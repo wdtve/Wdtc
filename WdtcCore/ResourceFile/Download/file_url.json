@@ -1,0 +1,15 @@
+{
+  "version_manifest": "https://piston-meta.mojang.com/mc/game/version_manifest.json",
+  "resources": "https://resources.download.minecraft.net/",
+  "FabraicList": "https://meta.fabricmc.net/v2/versions/loader",
+  "BMCLAPI": {
+    "version_manifest": "https://download.mcbbs.net/mc/game/version_manifest.json",
+    "Assets": "https://download.mcbbs.net/assets/",
+    "Libraries": "https://download.mcbbs.net/maven/",
+    "verison_json": "https://download.mcbbs.net/"
+  },
+  "MOJANG": {
+    "Libraries": "https://libraries.minecraft.net/",
+    "Assets": "https://resources.download.minecraft.net/"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "jvm": [
+    "-Dlog4j.configurationFile=",
+    "-Xmx",
+    "-Dminecraft.client.jar=",
+    "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m",
+    "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump",
+    "-Djava.library.path=",
+    "-Dminecraft.launcher.brand=Wdtc -Dminecraft.launcher.version=1.0.0-demo"
+  ],
+  "game": [
+    "--username",
+    "--version",
+    "--gameDir",
+    "--assetsDir",
+    "--assetIndex",
+    "--uuid",
+    "--accessToken",
+    "--clientId",
+    "--xuid",
+    "--userType",
+    "--versionType"
+  ]
+}

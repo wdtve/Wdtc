@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.WdtcUI.Controller">
+    <RadioButton fx:id="true_log" layoutX="77.0" layoutY="111.0" mnemonicParsing="false" onAction="#setTrue_log"
+                 text="显示"/>
+    <RadioButton fx:id="false_log" layoutX="139.0" layoutY="111.0" mnemonicParsing="false" onAction="#setFalse_log"
+                 selected="true" text="不显示"/>
+    <Label layoutX="77.0" layoutY="89.0"
+           text="启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):"/>
+    <Label layoutX="77.0" layoutY="138.0" text="是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):"/>
+    <RadioButton fx:id="true_BMCLAPI" layoutX="76.0" layoutY="159.0" mnemonicParsing="false" onAction="#setTrue_BMCLAPI"
+                 text="启用"/>
+    <RadioButton fx:id="false_BMCLAPI" layoutX="139.0" layoutY="159.0" mnemonicParsing="false"
+                 onAction="#setFalse_BMCLAPI" selected="true" text="不启用"/>
+
+
+</Pane>
