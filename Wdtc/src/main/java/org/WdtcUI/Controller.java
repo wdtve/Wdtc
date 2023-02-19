@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.WdtcUI.users.Registeruser;
@@ -19,10 +18,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller {
-    public static final Stage down_win = new Stage();
-    public static final Stage starter = new Stage();
-    public static final Stage setting_win = new Stage();
+public class Controller { ;
+    public static final Stage MainStage = AppMain.MainStage;
     private static final Logger logmaker = Logger.getLogger(Controller.class);
     private static boolean log = false;
     private static boolean BMCLAPI = false;
@@ -70,26 +67,17 @@ public class Controller {
 
     @FXML
     private void setDownload_game() throws IOException {
-        down_win.setTitle("下载游戏");
+        MainStage.setTitle("下载游戏");
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/down_win.fxml")));
         Scene down_scene = new Scene(pane);
-        down_win.setScene(down_scene);
-        down_win.getIcons().add(new Image("ico.jpg"));
-        down_win.setWidth(620);
-        down_win.setHeight(450);
-        down_win.setResizable(false);
-        down_win.show();
+        MainStage.setScene(down_scene);
     }
 
     @FXML
     private void setStart() throws IOException {
-        starter.setTitle("启动项目");
-        starter.setResizable(false);
-        starter.getIcons().add(new Image("ico.jpg"));
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Launcher_Win.fxml")));
         Scene scene = new Scene(pane);
-        starter.setScene(scene);
-        starter.show();
+        MainStage.setScene(scene);
     }
 
     @FXML
@@ -113,15 +101,10 @@ public class Controller {
 
     @FXML
     private void setSetting() throws IOException {
-        setting_win.setTitle("Setting");
+        MainStage.setTitle("Setting");
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Settings_Win.fxml")));
         Scene scene = new Scene(pane);
-        setting_win.setScene(scene);
-        setting_win.setWidth(620);
-        setting_win.setHeight(450);
-        setting_win.setResizable(false);
-        setting_win.getIcons().add(new Image("ico.jpg"));
-        setting_win.show();
+        MainStage.setScene(scene);
     }
 
     @FXML
@@ -178,6 +161,12 @@ public class Controller {
     @FXML
     void setbuy() throws IOException {
         Runtime.getRuntime().exec("cmd.exe /C start https://www.minecraft.net/");
+    }
+    @FXML
+    private void setHome() throws IOException {
+        Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
+        Scene scene = new Scene(main_pane);
+        MainStage.setScene(scene);
     }
 
 

@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.WdtcDownload.CompleteDocument.CompleteDocument;
 import org.WdtcDownload.SetFilePath.SetPath;
@@ -73,8 +72,6 @@ public class CompletionGame {
             stage.getIcons().add(new Image("ico.jpg"));
             stage.setTitle("Error");
             stage.setResizable(false);
-            stage.initOwner(Controller.starter);
-            stage.initModality(Modality.APPLICATION_MODAL);
             logmaker.error("* 版本文件夹为空");
             stage.show();
 

@@ -89,8 +89,6 @@ public class StartVersionList {
             stage.getIcons().add(new Image("ico.jpg"));
             stage.setTitle("Error");
             stage.setResizable(false);
-            stage.initOwner(Controller.starter);
-            stage.initModality(Modality.APPLICATION_MODAL);
             logmaker.error("* 版本文件夹为空");
             stage.show();
 

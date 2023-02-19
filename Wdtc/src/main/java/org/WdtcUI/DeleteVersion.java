@@ -66,8 +66,6 @@ public class DeleteVersion {
             Delete.setScene(scene);
             Delete.getIcons().add(new Image("ico.jpg"));
             Delete.setTitle("Error");
-            Delete.initOwner(Controller.starter);
-            Delete.initModality(Modality.APPLICATION_MODAL);
             Delete.setResizable(false);
             logmaker.error("* 版本文件夹为空");
             Delete.show();

@@ -32,6 +32,8 @@ dependencies {
     implementation("com.github.axet:wget:1.2.7")
     implementation("com.alibaba.fastjson2:fastjson2:2.0.22")
     implementation(project(":WdtcCore"))
+    // https://mvnrepository.com/artifact/com.jfoenix/jfoenix
+    implementation("com.jfoenix:jfoenix:9.0.10")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }

@@ -58,7 +58,7 @@ public class VersionList {
                     vm_e = in.readLine();
                 }
             } catch (IOException e) {
-                Controller.down_win.setTitle("下载游戏 (无网络)");
+                Controller.MainStage.setTitle("下载游戏 (无网络)");
                 logmaker.error("* 出现错误,可能是网络错误");
                 ErrorWin.setErrorWin(e);
             }

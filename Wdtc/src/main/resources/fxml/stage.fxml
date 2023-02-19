@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
       prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.WdtcUI.Controller">
-    <Button fx:id="download_game" layoutX="61.0" layoutY="337.0" mnemonicParsing="false" onAction="#setDownload_game"
-            prefHeight="23.0" prefWidth="149.0" text="下载"/>
-    <Button fx:id="start" layoutX="366.0" layoutY="337.0" mnemonicParsing="false" onAction="#setStart" prefHeight="23.0"
-            prefWidth="143.0" text="启动"/>
+    <AnchorPane prefHeight="400.0" prefWidth="51.0">
+        <Button onAction="#setHome" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" text="首页"/>
+        <Button fx:id="download_game" onAction="#setDownload_game" layoutY="23.0" mnemonicParsing="false" text="下载游戏"/>
+        <Button fx:id="start" onAction="#setStart" layoutY="46.0" mnemonicParsing="false" text="启动游戏"/>
+        <Button fx:id="github_button" onAction="#setGithub_button" layoutY="377.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" text="GitHub"/>
+        <Button fx:id="Setting" onAction="#setSetting" layoutY="354.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" text="设置"/>
+        <Label layoutX="17.0" layoutY="161.0" text="Wdtc"/>
+        <Label layoutX="17.0" layoutY="176.0" text="Demo"/>
+    </AnchorPane>
     <Label layoutX="172.0" layoutY="166.0" text="一个简单到不能再简单的我的世界Java版启动器"/>
-    <Button fx:id="github_button" layoutX="543.0" mnemonicParsing="false" onAction="#setGithub_button" text="GitHub"/>
-    <Button fx:id="Setting" mnemonicParsing="false" onAction="#setSetting" text="设置"/>
 </Pane>

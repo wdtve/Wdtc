@@ -27,7 +27,7 @@ public class AppMain extends Application {
         AppMain.MainStage = stage;
         Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
         MainStage.setWidth(615);
-        MainStage.setHeight(450);
+        MainStage.setHeight(440);
         MainStage.getIcons().add(new Image("ico.jpg"));
         try {
             URL url = new URL("https://www.bilibili.com");
@@ -42,8 +42,6 @@ public class AppMain extends Application {
         } catch (MalformedURLException e) {
             ErrorWin.setErrorWin(e);
         }
-        main_pane.setMaxWidth(MainStage.getWidth());
-        main_pane.setMaxHeight(MainStage.getHeight());
         MainStage.setResizable(false);
         Scene scene = new Scene(main_pane);
         MainStage.setScene(scene);

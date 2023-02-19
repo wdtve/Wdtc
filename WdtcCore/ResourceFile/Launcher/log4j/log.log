@@ -1,15 +1,2 @@
-2023-02-18 15:34:31  [JavaFX Application Thread]  org.WdtcUI.AppMain:50 - [ INFO ]  * 程序开始运行
-2023-02-18 15:34:37  [JavaFX Application Thread]  org.WdtcUI.VersionList:43 - [ INFO ]  * 开始加载版本列表
-2023-02-18 15:34:39  [JavaFX Application Thread]  org.WdtcUI.VersionList:99 - [ INFO ]  * 版本列表加载成功
-2023-02-18 15:35:18  [JavaFX Application Thread]  org.WdtcUI.CompletionGame:54 - [ INFO ]  * 版本补全完成
-2023-02-18 15:35:34  [JavaFX Application Thread]  org.WdtcUI.Controller:166 - [ INFO ]  * 账户注册Wd_t成功
-2023-02-18 15:35:39  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:47 - [ INFO ]  * 开始加载版本列表
-2023-02-18 15:35:39  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:82 - [ INFO ]  * 版本列表加载成功
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcUI.users.ReadUserList:18 - [ INFO ]  * 有账户,开始启动
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:65 - [ INFO ]  * 开始启动
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcLauncher.Launcher:37 - [ INFO ]  * 开始文件补全
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcLauncher.Launcher:41 - [ INFO ]  * 文件补全完成
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcLauncher.Launcher:42 - [ INFO ]  * 开始写入启动脚本
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcLauncher.Launcher:46 - [ INFO ]  * 启动脚本写入完成
-2023-02-18 15:35:42  [JavaFX Application Thread]  org.WdtcLauncher.Launcher:51 - [ INFO ]  * 开始运行启动脚本,日志:不显示
-2023-02-18 15:36:05  [JavaFX Application Thread]  org.WdtcUI.AppMain:53 - [ INFO ]  * 程序已退出
+2023-02-19 09:00:44  [JavaFX Application Thread]  org.WdtcUI.AppMain:48 - [ INFO ]  * 程序开始运行
+2023-02-19 09:00:51  [JavaFX Application Thread]  org.WdtcUI.AppMain:51 - [ INFO ]  * 程序已退出
