@@ -70,5 +70,5 @@ public static void main(String[] args) {
 - 解决方法之一:在IDE中运行配置里添加
 
 ```
-"--module-path "javafx-sdk-17.0.6/lib" --add-modules javafx.controls,javafx.fxml
+--module-path "javafx-sdk-17.0.6/lib" --add-modules javafx.controls,javafx.fxml
 ```

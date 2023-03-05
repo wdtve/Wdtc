@@ -3,6 +3,9 @@ package org.WdtcLauncher.JvmSet;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcLauncher.JavaHome.GetJavaPath;
+import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -12,53 +15,61 @@ public class GetJvm {
 
     private static final File u_f = new File("WdtcCore/ResourceFile/Launcher/launcher.json");
     private static final File m_t = new File("WdtcCore/ResourceFile/Launcher/starter.bat");
-    private static final File s_j = new File("WdtcCore/ResourceFile/Download/starter.json");
+    private static final File u_s = new File("WdtcCore/ResourceFile/Launcher/users/UsersSetting.json");
+    private static final String java_home = GetJavaPath.getjavapath();
+    private static String xmx = "1024";
 
-    public static void read_jvm(String xmx, File v_j, String java_path, String v_path, String v) throws IOException {
-        StringBuffer jvm_set = new StringBuffer();
-        String v_j_e = FileUtils.readFileToString(v_j);
-        JSONObject v_e_j = JSON.parseObject(v_j_e);
-        String s_e = FileUtils.readFileToString(s_j);
-        JSONObject s_e_j = JSON.parseObject(s_e);
-        String u_e = FileUtils.readFileToString(u_f);
-        JSONObject u_j_e = JSON.parseObject(u_e);
-        JSONObject jvmIndex_j = u_j_e.getJSONObject("jvmIndex");
+    public static void read_jvm(String v) throws IOException {
+        StringBuilder jvm_set = new StringBuilder();
+        Version version = new Version(v);
+        JSONObject u_j_e = JSON.parseObject(FileUtils.readFileToString(u_f, "UTF-8"));
+        JSONObject u_s_j = JSONObject.parseObject(FileUtils.readFileToString(u_s, "UTF-8"));
+        JSONArray users_jvm = u_s_j.getJSONArray("users_jvm");
+        JSONArray user_game = u_s_j.getJSONArray("user_game");
         JSONArray jvm_j = u_j_e.getJSONArray("jvm");
-        String game_p = s_e_j.getString("game_path");
-        jvm_set.append("@echo off\ncd " + game_p + "\n");
-        jvm_set.append(java_path + " ");
+        String game_p = SetPath.getGame_path();
+        jvm_set.append("@echo off\ncd ").append(game_p).append("\n");
+        jvm_set.append(java_home).append(" ");
 
-        String log4j_path = jvm_j.getString(0) + v_path + "log4j2.xml ";
+        String log4j_path = jvm_j.getString(0) + version.getVersionLog4j2() + " ";
         jvm_set.append(log4j_path);
+
+        String userxmx = user_game.getString(2);
+        if (userxmx != null) {
+            xmx = userxmx;
+        }
 
         String Xmx = jvm_j.getString(1) + xmx + "M ";
         jvm_set.append(Xmx);
 
-        String client_jar_path = jvm_j.getString(2) + v_path + v + ".jar ";
+        String client_jar_path = jvm_j.getString(2) + version.getVersionJar() + " ";
         jvm_set.append(client_jar_path);
 
         String run = jvm_j.getString(3) + " ";
         jvm_set.append(run);
 
+        String userjvm = users_jvm.getString(0);
+        if (userjvm != null) {
+            jvm_set.append(userjvm);
+        }
+
         String recovery = jvm_j.getString(4) + " ";
         jvm_set.append(recovery);
 
 
-        String library_p = v_path + "natives-windows-x86_64";
-        File lib_pay = new File(library_p);
+        File lib_pay = new File(version.getVersionNativesPath());
         if (!lib_pay.exists()) {
             lib_pay.mkdirs();
-            String lib_path = jvm_j.getString(5) + library_p + " ";
+            String lib_path = jvm_j.getString(5) + version.getVersionNativesPath() + " ";
             jvm_set.append(lib_path);
         } else if (lib_pay.exists()) {
-            String lib_path = jvm_j.getString(5) + library_p + " ";
+            String lib_path = jvm_j.getString(5) + version.getVersionNativesPath() + " ";
             jvm_set.append(lib_path);
         }
 
         String starter = jvm_j.getString(6) + " -cp ";
         jvm_set.append(starter);
 
-        FileUtils.writeStringToFile(m_t, jvm_set.toString());
-//        System.out.println(jvm_set);
+        FileUtils.writeStringToFile(m_t, jvm_set.toString(), "UTF-8");
     }
 }

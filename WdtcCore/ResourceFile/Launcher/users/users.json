@@ -1,1 +1,10 @@
-{"user_name":"Wd_t"}
+{
+  "user_name": "Wd_t",
+  "users_jvm" : [
+    "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m"
+  ],
+  "user_game" : [
+    "854",
+    "480"
+  ]
+}

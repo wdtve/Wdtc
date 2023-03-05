@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.scene.control.TextField;
+import org.WdtcDownload.SetFilePath.SetPath;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,6 @@ import java.util.zip.ZipFile;
 public class GetHash {
     private static final Logger LOGGER = Logger.getLogger(GetHash.class);
     private static final File f_u = new File("WdtcCore/ResourceFile/Download/file_url.json");
-    private static final File s_j = new File("WdtcCore/ResourceFile/Download/starter.json");
     private static final File resources_zip = new File("WdtcCore/ResourceFile/Download/objects.jar");
     private static String list;
     private static boolean BMCL;
@@ -60,7 +60,6 @@ public class GetHash {
                     }
                 }
             }
-
             zip.close();
         } catch (Exception e) {
             LOGGER.error("* 文件提取发生错误!");
@@ -69,14 +68,11 @@ public class GetHash {
     }
 
     public void gethash() throws IOException, InterruptedException {
-        String s_e = FileUtils.readFileToString(s_j);
-        JSONObject s_e_j = JSON.parseObject(s_e);
-        String f_e = FileUtils.readFileToString(f_u);
-        JSONObject f_e_j = JSON.parseObject(f_e);
+        JSONObject f_e_j = JSON.parseObject(FileUtils.readFileToString(f_u, "UTF-8"));
         JSONArray l_e_j = JSON.parseArray(list);
         CountDownLatch countDownLatch = new CountDownLatch(l_e_j.size());
         if (resources_zip.exists()) {
-            unzipByFile(resources_zip, s_e_j.getString("Game_assetsDir"));
+            unzipByFile(resources_zip, SetPath.getGame_assetsdir());
         } else {
             LOGGER.error("* 资源文件压缩包不存在!");
         }
@@ -85,7 +81,7 @@ public class GetHash {
             String hash_t = hash.substring(0, 2);
             if (BMCL) {
                 JSONObject BMCLAPI_J = f_e_j.getJSONObject("BMCLAPI");
-                File hash_path = new File(s_e_j.getString("Game_assetsDir") + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(BMCLAPI_J.getString("Assets") + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread = new Thread(() -> {
@@ -95,7 +91,7 @@ public class GetHash {
                     thread.start();
                 }
             } else {
-                File hash_path = new File(s_e_j.getString("Game_assetsDir") + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(f_e_j.getString("resources") + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread1 = new Thread(() -> {

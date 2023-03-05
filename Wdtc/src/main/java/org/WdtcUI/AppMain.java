@@ -34,9 +34,9 @@ public class AppMain extends Application {
             try {
                 InputStream in = url.openStream();
                 in.close();
-                MainStage.setTitle("Wdtc");
+                MainStage.setTitle("Wdtc - Demo");
             } catch (IOException e) {
-                MainStage.setTitle("Wdtc (无网络)");
+                MainStage.setTitle("Wdtc - Demo (无网络)");
                 logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
             }
         } catch (MalformedURLException e) {

@@ -1,4 +1,4 @@
-package org.WdtcDownload.VDownload;
+package org.WdtcDownload.VersionDownload;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
@@ -7,6 +7,7 @@ import com.github.axet.wget.WGet;
 import javafx.scene.control.TextField;
 import org.WdtcDownload.DownloadLib.GetLibUrl;
 import org.WdtcDownload.ResourceFile.DownloadResourceFile;
+import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -21,28 +22,24 @@ import java.util.Objects;
 
 public class SelectVersion {
     private static final File f_u = new File("WdtcCore/ResourceFile/Download/file_url.json");
-    private static final File vm_j = new File("WdtcCore/ResourceFile/Download/version_manifest.json");
     private static final Logger LOGGER = Logger.getLogger(SelectVersion.class);
-    private static final File s_j = new File("WdtcCore/ResourceFile/Download/starter.json");
     private static String v;
     private static String v_path;
     private static TextField label = new TextField();
     private static boolean BMCLAPI;
+    private static Version version;
 
     public SelectVersion(String v, String v_path, TextField label, boolean BMCLAPI) {
         SelectVersion.v = v;
         SelectVersion.v_path = v_path;
         SelectVersion.label = label;
         SelectVersion.BMCLAPI = BMCLAPI;
+        SelectVersion.version = new Version(v);
     }
 
-    public SelectVersion(String v, String v_path) {
-        this(v, v_path, label, BMCLAPI);
-    }
 
     public void select_v() throws IOException, InterruptedException {
-        String f_u_e = FileUtils.readFileToString(f_u);
-        JSONObject f_u_j = JSON.parseObject(f_u_e);
+        JSONObject f_u_j = JSON.parseObject(FileUtils.readFileToString(f_u, "UTF-8"));
         JSONObject BMCLAPI_J = f_u_j.getJSONObject("BMCLAPI");
         String vm_e = "";
         try {
@@ -66,9 +63,7 @@ public class SelectVersion {
             String v_n = versions_j.getJSONObject(i).getString("id");
             if (Objects.equals(v, v_n)) {
                 URL v_url = new URL(versions_j.getJSONObject(i).getString("url"));
-                String s_e = FileUtils.readFileToString(s_j);
-                JSONObject s_e_j = JSON.parseObject(s_e);
-                File v_j = new File(s_e_j.getString("v_lib_path") + v + "\\" + v + ".json");
+                File v_j = new File(version.getVersion_json());
                 new WGet(v_url, v_j).download();
                 new GetLibUrl(v_j, v_path, v, BMCLAPI, label).readdown();
                 label.setText("库下载完成");

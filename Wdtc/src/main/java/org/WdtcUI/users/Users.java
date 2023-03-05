@@ -3,6 +3,7 @@ package org.WdtcUI.users;
 public class Users {
     private static String user_name;
 
+
     public String getUser_name() {
         return user_name;
     }

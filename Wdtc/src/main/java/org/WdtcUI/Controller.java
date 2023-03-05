@@ -1,5 +1,6 @@
 package org.WdtcUI;
 
+import com.alibaba.fastjson2.JSON;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,19 +11,24 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.WdtcUI.users.Registeruser;
+import org.WdtcUI.users.UsersSetting;
 import org.WdtcUI.users.UsersWin;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller { ;
+public class Controller {
+    ;
     public static final Stage MainStage = AppMain.MainStage;
     private static final Logger logmaker = Logger.getLogger(Controller.class);
     private static boolean log = false;
     private static boolean BMCLAPI = false;
+    private static final File u_s = new File("WdtcCore/ResourceFile/Launcher/users/UsersSetting.json");
     @FXML
     private Button Down_WinDownload;
     @FXML
@@ -53,6 +59,14 @@ public class Controller { ;
     private TextField Registerusername;
     @FXML
     private Label OKRegister;
+    @FXML
+    private TextField userjvm;
+    @FXML
+    private TextField WinWide = new TextField();
+    @FXML
+    private TextField WinHide = new TextField();
+    @FXML
+    private TextField GameMemory = new TextField();
 
     public static boolean isContainChinese(String str) {
         Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
@@ -67,7 +81,7 @@ public class Controller { ;
 
     @FXML
     private void setDownload_game() throws IOException {
-        MainStage.setTitle("下载游戏");
+        MainStage.setTitle("Wdtc - Demo - 下载游戏");
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/down_win.fxml")));
         Scene down_scene = new Scene(pane);
         MainStage.setScene(down_scene);
@@ -75,6 +89,7 @@ public class Controller { ;
 
     @FXML
     private void setStart() throws IOException {
+        MainStage.setTitle("Wdtc - Demo - 启动游戏");
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Launcher_Win.fxml")));
         Scene scene = new Scene(pane);
         MainStage.setScene(scene);
@@ -101,8 +116,8 @@ public class Controller { ;
 
     @FXML
     private void setSetting() throws IOException {
-        MainStage.setTitle("Setting");
         Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Settings_Win.fxml")));
+        MainStage.setTitle("Wdtc - Demo - Setting");
         Scene scene = new Scene(pane);
         MainStage.setScene(scene);
     }
@@ -162,11 +177,26 @@ public class Controller { ;
     void setbuy() throws IOException {
         Runtime.getRuntime().exec("cmd.exe /C start https://www.minecraft.net/");
     }
+
     @FXML
     private void setHome() throws IOException {
+        MainStage.setTitle("Wdtc - Demo");
         Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
         Scene scene = new Scene(main_pane);
         MainStage.setScene(scene);
+    }
+    @FXML
+    private void Setapplication() throws IOException {
+        UsersSetting.user_game.clear();
+        UsersSetting.users_jvm.clear();
+        UsersSetting usersSetting = new UsersSetting();
+        usersSetting.setUsers_jvm(userjvm.getText());
+        usersSetting.setUser_game(WinWide.getText());
+        usersSetting.setUser_game(WinHide.getText());
+        usersSetting.setUser_game(GameMemory.getText());
+        String usersetting = JSON.toJSONString(usersSetting);
+        u_s.delete();
+        FileUtils.writeStringToFile(u_s,usersetting,"UTF-8");
     }
 
 
