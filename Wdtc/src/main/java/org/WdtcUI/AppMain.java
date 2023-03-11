@@ -18,38 +18,37 @@ public class AppMain extends Application {
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
     public static Stage MainStage = new Stage();
 
-    public static void main(String[] args) {
-        Application.launch();
-    }
-
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         AppMain.MainStage = stage;
-        Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
-        MainStage.setWidth(615);
-        MainStage.setHeight(440);
-        MainStage.getIcons().add(new Image("ico.jpg"));
         try {
-            URL url = new URL("https://www.bilibili.com");
+            Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
+            MainStage.setWidth(615);
+            MainStage.setHeight(440);
+            MainStage.getIcons().add(new Image("ico.jpg"));
             try {
-                InputStream in = url.openStream();
-                in.close();
-                MainStage.setTitle("Wdtc - Demo");
-            } catch (IOException e) {
-                MainStage.setTitle("Wdtc - Demo (无网络)");
-                logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
+                URL url = new URL("https://www.bilibili.com");
+                try {
+                    InputStream in = url.openStream();
+                    in.close();
+                    MainStage.setTitle("Wdtc - Demo");
+                } catch (IOException e) {
+                    MainStage.setTitle("Wdtc - Demo (无网络)");
+                    logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
+                }
+            } catch (MalformedURLException e) {
+                ErrorWin.setErrorWin(e);
             }
-        } catch (MalformedURLException e) {
+            MainStage.setResizable(false);
+            Scene scene = new Scene(main_pane);
+            MainStage.setScene(scene);
+            MainStage.show();
+            MainStage.setOnCloseRequest(windowEvent -> {
+                logmaker.info("* 程序已退出");
+                System.exit(0);
+            });
+        } catch (Exception e) {
             ErrorWin.setErrorWin(e);
         }
-        MainStage.setResizable(false);
-        Scene scene = new Scene(main_pane);
-        MainStage.setScene(scene);
-        logmaker.info("* 程序开始运行");
-        MainStage.show();
-        MainStage.setOnCloseRequest(windowEvent -> {
-            logmaker.info("* 程序已退出");
-            System.exit(0);
-        });
     }
 }

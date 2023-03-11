@@ -1,1 +1,5 @@
-2023-03-11 11:05:31  [JavaFX Application Thread]  org.WdtcUI.AppMain:51 - [ INFO ]  * 程序已退出
+2023-03-11 20:28:50  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:17.0.5
+2023-03-11 20:28:50  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
+2023-03-11 20:28:50  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Amazon Corretto\jdk17.0.5_8
+2023-03-11 20:28:50  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
+2023-03-11 20:29:25  [JavaFX Application Thread]  org.WdtcUI.AppMain:47 - [ INFO ]  * 程序已退出

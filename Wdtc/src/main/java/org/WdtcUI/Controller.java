@@ -24,7 +24,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Controller {
-    ;
     public static final Stage MainStage = AppMain.MainStage;
     private static final Logger logmaker = Logger.getLogger(Controller.class);
     private static boolean log = false;
