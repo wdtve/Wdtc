@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Launcher;
 import org.WdtcUI.users.ReadUserList;
 import org.apache.log4j.Logger;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class StartVersionList {
-    private static final File s_j = new File("WdtcCore/ResourceFile/Download/starter.json");
     private static final Stage stage = new Stage();
 
     private static final VBox V_BOX = new VBox();
@@ -58,7 +58,7 @@ public class StartVersionList {
                             start_label.setText("\t\t\t\t开始启动");
                             logmaker.info("* 开始启动");
                             new Launcher(file2.getName(), log, BMCLAPI);
-                            textField.setText(new File("WdtcCore/ResourceFile/Launcher/starter.bat").getCanonicalPath());
+                            textField.setText(new File(FilePath.getStarterBat()).getCanonicalPath());
                         }
                     } catch (IOException | InterruptedException | RuntimeException e) {
                         ErrorWin.setErrorWin(e);

@@ -20,7 +20,7 @@ public class Pack {
         String result = matcher.replaceAll("");
         d = d.replaceAll(result, "");
         d = d.replaceAll("\\.", "\\\\\\");
-        System.out.println(d);
+        System.out.println("\\a");
     }
 
 }

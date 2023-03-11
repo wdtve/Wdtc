@@ -13,24 +13,24 @@ public class Version {
         return version;
     }
 
-    public String getVersion_lib_path() {
+    public String getVersionLibPath() {
         return SetPath.getV_lib_path();
     }
 
-    public String getVersion_path() {
-        return getVersion_lib_path() + version + "\\";
+    public String getVersionPath() {
+        return getVersionLibPath() + version + "\\";
     }
 
-    public String getVersion_json() {
-        return getVersion_path() + version + ".json";
+    public String getVersionJson() {
+        return getVersionPath() + version + ".json";
     }
     public String getVersionJar() {
-        return getVersion_path() + version + ".jar";
+        return getVersionPath() + version + ".jar";
     }
     public String getVersionLog4j2() {
-        return getVersion_path() + "log4j2.xml";
+        return getVersionPath() + "log4j2.xml";
     }
     public String getVersionNativesPath() {
-        return getVersion_path() + "natives-windows-x86_64";
+        return getVersionPath() + "natives-windows-x86_64";
     }
 }

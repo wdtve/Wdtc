@@ -1,4 +1,4 @@
-package org.WdtcDownload.ResourceFile;
+package org.WdtcDownload.DownloadResourceFile;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -8,7 +8,6 @@ import org.WdtcDownload.SetFilePath.SetPath;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 public class DownloadResourceFile {
@@ -22,9 +21,8 @@ public class DownloadResourceFile {
         DownloadResourceFile.BMCLAPI = BMCLAPI;
     }
 
-    public void getresource_file() throws IOException, InterruptedException {
-        String v_e = FileUtils.readFileToString(v_j);
-        JSONObject v_e_j = JSON.parseObject(v_e);
+    public void getresource_file() throws Exception {
+        JSONObject v_e_j = JSON.parseObject(FileUtils.readFileToString(v_j, "UTF-8"));
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));

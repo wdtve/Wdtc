@@ -33,6 +33,8 @@ dependencies {
     implementation("log4j:log4j:1.2.17")
     implementation("com.github.axet:wget:1.2.7")
     implementation("com.alibaba.fastjson2:fastjson2:2.0.22")
+    // https://mvnrepository.com/artifact/org.apache.ant/ant
+    implementation("org.apache.ant:ant:1.10.13")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }

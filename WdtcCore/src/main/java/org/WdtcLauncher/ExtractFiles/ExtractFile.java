@@ -2,13 +2,10 @@ package org.WdtcLauncher.ExtractFiles;
 
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Objects;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.*;
 
 public class ExtractFile {
     private static final Logger logmaker = Logger.getLogger(ExtractFile.class);
@@ -16,11 +13,9 @@ public class ExtractFile {
     public static void getExtractFiles(String natives_lib_path, String natives_path) {
         File file = new File(natives_lib_path);
         unzipByFile(file, natives_path);
-
-
     }
 
-    public static boolean unzipByFile(File file, String path) {
+    public static void unzipByFile(File file, String path) {
         try {
 
 
@@ -53,17 +48,51 @@ public class ExtractFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
     }
-
-    // split截取后缀名
     public static String lastName(File file) {
         if (file == null) return null;
         String filename = file.getName();
         if (filename.lastIndexOf(".") == -1) {
-            return "";//文件没有后缀名的情况
+            return "";
         }
-        //此时返回的是带有 . 的后缀名，
         return filename.substring(filename.lastIndexOf("."));
+    }
+
+    public static void compressedFile(String resourcesPath, String targetPath) throws Exception {
+        File resourcesFile = new File(resourcesPath);
+        File targetFile = new File(targetPath);
+
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+
+        FileOutputStream outputStream = new FileOutputStream(targetFile);
+        CheckedOutputStream cos = new CheckedOutputStream(outputStream, new CRC32());
+        ZipOutputStream out = new ZipOutputStream(cos);
+        createCompressedFile(out, resourcesFile, "");
+        out.close();
+
+    }
+
+    public static void createCompressedFile(ZipOutputStream out, File file, String dir) throws Exception {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            out.putNextEntry(new ZipEntry(dir + "/"));
+
+            dir = dir.length() == 0 ? "" : dir + "/";
+            for (int i = 0; i < files.length; i++) {
+                createCompressedFile(out, files[i], dir + files[i].getName());
+            }
+        } else {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+            ZipEntry entry = new ZipEntry(dir);
+            out.putNextEntry(entry);
+            int j = 0;
+            byte[] buffer = new byte[1024];
+            while ((j = bis.read(buffer)) > 0) {
+                out.write(buffer, 0, j);
+            }
+            bis.close();
+        }
     }
 }

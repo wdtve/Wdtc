@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.WdtcLauncher.FilePath;
 import org.WdtcUI.users.Registeruser;
 import org.WdtcUI.users.UsersSetting;
 import org.WdtcUI.users.UsersWin;
@@ -28,7 +29,7 @@ public class Controller {
     private static final Logger logmaker = Logger.getLogger(Controller.class);
     private static boolean log = false;
     private static boolean BMCLAPI = false;
-    private static final File u_s = new File("WdtcCore/ResourceFile/Launcher/users/UsersSetting.json");
+    private static final File u_s = new File(FilePath.getUsersSettingJson());
     @FXML
     private Button Down_WinDownload;
     @FXML

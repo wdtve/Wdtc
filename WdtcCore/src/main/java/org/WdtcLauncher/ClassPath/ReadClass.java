@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.WdtcDownload.SetFilePath.SetPath;
 import org.WdtcLauncher.ExtractFiles.ExtractFile;
+import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ReadClass {
-    private static final File m_t = new File("WdtcCore/ResourceFile/Launcher/starter.bat");
+    private static final File m_t = new File(FilePath.getStarterBat());
 
     public static void readdown(String version_number) throws IOException {
         Version version = new Version(version_number);
@@ -21,7 +22,7 @@ public class ReadClass {
             lib_pay.mkdirs();
         }
         StringBuilder cpb = new StringBuilder();
-        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersion_json()), "UTF_8"));
+        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
         for (int i = 0; i < libraries_j.size(); i++) {
             JSONObject lib_j = libraries_j.getJSONObject(i);
@@ -64,7 +65,7 @@ public class ReadClass {
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
         JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
         String natives_lib_path = game_lib_path + natives_os.getString(extract_content);
-        natives_lib_path = natives_lib_path.replaceAll("/", File.separator);
+        natives_lib_path = natives_lib_path.replaceAll("/", "\\\\");
         return natives_lib_path;
     }
 
@@ -73,7 +74,7 @@ public class ReadClass {
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject artifact_j = downloads_j.getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString(extract_content) + ";";
-        lib_path = lib_path.replaceAll("/", File.separator);
+        lib_path = lib_path.replaceAll("/", "\\\\");
         return lib_path;
     }
 }

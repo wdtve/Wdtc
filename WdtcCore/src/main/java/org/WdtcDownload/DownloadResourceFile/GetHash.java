@@ -1,17 +1,17 @@
-package org.WdtcDownload.ResourceFile;
+package org.WdtcDownload.DownloadResourceFile;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.scene.control.TextField;
+import org.WdtcDownload.FileUrl;
 import org.WdtcDownload.SetFilePath.SetPath;
-import org.apache.commons.io.FileUtils;
+import org.WdtcLauncher.ExtractFiles.ExtractFile;
+import org.WdtcLauncher.FilePath;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
@@ -21,8 +21,7 @@ import java.util.zip.ZipFile;
 
 public class GetHash {
     private static final Logger LOGGER = Logger.getLogger(GetHash.class);
-    private static final File f_u = new File("WdtcCore/ResourceFile/Download/file_url.json");
-    private static final File resources_zip = new File("WdtcCore/ResourceFile/Download/objects.jar");
+    private static final File resources_zip = new File(FilePath.getResources_zip());
     private static String list;
     private static boolean BMCL;
     private final TextField label;
@@ -67,8 +66,7 @@ public class GetHash {
         }
     }
 
-    public void gethash() throws IOException, InterruptedException {
-        JSONObject f_e_j = JSON.parseObject(FileUtils.readFileToString(f_u, "UTF-8"));
+    public void gethash() throws Exception {
         JSONArray l_e_j = JSON.parseArray(list);
         CountDownLatch countDownLatch = new CountDownLatch(l_e_j.size());
         if (resources_zip.exists()) {
@@ -80,32 +78,44 @@ public class GetHash {
             String hash = l_e_j.getJSONObject(i).getString("hash");
             String hash_t = hash.substring(0, 2);
             if (BMCL) {
-                JSONObject BMCLAPI_J = f_e_j.getJSONObject("BMCLAPI");
                 File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
-                URL hash_url = new URL(BMCLAPI_J.getString("Assets") + hash_t + "/" + hash);
+                URL hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread = new Thread(() -> {
+                        LOGGER.info("* " + hash_url + " 开始下载");
                         new WGet(hash_url, hash_path).download();
+                        LOGGER.info("* " + hash + " 下载完成");
                         countDownLatch.countDown();
                     });
                     thread.start();
                 }
             } else {
                 File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
-                URL hash_url = new URL(f_e_j.getString("resources") + hash_t + "/" + hash);
+                URL hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread1 = new Thread(() -> {
+                        LOGGER.info("* " + hash_url + " 开始下载");
                         new WGet(hash_url, hash_path).download();
+                        LOGGER.info("* " + hash + " 下载完成");
                         countDownLatch.countDown();
                     });
                     thread1.start();
                 }
             }
-            if (i == l_e_j.size() - 1) {
-                label.setText("下载完成");
-            }
         }
         countDownLatch.await();
+        label.setText("下载完成");
+        LOGGER.info("下载完成");
+        Thread thread = new Thread(() -> {
+            if (!resources_zip.exists()) {
+                try {
+                    ExtractFile.compressedFile(SetPath.getGameObjects(), resources_zip.getCanonicalPath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }
 

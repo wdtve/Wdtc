@@ -43,3 +43,4 @@ bin/
 .DS_Store
 /WdtcCore/ResourceFile/Download/objects.jar
 /javafx-sdk-17.0.6/
+/WdtcCore/ResourceFile/Launcher/log4j/

@@ -33,5 +33,6 @@ public class ErrorWin {
         stage.getIcons().add(new Image("ico.jpg"));
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(windowEvent -> V_BOX.getChildren().clear());
     }
 }

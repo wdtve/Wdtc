@@ -3,6 +3,10 @@ package org.WdtcDownload.SetFilePath;
 public class SetPath {
     private static final String here = System.getProperty("user.dir");
 
+    public static String getGameObjects() {
+        return getGame_assetsdir() + "objects\\";
+    }
+
     public static String getHere() {
         return here;
     }

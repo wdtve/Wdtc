@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
 
@@ -12,9 +13,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class GetGame {
-    private static final File m_t = new File("WdtcCore/ResourceFile/Launcher/starter.bat");
-    private static final File l_j = new File("WdtcCore/ResourceFile/Launcher/launcher.json");
-    private static final File u_j = new File("WdtcCore/ResourceFile/Launcher/users/users.json");
+    private static final File m_t = new File(FilePath.getStarterBat());
+    private static final File l_j = new File(FilePath.getLauncherJson());
+    private static final File u_j = new File(FilePath.getUsersJson());
     private static final String users_uuid = String.valueOf(UUID.randomUUID()).replaceAll("-", "");
 
     public static void Getgame(String v) throws IOException {
@@ -22,7 +23,7 @@ public class GetGame {
         Version version = new Version(v);
         JSONObject l_e_j = JSON.parseObject(FileUtils.readFileToString(l_j, "UTF-8"));
         JSONArray game_j = l_e_j.getJSONArray("game");
-        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersion_json()), "UTF-8"));
+        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         JSONObject u_e_j = JSONObject.parseObject(FileUtils.readFileToString(u_j, "UTF-8"));
         String user_name = u_e_j.getString("user_name");

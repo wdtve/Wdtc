@@ -112,8 +112,6 @@ public class DeleteVersion {
             Delete.setResizable(false);
             logmaker.error("* 版本文件夹为空");
             Delete.show();
-
-
         }
     }
 }

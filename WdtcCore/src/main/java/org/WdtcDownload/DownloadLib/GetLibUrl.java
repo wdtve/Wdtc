@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextField;
-import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -17,91 +17,27 @@ import java.net.URL;
 import java.util.Objects;
 
 //1.19-
-public class GetLibUrl {
-    private static final File f_u = new File("WdtcCore/ResourceFile/Download/file_url.json");
+public class GetLibUrl extends GetLibPathUrl {
     private static final Logger logmaker = Logger.getLogger(GetLibUrl.class);
-    private static File v_j;
-    private static String v_path;
-    private static String version_number;
-    private static boolean BMCLAPI;
     private static TextField label;
-    private static String BMCLAPI_Libraries;
-    private static String MOJANG_Libraries;
     private static Version version;
 
 
-    public GetLibUrl(File v_j, String v_path, String version, boolean BMCLAPI, TextField label) throws IOException {
-        GetLibUrl.v_j = v_j;
-        GetLibUrl.v_path = v_path;
-        GetLibUrl.version_number = version;
-        GetLibUrl.BMCLAPI = BMCLAPI;
+
+    public GetLibUrl(String version, boolean BMCLAPI, TextField label) throws IOException {
+        GetLibPathUrl.BMCLAPI = BMCLAPI;
         GetLibUrl.label = label;
         GetLibUrl.version = new Version(version);
-        String f_e = FileUtils.readFileToString(f_u);
-        JSONObject f_e_j = JSONObject.parseObject(f_e);
-        JSONObject BMCLAPI_J = f_e_j.getJSONObject("BMCLAPI");
-        GetLibUrl.BMCLAPI_Libraries = BMCLAPI_J.getString("Libraries");
-        JSONObject MOJANG_J = f_e_j.getJSONObject("MOJANG");
-        GetLibUrl.MOJANG_Libraries = MOJANG_J.getString("Libraries");
     }
 
-    public static File readnatives_lib(JSONObject lib_j) throws IOException {
-        String game_lib_path = SetPath.getGame_lib_path();
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject natives_j = lib_j.getJSONObject("natives");
-        JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
-        String natives_name = natives_j.getString("windows");
-        JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
-        String natives_lib_path = game_lib_path + natives_os.getString("path");
-        natives_lib_path = natives_lib_path.replaceAll("/", File.separator);
-        return new File(natives_lib_path);
-    }
 
-    public static URL readnatives_url(JSONObject lib_j) throws IOException {
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject natives_j = lib_j.getJSONObject("natives");
-        JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
-        String natives_name = natives_j.getString("windows");
-        JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
-        String natives_lib_url = natives_os.getString("url");
-        if (BMCLAPI) {
-            natives_lib_url = natives_lib_url.replaceAll(MOJANG_Libraries, BMCLAPI_Libraries);
-            return new URL(natives_lib_url);
-        } else {
-            return new URL(natives_lib_url);
-        }
-    }
-
-    public static File readlib_path(JSONObject lib_j) throws IOException {
-        String game_lib_path = SetPath.getGame_lib_path();
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject artifact_j = downloads_j.getJSONObject("artifact");
-        String lib_path = game_lib_path + artifact_j.getString("path");
-        lib_path = lib_path.replaceAll("/", File.separator);
-        return new File(lib_path);
-
-    }
-
-    public static URL readlib_url(JSONObject lib_j) throws IOException {
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject artifact_j = downloads_j.getJSONObject("artifact");
-        String lib_url = artifact_j.getString("url");
-        if (BMCLAPI) {
-            lib_url = lib_url.replaceAll(MOJANG_Libraries, BMCLAPI_Libraries);
-            return new URL(lib_url);
-        } else {
-            return new URL(lib_url);
-        }
-    }
 
     public void readdown() throws IOException, RuntimeException {
-        String library_p = v_path + "natives-windows-x86_64";
-        File lib_pay = new File(library_p);
+        File lib_pay = new File(version.getVersionNativesPath());
         if (!lib_pay.exists()) {
             lib_pay.mkdirs();
         }
-        String v_e = FileUtils.readFileToString(v_j);
-        JSONObject v_e_j = JSONObject.parseObject(v_e);
+        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
         for (int i = 0; i < libraries_j.size(); i++) {
             JSONObject lib_j = libraries_j.getJSONObject(i);
@@ -114,7 +50,9 @@ public class GetLibUrl {
                         protected Void call() {
                             try {
                                 if (!readlib_path(lib_j).exists()) {
+                                    logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                     new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
+                                    logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                 }
 //                            System.out.println(readlib_url(lib_j));
                             } catch (IOException e) {
@@ -137,7 +75,9 @@ public class GetLibUrl {
 
                                 try {
                                     if (!readlib_path(lib_j).exists()) {
+                                        logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
+                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                     }
 //                                System.out.println(readlib_url(lib_j));
                                 } catch (IOException e) {
@@ -155,7 +95,9 @@ public class GetLibUrl {
                             protected Void call() {
                                 try {
                                     if (!readlib_path(lib_j).exists()) {
+                                        logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
+                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                     }
 //                                System.out.println(readlib_url(lib_j));
                                 } catch (IOException e) {
@@ -177,7 +119,9 @@ public class GetLibUrl {
                         protected Void call() {
                             try {
                                 if (!readnatives_lib(lib_j).exists()) {
+                                    logmaker.info("* " + readnatives_url(lib_j) + " 开始下载");
                                     new WGet(readnatives_url(lib_j), readnatives_lib(lib_j)).download();
+                                    logmaker.info("* " + readnatives_lib(lib_j) + " 下载完成");
                                 }
 //                                System.out.println(readnatives_url(lib_j));
                             } catch (IOException | RuntimeException e) {
@@ -192,7 +136,7 @@ public class GetLibUrl {
         }
         Thread thread = new Thread(() -> {
             try {
-                File log4j2 = new File("WdtcCore/ResourceFile/Download/log4j2.xml");
+                File log4j2 = new File(FilePath.getLog4j2());
                 File v_log = new File(version.getVersionLog4j2());
                 if (!v_log.exists()) {
                     FileUtils.copyFile(log4j2, v_log);
@@ -204,8 +148,11 @@ public class GetLibUrl {
             JSONObject client = downloads_j.getJSONObject("client");
             try {
                 URL jar_url = new URL(client.getString("url"));
-                if (!new File(version.getVersionJar()).exists()) {
-                    new WGet(jar_url, new File(version.getVersionJar())).download();
+                File VersionJar = new File(version.getVersionJar());
+                if (!VersionJar.exists()) {
+                    logmaker.info("* " + jar_url + " 开始下载");
+                    new WGet(jar_url, VersionJar).download();
+                    logmaker.info("* " + VersionJar.getName() + " 下载完成");
                 }
             } catch (MalformedURLException | RuntimeException e) {
                 e.printStackTrace();

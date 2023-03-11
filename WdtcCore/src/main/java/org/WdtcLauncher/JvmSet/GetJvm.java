@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.JavaHome.GetJavaPath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
@@ -13,16 +14,16 @@ import java.io.IOException;
 
 public class GetJvm {
 
-    private static final File u_f = new File("WdtcCore/ResourceFile/Launcher/launcher.json");
-    private static final File m_t = new File("WdtcCore/ResourceFile/Launcher/starter.bat");
-    private static final File u_s = new File("WdtcCore/ResourceFile/Launcher/users/UsersSetting.json");
+    private static final File l_j = new File(FilePath.getLauncherJson());
+    private static final File m_t = new File(FilePath.getStarterBat());
+    private static final File u_s = new File(FilePath.getUsersSettingJson());
     private static final String java_home = GetJavaPath.getjavapath();
     private static String xmx = "1024";
 
     public static void read_jvm(String v) throws IOException {
         StringBuilder jvm_set = new StringBuilder();
         Version version = new Version(v);
-        JSONObject u_j_e = JSON.parseObject(FileUtils.readFileToString(u_f, "UTF-8"));
+        JSONObject u_j_e = JSON.parseObject(FileUtils.readFileToString(l_j, "UTF-8"));
         JSONObject u_s_j = JSONObject.parseObject(FileUtils.readFileToString(u_s, "UTF-8"));
         JSONArray users_jvm = u_s_j.getJSONArray("users_jvm");
         JSONArray user_game = u_s_j.getJSONArray("user_game");
@@ -35,9 +36,9 @@ public class GetJvm {
         jvm_set.append(log4j_path);
 
         String userxmx = user_game.getString(2);
-        if (userxmx != null) {
-            xmx = userxmx;
-        }
+//        if (userxmx != null) {
+//            xmx = userxmx;
+//        }
 
         String Xmx = jvm_j.getString(1) + xmx + "M ";
         jvm_set.append(Xmx);

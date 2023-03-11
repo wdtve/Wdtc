@@ -12,19 +12,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Launcher {
-    private static final File m_t = new File("WdtcCore/ResourceFile/Launcher/starter.bat");
+    private static final File m_t = new File(FilePath.getStarterBat());
     private static final Logger logmaker = Logger.getLogger(Launcher.class);
     private static String Version_number;
     //    private static String xmx = "1024";
-    private static boolean log = false;
-    private static boolean BMCLAPI;
 
 
     public Launcher(String version_number, boolean log, boolean BMCLAPI) throws IOException, InterruptedException {
-        Launcher.log = log;
         Launcher.Version_number = version_number;
-        Launcher.BMCLAPI = BMCLAPI;
-        Version version = new Version(version_number);
         logmaker.info("* 开始文件补全");
         CompleteDocument completeDocument = new CompleteDocument(version_number, BMCLAPI);
         completeDocument.readdown();
