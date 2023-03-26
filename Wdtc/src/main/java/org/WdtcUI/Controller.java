@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -27,19 +26,9 @@ public class Controller {
     private static boolean log = false;
     private static boolean BMCLAPI = false;
     @FXML
-    private Button Down_WinDownload;
-    @FXML
-    private Button start;
-    @FXML
-    private Button download_game;
-    @FXML
     private TextField textField;
     @FXML
     private Label start_label;
-    @FXML
-    private Button github_button;
-    @FXML
-    private Button Setting;
     @FXML
     private RadioButton true_log = new RadioButton();
     @FXML
@@ -49,13 +38,7 @@ public class Controller {
     @FXML
     private RadioButton false_BMCLAPI = new RadioButton();
     @FXML
-    private Button isBMCLAPI;
-    @FXML
     private TextField stater_path;
-    @FXML
-    private TextField Registerusername;
-    @FXML
-    private Label OKRegister;
     @FXML
     private TextField userjvm;
     @FXML
@@ -133,32 +116,37 @@ public class Controller {
     }
 
     @FXML
-    private void setStarter() throws IOException {
+    private void setStarter() {
         new StartVersionList(start_label, log, stater_path, BMCLAPI).getStartList();
     }
 
     @FXML
-    private void setDelete() throws IOException {
+    private void setDelete() {
         new DeleteVersion().getStartList();
     }
 
     @FXML
-    private void Setcompletioner() throws IOException {
+    private void Setcompletioner() {
         new CompletionGame().completion_game();
     }
 
 
     @FXML
-    private void setSettingskin() throws IOException {
+    private void setSettingskin() {
         UsersWin.setUserWin("修改账户名");
     }
 
     @FXML
-    private void setHome() throws IOException {
-        MainStage.setTitle("Wdtc - Demo");
-        Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
-        Scene scene = new Scene(main_pane);
-        MainStage.setScene(scene);
+    private void setHome() {
+        try {
+
+            MainStage.setTitle("Wdtc - Demo");
+            Pane main_pane = new Pane(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml"))));
+            Scene scene = new Scene(main_pane);
+            MainStage.setScene(scene);
+        } catch (IOException e) {
+            ErrorWin.setErrorWin(e);
+        }
     }
 
     @FXML
