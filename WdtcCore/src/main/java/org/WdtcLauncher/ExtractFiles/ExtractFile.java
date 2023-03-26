@@ -10,11 +10,6 @@ import java.util.zip.*;
 public class ExtractFile {
     private static final Logger logmaker = Logger.getLogger(ExtractFile.class);
 
-    public static void getExtractFiles(String natives_lib_path, String natives_path) {
-        File file = new File(natives_lib_path);
-        unzipByFile(file, natives_path);
-    }
-
     public static void unzipByFile(File file, String path) {
         try {
 
@@ -63,7 +58,11 @@ public class ExtractFile {
         File targetFile = new File(targetPath);
 
         if (!targetFile.exists()) {
-            targetFile.mkdirs();
+            if (!targetFile.exists()) {
+                if (targetFile.isDirectory()) {
+                    targetFile.mkdirs();
+                }
+            }
         }
 
         FileOutputStream outputStream = new FileOutputStream(targetFile);

@@ -1,6 +1,5 @@
 package org.WdtcUI;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,7 +18,6 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public class StartVersionList {
     private static final Stage stage = new Stage();
@@ -40,9 +38,9 @@ public class StartVersionList {
         StartVersionList.BMCLAPI = BMCLAPI;
     }
 
-    public void getStartList() throws IOException {
+    public void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(SetPath.getV_lib_path());
+        File version_path = new File(SetPath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
         try {
@@ -77,16 +75,20 @@ public class StartVersionList {
             stage.show();
             stage.setOnCloseRequest(windowEvent -> V_BOX.getChildren().clear());
         } catch (NullPointerException e) {
-            Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/NullVersion.fxml")));
-            Scene scene = new Scene(pane);
+            Label label = new Label("您没有游戏版本,请去下载");
+            Pane pane = new Pane();
+            pane.prefHeight(400.0);
+            pane.prefWidth(600.0);
+            label.setLayoutX(217.0);
+            label.setLayoutY(193.0);
+            pane.getChildren().add(label);
+            Scene scene = new Scene(pane, 600, 400);
             stage.setScene(scene);
-            stage.getIcons().add(new Image("ico.jpg"));
-            stage.setTitle("Error");
             stage.setResizable(false);
-            logmaker.error("* 版本文件夹为空");
+            stage.getIcons().add(new Image("/ico.jpg"));
+            stage.setTitle("版本文件夹为空");
             stage.show();
-
-
+            logmaker.error("* 版本文件夹为空");
         }
     }
 }

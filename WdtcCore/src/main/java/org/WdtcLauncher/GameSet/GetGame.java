@@ -34,10 +34,10 @@ public class GetGame {
         String version_set = " " + game_j.getString(1) + " " + v;
         game_set.append(version_set);
 
-        String gamedir = " " + game_j.getString(2) + " " + SetPath.getGame_path();
+        String gamedir = " " + game_j.getString(2) + " " + SetPath.getGamePath();
         game_set.append(gamedir);
 
-        String assersdir = " " + game_j.getString(3) + " " + SetPath.getGame_assetsdir();
+        String assersdir = " " + game_j.getString(3) + " " + SetPath.getGameAssetsdir();
         game_set.append(assersdir);
 
         String assetIndex = " " + game_j.getString(4) + " " + assetIndex_j.getString("id");

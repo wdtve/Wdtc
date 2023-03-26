@@ -28,7 +28,7 @@ public class GetJvm {
         JSONArray users_jvm = u_s_j.getJSONArray("users_jvm");
         JSONArray user_game = u_s_j.getJSONArray("user_game");
         JSONArray jvm_j = u_j_e.getJSONArray("jvm");
-        String game_p = SetPath.getGame_path();
+        String game_p = SetPath.getGamePath();
         jvm_set.append("@echo off\ncd ").append(game_p).append("\n");
         jvm_set.append(java_home).append(" ");
 

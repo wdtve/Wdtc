@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.WdtcLauncher.FilePath;
-import org.WdtcUI.users.Registeruser;
 import org.WdtcUI.users.UsersSetting;
 import org.WdtcUI.users.UsersWin;
 import org.apache.commons.io.FileUtils;
@@ -20,15 +19,13 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Controller {
     public static final Stage MainStage = AppMain.MainStage;
     private static final Logger logmaker = Logger.getLogger(Controller.class);
+    private static final File u_s = new File(FilePath.getUsersSettingJson());
     private static boolean log = false;
     private static boolean BMCLAPI = false;
-    private static final File u_s = new File(FilePath.getUsersSettingJson());
     @FXML
     private Button Down_WinDownload;
     @FXML
@@ -67,12 +64,6 @@ public class Controller {
     private TextField WinHide = new TextField();
     @FXML
     private TextField GameMemory = new TextField();
-
-    public static boolean isContainChinese(String str) {
-        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
-        Matcher m = p.matcher(str);
-        return !m.find();
-    }
 
     @FXML
     private void setDownWinDownload() {
@@ -156,26 +147,10 @@ public class Controller {
         new CompletionGame().completion_game();
     }
 
-    @FXML
-    private void Setregister() throws IOException {
-        String username = Registerusername.getText();
-        if (isContainChinese(username)) {
-            Registeruser.RegisterUser(username);
-            logmaker.info("* 账户注册" + username + "成功");
-            OKRegister.setText("注册" + username + "成功");
-        } else {
-            OKRegister.setText("不能带中文字符哦");
-        }
-    }
 
     @FXML
     private void setSettingskin() throws IOException {
         UsersWin.setUserWin("修改账户名");
-    }
-
-    @FXML
-    void setbuy() throws IOException {
-        Runtime.getRuntime().exec("cmd.exe /C start https://www.minecraft.net/");
     }
 
     @FXML
@@ -185,6 +160,7 @@ public class Controller {
         Scene scene = new Scene(main_pane);
         MainStage.setScene(scene);
     }
+
     @FXML
     private void Setapplication() throws IOException {
         UsersSetting.user_game.clear();
@@ -196,8 +172,6 @@ public class Controller {
         usersSetting.setUser_game(GameMemory.getText());
         String usersetting = JSON.toJSONString(usersSetting);
         u_s.delete();
-        FileUtils.writeStringToFile(u_s,usersetting,"UTF-8");
+        FileUtils.writeStringToFile(u_s, usersetting, "UTF-8");
     }
-
-
 }

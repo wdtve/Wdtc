@@ -42,7 +42,10 @@ public final class ZipObjects {
         File targetFile = new File(targetPath);
 
         if (!targetFile.exists()) {
-            targetFile.mkdirs();
+            if (targetFile.isDirectory()) {
+                System.out.println(true);
+                targetFile.mkdirs();
+            }
         }
 
         FileOutputStream outputStream = new FileOutputStream(targetFile);

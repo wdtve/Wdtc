@@ -70,7 +70,7 @@ public class GetHash {
         JSONArray l_e_j = JSON.parseArray(list);
         CountDownLatch countDownLatch = new CountDownLatch(l_e_j.size());
         if (resources_zip.exists()) {
-            unzipByFile(resources_zip, SetPath.getGame_assetsdir());
+            unzipByFile(resources_zip, SetPath.getGameAssetsdir());
         } else {
             LOGGER.error("* 资源文件压缩包不存在!");
         }
@@ -78,7 +78,7 @@ public class GetHash {
             String hash = l_e_j.getJSONObject(i).getString("hash");
             String hash_t = hash.substring(0, 2);
             if (BMCL) {
-                File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread = new Thread(() -> {
@@ -90,7 +90,7 @@ public class GetHash {
                     thread.start();
                 }
             } else {
-                File hash_path = new File(SetPath.getGame_assetsdir() + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread1 = new Thread(() -> {

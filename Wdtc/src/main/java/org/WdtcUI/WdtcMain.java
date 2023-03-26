@@ -10,6 +10,7 @@ public class WdtcMain {
         logger.info("* Java VM Version:" + System.getProperty("java.vm.name"));
         logger.info("* Java Home:" + System.getProperty("java.home"));
         logger.info("* 程序开始运行");
+        logger.info("* 栓Q,JavaFX ↓");
         Application.launch(AppMain.class);
     }
 }

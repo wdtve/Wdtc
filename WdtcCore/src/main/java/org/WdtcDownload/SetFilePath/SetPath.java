@@ -4,26 +4,26 @@ public class SetPath {
     private static final String here = System.getProperty("user.dir");
 
     public static String getGameObjects() {
-        return getGame_assetsdir() + "objects\\";
+        return getGameAssetsdir() + "objects\\";
     }
 
     public static String getHere() {
         return here;
     }
 
-    public static String getGame_path() {
+    public static String getGamePath() {
         return here + "\\.minecraft\\";
     }
 
-    public static String getGame_lib_path() {
+    public static String GetGameLibPath() {
         return here + "\\.minecraft\\libraries\\";
     }
 
-    public static String getV_lib_path() {
+    public static String getGameVersionPath() {
         return here + "\\.minecraft\\versions\\";
     }
 
-    public static String getGame_assetsdir() {
+    public static String getGameAssetsdir() {
         return here + "\\.minecraft\\assets\\";
     }
 }

@@ -17,7 +17,6 @@ import java.util.Objects;
 public class AppMain extends Application {
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
     public static Stage MainStage = new Stage();
-
     @Override
     public void start(Stage stage) {
         AppMain.MainStage = stage;

@@ -1,20 +1,19 @@
 package org.WdtcUI;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.WdtcDownload.SetFilePath.SetPath;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public class DeleteVersion {
     private static final Logger logmaker = Logger.getLogger(DeleteVersion.class);
@@ -24,60 +23,10 @@ public class DeleteVersion {
     private static final ScrollPane SCROLL_PANE = new ScrollPane();
     private static final Scene SCENE = new Scene(SCROLL_PANE);
 
-    /**
-     * 删除文件夹
-     *
-     * @param folderPath 文件夹完整绝对路径 ,"Z:/xuyun/save"
-     */
-    public static void delFolder(String folderPath) {
-        try {
-            delAllFile(folderPath);
-            String filePath = folderPath;
-            filePath = filePath.toString();
-            File myFilePath = new File(filePath);
-            myFilePath.delete();
-        } catch (Exception e) {
-            ErrorWin.setErrorWin(e);
-        }
-    }
 
-    /**
-     * 删除指定文件夹下所有文件
-     *
-     * @param path 文件夹完整绝对路径 ,"Z:/xuyun/save"
-     */
-    public static boolean delAllFile(String path) {
-        boolean flag = false;
-        File file = new File(path);
-        if (!file.exists()) {
-            return flag;
-        }
-        if (!file.isDirectory()) {
-            return flag;
-        }
-        String[] tempList = file.list();
-        File temp = null;
-        for (int i = 0; i < tempList.length; i++) {
-            if (path.endsWith(File.separator)) {
-                temp = new File(path + tempList[i]);
-            } else {
-                temp = new File(path + File.separator + tempList[i]);
-            }
-            if (temp.isFile()) {
-                temp.delete();
-            }
-            if (temp.isDirectory()) {
-                delAllFile(path + "/" + tempList[i]);//先删除文件夹里面的文件
-                delFolder(path + "/" + tempList[i]);//再删除空文件夹
-                flag = true;
-            }
-        }
-        return flag;
-    }
-
-    public void getStartList() throws IOException {
+    public void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(SetPath.getV_lib_path());
+        File version_path = new File(SetPath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
         try {
@@ -85,11 +34,15 @@ public class DeleteVersion {
                 Button button = new Button(file2.getName());
                 V_BOX.getChildren().add(button);
                 button.setMaxSize(100, 50);
-                button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    V_BOX.getChildren().clear();
-                    Delete.close();
-                    delFolder(SetPath.getV_lib_path() + button.getText());
-                    logmaker.info("* 版本删除成功");
+                button.setOnAction(event -> {
+                    try {
+                        V_BOX.getChildren().clear();
+                        Delete.close();
+                        FileUtils.deleteDirectory(new File(SetPath.getGameVersionPath() + button.getText()));
+                        logmaker.info("* 版本删除成功");
+                    } catch (IOException e) {
+                        ErrorWin.setErrorWin(e);
+                    }
 
                 });
             }
@@ -104,14 +57,20 @@ public class DeleteVersion {
             Delete.show();
             Delete.setOnCloseRequest(windowEvent -> V_BOX.getChildren().clear());
         } catch (NullPointerException e) {
-            Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/NullVersion.fxml")));
-            Scene scene = new Scene(pane);
+            Label label = new Label("您没有游戏版本,请去下载");
+            Pane pane = new Pane();
+            pane.prefHeight(400.0);
+            pane.prefWidth(600.0);
+            label.setLayoutX(217.0);
+            label.setLayoutY(193.0);
+            pane.getChildren().add(label);
+            Scene scene = new Scene(pane, 600, 400);
             Delete.setScene(scene);
-            Delete.getIcons().add(new Image("ico.jpg"));
-            Delete.setTitle("Error");
             Delete.setResizable(false);
-            logmaker.error("* 版本文件夹为空");
+            Delete.getIcons().add(new Image("/ico.jpg"));
+            Delete.setTitle("版本文件夹为空");
             Delete.show();
+            logmaker.error("* 版本文件夹为空");
         }
     }
 }

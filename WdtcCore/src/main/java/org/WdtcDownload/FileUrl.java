@@ -8,6 +8,11 @@ public class FileUrl {
     private static final String BMCLAPI_VERSION_MANIFEST = "https://download.mcbbs.net/mc/game/version_manifest.json";
     private static final String BMCLAPI_ASSETS = "https://download.mcbbs.net/assets/";
     private static final String MOJANG_LIBRARIES = "https://libraries.minecraft.net/";
+    private static boolean BMCLAPI;
+
+    public FileUrl(boolean BMCLAPI) {
+        FileUrl.BMCLAPI = BMCLAPI;
+    }
 
     public static String getMojangVersionManifest() {
         return MOJANG_VERSION_MANIFEST;
@@ -35,6 +40,30 @@ public class FileUrl {
 
     public static String getMojangLibraries() {
         return MOJANG_LIBRARIES;
+    }
+
+    public String getVersionManifest() {
+        if (BMCLAPI) {
+            return getBmclapiVersionManifest();
+        } else {
+            return getMojangVersionManifest();
+        }
+    }
+
+    public String getAssets() {
+        if (BMCLAPI) {
+            return getBmclapiAssets();
+        } else {
+            return getMojangAssets();
+        }
+    }
+
+    public String getLibrary() {
+        if (BMCLAPI) {
+            return getBmclapiLibraries();
+        } else {
+            return getMojangLibraries();
+        }
     }
 
 }

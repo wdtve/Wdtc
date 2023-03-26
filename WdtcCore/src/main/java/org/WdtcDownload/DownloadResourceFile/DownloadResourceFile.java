@@ -26,7 +26,7 @@ public class DownloadResourceFile {
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));
-        File game_assetsDir_j = new File(SetPath.getGame_assetsdir() + "indexes\\" + id + ".json");
+        File game_assetsDir_j = new File(SetPath.getGameAssetsdir() + "indexes\\" + id + ".json");
         new WGet(url, game_assetsDir_j).download();
         GetFileList.getFileList(game_assetsDir_j, label, BMCLAPI);
 

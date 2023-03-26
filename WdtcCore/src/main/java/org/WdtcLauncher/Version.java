@@ -14,7 +14,7 @@ public class Version {
     }
 
     public String getVersionLibPath() {
-        return SetPath.getV_lib_path();
+        return SetPath.getGameVersionPath();
     }
 
     public String getVersionPath() {

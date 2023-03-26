@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.concurrent.Task;
-import javafx.scene.control.TextField;
 import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
@@ -19,18 +18,12 @@ import java.util.Objects;
 //1.19-
 public class GetLibUrl extends GetLibPathUrl {
     private static final Logger logmaker = Logger.getLogger(GetLibUrl.class);
-    private static TextField label;
     private static Version version;
 
-
-
-    public GetLibUrl(String version, boolean BMCLAPI, TextField label) throws IOException {
-        GetLibPathUrl.BMCLAPI = BMCLAPI;
-        GetLibUrl.label = label;
+    public GetLibUrl(String version, boolean BMCLAPI) {
+        super(BMCLAPI);
         GetLibUrl.version = new Version(version);
     }
-
-
 
     public void readdown() throws IOException, RuntimeException {
         File lib_pay = new File(version.getVersionNativesPath());
@@ -52,9 +45,8 @@ public class GetLibUrl extends GetLibPathUrl {
                                 if (!readlib_path(lib_j).exists()) {
                                     logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                     new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                    logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
+                                    logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
                                 }
-//                            System.out.println(readlib_url(lib_j));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -77,9 +69,8 @@ public class GetLibUrl extends GetLibPathUrl {
                                     if (!readlib_path(lib_j).exists()) {
                                         logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
+                                        logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
                                     }
-//                                System.out.println(readlib_url(lib_j));
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -88,7 +79,6 @@ public class GetLibUrl extends GetLibPathUrl {
 
                         };
                         new Thread(voidTask).start();
-//                        TimeUnit.MICROSECONDS.sleep(160);
                     } else if (Objects.equals(action, "allow") && Objects.equals(os_n, "windows")) {
                         Task<Void> voidTask = new Task<>() {
                             @Override
@@ -97,13 +87,11 @@ public class GetLibUrl extends GetLibPathUrl {
                                     if (!readlib_path(lib_j).exists()) {
                                         logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
+                                        logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
                                     }
-//                                System.out.println(readlib_url(lib_j));
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
-//                                TimeUnit.MICROSECONDS.sleep(160);
                                 return null;
                             }
                         };
@@ -121,9 +109,8 @@ public class GetLibUrl extends GetLibPathUrl {
                                 if (!readnatives_lib(lib_j).exists()) {
                                     logmaker.info("* " + readnatives_url(lib_j) + " 开始下载");
                                     new WGet(readnatives_url(lib_j), readnatives_lib(lib_j)).download();
-                                    logmaker.info("* " + readnatives_lib(lib_j) + " 下载完成");
+                                    logmaker.info("* " + readnatives_lib(lib_j).getName() + " 下载完成");
                                 }
-//                                System.out.println(readnatives_url(lib_j));
                             } catch (IOException | RuntimeException e) {
                                 e.printStackTrace();
                             }
