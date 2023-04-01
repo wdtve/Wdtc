@@ -192,10 +192,11 @@ public class CompleteDocument extends GetLibPathUrl {
                         }
                     });
                     thread.start();
+                } else {
+                    countDownLatch.countDown();
                 }
 
             } else {
-
                 File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
@@ -210,8 +211,9 @@ public class CompleteDocument extends GetLibPathUrl {
                         }
                     });
                     thread1.start();
+                } else {
+                    countDownLatch.countDown();
                 }
-                countDownLatch.await();
                 Thread thread = new Thread(() -> {
                     if (!resources_zip.exists()) {
                         try {

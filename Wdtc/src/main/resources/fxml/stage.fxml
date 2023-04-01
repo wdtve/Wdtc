@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/17"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.WdtcUI.Controller">
     <Button onAction="#setHome" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" text="首页"/>
     <Button onAction="#setDownload_game" layoutY="23.0" mnemonicParsing="false" text="下载游戏"/>

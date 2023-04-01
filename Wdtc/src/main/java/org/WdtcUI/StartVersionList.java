@@ -25,11 +25,11 @@ public class StartVersionList {
     private static final VBox V_BOX = new VBox();
     private static final ScrollPane SCROLL_PANE = new ScrollPane();
     private static final Scene SCENE = new Scene(SCROLL_PANE);
+    private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
     private static Label start_label;
     private static boolean log = false;
     private static TextField textField;
     private static boolean BMCLAPI;
-    private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
 
     public StartVersionList(Label start_label, boolean log, TextField textField, boolean BMCLAPI) {
         StartVersionList.start_label = start_label;
@@ -55,10 +55,16 @@ public class StartVersionList {
                         if (ReadUserList.SetUserJson()) {
                             start_label.setText("\t\t\t\t开始启动");
                             logmaker.info("* 开始启动");
-                            new Launcher(file2.getName(), log, BMCLAPI);
+                            new Thread(() -> {
+                                try {
+                                    new Launcher(file2.getName(), log, BMCLAPI);
+                                } catch (IOException | InterruptedException | RuntimeException e) {
+                                    ErrorWin.setErrorWin(e);
+                                }
+                            }).start();
                             textField.setText(new File(FilePath.getStarterBat()).getCanonicalPath());
                         }
-                    } catch (IOException | InterruptedException | RuntimeException e) {
+                    } catch (IOException e) {
                         ErrorWin.setErrorWin(e);
                     }
 

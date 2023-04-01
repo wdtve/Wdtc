@@ -6,8 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.WdtcLauncher.FilePath;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -15,6 +17,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class AppMain extends Application {
+    private static final File v_m = new File(FilePath.getVersionManifestJson());
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
     public static Stage MainStage = new Stage();
     @Override
@@ -43,6 +46,9 @@ public class AppMain extends Application {
             MainStage.setScene(scene);
             MainStage.show();
             MainStage.setOnCloseRequest(windowEvent -> {
+                if (v_m.exists()) {
+                    v_m.delete();
+                }
                 logmaker.info("* 程序已退出");
                 System.exit(0);
             });

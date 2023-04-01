@@ -11,9 +11,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.WdtcDownload.FileUrl;
 import org.WdtcDownload.VersionDownload.SelectVersion;
+import org.WdtcLauncher.FilePath;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -21,6 +24,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 public class VersionList {
+    private static final File v_m = new File(FilePath.getVersionManifestJson());
     private static final Logger logmaker = Logger.getLogger(VersionList.class);
     private static final Stage stage = new Stage();
     private static final ScrollPane sp = new ScrollPane();
@@ -40,17 +44,21 @@ public class VersionList {
         logmaker.info("* 开始加载版本列表");
         String vm_e = null;
         try {
-            URL version_manifest_url = new URL(fileUrl.getVersionManifest());
-            URLConnection uc = version_manifest_url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), StandardCharsets.UTF_8));
-            vm_e = in.readLine();
+            if (!v_m.exists()) {
+                URL version_manifest_url = new URL(fileUrl.getVersionManifest());
+                URLConnection uc = version_manifest_url.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), StandardCharsets.UTF_8));
+                vm_e = in.readLine();
+                FileUtils.writeStringToFile(v_m, vm_e, "UTF-8");
+            } else {
+                vm_e = FileUtils.readFileToString(v_m, "UTF-8");
+            }
         } catch (IOException e) {
             Controller.MainStage.setTitle("下载游戏 (无网络)");
             logmaker.error("* 出现错误,可能是网络错误");
             ErrorWin.setErrorWin(e);
         }
         try {
-
             JSONObject vm_e_j = JSONObject.parseObject(vm_e);
             JSONArray version_list = vm_e_j.getJSONArray("versions");
             for (int i = 0; i < version_list.size(); i++) {

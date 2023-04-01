@@ -1,6 +1,22 @@
-2023-03-26 12:16:42  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:17.0.5
-2023-03-26 12:16:42  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
-2023-03-26 12:16:42  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Amazon Corretto\jdk17.0.5_8
-2023-03-26 12:16:42  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
-2023-03-26 12:16:42  [main]  org.WdtcUI.WdtcMain:13 - [ INFO ]  * 栓Q,JavaFX ↓
-2023-03-26 12:17:00  [JavaFX Application Thread]  org.WdtcUI.AppMain:46 - [ INFO ]  * 程序已退出
+2023-03-31 20:00:03  [JavaFX Application Thread]  org.WdtcUI.users.ReadUserList:18 - [ INFO ]  * 有账户,开始启动
+2023-03-31 20:00:03  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:57 - [ INFO ]  * 开始启动
+2023-03-31 20:00:04  [Thread-50]  org.WdtcLauncher.Launcher:23 - [ INFO ]  * 开始文件补全
+2023-03-31 20:00:04  [Thread-53]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-openal/3.2.2/lwjgl-openal-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-51]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl/3.2.2/lwjgl-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-52]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-jemalloc/3.2.2/lwjgl-jemalloc-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-57]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-tinyfd/3.2.2/lwjgl-tinyfd-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-56]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-stb/3.2.2/lwjgl-stb-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-54]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-opengl/3.2.2/lwjgl-opengl-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-55]  org.WdtcDownload.CompleteDocument.CompleteDocument:80 - [ INFO ]  * https://libraries.minecraft.net/org/lwjgl/lwjgl-glfw/3.2.2/lwjgl-glfw-3.2.2.jar 开始下载
+2023-03-31 20:00:04  [Thread-52]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-jemalloc-3.2.2.jar下载完成
+2023-03-31 20:00:04  [Thread-57]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-tinyfd-3.2.2.jar下载完成
+2023-03-31 20:00:04  [Thread-51]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-3.2.2.jar下载完成
+2023-03-31 20:00:04  [Thread-56]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-stb-3.2.2.jar下载完成
+2023-03-31 20:00:04  [Thread-55]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-glfw-3.2.2.jar下载完成
+2023-03-31 20:00:04  [Thread-53]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-openal-3.2.2.jar下载完成
+2023-03-31 20:00:05  [Thread-54]  org.WdtcDownload.CompleteDocument.CompleteDocument:82 - [ INFO ]  * lwjgl-opengl-3.2.2.jar下载完成
+2023-03-31 20:00:06  [Thread-50]  org.WdtcLauncher.Launcher:27 - [ INFO ]  * 文件补全完成
+2023-03-31 20:00:06  [Thread-50]  org.WdtcLauncher.Launcher:28 - [ INFO ]  * 开始写入启动脚本
+2023-03-31 20:00:08  [Thread-50]  org.WdtcLauncher.Launcher:32 - [ INFO ]  * 启动脚本写入完成
+2023-03-31 20:00:08  [Thread-50]  org.WdtcLauncher.Launcher:37 - [ INFO ]  * 开始运行启动脚本,日志:不显示
+2023-03-31 20:00:15  [JavaFX Application Thread]  org.WdtcUI.AppMain:52 - [ INFO ]  * 程序已退出

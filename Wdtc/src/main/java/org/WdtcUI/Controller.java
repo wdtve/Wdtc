@@ -94,6 +94,8 @@ public class Controller {
         MainStage.setTitle("Wdtc - Demo - Setting");
         Scene scene = new Scene(pane);
         MainStage.setScene(scene);
+        true_BMCLAPI.setSelected(BMCLAPI);
+        true_log.setSelected(log);
     }
 
     @FXML
@@ -139,10 +141,9 @@ public class Controller {
     @FXML
     private void setHome() {
         try {
-
             MainStage.setTitle("Wdtc - Demo");
-            Pane main_pane = new Pane(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml"))));
-            Scene scene = new Scene(main_pane);
+            Pane pane = new Pane(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml"))));
+            Scene scene = new Scene(pane);
             MainStage.setScene(scene);
         } catch (IOException e) {
             ErrorWin.setErrorWin(e);

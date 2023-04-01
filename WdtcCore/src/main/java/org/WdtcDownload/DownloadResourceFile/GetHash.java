@@ -88,6 +88,8 @@ public class GetHash {
                         countDownLatch.countDown();
                     });
                     thread.start();
+                } else {
+                    countDownLatch.countDown();
                 }
             } else {
                 File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
@@ -100,6 +102,8 @@ public class GetHash {
                         countDownLatch.countDown();
                     });
                     thread1.start();
+                } else {
+                    countDownLatch.countDown();
                 }
             }
         }
