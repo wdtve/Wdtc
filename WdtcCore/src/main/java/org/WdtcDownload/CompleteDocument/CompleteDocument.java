@@ -56,7 +56,7 @@ public class CompleteDocument extends GetLibPathUrl {
                                 try {
                                     logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                     new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                    logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
+                                    logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                 } catch (IOException | RuntimeException e) {
                                     e.printStackTrace();
                                 }
@@ -72,14 +72,14 @@ public class CompleteDocument extends GetLibPathUrl {
                     JSONObject os_j = action_j.getJSONObject("os");
                     String os_n = os_j.getString("name");
                     if (Objects.equals(action, "disallow") && Objects.equals(os_n, "osx")) {
-                        if (readlib_path(lib_j).exists()) {
+                        if (!readlib_path(lib_j).exists()) {
                             Task<Void> voidTask = new Task<>() {
                                 @Override
                                 protected Void call() {
                                     try {
                                         logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                        logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
+                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                     } catch (IOException | RuntimeException e) {
                                         e.printStackTrace();
                                     }
@@ -97,7 +97,7 @@ public class CompleteDocument extends GetLibPathUrl {
                                     try {
                                         logmaker.info("* " + readlib_url(lib_j) + " 开始下载");
                                         new WGet(readlib_url(lib_j), readlib_path(lib_j)).download();
-                                        logmaker.info("* " + readlib_path(lib_j).getName() + "下载完成");
+                                        logmaker.info("* " + readlib_path(lib_j) + " 下载完成");
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -119,7 +119,7 @@ public class CompleteDocument extends GetLibPathUrl {
                                 try {
                                     logmaker.info("* " + readnatives_url(lib_j) + " 开始下载");
                                     new WGet(readnatives_url(lib_j), readnatives_lib(lib_j)).download();
-                                    logmaker.info("* " + readnatives_lib(lib_j).getName() + " 下载完成");
+                                    logmaker.info("* " + readnatives_lib(lib_j) + " 下载完成");
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -151,7 +151,7 @@ public class CompleteDocument extends GetLibPathUrl {
                 if (!VersionJar.exists()) {
                     logmaker.info("* " + jar_url + " 开始下载");
                     new WGet(jar_url, VersionJar).download();
-                    logmaker.info("* " + VersionJar.getName() + " 下载完成");
+                    logmaker.info("* " + VersionJar + " 下载完成");
                 }
             } catch (MalformedURLException | RuntimeException e) {
                 e.printStackTrace();

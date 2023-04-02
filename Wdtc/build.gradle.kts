@@ -14,7 +14,7 @@ allprojects {
 
 
 javafx {
-    version = "19.0.2.1"
+    version = "20"
     modules("javafx.controls", "javafx.fxml", "javafx.web")
 }
 sourceSets {

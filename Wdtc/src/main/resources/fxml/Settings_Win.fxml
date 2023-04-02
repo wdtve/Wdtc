@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="org.WdtcUI.Controller">
-    <Button mnemonicParsing="false" onAction="#setHome" prefHeight="23.0" prefWidth="64.0" text="首页"/>
-    <Button layoutY="23.0" mnemonicParsing="false" onAction="#setDownload_game" text="下载游戏"/>
-    <Button layoutY="46.0" mnemonicParsing="false" onAction="#setStart" text="启动游戏"/>
-    <Button layoutY="377.0" mnemonicParsing="false" onAction="#setGithub_button" prefHeight="23.0" prefWidth="64.0"
-            text="GitHub"/>
-    <Button layoutY="354.0" mnemonicParsing="false" onAction="#setSetting" prefHeight="23.0" prefWidth="64.0"
-            text="设置"/>
-    <Label layoutX="17.0" layoutY="161.0" text="Wdtc"/>
-    <Label layoutX="17.0" layoutY="176.0" text="Demo"/>
+    <JFXButton onAction="#setHome" style="-fx-border-color: #000000;" text="返回"/>
     <RadioButton fx:id="true_log" layoutX="77.0" layoutY="111.0" mnemonicParsing="false" onAction="#setTrue_log"
                  text="显示"/>
     <RadioButton fx:id="false_log" layoutX="139.0" layoutY="111.0" mnemonicParsing="false" onAction="#setFalse_log"

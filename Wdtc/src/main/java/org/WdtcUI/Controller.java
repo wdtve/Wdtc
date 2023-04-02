@@ -139,15 +139,11 @@ public class Controller {
     }
 
     @FXML
-    private void setHome() {
-        try {
-            MainStage.setTitle("Wdtc - Demo");
-            Pane pane = new Pane(FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml"))));
-            Scene scene = new Scene(pane);
-            MainStage.setScene(scene);
-        } catch (IOException e) {
-            ErrorWin.setErrorWin(e);
-        }
+    private void setHome() throws IOException {
+        MainStage.setTitle("Wdtc - Demo");
+        Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
+        MainStage.setScene(new Scene(pane));
+
     }
 
     @FXML

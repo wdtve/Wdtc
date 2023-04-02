@@ -6,7 +6,7 @@
 
 ## JDK:
 
-### corretto-17
+### [liberica-20](https://bell-sw.com/pages/downloads/)
 
 ## IDE:
 

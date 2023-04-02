@@ -7,7 +7,7 @@ plugins {
 version = "0.1-demo"
 
 javafx {
-    version = "19.0.2.1"
+    version = "20"
     modules("javafx.controls", "javafx.fxml")
 }
 allprojects {
