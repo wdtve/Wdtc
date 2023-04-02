@@ -24,7 +24,7 @@ public class DeleteVersion {
     private static final Scene SCENE = new Scene(SCROLL_PANE);
 
 
-    public void getStartList() {
+    public static void getStartList() {
         logmaker.info("* 开始加载版本列表");
         File version_path = new File(SetPath.getGameVersionPath());
         File[] files = version_path.listFiles();

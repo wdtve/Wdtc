@@ -54,7 +54,6 @@ public class VersionList {
                 vm_e = FileUtils.readFileToString(v_m, "UTF-8");
             }
         } catch (IOException e) {
-            Controller.MainStage.setTitle("下载游戏 (无网络)");
             logmaker.error("* 出现错误,可能是网络错误");
             ErrorWin.setErrorWin(e);
         }

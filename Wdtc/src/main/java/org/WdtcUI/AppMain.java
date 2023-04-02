@@ -1,10 +1,7 @@
 package org.WdtcUI;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.WdtcLauncher.FilePath;
 import org.apache.log4j.Logger;
@@ -14,17 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
 
 public class AppMain extends Application {
     private static final File v_m = new File(FilePath.getVersionManifestJson());
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
-    public static Stage MainStage = new Stage();
+
     @Override
-    public void start(Stage stage) {
-        AppMain.MainStage = stage;
+    public void start(Stage MainStage) {
         try {
-            Pane main_pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/stage.fxml")));
             MainStage.setWidth(615);
             MainStage.setHeight(440);
             MainStage.getIcons().add(new Image("ico.jpg"));
@@ -42,8 +36,7 @@ public class AppMain extends Application {
                 ErrorWin.setErrorWin(e);
             }
             MainStage.setResizable(false);
-            Scene scene = new Scene(main_pane);
-            MainStage.setScene(scene);
+            HomeWin.setHome(MainStage);
             MainStage.show();
             MainStage.setOnCloseRequest(windowEvent -> {
                 if (v_m.exists()) {

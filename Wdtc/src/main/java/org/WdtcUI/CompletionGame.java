@@ -26,7 +26,7 @@ public class CompletionGame {
     private static final Scene SCENE = new Scene(SCROLL_PANE);
 
 
-    public void completion_game() {
+    public static void completion_game() {
         File version_path = new File(SetPath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
