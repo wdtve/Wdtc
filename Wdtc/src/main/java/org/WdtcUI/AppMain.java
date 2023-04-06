@@ -16,6 +16,10 @@ public class AppMain extends Application {
     private static final File v_m = new File(FilePath.getVersionManifestJson());
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage MainStage) {
         try {

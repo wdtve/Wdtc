@@ -1,16 +1,6 @@
-2023-04-02 13:46:02  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
-2023-04-02 13:46:02  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
-2023-04-02 13:46:02  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
-2023-04-02 13:46:02  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
-2023-04-02 13:46:02  [main]  org.WdtcUI.WdtcMain:13 - [ INFO ]  * 栓Q,JavaFX ↓
-2023-04-02 13:46:12  [JavaFX Application Thread]  org.WdtcUI.SettingWin:36 - [ INFO ]  * 启动日志器开启显示
-2023-04-02 13:46:20  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:42 - [ INFO ]  * 开始加载版本列表
-2023-04-02 13:46:20  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:80 - [ INFO ]  * 版本列表加载成功
-2023-04-02 13:46:22  [JavaFX Application Thread]  org.WdtcUI.users.ReadUserList:18 - [ INFO ]  * 有账户,开始启动
-2023-04-02 13:46:22  [JavaFX Application Thread]  org.WdtcUI.StartVersionList:57 - [ INFO ]  * 开始启动
-2023-04-02 13:46:22  [Thread-3]  org.WdtcLauncher.Launcher:23 - [ INFO ]  * 开始文件补全
-2023-04-02 13:46:26  [Thread-3]  org.WdtcLauncher.Launcher:27 - [ INFO ]  * 文件补全完成
-2023-04-02 13:46:26  [Thread-3]  org.WdtcLauncher.Launcher:28 - [ INFO ]  * 开始写入启动脚本
-2023-04-02 13:46:26  [Thread-3]  org.WdtcLauncher.Launcher:32 - [ INFO ]  * 启动脚本写入完成
-2023-04-02 13:46:26  [Thread-3]  org.WdtcLauncher.Launcher:34 - [ INFO ]  * 开始运行启动脚本,日志:显示
-2023-04-02 13:48:53  [JavaFX Application Thread]  org.WdtcUI.AppMain:45 - [ INFO ]  * 程序已退出
+2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
+2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
+2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
+2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
+2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:13 - [ INFO ]  * 栓Q,JavaFX ↓
+2023-04-06 14:47:50  [JavaFX Application Thread]  org.WdtcUI.AppMain:49 - [ INFO ]  * 程序已退出
