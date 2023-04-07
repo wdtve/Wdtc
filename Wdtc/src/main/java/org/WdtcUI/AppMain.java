@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.WdtcLauncher.FilePath;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -44,7 +45,11 @@ public class AppMain extends Application {
             MainStage.show();
             MainStage.setOnCloseRequest(windowEvent -> {
                 if (v_m.exists()) {
-                    v_m.delete();
+                    try {
+                        FileUtils.delete(v_m);
+                    } catch (IOException | RuntimeException e) {
+                        ErrorWin.setErrorWin(e);
+                    }
                 }
                 logmaker.info("* 程序已退出");
                 System.exit(0);

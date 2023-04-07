@@ -50,7 +50,7 @@ public class test {
         Dependency dependency =
                 new Dependency(new DefaultArtifact(coords), "compile");
         RemoteRepository central =
-                new RemoteRepository.Builder("central", "default", "https://maven.fabricmc.net/").build();
+                new RemoteRepository.Builder("central", "default", "https://bmclapi2.bangbang93.com/maven").build();
         CollectRequest collectRequest = new CollectRequest();
         collectRequest.setRoot(dependency);
         collectRequest.addRepository(central);

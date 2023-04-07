@@ -27,7 +27,11 @@ sourceSets {
         }
     }
 }
-
+tasks.jar {
+    manifest {
+        "Main-Class" to "org.WdtcUI.WdtcMain"
+    }
+}
 dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("log4j:log4j:1.2.17")

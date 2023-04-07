@@ -1,6 +1,5 @@
-2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
-2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
-2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
-2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
-2023-04-06 14:47:37  [main]  org.WdtcUI.WdtcMain:13 - [ INFO ]  * 栓Q,JavaFX ↓
-2023-04-06 14:47:50  [JavaFX Application Thread]  org.WdtcUI.AppMain:49 - [ INFO ]  * 程序已退出
+2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
+2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
+2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
+2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
+2023-04-07 09:47:10  [JavaFX Application Thread]  org.WdtcUI.AppMain:54 - [ INFO ]  * 程序已退出

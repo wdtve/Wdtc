@@ -24,10 +24,12 @@
 - 等gradle自动下载好依赖后
 - 找到[WdtcMain](Wdtc/src/main/java/org/WdtcUI/WdtcMain.java)类文件里的main函数
 
-```
-public static void main(String[] args) {
-    //右键运行
-    Application.launch(AppMain.class);
+```java
+public static class WdtcMain {
+    public static void main(String[] args) {
+        //右键运行
+        AppMain.main(args);
+    }
 }
 ```
 
