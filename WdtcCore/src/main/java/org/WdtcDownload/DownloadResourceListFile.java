@@ -1,24 +1,23 @@
-package org.WdtcDownload.DownloadResourceFile;
+package org.WdtcDownload;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.scene.control.TextField;
-import org.WdtcDownload.SetFilePath.SetPath;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.net.URL;
 
-public class DownloadResourceFile {
+public class DownloadResourceListFile {
     private static File v_j;
     private static TextField label;
     private static boolean BMCLAPI = false;
 
-    public DownloadResourceFile(File v_j, TextField label, boolean BMCLAPI) {
-        DownloadResourceFile.v_j = v_j;
-        DownloadResourceFile.label = label;
-        DownloadResourceFile.BMCLAPI = BMCLAPI;
+    public DownloadResourceListFile(File v_j, TextField label, boolean BMCLAPI) {
+        DownloadResourceListFile.v_j = v_j;
+        DownloadResourceListFile.label = label;
+        DownloadResourceListFile.BMCLAPI = BMCLAPI;
     }
 
     public void getresource_file() throws Exception {
@@ -26,9 +25,10 @@ public class DownloadResourceFile {
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));
-        File game_assetsDir_j = new File(SetPath.getGameAssetsdir() + "indexes\\" + id + ".json");
+        File game_assetsDir_j = new File(GetGamePath.getGameAssetsdir() + "indexes\\" + id + ".json");
         new WGet(url, game_assetsDir_j).download();
-        GetFileList.getFileList(game_assetsDir_j, label, BMCLAPI);
+        DownloadGameResourceFile downloadGameResourceFile = new DownloadGameResourceFile(game_assetsDir_j, label, BMCLAPI);
+        downloadGameResourceFile.gethash();
 
     }
 }

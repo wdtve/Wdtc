@@ -1,14 +1,11 @@
-package org.WdtcDownload.CompleteDocument;
+package org.WdtcDownload;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
 import javafx.concurrent.Task;
-import org.WdtcDownload.DownloadLib.GetLibPathUrl;
-import org.WdtcDownload.FileUrl;
-import org.WdtcDownload.SetFilePath.SetPath;
-import org.WdtcLauncher.ExtractFiles.ExtractFile;
+import org.WdtcLauncher.ExtractFile;
 import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Version;
 import org.apache.commons.io.FileUtils;
@@ -22,7 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 //1.19-
-public class CompleteDocument extends GetLibPathUrl {
+public class CompleteDocument extends GetLibPathAndUrl {
     private static final Logger logmaker = Logger.getLogger(CompleteDocument.class);
     private static final File resources_zip = new File(FilePath.getResources_zip());
 
@@ -167,7 +164,7 @@ public class CompleteDocument extends GetLibPathUrl {
         JSONObject v_e_j = JSONObject.parseObject(v_e);
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
-        String game_assetsDir_j = SetPath.getGameAssetsdir() + "indexes\\" + id + ".json";
+        String game_assetsDir_j = GetGamePath.getGameAssetsdir() + "indexes\\" + id + ".json";
         String a_e = FileUtils.readFileToString(new File(game_assetsDir_j), "UTF-8");
         JSONObject a_e_j = JSON.parseObject(a_e);
         JSONObject object_j = a_e_j.getJSONObject("objects");
@@ -178,7 +175,7 @@ public class CompleteDocument extends GetLibPathUrl {
             String hash = l_e_j.getJSONObject(i).getString("hash");
             String hash_t = hash.substring(0, 2);
             if (BMCLAPI) {
-                File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(GetGamePath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread = new Thread(() -> {
@@ -197,7 +194,7 @@ public class CompleteDocument extends GetLibPathUrl {
                 }
 
             } else {
-                File hash_path = new File(SetPath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
+                File hash_path = new File(GetGamePath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
                 URL hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
                 if (!hash_path.exists()) {
                     Thread thread1 = new Thread(() -> {
@@ -217,7 +214,7 @@ public class CompleteDocument extends GetLibPathUrl {
                 Thread thread = new Thread(() -> {
                     if (!resources_zip.exists()) {
                         try {
-                            ExtractFile.compressedFile(SetPath.getGameObjects(), resources_zip.getCanonicalPath());
+                            ExtractFile.compressedFile(GetGamePath.getGameObjects(), resources_zip.getCanonicalPath());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

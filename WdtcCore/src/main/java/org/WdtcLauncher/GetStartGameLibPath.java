@@ -1,21 +1,18 @@
-package org.WdtcLauncher.ClassPath;
+package org.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.WdtcDownload.SetFilePath.SetPath;
-import org.WdtcLauncher.ExtractFiles.ExtractFile;
-import org.WdtcLauncher.FilePath;
-import org.WdtcLauncher.Version;
+import org.WdtcDownload.GetGamePath;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class ReadClass {
+public class GetStartGameLibPath {
     private static final File m_t = new File(FilePath.getStarterBat());
 
-    public static void readdown(String version_number) throws IOException {
+    public static void getLibPath(String version_number) throws IOException {
         Version version = new Version(version_number);
         File lib_pay = new File(version.getVersionNativesPath());
         if (lib_pay.mkdirs()) ;
@@ -55,7 +52,7 @@ public class ReadClass {
     }
 
     public static String readlib(JSONObject lib_j, String natives_name) {
-        String game_lib_path = SetPath.GetGameLibPath();
+        String game_lib_path = GetGamePath.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
         JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
@@ -65,7 +62,7 @@ public class ReadClass {
     }
 
     public static String readlib(JSONObject lib_j) {
-        String game_lib_path = SetPath.GetGameLibPath();
+        String game_lib_path = GetGamePath.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject artifact_j = downloads_j.getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path") + ";";

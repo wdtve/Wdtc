@@ -9,8 +9,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.WdtcDownload.CompleteDocument.CompleteDocument;
-import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcDownload.CompleteDocument;
+import org.WdtcDownload.GetGamePath;
 import org.WdtcLauncher.Version;
 import org.apache.log4j.Logger;
 
@@ -27,7 +27,7 @@ public class CompletionGame {
 
 
     public static void completion_game() {
-        File version_path = new File(SetPath.getGameVersionPath());
+        File version_path = new File(GetGamePath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
         try {

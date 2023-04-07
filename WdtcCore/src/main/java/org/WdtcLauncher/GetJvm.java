@@ -1,12 +1,9 @@
-package org.WdtcLauncher.JvmSet;
+package org.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.WdtcDownload.SetFilePath.SetPath;
-import org.WdtcLauncher.FilePath;
-import org.WdtcLauncher.JavaHome.GetJavaPath;
-import org.WdtcLauncher.Version;
+import org.WdtcDownload.GetGamePath;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -28,7 +25,7 @@ public class GetJvm {
         JSONArray users_jvm = u_s_j.getJSONArray("users_jvm");
         JSONArray user_game = u_s_j.getJSONArray("user_game");
         JSONArray jvm_j = u_j_e.getJSONArray("jvm");
-        String game_p = SetPath.getGamePath();
+        String game_p = GetGamePath.getGamePath();
         jvm_set.append("@echo off\ncd ").append(game_p).append("\n");
         jvm_set.append(java_home).append(" ");
 

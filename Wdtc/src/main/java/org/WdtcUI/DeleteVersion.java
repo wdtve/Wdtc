@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcDownload.GetGamePath;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class DeleteVersion {
 
     public static void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(SetPath.getGameVersionPath());
+        File version_path = new File(GetGamePath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
         try {
@@ -38,7 +38,7 @@ public class DeleteVersion {
                     try {
                         V_BOX.getChildren().clear();
                         Delete.close();
-                        FileUtils.deleteDirectory(new File(SetPath.getGameVersionPath() + button.getText()));
+                        FileUtils.deleteDirectory(new File(GetGamePath.getGameVersionPath() + button.getText()));
                         logmaker.info("* 版本删除成功");
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);

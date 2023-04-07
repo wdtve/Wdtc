@@ -1,9 +1,6 @@
 package org.WdtcLauncher;
 
-import org.WdtcDownload.CompleteDocument.CompleteDocument;
-import org.WdtcLauncher.ClassPath.ReadClass;
-import org.WdtcLauncher.GameSet.GetGame;
-import org.WdtcLauncher.JvmSet.GetJvm;
+import org.WdtcDownload.CompleteDocument;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -27,7 +24,7 @@ public class Launcher {
         logmaker.info("* 文件补全完成");
         logmaker.info("* 开始写入启动脚本");
         GetJvm.read_jvm(Version_number);
-        ReadClass.readdown(Version_number);
+        GetStartGameLibPath.getLibPath(Version_number);
         GetGame.Getgame(Version_number);
         logmaker.info("* 启动脚本写入完成");
         if (log) {

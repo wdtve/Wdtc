@@ -1,6 +1,6 @@
-package org.WdtcDownload.SetFilePath;
+package org.WdtcDownload;
 
-public class SetPath {
+public class GetGamePath {
     private static final String here = System.getProperty("user.dir");
 
     public static String getGameObjects() {

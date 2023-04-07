@@ -1,11 +1,9 @@
-package org.WdtcLauncher.GameSet;
+package org.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.WdtcDownload.SetFilePath.SetPath;
-import org.WdtcLauncher.FilePath;
-import org.WdtcLauncher.Version;
+import org.WdtcDownload.GetGamePath;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -34,10 +32,10 @@ public class GetGame {
         String version_set = " " + game_j.getString(1) + " " + v;
         game_set.append(version_set);
 
-        String gamedir = " " + game_j.getString(2) + " " + SetPath.getGamePath();
+        String gamedir = " " + game_j.getString(2) + " " + GetGamePath.getGamePath();
         game_set.append(gamedir);
 
-        String assersdir = " " + game_j.getString(3) + " " + SetPath.getGameAssetsdir();
+        String assersdir = " " + game_j.getString(3) + " " + GetGamePath.getGameAssetsdir();
         game_set.append(assersdir);
 
         String assetIndex = " " + game_j.getString(4) + " " + assetIndex_j.getString("id");

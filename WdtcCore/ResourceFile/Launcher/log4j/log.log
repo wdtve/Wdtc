@@ -1,5 +1,13 @@
-2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
-2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
-2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
-2023-04-07 09:46:59  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
-2023-04-07 09:47:10  [JavaFX Application Thread]  org.WdtcUI.AppMain:54 - [ INFO ]  * 程序已退出
+2023-04-07 18:21:16  [main]  org.WdtcUI.WdtcMain:9 - [ INFO ]  * Java Version:20
+2023-04-07 18:21:16  [main]  org.WdtcUI.WdtcMain:10 - [ INFO ]  * Java VM Version:OpenJDK 64-Bit Server VM
+2023-04-07 18:21:16  [main]  org.WdtcUI.WdtcMain:11 - [ INFO ]  * Java Home:F:\jdk\Liberica JDK\LibericaJDK-20-Full
+2023-04-07 18:21:16  [main]  org.WdtcUI.WdtcMain:12 - [ INFO ]  * 程序开始运行
+2023-04-07 18:21:34  [JavaFX Application Thread]  org.WdtcUI.VersionList:45 - [ INFO ]  * 开始加载版本列表
+2023-04-07 18:21:36  [JavaFX Application Thread]  org.WdtcUI.VersionList:98 - [ INFO ]  * 版本列表加载成功
+2023-04-07 18:21:44  [Thread-12]  org.WdtcDownload.DownloadAndGameLibFile:46 - [ INFO ]  * https://libraries.minecraft.net/com/mojang/datafixerupper/6.0.6/datafixerupper-6.0.6.jar 开始下载
+2023-04-07 18:21:44  [Thread-3]  org.WdtcDownload.DownloadGameResourceFile:64 - [ ERROR ]  * 文件提取发生错误!
+2023-04-07 18:21:44  [Thread-62]  org.WdtcDownload.DownloadAndGameLibFile:140 - [ INFO ]  * https://piston-data.mojang.com/v1/objects/958928a560c9167687bea0cefeb7375da1e552a8/client.jar 开始下载
+2023-04-07 18:21:45  [Thread-3]  org.WdtcDownload.DownloadGameResourceFile:112 - [ INFO ]  下载完成
+2023-04-07 18:21:45  [Thread-12]  org.WdtcDownload.DownloadAndGameLibFile:48 - [ INFO ]  * E:\Wdtc\.minecraft\libraries\com\mojang\datafixerupper\6.0.6\datafixerupper-6.0.6.jar 下载完成
+2023-04-07 18:22:14  [Thread-62]  org.WdtcDownload.DownloadAndGameLibFile:142 - [ INFO ]  * E:\Wdtc\.minecraft\versions\1.19.4\1.19.4.jar 下载完成
+2023-04-07 18:24:00  [JavaFX Application Thread]  org.WdtcUI.AppMain:54 - [ INFO ]  * 程序已退出

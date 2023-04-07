@@ -1,6 +1,6 @@
 package org.WdtcLauncher;
 
-import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcDownload.GetGamePath;
 
 public class Version {
     private static String version;
@@ -14,7 +14,7 @@ public class Version {
     }
 
     public String getVersionLibPath() {
-        return SetPath.getGameVersionPath();
+        return GetGamePath.getGameVersionPath();
     }
 
     public String getVersionPath() {

@@ -1,4 +1,4 @@
-package org.WdtcLauncher.JavaHome;
+package org.WdtcLauncher;
 
 public class GetJavaPath {
     public static String getjavapath() {

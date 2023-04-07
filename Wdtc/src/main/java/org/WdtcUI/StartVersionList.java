@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.WdtcDownload.SetFilePath.SetPath;
+import org.WdtcDownload.GetGamePath;
 import org.WdtcLauncher.FilePath;
 import org.WdtcLauncher.Launcher;
 import org.WdtcUI.users.ReadUserList;
@@ -40,7 +40,7 @@ public class StartVersionList {
 
     public void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(SetPath.getGameVersionPath());
+        File version_path = new File(GetGamePath.getGameVersionPath());
         File[] files = version_path.listFiles();
         //foreach遍历数组
         try {

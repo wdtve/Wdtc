@@ -2,6 +2,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
@@ -22,11 +23,15 @@ import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 public class test {
     private static RepositorySystem newRepositorySystem() {
@@ -75,5 +80,14 @@ public class test {
             tests(lib_file.getString("name"));
 
         }
+    }
+
+    @Test
+    public void urlio() throws IOException {
+        URL fabric_version_manifest_url = new URL("https://piston-meta.mojang.com/mc/game/version_manifest.json");
+        URLConnection uc = fabric_version_manifest_url.openConnection();
+        System.out.println(IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8));
+
+
     }
 }

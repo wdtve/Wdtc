@@ -1,4 +1,4 @@
-package org.WdtcLauncher.ExtractFiles;
+package org.WdtcLauncher;
 
 import org.apache.log4j.Logger;
 

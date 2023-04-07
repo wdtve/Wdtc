@@ -1,4 +1,4 @@
-package org.WdtcDownload.DownloadLib;
+package org.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -16,13 +16,13 @@ import java.net.URL;
 import java.util.Objects;
 
 //1.19-
-public class GetLibUrl extends GetLibPathUrl {
-    private static final Logger logmaker = Logger.getLogger(GetLibUrl.class);
+public class DownloadAndGameLibFile extends GetLibPathAndUrl {
+    private static final Logger logmaker = Logger.getLogger(DownloadAndGameLibFile.class);
     private static Version version;
 
-    public GetLibUrl(String version, boolean BMCLAPI) {
+    public DownloadAndGameLibFile(String version, boolean BMCLAPI) {
         super(BMCLAPI);
-        GetLibUrl.version = new Version(version);
+        DownloadAndGameLibFile.version = new Version(version);
     }
 
     public void readdown() throws IOException, RuntimeException {

@@ -10,15 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.WdtcDownload.FileUrl;
-import org.WdtcDownload.VersionDownload.SelectVersion;
+import org.WdtcDownload.SelectGameVersion;
 import org.WdtcLauncher.FilePath;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -47,8 +46,7 @@ public class VersionList {
             if (!v_m.exists()) {
                 URL version_manifest_url = new URL(fileUrl.getVersionManifest());
                 URLConnection uc = version_manifest_url.openConnection();
-                BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), StandardCharsets.UTF_8));
-                vm_e = in.readLine();
+                vm_e = IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8);
                 FileUtils.writeStringToFile(v_m, vm_e, "UTF-8");
             } else {
                 vm_e = FileUtils.readFileToString(v_m, "UTF-8");
@@ -76,7 +74,7 @@ public class VersionList {
                     Thread thread = new Thread(() -> {
                         try {
 
-                            new SelectVersion(button.getText(), textField, BMCLAPI).selectversion();
+                            new SelectGameVersion(button.getText(), textField, BMCLAPI).selectversion();
                         } catch (Exception e) {
                             ErrorWin.setErrorWin(e);
                         }
