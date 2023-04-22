@@ -1,4 +1,4 @@
-import org.WdtcDownload.GetGamePath;
+import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.File;
 

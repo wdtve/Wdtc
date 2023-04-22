@@ -1,2 +1,3 @@
 rootProject.name = "Wdtc-demo"
-include("WdtcCore", "Wdtc")
+include(":WdtcCore")
+include(":Wdtc")
