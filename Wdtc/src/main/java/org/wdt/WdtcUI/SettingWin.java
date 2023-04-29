@@ -3,15 +3,18 @@ package org.wdt.WdtcUI;
 import com.alibaba.fastjson2.JSONObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
 import org.wdt.StringUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -86,7 +89,24 @@ public class SettingWin {
                 ErrorWin.setErrorWin(e);
             }
         });
-        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess);
+        Button export_log = new Button("导出日志");
+        export_log.setLayoutX(76.0);
+        export_log.setLayoutY(298.0);
+        export_log.setPrefHeight(23.0);
+        export_log.setPrefWidth(64.0);
+        export_log.setOnAction(event -> {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("选择日志文件保存路径");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("日志文件", "*.log"));
+                File logfile = fileChooser.showSaveDialog(MainStage);
+                File srcFile = new File("WdtcCore/ResourceFile/WdtcLog/Wdtc.log");
+                FileUtils.copyFile(srcFile, logfile);
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
+        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log);
         Scene scene = new Scene(pane, 600.0, 400.0);
         MainStage.setScene(scene);
         false_bmcl.setSelected(!AboutSetting.GetBmclSwitch());

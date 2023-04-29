@@ -1,10 +1,8 @@
 package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.github.axet.wget.WGet;
-import com.github.axet.wget.errors.DownloadError;
-import com.github.axet.wget.errors.DownloadRetry;
 import javafx.concurrent.Task;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -24,20 +22,19 @@ public class DownloadTask extends GetLibPathAndUrl {
     }
 
     public static void StartDownloadTask(URL url, File file) {
-        WGet wGet = new WGet(url, file);
         try {
             Thread.sleep(20);
             logmaker.info("* " + url + " 开始下载");
-            wGet.download();
+            FileUtils.copyURLToFile(url, file);
             logmaker.info("* " + file + " 下载完成");
-        } catch (DownloadRetry | DownloadError | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
             try {
                 TimeUnit.SECONDS.sleep(5);
                 logmaker.info("* " + url + " 开始重试");
-                wGet.download();
+                FileUtils.copyURLToFile(url, file);
                 logmaker.info("* " + file + " 重试成功");
-            } catch (InterruptedException | RuntimeException ex) {
+            } catch (IOException | InterruptedException exception) {
                 logmaker.error("* 下载任务" + url + " 重试失败,任务取消");
             }
         }
