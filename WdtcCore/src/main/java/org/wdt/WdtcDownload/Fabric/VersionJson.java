@@ -5,8 +5,8 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.FileUrl;
-import org.wdt.WdtcLauncher.Version;
 
 import java.io.File;
 import java.io.IOException;

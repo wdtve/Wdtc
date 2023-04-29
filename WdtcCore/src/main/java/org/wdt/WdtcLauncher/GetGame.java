@@ -4,6 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.wdt.FilePath;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.File;
@@ -11,9 +13,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class GetGame {
-    private static final File m_t = new File(FilePath.getStarterBat());
-    private static final File l_j = new File(FilePath.getLauncherJson());
-    private static final File u_j = new File(FilePath.getUsersJson());
+    private static final File m_t = FilePath.getStarterBat();
+    private static final File l_j = FilePath.getLauncherJson();
+    private static final File u_j = FilePath.getUsersJson();
     private static final String users_uuid = String.valueOf(UUID.randomUUID()).replaceAll("-", "");
 
     public static void Getgame(String v) throws IOException {

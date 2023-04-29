@@ -2,14 +2,11 @@ package org.wdt.WdtcDownload.Fabric;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.IOUtils;
+import org.wdt.StringUtil;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.FileUrl;
-import org.wdt.WdtcLauncher.Version;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +27,7 @@ public class GetFabricFile {
 
     public List<String> getFabricFileName() throws IOException {
         List<String> StringFileList = new ArrayList<>();
-        URL FabricFileListUrl = new URL(String.format(FabricFileList, GameVersionNumber, FabricVersionNumber));
-        URLConnection uc = FabricFileListUrl.openConnection();
-        JSONObject FileList = JSONObject.parseObject(IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8));
+        JSONObject FileList = JSONObject.parseObject(StringUtil.GetUrlContent(String.format(FabricFileList, GameVersionNumber, FabricVersionNumber)));
         JSONObject loader = FileList.getJSONObject("loader");
         StringFileList.add(loader.getString("maven"));
         JSONObject intermediary = FileList.getJSONObject("intermediary");

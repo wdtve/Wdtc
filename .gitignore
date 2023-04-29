@@ -41,6 +41,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/WdtcCore/ResourceFile/Download/objects.jar
-/WdtcCore/ResourceFile/Launcher/log4j/
 /WdtcCore/ResourceFile/Launcher/1.19.1-fabric.ps1
+/WdtcCore/ResourceFile/WdtcLog/

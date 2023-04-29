@@ -8,9 +8,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.AboutSetting;
 import org.wdt.WdtcDownload.SelectGameVersion;
 import org.wdt.WdtcDownload.VersionList;
 
+import java.io.IOException;
 import java.util.List;
 
 public class DownloadVersionList {
@@ -19,14 +21,14 @@ public class DownloadVersionList {
     private static final ScrollPane sp = new ScrollPane();
     private static final VBox vBox = new VBox();
     private static final Scene SCENE = new Scene(sp);
+    private static boolean BMCLAPI;
     private static TextField textField;
-    private static boolean BMCLAPI = true;
     private static VersionList versionList;
 
-    public DownloadVersionList(TextField textField, boolean BMCLAPI) {
-        DownloadVersionList.BMCLAPI = BMCLAPI;
+    public DownloadVersionList(TextField textField) throws IOException {
         DownloadVersionList.textField = textField;
-        versionList = new VersionList(BMCLAPI);
+        versionList = new VersionList(AboutSetting.GetBmclSwitch());
+        BMCLAPI = AboutSetting.GetBmclSwitch();
     }
 
     public void getVersion_List() {

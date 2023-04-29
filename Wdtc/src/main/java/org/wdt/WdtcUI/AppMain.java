@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.WdtcLauncher.FilePath;
+import org.wdt.FilePath;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AppMain extends Application {
-    private static final File v_m = new File(FilePath.getVersionManifestJson());
+    private static final File v_m = FilePath.getVersionManifestJson();
     private static final Logger logmaker = Logger.getLogger(AppMain.class);
 
     public static void main(String[] args) {

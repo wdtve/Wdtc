@@ -20,9 +20,9 @@ import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.FileUrl;
 import org.wdt.WdtcDownload.GetGamePath;
-import org.wdt.WdtcLauncher.Version;
 
 import java.io.IOException;
 import java.util.List;

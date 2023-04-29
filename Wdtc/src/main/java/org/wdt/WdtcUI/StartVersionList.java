@@ -11,8 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.FilePath;
 import org.wdt.WdtcDownload.GetGamePath;
-import org.wdt.WdtcLauncher.FilePath;
 import org.wdt.WdtcLauncher.Launcher;
 import org.wdt.WdtcUI.users.ReadUserList;
 
@@ -27,15 +27,11 @@ public class StartVersionList {
     private static final Scene SCENE = new Scene(SCROLL_PANE);
     private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
     private static Label start_label;
-    private static boolean log = false;
     private static TextField textField;
-    private static boolean BMCLAPI;
 
-    public StartVersionList(Label start_label, boolean log, TextField textField, boolean BMCLAPI) {
+    public StartVersionList(Label start_label, TextField textField) {
         StartVersionList.start_label = start_label;
-        StartVersionList.log = log;
         StartVersionList.textField = textField;
-        StartVersionList.BMCLAPI = BMCLAPI;
     }
 
     public void getStartList() {
@@ -57,12 +53,12 @@ public class StartVersionList {
                             logmaker.info("* 开始启动");
                             new Thread(() -> {
                                 try {
-                                    new Launcher(file2.getName(), log, BMCLAPI);
+                                    new Launcher(file2.getName());
                                 } catch (IOException | InterruptedException | RuntimeException e) {
-                                    ErrorWin.setErrorWin(e);
+                                    e.printStackTrace();
                                 }
                             }).start();
-                            textField.setText(new File(FilePath.getStarterBat()).getCanonicalPath());
+                            textField.setText(FilePath.getStarterBat().getCanonicalPath());
                         }
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);

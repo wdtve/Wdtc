@@ -12,8 +12,7 @@ import java.io.IOException;
 
 
 public class DownloadGameWin {
-    public static boolean BMCLAPI = false;
-    public static boolean log = false;
+
 
     public static void setDownGameWin(Stage MainStage) {
         MainStage.setTitle("Wdtc - Demo - 下载游戏");
@@ -30,7 +29,13 @@ public class DownloadGameWin {
         downGame.setLayoutY(227.0);
         downGame.setPrefHeight(23.0);
         downGame.setPrefWidth(108.0);
-        downGame.setOnAction(event -> new DownloadVersionList(textField, BMCLAPI).getVersion_List());
+        downGame.setOnAction(event -> {
+            try {
+                new DownloadVersionList(textField).getVersion_List();
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
         Label time = new Label("下载时间不会太长");
         Label status_bar = new Label("下面是状态栏");
         time.setLayoutX(241.0);

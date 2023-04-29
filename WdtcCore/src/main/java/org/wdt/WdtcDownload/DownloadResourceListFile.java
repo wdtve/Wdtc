@@ -1,9 +1,8 @@
 package org.wdt.WdtcDownload;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.github.axet.wget.WGet;
 import org.apache.commons.io.FileUtils;
+import org.wdt.StringUtil;
 
 import java.io.File;
 import java.net.URL;
@@ -18,12 +17,11 @@ public class DownloadResourceListFile {
     }
 
     public void getresource_file() throws Exception {
-        JSONObject v_e_j = JSON.parseObject(FileUtils.readFileToString(v_j, "UTF-8"));
-        JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
+        JSONObject assetIndex_j = StringUtil.FileToJSONObject(v_j).getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));
         File game_assetsDir_j = new File(GetGamePath.getGameAssetsdir() + "indexes\\" + id + ".json");
-        new WGet(url, game_assetsDir_j).download();
+        FileUtils.copyURLToFile(url, game_assetsDir_j);
         DownloadGameResourceFile downloadGameResourceFile = new DownloadGameResourceFile(game_assetsDir_j, BMCLAPI);
         downloadGameResourceFile.gethash();
 

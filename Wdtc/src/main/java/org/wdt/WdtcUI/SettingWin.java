@@ -1,17 +1,28 @@
 package org.wdt.WdtcUI;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.AboutSetting;
+import org.wdt.StringUtil;
+
+import java.io.IOException;
+
 
 public class SettingWin {
     private static final Logger logmaker = Logger.getLogger(SettingWin.class);
 
-    public static void setSettingWin(Stage MainStage) {
+    private SettingWin() {
+    }
+
+    public static void setSettingWin(Stage MainStage) throws IOException {
+        JSONObject SettingJson = StringUtil.FileToJSONObject(AboutSetting.GetSettingFile());
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
@@ -24,14 +35,24 @@ public class SettingWin {
         false_log.setLayoutY(111.0);
         false_log.setLayoutX(139.0);
         false_log.setOnAction(event -> {
-            true_log.setSelected(false);
-            logmaker.info("* 启动日志器关闭显示");
-            DownloadGameWin.log = false;
+            try {
+                true_log.setSelected(false);
+                logmaker.info("* 启动日志器关闭显示");
+                SettingJson.put("log", false);
+                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
         });
         true_log.setOnAction(event -> {
-            false_log.setSelected(false);
-            logmaker.info("* 启动日志器开启显示");
-            DownloadGameWin.log = true;
+            try {
+                false_log.setSelected(false);
+                logmaker.info("* 启动日志器开启显示");
+                SettingJson.put("log", true);
+                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
         });
         Label cmd = new Label("启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):");
         cmd.setLayoutX(77.0);
@@ -46,21 +67,31 @@ public class SettingWin {
         false_bmcl.setLayoutX(139.0);
         false_bmcl.setLayoutY(159.0);
         true_bmcl.setOnAction(event -> {
-            false_bmcl.setSelected(false);
-            logmaker.info("* BMCLAPI下载加速已开启");
-            DownloadGameWin.BMCLAPI = true;
+            try {
+                false_bmcl.setSelected(false);
+                logmaker.info("* BMCLAPI下载加速已开启");
+                SettingJson.put("bmcl", true);
+                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
         });
         false_bmcl.setOnAction(event -> {
-            true_bmcl.setSelected(false);
-            logmaker.info("* BMCLAPI下载加速已关闭");
-            DownloadGameWin.BMCLAPI = false;
+            try {
+                true_bmcl.setSelected(false);
+                logmaker.info("* BMCLAPI下载加速已关闭");
+                SettingJson.put("bmcl", false);
+                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
         });
         pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess);
         Scene scene = new Scene(pane, 600.0, 400.0);
         MainStage.setScene(scene);
-        false_bmcl.setSelected(!DownloadGameWin.BMCLAPI);
-        false_log.setSelected(!DownloadGameWin.log);
-        true_bmcl.setSelected(DownloadGameWin.BMCLAPI);
-        true_log.setSelected(DownloadGameWin.log);
+        false_bmcl.setSelected(!AboutSetting.GetBmclSwitch());
+        false_log.setSelected(!AboutSetting.GetLogSwitch());
+        true_bmcl.setSelected(AboutSetting.GetBmclSwitch());
+        true_log.setSelected(AboutSetting.GetLogSwitch());
     }
 }

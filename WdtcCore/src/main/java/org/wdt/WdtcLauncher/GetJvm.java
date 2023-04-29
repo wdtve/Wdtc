@@ -4,6 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.wdt.FilePath;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.File;
@@ -11,10 +13,10 @@ import java.io.IOException;
 
 public class GetJvm {
 
-    private static final File l_j = new File(FilePath.getLauncherJson());
-    private static final File m_t = new File(FilePath.getStarterBat());
-    private static final File u_s = new File(FilePath.getUsersSettingJson());
-    private static final String java_home = GetJavaPath.getjavapath();
+    private static final File l_j = FilePath.getLauncherJson();
+    private static final File m_t = FilePath.getStarterBat();
+    private static final File u_s = FilePath.getUsersSettingJson();
+    private static final String java_home = GetJavaPath.GetRunJavaHome();
     private static String xmx = "1024";
 
     public static void read_jvm(String v) throws IOException {

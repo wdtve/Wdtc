@@ -44,7 +44,7 @@ public class DownloadTask extends GetLibPathAndUrl {
     }
 
     public static Task<Void> StartDownloadLibTask(JSONObject lib_j) {
-        Task<Void> task = new Task<>() {
+        return new Task<>() {
             @Override
             protected Void call() throws IOException {
                 if (!readlib_path(lib_j).exists()) {
@@ -53,11 +53,10 @@ public class DownloadTask extends GetLibPathAndUrl {
                 return null;
             }
         };
-        return task;
     }
 
     public static Task<Void> StartDownloadNativesLibTask(JSONObject lib_j) {
-        Task<Void> task = new Task<>() {
+        return new Task<>() {
             @Override
             protected Void call() throws IOException {
                 if (!readnatives_lib(lib_j).exists()) {
@@ -66,7 +65,6 @@ public class DownloadTask extends GetLibPathAndUrl {
                 return null;
             }
         };
-        return task;
     }
 
 
@@ -75,9 +73,9 @@ public class DownloadTask extends GetLibPathAndUrl {
         File hash_path = new File(GetGamePath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
         URL hash_url;
         if (bmclapi) {
-            hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
-        } else {
             hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
+        } else {
+            hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
         }
         Runnable runnable = () -> {
             if (!hash_path.exists()) {

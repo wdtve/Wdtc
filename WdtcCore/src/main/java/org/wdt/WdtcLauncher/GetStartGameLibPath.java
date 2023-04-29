@@ -3,28 +3,31 @@ package org.wdt.WdtcLauncher;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.wdt.FilePath;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class GetStartGameLibPath {
-    private static final File m_t = new File(FilePath.getStarterBat());
+    private static final File m_t = FilePath.getStarterBat();
 
     public static void getLibPath(String version_number) throws IOException {
         Version version = new Version(version_number);
-        File lib_pay = new File(version.getVersionNativesPath());
-        if (lib_pay.mkdirs()) ;
+        Files.createDirectories(Paths.get(version.getVersionNativesPath()));
         StringBuilder cpb = new StringBuilder();
         JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
         for (int i = 0; i < libraries_j.size(); i++) {
             JSONObject lib_j = libraries_j.getJSONObject(i);
             JSONObject natives_j = lib_j.getJSONObject("natives");
-            if (natives_j == null) {
+            if (Objects.isNull(natives_j)) {
                 JSONArray rules = lib_j.getJSONArray("rules");
-                if (rules == null) {
+                if (Objects.isNull(rules)) {
                     cpb.append(readlib(lib_j));
                 } else {
                     JSONObject action_j = rules.getJSONObject(rules.size() - 1);
@@ -39,9 +42,8 @@ public class GetStartGameLibPath {
                 }
             } else {
                 String natives_name = natives_j.getString("windows");
-                if (natives_name != null) {
-                    String natives_lib_path = readlib(lib_j, natives_name);
-                    ExtractFile.unzipByFile(new File(natives_lib_path), version.getVersionNativesPath());
+                if (Objects.nonNull(natives_name)) {
+                    ExtractFile.unzipByFile(new File(readlib(lib_j, natives_name)), version.getVersionNativesPath());
                 }
             }
         }

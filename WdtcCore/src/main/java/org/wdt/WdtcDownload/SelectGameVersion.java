@@ -2,17 +2,14 @@ package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.github.axet.wget.WGet;
 import javafx.scene.control.TextField;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.WdtcLauncher.Version;
+import org.wdt.StringUtil;
+import org.wdt.Version;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class SelectGameVersion {
@@ -33,22 +30,13 @@ public class SelectGameVersion {
 
 
     public void selectversion() throws Exception {
-        String vm_e = "";
-        try {
-            URL version_manifest_url = new URL(fileUrl.getVersionManifest());
-            URLConnection uc = version_manifest_url.openConnection();
-            vm_e = IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            LOGGER.error("* 当前无网络");
-        }
-        JSONObject vm_e_j = JSONObject.parseObject(vm_e);
-        JSONArray versions_j = vm_e_j.getJSONArray("versions");
+        JSONArray versions_j = JSONObject.parseObject(StringUtil.GetUrlContent(fileUrl.getVersionManifest())).getJSONArray("versions");
         for (int i = 0; i < versions_j.size(); i++) {
             String version_name = versions_j.getJSONObject(i).getString("id");
             if (Objects.equals(version_number, version_name)) {
                 URL v_url = new URL(versions_j.getJSONObject(i).getString("url"));
                 File v_j = new File(version.getVersionJson());
-                new WGet(v_url, v_j).download();
+                FileUtils.copyURLToFile(v_url, v_j);
                 new DownloadAndGameLibFile(version_number, BMCLAPI).readdown();
                 label.setText("库下载完成");
                 LOGGER.debug("库下载完成");

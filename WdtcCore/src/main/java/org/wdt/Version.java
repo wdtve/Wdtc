@@ -1,4 +1,4 @@
-package org.wdt.WdtcLauncher;
+package org.wdt;
 
 import org.wdt.WdtcDownload.GetGamePath;
 

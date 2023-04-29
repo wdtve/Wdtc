@@ -37,7 +37,13 @@ public class HomeWin {
         setting.setLayoutY(354.0);
         setting.setPrefHeight(23.0);
         setting.setPrefWidth(64.0);
-        setting.setOnAction(event -> SettingWin.setSettingWin(MainStage));
+        setting.setOnAction(event -> {
+            try {
+                SettingWin.setSettingWin(MainStage);
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
         Label name = new Label("Wdtc");
         name.setLayoutX(17.0);
         name.setLayoutY(161.0);

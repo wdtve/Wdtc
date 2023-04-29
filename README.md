@@ -6,7 +6,7 @@
 
 ## JDK:
 
-### [liberica-20](https://bell-sw.com/pages/downloads/)
+### [zulu-20](https://www.azul.com/downloads/?version=java-20-sts&package=jdk-fx#zulu)
 
 ## IDE:
 
@@ -21,8 +21,9 @@
 ---
 
 ### 构建方法:
+
 - 等gradle自动下载好依赖后
-- 找到[WdtcMain](Wdtc/src/main/java/org/WdtcUI/WdtcMain.java)类文件里的main函数
+- 找到[WdtcMain](Wdtc/src/main/java/org/wdt/WdtcUI/WdtcMain.java)类文件里的main函数
 
 ```java
 public static class WdtcMain {

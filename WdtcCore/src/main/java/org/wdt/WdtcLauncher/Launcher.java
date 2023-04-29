@@ -1,6 +1,8 @@
 package org.wdt.WdtcLauncher;
 
 import org.apache.log4j.Logger;
+import org.wdt.AboutSetting;
+import org.wdt.FilePath;
 import org.wdt.WdtcDownload.CompleteDocument;
 
 import java.io.BufferedReader;
@@ -9,13 +11,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Launcher {
-    private static final File m_t = new File(FilePath.getStarterBat());
+    private static final File m_t = FilePath.getStarterBat();
     private static final Logger logmaker = Logger.getLogger(Launcher.class);
     private static String Version_number;
     //    private static String xmx = "1024";
 
 
-    public Launcher(String version_number, boolean log, boolean BMCLAPI) throws IOException, InterruptedException {
+    public Launcher(String version_number) throws IOException, InterruptedException {
+        boolean BMCLAPI = AboutSetting.GetBmclSwitch();
+        boolean log = AboutSetting.GetLogSwitch();
         Launcher.Version_number = version_number;
         logmaker.info("* 开始文件补全");
         CompleteDocument completeDocument = new CompleteDocument(version_number, BMCLAPI);

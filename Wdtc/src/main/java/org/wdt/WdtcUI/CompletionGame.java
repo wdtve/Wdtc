@@ -10,9 +10,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.AboutSetting;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.CompleteDocument;
 import org.wdt.WdtcDownload.GetGamePath;
-import org.wdt.WdtcLauncher.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class CompletionGame {
                     stage.close();
                     Version version = new Version(button.getText());
                     try {
-                        CompleteDocument completeDocument = new CompleteDocument(version.getVersion(), false);
+                        CompleteDocument completeDocument = new CompleteDocument(version.getVersion(), AboutSetting.GetBmclSwitch());
                         completeDocument.readdown();
                         completeDocument.gethash();
                         logmaker.info("* 版本补全完成");

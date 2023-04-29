@@ -1,5 +1,6 @@
 package org.wdt.WdtcLauncher;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -12,13 +13,11 @@ public class ExtractFile {
 
     public static void unzipByFile(File file, String path) {
         try {
-
-
             ZipFile zip = new ZipFile(file);
             for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
-                if (Objects.equals(lastName(new File(name)), ".dll")) {
+                if (Objects.equals(FilenameUtils.getExtension(name), "dll")) {
                     logmaker.debug("* 提取natives库dll文件" + name + "中");
                     File dir = new File(path + File.separator + name);
                     if (!dir.exists()) {
@@ -43,14 +42,6 @@ public class ExtractFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    public static String lastName(File file) {
-        if (file == null) return null;
-        String filename = file.getName();
-        if (filename.lastIndexOf(".") == -1) {
-            return "";
-        }
-        return filename.substring(filename.lastIndexOf("."));
     }
 
     public static void compressedFile(String resourcesPath, String targetPath) throws Exception {
