@@ -1,8 +1,8 @@
 package org.wdt.WdtcLauncher;
 
 import org.apache.log4j.Logger;
-import org.wdt.AboutSetting;
 import org.wdt.FilePath;
+import org.wdt.Launcher;
 import org.wdt.WdtcDownload.CompleteDocument;
 
 import java.io.BufferedReader;
@@ -10,28 +10,25 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Launcher {
+public class LauncherGame {
     private static final File m_t = FilePath.getStarterBat();
-    private static final Logger logmaker = Logger.getLogger(Launcher.class);
-    private static String Version_number;
+    private static final Logger logmaker = Logger.getLogger(LauncherGame.class);
     //    private static String xmx = "1024";
 
 
-    public Launcher(String version_number) throws IOException, InterruptedException {
-        boolean BMCLAPI = AboutSetting.GetBmclSwitch();
-        boolean log = AboutSetting.GetLogSwitch();
-        Launcher.Version_number = version_number;
+    public LauncherGame(Launcher launcher) throws IOException, InterruptedException {
+        GetStartGameLibPath getStartGameLibPath = new GetStartGameLibPath(launcher);
         logmaker.info("* 开始文件补全");
-        CompleteDocument completeDocument = new CompleteDocument(version_number, BMCLAPI);
+        CompleteDocument completeDocument = new CompleteDocument(launcher);
         completeDocument.readdown();
         completeDocument.gethash();
         logmaker.info("* 文件补全完成");
         logmaker.info("* 开始写入启动脚本");
-        GetJvm.read_jvm(Version_number);
-        GetStartGameLibPath.getLibPath(Version_number);
-        GetGame.Getgame(Version_number);
+        GetJvm.readJvm(launcher);
+        getStartGameLibPath.getLibPath();
+        GetGame.Getgame(launcher);
         logmaker.info("* 启动脚本写入完成");
-        if (log) {
+        if (launcher.log()) {
             logmaker.info("* 开始运行启动脚本,日志:显示");
             bat(m_t.getCanonicalPath());
         } else {

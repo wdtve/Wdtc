@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.wdt.FilePath;
+import org.wdt.Launcher;
 import org.wdt.StringUtil;
-import org.wdt.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import java.util.concurrent.CountDownLatch;
 //1.19-
 public class CompleteDocument extends DownloadTask {
 
-    private static Version version;
+    private static Launcher version;
 
-    public CompleteDocument(String version_number, boolean BMCLAPI) throws IOException {
-        super(BMCLAPI);
-        CompleteDocument.version = new Version(version_number);
+    public CompleteDocument(Launcher launcher) throws IOException {
+        super(launcher);
+        CompleteDocument.version = launcher;
     }
 
 
@@ -91,7 +91,7 @@ public class CompleteDocument extends DownloadTask {
         JSONObject v_e_j = StringUtil.FileToJSONObject(version.getVersionJson());
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
-        String game_assetsDir_j = GetGamePath.getGameAssetsdir() + "indexes\\" + id + ".json";
+        String game_assetsDir_j = version.getGameAssetsdir() + "indexes\\" + id + ".json";
         JSONObject a_e_j = StringUtil.FileToJSONObject(game_assetsDir_j);
         JSONObject object_j = a_e_j.getJSONObject("objects");
         String file_list = object_j.values().toString();

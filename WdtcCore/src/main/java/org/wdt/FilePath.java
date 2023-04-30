@@ -6,8 +6,8 @@ public class FilePath {
     private static final String VERSION_MANIFEST_JSON = "WdtcCore/ResourceFile/Download/version_manifest.json";
     private static final String LAUNCHER_JSON = "WdtcCore/ResourceFile/Launcher/launcher.json";
     private static final String STARTER_BAT = "WdtcCore/ResourceFile/Launcher/starter.bat";
-    private static final String USERS_JSON = "WdtcCore/ResourceFile/Launcher/users/users.json";
-    private static final String USERS_SETTING_JSON = "WdtcCore/ResourceFile/Launcher/users/UsersSetting.json";
+    private static final String USERS_JSON = System.getProperty("user.home") + "/.wdtc/users/users.json";
+    private static final String USERS_SETTING_JSON = System.getProperty("user.home") + "/.wdtc/users/UsersSetting.json";
     private static final String log4j2 = "WdtcCore/ResourceFile/Download/log4j2.xml";
 
 

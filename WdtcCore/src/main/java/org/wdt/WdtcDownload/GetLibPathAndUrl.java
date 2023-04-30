@@ -2,6 +2,7 @@ package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
+import org.wdt.Launcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,17 +13,20 @@ public class GetLibPathAndUrl {
     private static final String MOJANG_Libraries = FileUrl.getMojangLibraries();
     private static final Logger log = Logger.getLogger(GetLibPathAndUrl.class);
     private static boolean BMCLAPI;
+    private static Launcher launcher;
 
-    public GetLibPathAndUrl(boolean BMCLAPI) {
-        GetLibPathAndUrl.BMCLAPI = BMCLAPI;
-    }
 
-    public GetLibPathAndUrl() {
-        GetLibPathAndUrl.BMCLAPI = false;
+    public GetLibPathAndUrl(Launcher launcher) {
+        try {
+            GetLibPathAndUrl.launcher = launcher;
+            GetLibPathAndUrl.BMCLAPI = launcher.bmclapi();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static File readnatives_lib(JSONObject lib_j) throws IOException {
-        String game_lib_path = GetGamePath.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject natives_j = lib_j.getJSONObject("natives");
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
@@ -49,7 +53,7 @@ public class GetLibPathAndUrl {
     }
 
     public static File readlib_path(JSONObject lib_j) throws IOException {
-        String game_lib_path = GetGamePath.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject artifact_j = downloads_j.getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path");

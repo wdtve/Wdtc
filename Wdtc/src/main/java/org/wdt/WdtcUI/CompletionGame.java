@@ -11,9 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
-import org.wdt.Version;
+import org.wdt.GetGamePath;
+import org.wdt.Launcher;
 import org.wdt.WdtcDownload.CompleteDocument;
-import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,10 +28,11 @@ public class CompletionGame {
 
 
     public static void completion_game() {
-        File version_path = new File(GetGamePath.getGameVersionPath());
-        File[] files = version_path.listFiles();
         //foreach遍历数组
         try {
+            GetGamePath getGamePath = new GetGamePath(AboutSetting.GetDefaultGamePath());
+            File version_path = new File(getGamePath.getGameVersionPath());
+            File[] files = version_path.listFiles();
             for (File file2 : files) {
                 Button button = new Button(file2.getName());
                 V_BOX.getChildren().add(button);
@@ -39,9 +40,9 @@ public class CompletionGame {
                 button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     V_BOX.getChildren().clear();
                     stage.close();
-                    Version version = new Version(button.getText());
+                    Launcher version = new Launcher(button.getText());
                     try {
-                        CompleteDocument completeDocument = new CompleteDocument(version.getVersion(), AboutSetting.GetBmclSwitch());
+                        CompleteDocument completeDocument = new CompleteDocument(version);
                         completeDocument.readdown();
                         completeDocument.gethash();
                         logmaker.info("* 版本补全完成");
@@ -74,6 +75,8 @@ public class CompletionGame {
             stage.setTitle("版本文件夹为空");
             stage.show();
             logmaker.error("* 版本文件夹为空");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

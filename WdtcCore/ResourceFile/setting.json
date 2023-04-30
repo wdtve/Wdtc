@@ -1,4 +1,5 @@
 {
   "bmcl": false,
-  "log": false
+  "log": false,
+  "DefaultGamePath": ""
 }

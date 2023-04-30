@@ -10,7 +10,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.WdtcDownload.GetGamePath;
+import org.wdt.AboutSetting;
+import org.wdt.GetGamePath;
+import org.wdt.Launcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +28,11 @@ public class DeleteVersion {
 
     public static void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(GetGamePath.getGameVersionPath());
-        File[] files = version_path.listFiles();
         //foreach遍历数组
         try {
+            GetGamePath GetPath = new GetGamePath(AboutSetting.GetDefaultGamePath());
+            File version_path = new File(GetPath.getGameVersionPath());
+            File[] files = version_path.listFiles();
             for (File file2 : files) {
                 Button button = new Button(file2.getName());
                 V_BOX.getChildren().add(button);
@@ -38,7 +41,8 @@ public class DeleteVersion {
                     try {
                         V_BOX.getChildren().clear();
                         Delete.close();
-                        FileUtils.deleteDirectory(new File(GetGamePath.getGameVersionPath() + button.getText()));
+                        Launcher launcher = new Launcher(button.getText(), AboutSetting.GetDefaultGamePath());
+                        FileUtils.deleteDirectory(new File(launcher.getVersionPath()));
                         logmaker.info("* 版本删除成功");
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);
@@ -71,6 +75,8 @@ public class DeleteVersion {
             Delete.setTitle("版本文件夹为空");
             Delete.show();
             logmaker.error("* 版本文件夹为空");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

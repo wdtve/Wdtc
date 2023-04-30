@@ -23,4 +23,8 @@ public class AboutSetting {
             FileUtils.copyFile(new File("WdtcCore/ResourceFile/setting.json"), GetSettingFile());
         }
     }
+
+    public static String GetDefaultGamePath() throws IOException {
+        return StringUtil.FileToJSONObject(GetSettingFile()).getString("DefaultGamePath");
+    }
 }

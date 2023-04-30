@@ -11,9 +11,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.AboutSetting;
 import org.wdt.FilePath;
-import org.wdt.WdtcDownload.GetGamePath;
-import org.wdt.WdtcLauncher.Launcher;
+import org.wdt.GetGamePath;
+import org.wdt.Launcher;
+import org.wdt.WdtcLauncher.LauncherGame;
 import org.wdt.WdtcUI.users.ReadUserList;
 
 import java.io.File;
@@ -36,10 +38,10 @@ public class StartVersionList {
 
     public void getStartList() {
         logmaker.info("* 开始加载版本列表");
-        File version_path = new File(GetGamePath.getGameVersionPath());
-        File[] files = version_path.listFiles();
-        //foreach遍历数组
         try {
+            GetGamePath GetPath = new GetGamePath(AboutSetting.GetDefaultGamePath());
+            File version_path = new File(GetPath.getGameVersionPath());
+            File[] files = version_path.listFiles();
             for (File file2 : files) {
                 Button button = new Button(file2.getName());
                 V_BOX.getChildren().add(button);
@@ -53,7 +55,8 @@ public class StartVersionList {
                             logmaker.info("* 开始启动");
                             new Thread(() -> {
                                 try {
-                                    new Launcher(file2.getName());
+                                    Launcher launcher = new Launcher(file2.getName(), AboutSetting.GetDefaultGamePath());
+                                    new LauncherGame(launcher);
                                 } catch (IOException | InterruptedException | RuntimeException e) {
                                     e.printStackTrace();
                                 }
@@ -91,6 +94,8 @@ public class StartVersionList {
             stage.setTitle("版本文件夹为空");
             stage.show();
             logmaker.error("* 版本文件夹为空");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

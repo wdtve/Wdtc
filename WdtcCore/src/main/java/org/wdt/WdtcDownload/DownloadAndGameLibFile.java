@@ -5,8 +5,8 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.FilePath;
+import org.wdt.Launcher;
 import org.wdt.StringUtil;
-import org.wdt.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import java.util.Objects;
 //1.19-
 public class DownloadAndGameLibFile extends DownloadTask {
     private static final Logger logmaker = Logger.getLogger(DownloadAndGameLibFile.class);
-    private static Version version;
+    private static Launcher version;
 
-    public DownloadAndGameLibFile(String version, boolean BMCLAPI) {
-        super(BMCLAPI);
-        DownloadAndGameLibFile.version = new Version(version);
+    public DownloadAndGameLibFile(Launcher launcher) {
+        super(launcher);
+        DownloadAndGameLibFile.version = launcher;
     }
 
     public void readdown() throws IOException, RuntimeException {

@@ -17,5 +17,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-

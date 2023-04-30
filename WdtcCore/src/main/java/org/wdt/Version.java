@@ -1,11 +1,14 @@
 package org.wdt;
 
-import org.wdt.WdtcDownload.GetGamePath;
-
-public class Version {
+public class Version extends GetGamePath {
     private static String version;
 
     public Version(String version) {
+        Version.version = version;
+    }
+
+    public Version(String version, String here) {
+        super(here);
         Version.version = version;
     }
 
@@ -14,7 +17,7 @@ public class Version {
     }
 
     public String getVersionLibPath() {
-        return GetGamePath.getGameVersionPath();
+        return getGameVersionPath();
     }
 
     public String getVersionPath() {

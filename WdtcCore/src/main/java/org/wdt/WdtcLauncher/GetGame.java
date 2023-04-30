@@ -1,12 +1,11 @@
 package org.wdt.WdtcLauncher;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.wdt.FilePath;
-import org.wdt.Version;
-import org.wdt.WdtcDownload.GetGamePath;
+import org.wdt.Launcher;
+import org.wdt.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,26 +17,25 @@ public class GetGame {
     private static final File u_j = FilePath.getUsersJson();
     private static final String users_uuid = String.valueOf(UUID.randomUUID()).replaceAll("-", "");
 
-    public static void Getgame(String v) throws IOException {
+    public static void Getgame(Launcher version) throws IOException {
         StringBuilder game_set = new StringBuilder();
-        Version version = new Version(v);
-        JSONObject l_e_j = JSON.parseObject(FileUtils.readFileToString(l_j, "UTF-8"));
+        JSONObject l_e_j = StringUtil.FileToJSONObject(l_j);
         JSONArray game_j = l_e_j.getJSONArray("game");
-        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
+        JSONObject v_e_j = StringUtil.FileToJSONObject(version.getVersionJson());
         JSONObject assetIndex_j = v_e_j.getJSONObject("assetIndex");
-        JSONObject u_e_j = JSONObject.parseObject(FileUtils.readFileToString(u_j, "UTF-8"));
+        JSONObject u_e_j = StringUtil.FileToJSONObject(u_j);
         String user_name = u_e_j.getString("user_name");
 
         String usersname = " " + game_j.getString(0) + " " + user_name;
         game_set.append(usersname);
 
-        String version_set = " " + game_j.getString(1) + " " + v;
+        String version_set = " " + game_j.getString(1) + " " + version.getVersion();
         game_set.append(version_set);
 
-        String gamedir = " " + game_j.getString(2) + " " + GetGamePath.getGamePath();
+        String gamedir = " " + game_j.getString(2) + " " + version.getGamePath();
         game_set.append(gamedir);
 
-        String assersdir = " " + game_j.getString(3) + " " + GetGamePath.getGameAssetsdir();
+        String assersdir = " " + game_j.getString(3) + " " + version.getGameAssetsdir();
         game_set.append(assersdir);
 
         String assetIndex = " " + game_j.getString(4) + " " + assetIndex_j.getString("id");

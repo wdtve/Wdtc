@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.wdt.FilePath;
-import org.wdt.Version;
-import org.wdt.WdtcDownload.GetGamePath;
+import org.wdt.Launcher;
+import org.wdt.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +15,16 @@ import java.util.Objects;
 
 public class GetStartGameLibPath {
     private static final File m_t = FilePath.getStarterBat();
+    private static Launcher launcher;
 
-    public static void getLibPath(String version_number) throws IOException {
-        Version version = new Version(version_number);
-        Files.createDirectories(Paths.get(version.getVersionNativesPath()));
+    public GetStartGameLibPath(Launcher launcher) {
+        GetStartGameLibPath.launcher = launcher;
+    }
+
+    public void getLibPath() throws IOException {
+        Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
         StringBuilder cpb = new StringBuilder();
-        JSONObject v_e_j = JSONObject.parseObject(FileUtils.readFileToString(new File(version.getVersionJson()), "UTF-8"));
+        JSONObject v_e_j = StringUtil.FileToJSONObject(launcher.getVersionJson());
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
         for (int i = 0; i < libraries_j.size(); i++) {
             JSONObject lib_j = libraries_j.getJSONObject(i);
@@ -43,18 +47,18 @@ public class GetStartGameLibPath {
             } else {
                 String natives_name = natives_j.getString("windows");
                 if (Objects.nonNull(natives_name)) {
-                    ExtractFile.unzipByFile(new File(readlib(lib_j, natives_name)), version.getVersionNativesPath());
+                    ExtractFile.unzipByFile(new File(readlib(lib_j, natives_name)), launcher.getVersionNativesPath());
                 }
             }
         }
-        String verions_jar = version.getVersionJar() + " ";
+        String verions_jar = launcher.getVersionJar() + " ";
         String mainclass = v_e_j.getString("mainClass");
-        cpb.append(verions_jar + mainclass);
+        cpb.append(verions_jar).append(mainclass);
         FileUtils.writeStringToFile(m_t, cpb.toString(), "UTF-8", true);
     }
 
     public static String readlib(JSONObject lib_j, String natives_name) {
-        String game_lib_path = GetGamePath.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
         JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
@@ -64,7 +68,7 @@ public class GetStartGameLibPath {
     }
 
     public static String readlib(JSONObject lib_j) {
-        String game_lib_path = GetGamePath.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibPath();
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject artifact_j = downloads_j.getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path") + ";";

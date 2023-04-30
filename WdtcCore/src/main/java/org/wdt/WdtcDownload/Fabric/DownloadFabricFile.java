@@ -20,9 +20,8 @@ import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
-import org.wdt.Version;
+import org.wdt.Launcher;
 import org.wdt.WdtcDownload.FileUrl;
-import org.wdt.WdtcDownload.GetGamePath;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,15 +29,17 @@ import java.util.List;
 public class DownloadFabricFile {
     private static String FabricVersionNumber;
     private static String GameVersionNumber;
+    private static Launcher launcher;
 
     public DownloadFabricFile(String FabricVersionNumber, String GameVersionNumber) {
         DownloadFabricFile.FabricVersionNumber = FabricVersionNumber;
         DownloadFabricFile.GameVersionNumber = GameVersionNumber;
     }
 
-    public DownloadFabricFile(String FabricVersionNumber, Version version) {
+    public DownloadFabricFile(String FabricVersionNumber, Launcher launcher) {
         DownloadFabricFile.FabricVersionNumber = FabricVersionNumber;
-        DownloadFabricFile.GameVersionNumber = version.getVersion();
+        DownloadFabricFile.GameVersionNumber = launcher.getVersion();
+        DownloadFabricFile.launcher = launcher;
     }
 
     public void StartTask() throws IOException, DependencyCollectionException, DependencyResolutionException {
@@ -59,7 +60,7 @@ public class DownloadFabricFile {
 
     private static RepositorySystemSession newSession(RepositorySystem system) {
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
-        LocalRepository localRepo = new LocalRepository(GetGamePath.GetGameLibPath());
+        LocalRepository localRepo = new LocalRepository(launcher.GetGameLibPath());
         session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
         return session;
     }

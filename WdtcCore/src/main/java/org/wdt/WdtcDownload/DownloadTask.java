@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import javafx.concurrent.Task;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.Launcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +15,17 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadTask extends GetLibPathAndUrl {
     private static final Logger logmaker = Logger.getLogger(DownloadTask.class);
-    private static boolean bmclapi = false;
+    private static boolean bmclapi;
+    private static Launcher launcher;
 
-    public DownloadTask(boolean bmclapi) {
-        super(bmclapi);
-        DownloadTask.bmclapi = bmclapi;
+    public DownloadTask(Launcher launcher) {
+        super(launcher);
+        try {
+            DownloadTask.launcher = launcher;
+            DownloadTask.bmclapi = launcher.bmclapi();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void StartDownloadTask(URL url, File file) {
@@ -67,14 +74,14 @@ public class DownloadTask extends GetLibPathAndUrl {
 
     public static Runnable StartDownloadHashTask(String hash, CountDownLatch downLatch) throws MalformedURLException {
         String hash_t = hash.substring(0, 2);
-        File hash_path = new File(GetGamePath.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
+        File hash_path = new File(launcher.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
         URL hash_url;
         if (bmclapi) {
             hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
         } else {
             hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
         }
-        Runnable runnable = () -> {
+        return () -> {
             if (!hash_path.exists()) {
                 StartDownloadTask(hash_url, hash_path);
                 downLatch.countDown();
@@ -82,8 +89,6 @@ public class DownloadTask extends GetLibPathAndUrl {
                 downLatch.countDown();
             }
         };
-        downLatch.countDown();
-        return runnable;
     }
 
 }

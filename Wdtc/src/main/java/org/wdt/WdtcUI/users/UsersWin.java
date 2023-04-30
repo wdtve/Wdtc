@@ -59,6 +59,7 @@ public class UsersWin {
                     Registeruser.RegisterUser(username);
                     loggmaker.info("* 账户注册" + username + "成功");
                     OKRegister.setText("注册" + username + "成功");
+                    userwin.close();
                 } else {
                     OKRegister.setText("不能带中文字符哦");
                 }

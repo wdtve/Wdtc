@@ -48,6 +48,7 @@ dependencies {
     implementation("org.apache.maven:maven-aether-provider:3.3.9")
     // https://mvnrepository.com/artifact/org.apache.maven.wagon/wagon-ssh
     implementation("org.apache.maven.wagon:wagon-ssh:3.5.3")
+    implementation(files("../libs/authlib-injector-1.2.2.jar"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }

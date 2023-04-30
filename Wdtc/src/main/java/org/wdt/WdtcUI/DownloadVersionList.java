@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
+import org.wdt.Launcher;
 import org.wdt.WdtcDownload.SelectGameVersion;
 import org.wdt.WdtcDownload.VersionList;
 
@@ -21,14 +22,12 @@ public class DownloadVersionList {
     private static final ScrollPane sp = new ScrollPane();
     private static final VBox vBox = new VBox();
     private static final Scene SCENE = new Scene(sp);
-    private static boolean BMCLAPI;
     private static TextField textField;
     private static VersionList versionList;
 
     public DownloadVersionList(TextField textField) throws IOException {
         DownloadVersionList.textField = textField;
         versionList = new VersionList(AboutSetting.GetBmclSwitch());
-        BMCLAPI = AboutSetting.GetBmclSwitch();
     }
 
     public void getVersion_List() {
@@ -42,15 +41,20 @@ public class DownloadVersionList {
                 button.setOnAction(mouseEvent -> {
                     vBox.getChildren().clear();
                     stage.close();
-                    if (BMCLAPI) {
-                        textField.setText("BMCLAPI下载加速已开启");
-                    } else {
-                        textField.setText("开始下载");
+                    Launcher launcher = new Launcher(button.getText());
+                    try {
+
+                        if (launcher.bmclapi()) {
+                            textField.setText("BMCLAPI下载加速已开启");
+                        } else {
+                            textField.setText("开始下载");
+                        }
+                    } catch (IOException e) {
+                        ErrorWin.setErrorWin(e);
                     }
                     Thread thread = new Thread(() -> {
                         try {
-
-                            new SelectGameVersion(button.getText(), textField, BMCLAPI).selectversion();
+                            new SelectGameVersion(launcher, textField).selectversion();
                         } catch (Exception e) {
                             ErrorWin.setErrorWin(e);
                         }

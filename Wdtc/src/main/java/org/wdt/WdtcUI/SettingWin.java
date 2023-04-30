@@ -6,7 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
@@ -16,6 +19,7 @@ import org.wdt.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class SettingWin {
@@ -106,7 +110,38 @@ public class SettingWin {
                 ErrorWin.setErrorWin(e);
             }
         });
-        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log);
+        TextField GamePath = new TextField();
+        GamePath.setText(AboutSetting.GetDefaultGamePath());
+        GamePath.setLayoutX(77.0);
+        GamePath.setLayoutY(55.0);
+        GamePath.setPrefHeight(23.0);
+        GamePath.setPrefWidth(234.0);
+        Label tips = new Label("游戏文件夹位置:");
+        tips.setLayoutX(78.0);
+        tips.setLayoutY(35.0);
+        Label tips2 = new Label("如:选择C盘则游戏文件夹为\"C:\\minceaft\"");
+        tips2.setTextFill(Color.GRAY);
+        tips2.setLayoutX(168.0);
+        tips2.setLayoutY(35.0);
+        Button button = new Button("...");
+        button.setLayoutX(315.0);
+        button.setLayoutY(55.0);
+        button.setOnAction(event -> {
+            try {
+                DirectoryChooser fileChooser = new DirectoryChooser();
+                fileChooser.setTitle("选择游戏文件夹");
+                fileChooser.setInitialDirectory(new File(AboutSetting.GetDefaultGamePath()));
+                File file = fileChooser.showDialog(MainStage);
+                if (Objects.nonNull(file)) {
+                    SettingJson.put("DefaultGamePath", file);
+                    FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+                    GamePath.setText(file.getCanonicalPath());
+                }
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
+        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log, GamePath, tips2, tips, button);
         Scene scene = new Scene(pane, 600.0, 400.0);
         MainStage.setScene(scene);
         false_bmcl.setSelected(!AboutSetting.GetBmclSwitch());
