@@ -1,5 +1,6 @@
 package org.wdt;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -21,6 +22,9 @@ public class AboutSetting {
     public static void GenerateSettingFile() throws IOException {
         if (!GetSettingFile().exists()) {
             FileUtils.copyFile(new File("WdtcCore/ResourceFile/setting.json"), GetSettingFile());
+            JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
+            Setting.put("DefaultGamePath", System.getProperty("user.dir"));
+            FileUtils.writeStringToFile(GetSettingFile(), Setting.toString(), "UTF-8");
         }
     }
 
