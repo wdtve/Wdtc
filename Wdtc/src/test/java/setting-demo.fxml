@@ -13,20 +13,12 @@
     <RadioButton fx:id="true_BMCLAPI" layoutX="76.0" layoutY="159.0" mnemonicParsing="false" text="启用"/>
     <RadioButton fx:id="false_BMCLAPI" layoutX="139.0" layoutY="159.0" mnemonicParsing="false" selected="true"
                  text="不启用"/>
-    <Label layoutX="76.0" layoutY="185.0" text="JVM属性(你最好知道要添加什么,不然就保持默认):"/>
-    <TextField fx:id="userjvm" layoutX="76.0" layoutY="202.0" prefHeight="23.0" prefWidth="407.0"/>
-    <Label layoutX="77.0" layoutY="231.0" text="窗口大小:"/>
-    <Label layoutX="76.0" layoutY="254.0" text="高度:"/>
-    <TextField fx:id="WinHide" layoutX="107.0" layoutY="250.0" prefHeight="23.0" prefWidth="64.0"/>
-    <Label layoutX="183.0" layoutY="254.0" text="宽度:"/>
-    <TextField fx:id="WinWide" layoutX="222.0" layoutY="250.0" prefHeight="23.0" prefWidth="64.0"/>
-    <Button layoutX="502.0" layoutY="363.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="64.0" text="应用"/>
-    <Label layoutX="76.0" layoutY="276.0" text="游戏内存:"/>
-    <TextField fx:id="GameMemory" layoutX="76.0" layoutY="298.0" prefHeight="23.0" prefWidth="64.0"/>
-    <TextField layoutX="77.0" layoutY="55.0" prefHeight="23.0" prefWidth="234.0"/>
     <Label layoutX="78.0" layoutY="35.0" text="游戏文件夹位置:"/>
     <Label layoutX="168.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;" textFill="#0000007c"/>
     <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..."/>
+    <Label layoutX="76.0" layoutY="185.0" text="是否启用OpenGL软渲染器:"/>
+    <RadioButton layoutX="78.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
+    <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用"/>
     <!--    <JFXButton style="-fx-border-color: #000000;" text="返回"/>-->
 
 

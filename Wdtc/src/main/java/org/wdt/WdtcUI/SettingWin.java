@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-public class SettingWin {
+public class SettingWin extends AboutSetting {
     private static final Logger logmaker = Logger.getLogger(SettingWin.class);
 
     private SettingWin() {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        JSONObject SettingJson = StringUtil.FileToJSONObject(AboutSetting.GetSettingFile());
+        JSONObject SettingJson = StringUtil.FileToJSONObject(GetSettingFile());
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
@@ -42,24 +42,16 @@ public class SettingWin {
         false_log.setLayoutY(111.0);
         false_log.setLayoutX(139.0);
         false_log.setOnAction(event -> {
-            try {
-                true_log.setSelected(false);
-                logmaker.info("* 启动日志器关闭显示");
-                SettingJson.put("log", false);
-                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
+            true_log.setSelected(false);
+            logmaker.info("* 启动日志器关闭显示");
+            SettingJson.put("log", false);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
         });
         true_log.setOnAction(event -> {
-            try {
-                false_log.setSelected(false);
-                logmaker.info("* 启动日志器开启显示");
-                SettingJson.put("log", true);
-                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
+            false_log.setSelected(false);
+            logmaker.info("* 启动日志器开启显示");
+            SettingJson.put("log", true);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
         });
         Label cmd = new Label("启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):");
         cmd.setLayoutX(77.0);
@@ -84,14 +76,10 @@ public class SettingWin {
             }
         });
         false_bmcl.setOnAction(event -> {
-            try {
-                true_bmcl.setSelected(false);
-                logmaker.info("* BMCLAPI下载加速已关闭");
-                SettingJson.put("bmcl", false);
-                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
+            true_bmcl.setSelected(false);
+            logmaker.info("* BMCLAPI下载加速已关闭");
+            SettingJson.put("bmcl", false);
+            StringUtil.PutJSONObject(AboutSetting.GetSettingFile(), SettingJson);
         });
         Button export_log = new Button("导出日志");
         export_log.setLayoutX(76.0);
@@ -104,8 +92,10 @@ public class SettingWin {
                 fileChooser.setTitle("选择日志文件保存路径");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("日志文件", "*.log"));
                 File logfile = fileChooser.showSaveDialog(MainStage);
-                File srcFile = new File("WdtcCore/ResourceFile/WdtcLog/Wdtc.log");
-                FileUtils.copyFile(srcFile, logfile);
+                if (Objects.nonNull(logfile)) {
+                    File srcFile = new File("ResourceFile/WdtcLog/Wdtc.log");
+                    FileUtils.copyFile(srcFile, logfile);
+                }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
             }
@@ -130,23 +120,44 @@ public class SettingWin {
             try {
                 DirectoryChooser fileChooser = new DirectoryChooser();
                 fileChooser.setTitle("选择游戏文件夹");
-                fileChooser.setInitialDirectory(new File(AboutSetting.GetDefaultGamePath()));
+                fileChooser.setInitialDirectory(new File(GetDefaultGamePath()));
                 File file = fileChooser.showDialog(MainStage);
                 if (Objects.nonNull(file)) {
                     SettingJson.put("DefaultGamePath", file);
-                    FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
+                    StringUtil.PutJSONObject(file, SettingJson);
                     GamePath.setText(file.getCanonicalPath());
                 }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
             }
         });
-        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log, GamePath, tips2, tips, button);
+        Label tips3 = new Label("是否启用OpenGL软渲染器:");
+        tips3.setLayoutX(76.0);
+        tips3.setLayoutY(185.0);
+        RadioButton TrueOpenGl = new RadioButton("启用");
+        RadioButton FalseOpenGL = new RadioButton("不启用");
+        TrueOpenGl.setLayoutX(78.0);
+        TrueOpenGl.setLayoutY(209.0);
+        TrueOpenGl.setOnAction(event -> {
+            FalseOpenGL.setSelected(false);
+            SettingJson.put("llvmpipe-loader", true);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+        });
+        FalseOpenGL.setOnAction(event -> {
+            TrueOpenGl.setSelected(false);
+            SettingJson.put("llvmpipe-loader", false);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+        });
+        FalseOpenGL.setLayoutX(139.0);
+        FalseOpenGL.setLayoutY(209.0);
+        pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL);
         Scene scene = new Scene(pane, 600.0, 400.0);
         MainStage.setScene(scene);
-        false_bmcl.setSelected(!AboutSetting.GetBmclSwitch());
-        false_log.setSelected(!AboutSetting.GetLogSwitch());
-        true_bmcl.setSelected(AboutSetting.GetBmclSwitch());
-        true_log.setSelected(AboutSetting.GetLogSwitch());
+        false_bmcl.setSelected(!GetBmclSwitch());
+        false_log.setSelected(!GetLogSwitch());
+        FalseOpenGL.setSelected(!GetLlvmpipeSwitch());
+        true_bmcl.setSelected(GetBmclSwitch());
+        true_log.setSelected(GetLogSwitch());
+        TrueOpenGl.setSelected(GetLlvmpipeSwitch());
     }
 }

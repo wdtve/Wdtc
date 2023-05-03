@@ -21,7 +21,7 @@ import org.wdt.WdtcUI.users.ReadUserList;
 import java.io.File;
 import java.io.IOException;
 
-public class StartVersionList {
+public class StartVersionList extends LauncherGame {
     private static final Stage stage = new Stage();
 
     private static final VBox V_BOX = new VBox();
@@ -55,9 +55,9 @@ public class StartVersionList {
                             logmaker.info("* 开始启动");
                             new Thread(() -> {
                                 try {
-                                    Launcher launcher = new Launcher(file2.getName(), AboutSetting.GetDefaultGamePath());
-                                    new LauncherGame(launcher);
-                                } catch (IOException | InterruptedException | RuntimeException e) {
+                                    Launcher launcher = new Launcher(file2.getName());
+                                    launchergame(launcher);
+                                } catch (IOException | RuntimeException e) {
                                     e.printStackTrace();
                                 }
                             }).start();

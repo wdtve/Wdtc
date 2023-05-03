@@ -1,6 +1,7 @@
 package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.github.axet.wget.WGet;
 import javafx.concurrent.Task;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -44,6 +45,33 @@ public class DownloadTask extends GetLibPathAndUrl {
             } catch (IOException | InterruptedException exception) {
                 logmaker.error("* 下载任务" + url + " 重试失败,任务取消");
             }
+        }
+    }
+
+    public static void StartWGetDownloadTask(URL url, File file) {
+        WGet wGet = new WGet(url, file);
+        try {
+            logmaker.info("* " + url + " 开始下载");
+            wGet.download();
+            logmaker.info("* " + file + " 下载完成");
+        } catch (RuntimeException exception) {
+            logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                logmaker.info("* " + url + " 开始重试");
+                wGet.download();
+                logmaker.info("* " + file + " 重试成功");
+            } catch (InterruptedException | RuntimeException e) {
+                logmaker.error("* 下载任务" + url + " 重试失败,任务取消", e);
+            }
+        }
+    }
+
+    public static void StartWGetDownloadTask(String url, File file) {
+        try {
+            StartDownloadTask(new URL(url), file);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
     }
 

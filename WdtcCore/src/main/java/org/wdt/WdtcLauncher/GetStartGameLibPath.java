@@ -2,7 +2,7 @@ package org.wdt.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
+import org.wdt.AboutSetting;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
@@ -14,14 +14,10 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class GetStartGameLibPath {
-    private static final File m_t = FilePath.getStarterBat();
     private static Launcher launcher;
 
-    public GetStartGameLibPath(Launcher launcher) {
+    public static void getLibPath(Launcher launcher) throws IOException {
         GetStartGameLibPath.launcher = launcher;
-    }
-
-    public void getLibPath() throws IOException {
         Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
         StringBuilder cpb = new StringBuilder();
         JSONObject v_e_j = StringUtil.FileToJSONObject(launcher.getVersionJson());
@@ -53,8 +49,15 @@ public class GetStartGameLibPath {
         }
         String verions_jar = launcher.getVersionJar() + " ";
         String mainclass = v_e_j.getString("mainClass");
-        cpb.append(verions_jar).append(mainclass);
-        FileUtils.writeStringToFile(m_t, cpb.toString(), "UTF-8", true);
+        cpb.append(verions_jar);
+//        cpb.append("-javaagent:").append(FilePath.getAuthlibInjector()).append("=").append(FileUrl.getLittleskinApi());
+//        cpb.append(" ").append("-Dauthlibinjector.yggdrasil.prefetched=").append(StringUtil.StringToBase64(StringUtil.GetUrlContent(FileUrl.getLittleskinApi())));
+        if (AboutSetting.GetLlvmpipeSwitch()) {
+            cpb.append(" ").append("-javaagent:").append(FilePath.getLlbmpipeLoader()).append(" ").append(mainclass);
+        } else {
+            cpb.append(" ").append(mainclass);
+        }
+        launcher.setLibrartattribute(cpb);
     }
 
     public static String readlib(JSONObject lib_j, String natives_name) {

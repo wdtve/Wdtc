@@ -2,7 +2,6 @@ package org.wdt.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
@@ -15,8 +14,6 @@ import java.nio.file.Paths;
 public class GetJvm {
 
     private static final File l_j = FilePath.getLauncherJson();
-    private static final File m_t = FilePath.getStarterBat();
-    private static final File u_s = FilePath.getUsersSettingJson();
     private static final String java_home = GetJavaPath.GetRunJavaHome();
     private static String xmx = "1024";
 
@@ -57,6 +54,6 @@ public class GetJvm {
         String starter = jvm_j.getString(6) + " -cp ";
         jvm_set.append(starter);
 
-        FileUtils.writeStringToFile(m_t, jvm_set.toString(), "UTF-8");
+        version.setJvmattribute(jvm_set);
     }
 }

@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
 import org.wdt.GetGamePath;
 import org.wdt.Launcher;
-import org.wdt.WdtcDownload.CompleteDocument;
+import org.wdt.WdtcDownload.SelectGameVersion;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,11 +40,10 @@ public class CompletionGame {
                 button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     V_BOX.getChildren().clear();
                     stage.close();
-                    Launcher version = new Launcher(button.getText());
                     try {
-                        CompleteDocument completeDocument = new CompleteDocument(version);
-                        completeDocument.readdown();
-                        completeDocument.gethash();
+                        Launcher version = new Launcher(button.getText());
+                        SelectGameVersion gameVersion = new SelectGameVersion(version);
+                        gameVersion.selectversion();
                         logmaker.info("* 版本补全完成");
                     } catch (IOException | InterruptedException | RuntimeException e) {
                         ErrorWin.setErrorWin(e);

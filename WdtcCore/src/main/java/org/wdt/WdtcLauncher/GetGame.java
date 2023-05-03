@@ -2,7 +2,6 @@ package org.wdt.WdtcLauncher;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
@@ -58,7 +57,7 @@ public class GetGame {
 
         String v_type = " " + game_j.getString(10) + " " + "Wdtc-dome";
         game_set.append(v_type);
-        FileUtils.writeStringToFile(m_t, game_set.toString(), "UTF-8", true);
-
+//        FileUtils.writeStringToFile(m_t, game_set.toString(), "UTF-8", true);
+        version.setGameattribute(game_set);
     }
 }

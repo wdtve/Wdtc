@@ -1,12 +1,13 @@
 package org.wdt.WdtcUI.users;
 
 import org.apache.log4j.Logger;
+import org.wdt.FilePath;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ReadUserList {
-    private static final File user_json = new File("WdtcCore/ResourceFile/Launcher/users/users.json");
+    private static final File user_json = FilePath.getUsersJson();
     private static final Logger logmaker = Logger.getLogger(ReadUserList.class);
 
     public static boolean SetUserJson() throws IOException {

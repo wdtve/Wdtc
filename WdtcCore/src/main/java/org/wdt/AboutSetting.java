@@ -19,12 +19,16 @@ public class AboutSetting {
         return (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("log");
     }
 
+    public static boolean GetLlvmpipeSwitch() throws IOException {
+        return (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("llvmpipe-loader");
+    }
+
     public static void GenerateSettingFile() throws IOException {
         if (!GetSettingFile().exists()) {
-            FileUtils.copyFile(new File("WdtcCore/ResourceFile/setting.json"), GetSettingFile());
+            FileUtils.copyFile(new File("ResourceFile/setting.json"), GetSettingFile());
             JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
             Setting.put("DefaultGamePath", System.getProperty("user.dir"));
-            FileUtils.writeStringToFile(GetSettingFile(), Setting.toString(), "UTF-8");
+            StringUtil.PutJSONObject(GetSettingFile(), Setting);
         }
     }
 

@@ -19,7 +19,7 @@ public class ErrorWin {
     private static final Scene scene = new Scene(sp);
 
     public static void setErrorWin(Throwable e) {
-        LOGGER.error("* 发生错误:" + e.getLocalizedMessage());
+        LOGGER.error("* 发生错误:", e);
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         setWin(sw.getBuffer().toString());

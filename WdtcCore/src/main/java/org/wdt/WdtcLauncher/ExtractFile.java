@@ -18,9 +18,9 @@ public class ExtractFile {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
                 if (Objects.equals(FilenameUtils.getExtension(name), "dll")) {
-                    logmaker.debug("* 提取natives库dll文件" + name + "中");
                     File dir = new File(path + File.separator + name);
                     if (!dir.exists()) {
+                        logmaker.debug("* 提取natives库dll文件" + name + "中");
                         if (entry.isDirectory()) {
                             dir.mkdir();
                         } else {

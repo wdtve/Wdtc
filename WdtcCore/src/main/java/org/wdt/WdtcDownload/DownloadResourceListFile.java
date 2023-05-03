@@ -8,6 +8,7 @@ import org.wdt.Launcher;
 import org.wdt.StringUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
@@ -19,7 +20,7 @@ public class DownloadResourceListFile extends DownloadTask {
         DownloadResourceListFile.version = launcher;
     }
 
-    public void GetresourceFile() throws Exception {
+    public void GetresourceFile() throws IOException, InterruptedException {
         JSONObject assetIndex_j = StringUtil.FileToJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));

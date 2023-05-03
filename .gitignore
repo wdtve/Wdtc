@@ -41,5 +41,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/WdtcCore/ResourceFile/Launcher/1.19.1-fabric.ps1
-/WdtcCore/ResourceFile/WdtcLog/
+/ResourceFile/Launcher/1.19.1-fabric.ps1
+/ResourceFile/WdtcLog/

@@ -14,11 +14,7 @@ import java.util.List;
 
 public class VersionList {
     private static final Logger logmaker = Logger.getLogger(VersionList.class);
-    private static FileUrl fileUrl;
-
-    public VersionList(boolean bmcl) {
-        fileUrl = new FileUrl(bmcl);
-    }
+    private static final FileUrl fileUrl = new FileUrl();
 
     public List<String> getVersionList() {
         List<String> VersionList = new ArrayList<>();
@@ -33,7 +29,7 @@ public class VersionList {
                 VersionList.add(VersionObject.getString("id"));
             }
         } catch (IOException e) {
-            logmaker.error("* 出现错误,可能是网络错误");
+            logmaker.error("* 出现错误,可能是网络错误", e);
         }
         return VersionList;
     }

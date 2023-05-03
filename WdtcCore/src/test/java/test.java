@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.wdt.Version;
 import org.wdt.WdtcDownload.Fabric.VersionJson;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,7 +19,7 @@ public class test {
 
     static void function(String filename, File dir) {
         File[] files = dir.listFiles();
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
                     function(filename, file.getAbsoluteFile());
@@ -27,6 +29,20 @@ public class test {
                     break;
                 }
             }
+        }
+    }
+
+    public static void executeCmdCommand(String cmdCommand) {
+        try {
+            Process process = Runtime.getRuntime().exec(cmdCommand);
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream(), "GBK"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.err.println(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -63,6 +79,6 @@ public class test {
 
     @Test
     public void isnull() throws IOException {
-        System.out.println(FileUtils.getUserDirectory());
+        executeCmdCommand("");
     }
 }

@@ -1,5 +1,9 @@
 package org.wdt.WdtcDownload;
 
+import org.wdt.AboutSetting;
+
+import java.io.IOException;
+
 public class FileUrl {
     private static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";
     private static final String MOJANG_ASSETS = "https://resources.download.minecraft.net/";
@@ -10,14 +14,38 @@ public class FileUrl {
     private static final String MOJANG_LIBRARIES = "https://libraries.minecraft.net/";
     private static final String FABRIC_FILE_LIST = "https://meta.fabricmc.net/v2/versions/loader/%s/%s";
     private static final String BMCL_FABRIC_FILE_LIST = "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/%s/%s";
+    private static final String LLBMPIPE_LOADER = "https://ghdl.feizhuqwq.cf/https://github.com/Glavo/llvmpipe-loader/releases/download/v1.0/llvmpipe-loader-1.0.jar";
+    private static final String AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/";
+    private static final String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
+    private static final String LITTLESKIN_API = "https://littleskin.cn/api/yggdrasil";
     private static boolean BMCLAPI;
+
+    public FileUrl() {
+        try {
+            FileUrl.BMCLAPI = AboutSetting.GetBmclSwitch();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getLittleskinApi() {
+        return LITTLESKIN_API;
+    }
+
+    public static String getAuthlibInjector() {
+        return AUTHLIB_INJECTOR;
+    }
+
+    public static String getBmclAuthlibInjector() {
+        return BMCL_AUTHLIB_INJECTOR;
+    }
+
+    public static String getLlbmpipeLoader() {
+        return LLBMPIPE_LOADER;
+    }
 
     public static String getBmclFabricFileList() {
         return BMCL_FABRIC_FILE_LIST;
-    }
-
-    public FileUrl(boolean BMCLAPI) {
-        FileUrl.BMCLAPI = BMCLAPI;
     }
 
     public static String getFabricFileList() {
@@ -73,6 +101,14 @@ public class FileUrl {
             return getBmclapiLibraries();
         } else {
             return getMojangLibraries();
+        }
+    }
+
+    public String GetAuthlibInjector() {
+        if (BMCLAPI) {
+            return getBmclAuthlibInjector();
+        } else {
+            return getAuthlibInjector();
         }
     }
 
