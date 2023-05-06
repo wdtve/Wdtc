@@ -66,8 +66,7 @@ public class DownloadAndGameLibFile extends DownloadTask {
             } catch (RuntimeException | IOException e) {
                 logmaker.error("* logej.xml不存在或路径错误!");
             }
-            JSONObject downloads_j = v_e_j.getJSONObject("downloads");
-            JSONObject client = downloads_j.getJSONObject("client");
+            JSONObject client = v_e_j.getJSONObject("downloads").getJSONObject("client");
             try {
                 URL jar_url = new URL(client.getString("url"));
                 File VersionJar = new File(version.getVersionJar());

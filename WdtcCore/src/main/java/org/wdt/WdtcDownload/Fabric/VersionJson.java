@@ -1,10 +1,10 @@
 package org.wdt.WdtcDownload.Fabric;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.wdt.StringUtil;
 import org.wdt.Version;
 import org.wdt.WdtcDownload.FileUrl;
 
@@ -37,8 +37,7 @@ public class VersionJson {
         for (int i = 0; i < common.size(); i++) {
             LibraryList.add(common.getJSONObject(i));
         }
-        VersionJson_json.put("libraries", JSON.toJSONString(LibraryList));
-        String versionjsonend = JSON.toJSONString(VersionJson_json);
-        FileUtils.writeStringToFile(versionJson, versionjsonend, "UTF-8");
+        VersionJson_json.put("libraries", LibraryList);
+        StringUtil.PutJSONObject(versionJson, VersionJson_json);
     }
 }

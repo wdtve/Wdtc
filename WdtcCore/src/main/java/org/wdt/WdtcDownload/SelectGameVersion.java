@@ -3,7 +3,6 @@ package org.wdt.WdtcDownload;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import javafx.scene.control.TextField;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
@@ -35,7 +34,7 @@ public class SelectGameVersion {
             if (Objects.equals(launcher.getVersion(), version_name)) {
                 URL v_url = new URL(versions_j.getJSONObject(i).getString("url"));
                 File v_j = new File(launcher.getVersionJson());
-                FileUtils.copyURLToFile(v_url, v_j);
+                DownloadTask.StartDownloadTask(v_url, v_j);
                 new DownloadAndGameLibFile(launcher).readdown();
                 if (Objects.nonNull(label)) {
                     label.setText("库下载完成");

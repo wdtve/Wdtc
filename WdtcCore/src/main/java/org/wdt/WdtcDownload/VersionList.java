@@ -2,13 +2,10 @@ package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.wdt.StringUtil;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +16,7 @@ public class VersionList {
     public List<String> getVersionList() {
         List<String> VersionList = new ArrayList<>();
         try {
-            URL version_manifest_url = new URL(fileUrl.getVersionManifest());
-            URLConnection uc = version_manifest_url.openConnection();
-            String vm_e = IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8);
-            JSONObject vm_e_j = JSONObject.parseObject(vm_e);
-            JSONArray version_list = vm_e_j.getJSONArray("versions");
+            JSONArray version_list = JSONObject.parseObject(StringUtil.GetUrlContent(fileUrl.getVersionManifest())).getJSONArray("versions");
             for (int i = 0; i < version_list.size(); i++) {
                 JSONObject VersionObject = version_list.getJSONObject(i);
                 VersionList.add(VersionObject.getString("id"));

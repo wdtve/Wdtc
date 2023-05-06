@@ -1,9 +1,7 @@
 package org.wdt.WdtcDownload;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
 
@@ -25,9 +23,9 @@ public class DownloadResourceListFile extends DownloadTask {
         String id = assetIndex_j.getString("id");
         URL url = new URL(assetIndex_j.getString("url"));
         File GameAssetsDirJson = new File(version.getGameAssetsdir() + "indexes\\" + id + ".json");
-        FileUtils.copyURLToFile(url, GameAssetsDirJson);
+        StartDownloadTask(url, GameAssetsDirJson);
         String list = StringUtil.FileToJSONObject(GameAssetsDirJson).getJSONObject("objects").values().toString();
-        JSONArray l_e_j = JSON.parseArray(list);
+        JSONArray l_e_j = JSONArray.parseArray(list);
         CountDownLatch countDownLatch = new CountDownLatch(l_e_j.size());
         for (int i = 0; i < l_e_j.size(); i++) {
             String hash = l_e_j.getJSONObject(i).getString("hash");

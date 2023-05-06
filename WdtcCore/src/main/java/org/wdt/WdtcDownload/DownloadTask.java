@@ -16,24 +16,20 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadTask extends GetLibPathAndUrl {
     private static final Logger logmaker = Logger.getLogger(DownloadTask.class);
-    private static boolean bmclapi;
     private static Launcher launcher;
 
     public DownloadTask(Launcher launcher) {
         super(launcher);
-        try {
-            DownloadTask.launcher = launcher;
-            DownloadTask.bmclapi = launcher.bmclapi();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        DownloadTask.launcher = launcher;
     }
 
     public static void StartDownloadTask(URL url, File file) {
         try {
             Thread.sleep(20);
             logmaker.info("* " + url + " 开始下载");
-            FileUtils.copyURLToFile(url, file);
+            if (!file.exists()) {
+                FileUtils.copyURLToFile(url, file);
+            }
             logmaker.info("* " + file + " 下载完成");
         } catch (IOException | InterruptedException e) {
             logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
@@ -52,7 +48,9 @@ public class DownloadTask extends GetLibPathAndUrl {
         WGet wGet = new WGet(url, file);
         try {
             logmaker.info("* " + url + " 开始下载");
-            wGet.download();
+            if (!file.exists()) {
+                wGet.download();
+            }
             logmaker.info("* " + file + " 下载完成");
         } catch (RuntimeException exception) {
             logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
@@ -100,11 +98,11 @@ public class DownloadTask extends GetLibPathAndUrl {
     }
 
 
-    public static Runnable StartDownloadHashTask(String hash, CountDownLatch downLatch) throws MalformedURLException {
+    public static Runnable StartDownloadHashTask(String hash, CountDownLatch downLatch) throws IOException {
         String hash_t = hash.substring(0, 2);
         File hash_path = new File(launcher.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
         URL hash_url;
-        if (bmclapi) {
+        if (launcher.bmclapi()) {
             hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
         } else {
             hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);

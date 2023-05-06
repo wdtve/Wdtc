@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 public class LauncherGame {
     private static final File m_t = FilePath.getStarterBat();
     private static final Logger logmaker = Logger.getLogger(LauncherGame.class);
-    //    private static String xmx = "1024";
 
     public static void bat(String file) throws IOException {
         Runtime.getRuntime().exec("cmd.exe /C start " + file);
@@ -23,7 +22,11 @@ public class LauncherGame {
         try {
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);
-            gameVersion.selectversion();
+            try {
+                gameVersion.selectversion();
+            } catch (Exception e) {
+                logmaker.error("错误:", e);
+            }
             logmaker.info("* 文件补全完成");
             logmaker.info("* 开始写入启动脚本");
             GetJvm.readJvm(launcher);

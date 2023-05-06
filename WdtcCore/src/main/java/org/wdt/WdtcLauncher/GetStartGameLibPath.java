@@ -6,6 +6,7 @@ import org.wdt.AboutSetting;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
+import org.wdt.WdtcDownload.FileUrl;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +15,12 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class GetStartGameLibPath {
+    private static final StringBuilder cpb = new StringBuilder();
     private static Launcher launcher;
 
     public static void getLibPath(Launcher launcher) throws IOException {
         GetStartGameLibPath.launcher = launcher;
         Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
-        StringBuilder cpb = new StringBuilder();
         JSONObject v_e_j = StringUtil.FileToJSONObject(launcher.getVersionJson());
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
         for (int i = 0; i < libraries_j.size(); i++) {
@@ -50,21 +51,26 @@ public class GetStartGameLibPath {
         String verions_jar = launcher.getVersionJar() + " ";
         String mainclass = v_e_j.getString("mainClass");
         cpb.append(verions_jar);
-//        cpb.append("-javaagent:").append(FilePath.getAuthlibInjector()).append("=").append(FileUrl.getLittleskinApi());
-//        cpb.append(" ").append("-Dauthlibinjector.yggdrasil.prefetched=").append(StringUtil.StringToBase64(StringUtil.GetUrlContent(FileUrl.getLittleskinApi())));
         if (AboutSetting.GetLlvmpipeSwitch()) {
-            cpb.append(" ").append("-javaagent:").append(FilePath.getLlbmpipeLoader()).append(" ").append(mainclass);
-        } else {
-            cpb.append(" ").append(mainclass);
+            cpb.append(LlbmpipeLoader());
         }
+        cpb.append(mainclass).append(" ");
         launcher.setLibrartattribute(cpb);
+    }
+
+    private static String LittleskinApi_AuthlibInjector() throws IOException {
+        return "-javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
+                StringUtil.StringToBase64(StringUtil.GetUrlContent(FileUrl.getLittleskinApi())) + " ";
+    }
+
+    private static String LlbmpipeLoader() {
+        return "-javaagent:" + FilePath.getLlbmpipeLoader() + " ";
     }
 
     public static String readlib(JSONObject lib_j, String natives_name) {
         String game_lib_path = launcher.GetGameLibPath();
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
-        JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
+        JSONObject natives_os = lib_j.getJSONObject("downloads").getJSONObject("classifiers")
+                .getJSONObject(natives_name);
         String natives_lib_path = game_lib_path + natives_os.getString("path");
         natives_lib_path = natives_lib_path.replaceAll("/", "\\\\");
         return natives_lib_path;
@@ -72,8 +78,7 @@ public class GetStartGameLibPath {
 
     public static String readlib(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject artifact_j = downloads_j.getJSONObject("artifact");
+        JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path") + ";";
         lib_path = lib_path.replaceAll("/", "\\\\");
         return lib_path;

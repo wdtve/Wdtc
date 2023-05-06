@@ -1,5 +1,6 @@
 package org.wdt.WdtcUI;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -22,7 +23,7 @@ public class ErrorWin {
         LOGGER.error("* 发生错误:", e);
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
-        setWin(sw.getBuffer().toString());
+        Platform.runLater(() -> setWin(sw.getBuffer().toString()));
     }
 
     public static void setWin(String e) {

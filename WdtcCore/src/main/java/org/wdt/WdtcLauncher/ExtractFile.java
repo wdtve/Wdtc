@@ -64,7 +64,7 @@ public class ExtractFile {
 
     }
 
-    public static void createCompressedFile(ZipOutputStream out, File file, String dir) throws Exception {
+    private static void createCompressedFile(ZipOutputStream out, File file, String dir) throws Exception {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             out.putNextEntry(new ZipEntry(dir + "/"));
@@ -77,7 +77,7 @@ public class ExtractFile {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
             ZipEntry entry = new ZipEntry(dir);
             out.putNextEntry(entry);
-            int j = 0;
+            int j;
             byte[] buffer = new byte[1024];
             while ((j = bis.read(buffer)) > 0) {
                 out.write(buffer, 0, j);

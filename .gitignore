@@ -43,3 +43,6 @@ bin/
 .DS_Store
 /ResourceFile/Launcher/1.19.1-fabric.ps1
 /ResourceFile/WdtcLog/
+/ResourceFile/Launcher/WdtcGameLauncherScript.bat
+/ResourceFile/skin.zip
+/ResourceFile/skin/
