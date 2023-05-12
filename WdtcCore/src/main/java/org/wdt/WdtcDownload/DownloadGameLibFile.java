@@ -17,16 +17,16 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 //1.19-
-public class DownloadAndGameLibFile extends DownloadTask {
-    private static final Logger logmaker = Logger.getLogger(DownloadAndGameLibFile.class);
+public class DownloadGameLibFile extends DownloadTask {
+    private static final Logger logmaker = Logger.getLogger(DownloadGameLibFile.class);
     private static Launcher version;
 
-    public DownloadAndGameLibFile(Launcher launcher) {
+    public DownloadGameLibFile(Launcher launcher) {
         super(launcher);
-        DownloadAndGameLibFile.version = launcher;
+        DownloadGameLibFile.version = launcher;
     }
 
-    public void readdown() throws IOException, RuntimeException {
+    public void DownloadLibFile() throws IOException, RuntimeException {
         Files.createDirectories(Paths.get(version.getVersionNativesPath()));
         JSONObject v_e_j = StringUtil.FileToJSONObject(version.getVersionJson());
         JSONArray libraries_j = v_e_j.getJSONArray("libraries");
@@ -60,7 +60,7 @@ public class DownloadAndGameLibFile extends DownloadTask {
             try {
                 File log4j2 = FilePath.getLog4j2();
                 File v_log = new File(version.getVersionLog4j2());
-                if (!v_log.exists()) {
+                if (StringUtil.FileExistenceAndSize(log4j2)) {
                     FileUtils.copyFile(log4j2, v_log);
                 }
             } catch (RuntimeException | IOException e) {
@@ -70,7 +70,7 @@ public class DownloadAndGameLibFile extends DownloadTask {
             try {
                 URL jar_url = new URL(client.getString("url"));
                 File VersionJar = new File(version.getVersionJar());
-                if (!VersionJar.exists()) {
+                if (StringUtil.FileExistenceAndSize(VersionJar)) {
                     StartDownloadTask(jar_url, VersionJar);
                 }
             } catch (MalformedURLException | RuntimeException e) {

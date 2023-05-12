@@ -1,18 +1,7 @@
 plugins {
     id("java")
-    id("idea")
-    id("application")
     id("org.openjfx.javafxplugin") version "0.0.9"
 }
-allprojects {
-    repositories {
-        maven { url = uri("https://maven.aliyun.com/repository/public/") }
-        mavenLocal()
-        mavenCentral()
-    }
-}
-
-
 javafx {
     version = "19.0.2.1"
     modules("javafx.controls", "javafx.fxml", "javafx.web")

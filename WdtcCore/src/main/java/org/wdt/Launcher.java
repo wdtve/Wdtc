@@ -43,11 +43,11 @@ public class Launcher extends Version {
         Librartattribute = librartattribute.toString();
     }
 
-    public boolean bmclapi() throws IOException {
+    public boolean bmclapi() {
         return AboutSetting.GetBmclSwitch();
     }
 
-    public boolean log() throws IOException {
+    public boolean log() {
         return AboutSetting.GetLogSwitch();
     }
 

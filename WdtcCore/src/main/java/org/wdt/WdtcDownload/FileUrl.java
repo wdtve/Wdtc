@@ -2,8 +2,6 @@ package org.wdt.WdtcDownload;
 
 import org.wdt.AboutSetting;
 
-import java.io.IOException;
-
 public class FileUrl {
     private static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";
     private static final String MOJANG_ASSETS = "https://resources.download.minecraft.net/";
@@ -21,11 +19,7 @@ public class FileUrl {
     private static boolean BMCLAPI;
 
     public FileUrl() {
-        try {
-            FileUrl.BMCLAPI = AboutSetting.GetBmclSwitch();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUrl.BMCLAPI = AboutSetting.GetBmclSwitch();
     }
 
     public static String getLittleskinApi() {

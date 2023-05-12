@@ -11,24 +11,46 @@ public class AboutSetting {
         return new File(System.getProperty("user.home") + "\\.wdtc\\setting\\setting.json");
     }
 
-    public static boolean GetBmclSwitch() throws IOException {
-        return (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("bmcl");
+    public static boolean GetBmclSwitch() {
+        boolean bmcl = false;
+        try {
+            bmcl = (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("bmcl");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmcl;
     }
 
-    public static boolean GetLogSwitch() throws IOException {
-        return (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("log");
+    public static boolean GetLogSwitch() {
+        boolean log = false;
+        try {
+            log = (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("log");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return log;
     }
 
-    public static boolean GetLlvmpipeSwitch() throws IOException {
-        return (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("llvmpipe-loader");
+    public static boolean GetLlvmpipeSwitch() {
+        boolean LlvmpipeLoader = false;
+        try {
+            LlvmpipeLoader = (boolean) StringUtil.FileToJSONObject(GetSettingFile()).get("llvmpipe-loader");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return LlvmpipeLoader;
     }
 
-    public static void GenerateSettingFile() throws IOException {
-        if (!GetSettingFile().exists()) {
-            FileUtils.copyFile(new File("ResourceFile/setting.json"), GetSettingFile());
-            JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
-            Setting.put("DefaultGamePath", System.getProperty("user.dir"));
-            StringUtil.PutJSONObject(GetSettingFile(), Setting);
+    public static void GenerateSettingFile() {
+        if (StringUtil.FileExistenceAndSize(GetSettingFile())) {
+            try {
+                FileUtils.copyFile(new File("ResourceFile/setting.json"), GetSettingFile());
+                JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
+                Setting.put("DefaultGamePath", System.getProperty("user.dir"));
+                StringUtil.PutJSONObject(GetSettingFile(), Setting);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

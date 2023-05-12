@@ -2,10 +2,10 @@ package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.github.axet.wget.WGet;
-import javafx.concurrent.Task;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.Launcher;
+import org.wdt.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class DownloadTask extends GetLibPathAndUrl {
         try {
             Thread.sleep(20);
             logmaker.info("* " + url + " 开始下载");
-            if (!file.exists()) {
+            if (StringUtil.FileExistenceAndSize(file)) {
                 FileUtils.copyURLToFile(url, file);
             }
             logmaker.info("* " + file + " 下载完成");
@@ -48,7 +48,7 @@ public class DownloadTask extends GetLibPathAndUrl {
         WGet wGet = new WGet(url, file);
         try {
             logmaker.info("* " + url + " 开始下载");
-            if (!file.exists()) {
+            if (StringUtil.FileExistenceAndSize(file)) {
                 wGet.download();
             }
             logmaker.info("* " + file + " 下载完成");
@@ -73,27 +73,29 @@ public class DownloadTask extends GetLibPathAndUrl {
         }
     }
 
-    public static Task<Void> StartDownloadLibTask(JSONObject lib_j) {
-        return new Task<>() {
-            @Override
-            protected Void call() throws IOException {
-                if (!readlib_path(lib_j).exists()) {
-                    StartDownloadTask(readlib_url(lib_j), readlib_path(lib_j));
+    public static Runnable StartDownloadLibTask(JSONObject lib_j) {
+        return () -> {
+            if (StringUtil.FileExistenceAndSize(GetLibPath(lib_j))) {
+                try {
+                    StartDownloadTask(GetLibUrl(lib_j), GetLibPath(lib_j));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
                 }
-                return null;
             }
+
         };
     }
 
-    public static Task<Void> StartDownloadNativesLibTask(JSONObject lib_j) {
-        return new Task<>() {
-            @Override
-            protected Void call() throws IOException {
-                if (!readnatives_lib(lib_j).exists()) {
-                    StartDownloadTask(readnatives_url(lib_j), readnatives_lib(lib_j));
+    public static Runnable StartDownloadNativesLibTask(JSONObject lib_j) {
+        return () -> {
+            if (StringUtil.FileExistenceAndSize(GetNativesLibPath(lib_j))) {
+                try {
+                    StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                return null;
             }
+
         };
     }
 
@@ -108,7 +110,7 @@ public class DownloadTask extends GetLibPathAndUrl {
             hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
         }
         return () -> {
-            if (!hash_path.exists()) {
+            if (StringUtil.FileExistenceAndSize(hash_path)) {
                 StartDownloadTask(hash_url, hash_path);
                 downLatch.countDown();
             } else {

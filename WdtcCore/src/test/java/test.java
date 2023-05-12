@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.wdt.StringUtil;
 import org.wdt.Version;
 import org.wdt.WdtcDownload.Fabric.VersionJson;
 
@@ -79,6 +80,6 @@ public class test {
 
     @Test
     public void isnull() throws IOException {
-        executeCmdCommand("");
+        System.out.println(StringUtil.GetUrlContent("https://littleskin.cn/user/profile"));
     }
 }

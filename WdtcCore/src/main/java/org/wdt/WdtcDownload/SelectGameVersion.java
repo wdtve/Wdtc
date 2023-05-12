@@ -35,10 +35,7 @@ public class SelectGameVersion {
                 URL v_url = new URL(versions_j.getJSONObject(i).getString("url"));
                 File v_j = new File(launcher.getVersionJson());
                 DownloadTask.StartDownloadTask(v_url, v_j);
-                new DownloadAndGameLibFile(launcher).readdown();
-                if (Objects.nonNull(label)) {
-                    label.setText("库下载完成");
-                }
+                new DownloadGameLibFile(launcher).DownloadLibFile();
                 LOGGER.debug("库下载完成");
                 new DownloadResourceListFile(launcher).GetresourceFile();
                 LOGGER.info("下载完成");

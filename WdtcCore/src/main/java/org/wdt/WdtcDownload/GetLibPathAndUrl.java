@@ -5,6 +5,7 @@ import org.wdt.Launcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GetLibPathAndUrl {
@@ -17,7 +18,7 @@ public class GetLibPathAndUrl {
         GetLibPathAndUrl.launcher = launcher;
     }
 
-    public static File readnatives_lib(JSONObject lib_j) {
+    public static File GetNativesLibPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject classifiers_j = lib_j.getJSONObject("downloads").getJSONObject("classifiers");
         String natives_name = lib_j.getJSONObject("natives").getString("windows");
@@ -27,7 +28,7 @@ public class GetLibPathAndUrl {
         return new File(natives_lib_path);
     }
 
-    public static URL readnatives_url(JSONObject lib_j) throws IOException {
+    public static URL GetNativesLibUrl(JSONObject lib_j) throws IOException {
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject natives_j = lib_j.getJSONObject("natives");
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
@@ -42,7 +43,7 @@ public class GetLibPathAndUrl {
         }
     }
 
-    public static File readlib_path(JSONObject lib_j) {
+    public static File GetLibPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path");
@@ -51,7 +52,7 @@ public class GetLibPathAndUrl {
 
     }
 
-    public static URL readlib_url(JSONObject lib_j) throws IOException {
+    public static URL GetLibUrl(JSONObject lib_j) throws MalformedURLException {
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_url = artifact_j.getString("url");
         if (launcher.bmclapi()) {

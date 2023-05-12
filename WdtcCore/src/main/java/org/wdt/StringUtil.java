@@ -45,4 +45,16 @@ public class StringUtil extends FileUtils {
     public static String StringToBase64(String str) throws UnsupportedEncodingException {
         return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
     }
+
+    public static boolean FileExistenceAndSize(File file) {
+        if (file.exists()) {
+            return sizeOf(file) != 0;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean FileExistenceAndSize(String filePath) {
+        return FileExistenceAndSize(new File(filePath));
+    }
 }
