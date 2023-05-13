@@ -1,7 +1,7 @@
 
 plugins {
     id("java")
-    id("org.openjfx.javafxplugin") version "0.0.9"
+    id("org.openjfx.javafxplugin") version "0.0.14"
 }
 
 
@@ -27,7 +27,7 @@ dependencies {
     implementation("com.alibaba.fastjson2:fastjson2:2.0.25")
     // https://mvnrepository.com/artifact/org.apache.ant/ant
     implementation("org.apache.ant:ant:1.10.13")
-    implementation(files("../libs/authlib-injector-1.2.2.jar"))
+    implementation(files("../libs/DependencyDownloader-1.0.jar"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }

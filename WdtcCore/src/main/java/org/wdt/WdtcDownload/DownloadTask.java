@@ -39,7 +39,7 @@ public class DownloadTask extends GetLibPathAndUrl {
                 FileUtils.copyURLToFile(url, file);
                 logmaker.info("* " + file + " 重试成功");
             } catch (IOException | InterruptedException exception) {
-                logmaker.error("* 下载任务" + url + " 重试失败,任务取消");
+                logmaker.error("* 下载任务" + url + " 重试失败,任务取消", e);
             }
         }
     }

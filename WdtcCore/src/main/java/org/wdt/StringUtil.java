@@ -48,9 +48,9 @@ public class StringUtil extends FileUtils {
 
     public static boolean FileExistenceAndSize(File file) {
         if (file.exists()) {
-            return sizeOf(file) != 0;
+            return sizeOf(file) == 0;
         } else {
-            return false;
+            return true;
         }
     }
 

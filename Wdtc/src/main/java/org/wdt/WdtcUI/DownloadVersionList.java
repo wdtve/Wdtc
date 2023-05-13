@@ -21,8 +21,8 @@ public class DownloadVersionList {
     private static final ScrollPane sp = new ScrollPane();
     private static final VBox vBox = new VBox();
     private static final Scene SCENE = new Scene(sp);
-    private static TextField textField;
     private static final VersionList versionList = new VersionList();
+    private static TextField textField;
 
     public DownloadVersionList(TextField textField) throws IOException {
         DownloadVersionList.textField = textField;
@@ -49,6 +49,7 @@ public class DownloadVersionList {
                         Thread thread = new Thread(() -> {
                             try {
                                 new SelectGameVersion(launcher, textField).selectversion();
+
                             } catch (Exception e) {
                                 ErrorWin.setErrorWin(e);
                             }
@@ -59,6 +60,7 @@ public class DownloadVersionList {
                     }
 
                 });
+
             } catch (NullPointerException e) {
                 ErrorWin.setErrorWin(e);
             }

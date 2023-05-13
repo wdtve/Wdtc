@@ -80,6 +80,6 @@ public class test {
 
     @Test
     public void isnull() throws IOException {
-        System.out.println(StringUtil.GetUrlContent("https://littleskin.cn/user/profile"));
+        System.out.println(StringUtil.FileExistenceAndSize("WdtcCore/src/test/java/jasd.json"));
     }
 }

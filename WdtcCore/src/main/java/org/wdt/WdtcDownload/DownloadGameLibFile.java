@@ -60,7 +60,7 @@ public class DownloadGameLibFile extends DownloadTask {
             try {
                 File log4j2 = FilePath.getLog4j2();
                 File v_log = new File(version.getVersionLog4j2());
-                if (StringUtil.FileExistenceAndSize(log4j2)) {
+                if (StringUtil.FileExistenceAndSize(v_log)) {
                     FileUtils.copyFile(log4j2, v_log);
                 }
             } catch (RuntimeException | IOException e) {
