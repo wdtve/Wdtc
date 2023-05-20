@@ -11,19 +11,29 @@ public class FileUrl {
     private static final String BMCLAPI_ASSETS = "https://download.mcbbs.net/assets/";
     private static final String MOJANG_LIBRARIES = "https://libraries.minecraft.net/";
     private static final String FABRIC_FILE_LIST = "https://meta.fabricmc.net/v2/versions/loader/%s/%s";
+    private static final String BMCLAPI_FABRIC_FILE_LIST = "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/%s/%s";
     private static final String BMCL_FABRIC_FILE_LIST = "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/%s/%s";
     private static final String LLBMPIPE_LOADER = "https://ghdl.feizhuqwq.cf/https://github.com/Glavo/llvmpipe-loader/releases/download/v1.0/llvmpipe-loader-1.0.jar";
     private static final String AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/";
     private static final String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
     private static final String LITTLESKIN_API = "https://littleskin.cn/api/yggdrasil";
+    private static final String FABRIC_MAVEN = "https://maven.fabricmc.net/";
     private static boolean BMCLAPI;
 
     public FileUrl() {
         FileUrl.BMCLAPI = AboutSetting.GetBmclSwitch();
     }
 
+    public static String getFabricMaven() {
+        return FABRIC_MAVEN;
+    }
+
     public static String getLittleskinApi() {
         return LITTLESKIN_API;
+    }
+
+    public static String getBmclapiFabricFileList() {
+        return BMCLAPI_FABRIC_FILE_LIST;
     }
 
     public static String getAuthlibInjector() {

@@ -8,7 +8,6 @@ import org.wdt.Launcher;
 import org.wdt.StringUtil;
 import org.wdt.WdtcDownload.FileUrl;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,22 +28,21 @@ public class GetStartGameLibPath {
             if (Objects.isNull(natives_j)) {
                 JSONArray rules = lib_j.getJSONArray("rules");
                 if (Objects.isNull(rules)) {
-                    cpb.append(readlib(lib_j));
+                    cpb.append(GetPath(lib_j));
                 } else {
                     JSONObject action_j = rules.getJSONObject(rules.size() - 1);
                     String action = action_j.getString("action");
-                    JSONObject os_j = action_j.getJSONObject("os");
-                    String os_n = os_j.getString("name");
+                    String os_n = action_j.getJSONObject("os").getString("name");
                     if (Objects.equals(action, "disallow") && Objects.equals(os_n, "osx")) {
-                        cpb.append(readlib(lib_j));
+                        cpb.append(GetPath(lib_j));
                     } else if (Objects.equals(action, "allow") && Objects.equals(os_n, "windows")) {
-                        cpb.append(readlib(lib_j));
+                        cpb.append(GetPath(lib_j));
                     }
                 }
             } else {
                 String natives_name = natives_j.getString("windows");
                 if (Objects.nonNull(natives_name)) {
-                    ExtractFile.unzipByFile(new File(readlib(lib_j, natives_name)), launcher.getVersionNativesPath());
+                    ExtractFile.unzipByFile(GetNativesPath(lib_j), launcher.getVersionNativesPath());
                 }
             }
         }
@@ -67,16 +65,16 @@ public class GetStartGameLibPath {
         return "-javaagent:" + FilePath.getLlbmpipeLoader() + " ";
     }
 
-    public static String readlib(JSONObject lib_j, String natives_name) {
+    public static String GetNativesPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject natives_os = lib_j.getJSONObject("downloads").getJSONObject("classifiers")
-                .getJSONObject(natives_name);
+                .getJSONObject("windows");
         String natives_lib_path = game_lib_path + natives_os.getString("path");
         natives_lib_path = natives_lib_path.replaceAll("/", "\\\\");
         return natives_lib_path;
     }
 
-    public static String readlib(JSONObject lib_j) {
+    public static String GetPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path") + ";";

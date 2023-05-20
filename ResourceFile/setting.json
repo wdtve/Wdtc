@@ -2,5 +2,6 @@
   "bmcl": false,
   "log": false,
   "llvmpipe-loader": false,
-  "DefaultGamePath": ""
+  "DefaultGamePath": "",
+  "JavaPath": []
 }

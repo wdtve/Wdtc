@@ -4,9 +4,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.StringUtil;
 import org.wdt.Version;
 import org.wdt.WdtcDownload.Fabric.VersionJson;
+import org.wdt.WdtcLauncher.GetJavaPath;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,19 +14,35 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class test {
     private static final Logger logmaker = Logger.getLogger(test.class);
 
-    static void function(String filename, File dir) {
+    static void function(File dir) {
         File[] files = dir.listFiles();
-        if (files != null) {
+        if (Objects.nonNull(files)) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    function(filename, file.getAbsoluteFile());
+                    function(file.getAbsoluteFile());
                 }
-                if (file.isFile() && filename.equals(file.getName())) {
-                    logmaker.info("* " + file.getAbsolutePath());
+                if (file.isFile() && "java.exe".equals(file.getName())) {
+                    File file1 = new File(file.getParent());
+                    try {
+                        List<String> allLines = Files.readAllLines(Paths.get(file1.getParent() + "/release"));
+                        for (String line : allLines) {
+                            Pattern p = Pattern.compile("JAVA_VERSION=");
+                            Matcher m = p.matcher(line);
+                            if (m.find()) {
+                                logmaker.info("* 已找到Java:" + file.getAbsolutePath() + "版本:" + line.replace("JAVA_VERSION=", "").replace("\"", ""));
+                            }
+                        }
+                    } catch (IOException e) {
+                        logmaker.info("* 已找到Java:" + file.getAbsolutePath());
+                    }
                     break;
                 }
             }
@@ -79,7 +95,8 @@ public class test {
     }
 
     @Test
-    public void isnull() throws IOException {
-        System.out.println(StringUtil.FileExistenceAndSize("WdtcCore/src/test/java/jasd.json"));
+    public void isnull() {
+        GetJavaPath.FindJava(new File("F:\\jdk"));
     }
+
 }

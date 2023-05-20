@@ -21,6 +21,7 @@ sourceSets {
     }
 }
 dependencies {
+    implementation("dom4j:dom4j:1.6.1")
     implementation("commons-io:commons-io:2.11.0")
     implementation("log4j:log4j:1.2.17")
     implementation("com.github.axet:wget:1.7.0")

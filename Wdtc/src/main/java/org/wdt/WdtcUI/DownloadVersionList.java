@@ -30,50 +30,55 @@ public class DownloadVersionList {
 
     public void getVersion_List() {
         logmaker.info("* 开始加载版本列表");
-        List<String> versionIdList = versionList.getVersionList();
-        for (String version_id : versionIdList) {
-            try {
-                Button button = new Button(version_id);
-                button.setMaxSize(100, 50);
-                vBox.getChildren().addAll(button);
-                button.setOnAction(mouseEvent -> {
-                    vBox.getChildren().clear();
-                    stage.close();
-                    try {
-                        Launcher launcher = new Launcher(button.getText());
-                        if (launcher.bmclapi()) {
-                            textField.setText("BMCLAPI下载加速已开启");
-                        } else {
-                            textField.setText("开始下载");
-                        }
-                        Thread thread = new Thread(() -> {
-                            try {
-                                new SelectGameVersion(launcher, textField).selectversion();
-
-                            } catch (Exception e) {
-                                ErrorWin.setErrorWin(e);
+        try {
+            List<String> versionIdList = versionList.getVersionList();
+            for (String version_id : versionIdList) {
+                try {
+                    Button button = new Button(version_id);
+                    button.setMaxSize(100, 50);
+                    vBox.getChildren().addAll(button);
+                    button.setOnAction(mouseEvent -> {
+                        vBox.getChildren().clear();
+                        stage.close();
+                        try {
+                            Launcher launcher = new Launcher(button.getText());
+                            if (launcher.bmclapi()) {
+                                textField.setText("BMCLAPI下载加速已开启");
+                            } else {
+                                textField.setText("开始下载");
                             }
-                        });
-                        thread.start();
-                    } catch (IOException e) {
-                        ErrorWin.setErrorWin(e);
-                    }
+                            Thread thread = new Thread(() -> {
+                                try {
+                                    new SelectGameVersion(launcher, textField).selectversion();
 
-                });
+                                } catch (Exception e) {
+                                    ErrorWin.setErrorWin(e);
+                                }
+                            });
+                            thread.start();
+                        } catch (IOException e) {
+                            ErrorWin.setErrorWin(e);
+                        }
 
-            } catch (NullPointerException e) {
-                ErrorWin.setErrorWin(e);
+                    });
+
+                } catch (NullPointerException e) {
+                    ErrorWin.setErrorWin(e);
+                }
             }
+            stage.setTitle("Version List");
+            stage.setWidth(500);
+            stage.setHeight(500);
+            stage.getIcons().add(new Image("ico.jpg"));
+            sp.setContent(vBox);
+            stage.setScene(SCENE);
+            stage.setResizable(false);
+            logmaker.info("* 版本列表加载成功");
+            stage.show();
+            stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
+        } catch (Exception e) {
+            logmaker.error("* 版本列表加载失败");
+            ErrorWin.setErrorWin(e);
         }
-        stage.setTitle("Version List");
-        stage.setWidth(500);
-        stage.setHeight(500);
-        stage.getIcons().add(new Image("ico.jpg"));
-        sp.setContent(vBox);
-        stage.setScene(SCENE);
-        stage.setResizable(false);
-        logmaker.info("* 版本列表加载成功");
-        stage.show();
-        stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
     }
 }

@@ -7,18 +7,19 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class StringUtil extends FileUtils {
-    public static String GetUrlContent(URL url) throws IOException {
+    public static String GetUrlContent(URL url) throws IOException, SocketException {
         URLConnection uc = url.openConnection();
         return IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8);
     }
 
-    public static String GetUrlContent(String url_string) throws IOException {
+    public static String GetUrlContent(String url_string) throws IOException, SocketException {
         return GetUrlContent(new URL(url_string));
     }
 

@@ -10,6 +10,16 @@ public class FilePath {
     private static final String log4j2 = "ResourceFile/log4j2.xml";
     private static final String LLBMPIPE_LOADER = System.getProperty("user.home") + "/.wdtc/llvmpipe-loader.jar";
     private static final String AUTHLIB_INJECTOR = System.getProperty("user.home") + "/.wdtc/authlib-injector.jar";
+    private static final String WDTC_CONFIG = System.getProperty("user.home") + "/.wdtc";
+    private static final File SETTING_FILE = AboutSetting.GetSettingFile();
+
+    public static File getSettingFile() {
+        return SETTING_FILE;
+    }
+
+    public static File getWdtcConfig() {
+        return new File(WDTC_CONFIG);
+    }
 
     public static File getLauncherJson() {
         return new File(LAUNCHER_JSON);

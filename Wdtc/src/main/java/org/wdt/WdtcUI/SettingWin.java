@@ -10,15 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
+import org.wdt.FilePath;
 import org.wdt.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 
@@ -88,13 +90,18 @@ public class SettingWin extends AboutSetting {
         export_log.setPrefWidth(64.0);
         export_log.setOnAction(event -> {
             try {
-                FileChooser fileChooser = new FileChooser();
+                DirectoryChooser fileChooser = new DirectoryChooser();
                 fileChooser.setTitle("选择日志文件保存路径");
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("日志文件", "*.log"));
-                File logfile = fileChooser.showSaveDialog(MainStage);
-                if (Objects.nonNull(logfile)) {
+                fileChooser.setInitialDirectory(FilePath.getWdtcConfig());
+                File logDirectory = fileChooser.showDialog(MainStage);
+                if (Objects.nonNull(logDirectory)) {
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
                     File srcFile = new File("ResourceFile/WdtcLog/Wdtc.log");
-                    FileUtils.copyFile(srcFile, logfile);
+                    File logFile = new File(logDirectory.getAbsolutePath() + "/Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
+                    FileUtils.copyFile(srcFile, logFile);
+                    logmaker.info("* 日志已导出:" + logFile);
+                    ErrorWin.setWin(FileUtils.readFileToString(logFile, "UTF-8"), logFile.getAbsolutePath());
                 }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -116,19 +123,29 @@ public class SettingWin extends AboutSetting {
         Button button = new Button("...");
         button.setLayoutX(315.0);
         button.setLayoutY(55.0);
-        button.setOnAction(event -> {
-            try {
-                DirectoryChooser fileChooser = new DirectoryChooser();
-                fileChooser.setTitle("选择游戏文件夹");
-                fileChooser.setInitialDirectory(new File(GetDefaultGamePath()));
-                File file = fileChooser.showDialog(MainStage);
-                if (Objects.nonNull(file)) {
-                    SettingJson.put("DefaultGamePath", file);
-                    StringUtil.PutJSONObject(file, SettingJson);
-                    GamePath.setText(file.getCanonicalPath());
+        button.setOnMousePressed(event -> {
+            if (event.isControlDown()) {
+                try {
+                    Runtime.getRuntime().exec("cmd.exe /c " + GetSettingFile());
+                    logmaker.info("* 设置文件" + GetSettingFile() + "已打开");
+                } catch (IOException e) {
+                    ErrorWin.setErrorWin(e);
                 }
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+            } else {
+                try {
+                    DirectoryChooser fileChooser = new DirectoryChooser();
+                    fileChooser.setTitle("选择游戏文件夹");
+                    fileChooser.setInitialDirectory(new File(GetDefaultGamePath()));
+                    File file = fileChooser.showDialog(MainStage);
+                    if (Objects.nonNull(file)) {
+                        SettingJson.put("DefaultGamePath", file);
+                        StringUtil.PutJSONObject(file, SettingJson);
+                        GamePath.setText(file.getCanonicalPath());
+                        logmaker.info("* 游戏文件夹已更改为:" + file);
+                    }
+                } catch (IOException e) {
+                    ErrorWin.setErrorWin(e);
+                }
             }
         });
         Label tips3 = new Label("是否启用OpenGL软渲染器:");
@@ -142,11 +159,13 @@ public class SettingWin extends AboutSetting {
             FalseOpenGL.setSelected(false);
             SettingJson.put("llvmpipe-loader", true);
             StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            logmaker.info("* OpenGL软渲染已开启");
         });
         FalseOpenGL.setOnAction(event -> {
             TrueOpenGl.setSelected(false);
             SettingJson.put("llvmpipe-loader", false);
             StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            logmaker.info("* OpenGL软渲染已关闭");
         });
         FalseOpenGL.setLayoutX(139.0);
         FalseOpenGL.setLayoutY(209.0);

@@ -43,7 +43,7 @@ public class AppMain extends Application {
                 MainStage.show();
             });
             MainStage.setOnCloseRequest(windowEvent -> {
-                logmaker.info("* 程序已退出");
+                logmaker.info("===== 程序已退出 =====");
                 System.exit(0);
             });
         } catch (Exception e) {

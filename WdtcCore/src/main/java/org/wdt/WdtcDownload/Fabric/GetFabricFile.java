@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetFabricFile {
-    private static final String FabricFileList = FileUrl.getFabricFileList();
+    private static final String FabricFileList = FileUrl.getBmclapiFabricFileList();
     private static String FabricVersionNumber;
     private static String GameVersionNumber;
 

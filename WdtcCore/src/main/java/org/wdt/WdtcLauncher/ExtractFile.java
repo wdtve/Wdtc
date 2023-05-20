@@ -2,8 +2,11 @@ package org.wdt.WdtcLauncher;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.wdt.StringUtil;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Objects;
 import java.util.zip.*;
@@ -11,30 +14,24 @@ import java.util.zip.*;
 public class ExtractFile {
     private static final Logger logmaker = Logger.getLogger(ExtractFile.class);
 
-    public static void unzipByFile(File file, String path) {
+    public static void unzipByFile(String file, String path) {
         try {
-            ZipFile zip = new ZipFile(file);
+            ZipFile zip = new ZipFile(new File(file));
             for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
                 if (Objects.equals(FilenameUtils.getExtension(name), "dll")) {
-                    File dir = new File(path + File.separator + name);
-                    if (!dir.exists()) {
+                    File unfile = new File(path + File.separator + name);
+                    if (StringUtil.FileExistenceAndSize(unfile)) {
                         logmaker.debug("* 提取natives库dll文件" + name + "中");
-                        if (entry.isDirectory()) {
-                            dir.mkdir();
-                        } else {
-                            File unfile = new File(path + File.separator + name);
-                            if (!unfile.getParentFile().exists()) unfile.getParentFile().mkdir();
-                            unfile.createNewFile();
-                            InputStream in = zip.getInputStream(entry);
-                            FileOutputStream fos = new FileOutputStream(unfile);
-                            int len;
-                            byte[] buf = new byte[1024];
-                            while ((len = in.read(buf)) != -1) fos.write(buf, 0, len);
-                            fos.close();
-                            in.close();
-                        }
+                        Files.createDirectories(Paths.get(path + File.separator + name));
+                        InputStream in = zip.getInputStream(entry);
+                        FileOutputStream fos = new FileOutputStream(unfile);
+                        int len;
+                        byte[] buf = new byte[1024];
+                        while ((len = in.read(buf)) != -1) fos.write(buf, 0, len);
+                        fos.close();
+                        in.close();
                     }
                 }
             }
