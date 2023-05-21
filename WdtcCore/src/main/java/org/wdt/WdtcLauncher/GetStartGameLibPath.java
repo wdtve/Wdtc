@@ -49,6 +49,7 @@ public class GetStartGameLibPath {
         String verions_jar = launcher.getVersionJar() + " ";
         String mainclass = v_e_j.getString("mainClass");
         cpb.append(verions_jar);
+        cpb.append(LittleskinApiAuthlibInjector());
         if (AboutSetting.GetLlvmpipeSwitch()) {
             cpb.append(LlbmpipeLoader());
         }
@@ -56,7 +57,7 @@ public class GetStartGameLibPath {
         launcher.setLibrartattribute(cpb);
     }
 
-    private static String LittleskinApi_AuthlibInjector() throws IOException {
+    private static String LittleskinApiAuthlibInjector() throws IOException {
         return "-javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
                 StringUtil.StringToBase64(StringUtil.GetUrlContent(FileUrl.getLittleskinApi())) + " ";
     }

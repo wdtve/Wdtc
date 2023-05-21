@@ -28,6 +28,8 @@ dependencies {
     implementation("com.alibaba.fastjson2:fastjson2:2.0.25")
     // https://mvnrepository.com/artifact/org.apache.ant/ant
     implementation("org.apache.ant:ant:1.10.13")
+    // https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
+    implementation("commons-httpclient:commons-httpclient:3.1")
     implementation(files("../libs/DependencyDownloader-1.0.jar"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")

@@ -2,14 +2,15 @@ package org.wdt;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.WdtcLauncher.Accounts;
 
 import java.io.IOException;
 
 public class Launcher extends Version {
-    private static final Logger logmaker = Logger.getLogger(Launcher.class);
-    private static String Gameattribute;
-    private static String Jvmattribute;
-    private static String Librartattribute;
+    private final Logger logmaker = Logger.getLogger(Launcher.class);
+    private String Gameattribute;
+    private String Jvmattribute;
+    private String Librartattribute;
 
     public Launcher(String version) throws IOException {
         this(version, AboutSetting.GetDefaultGamePath());
@@ -64,4 +65,9 @@ public class Launcher extends Version {
     public String GetStartScript() {
         return getJvmattribute() + getLibrartattribute() + getGameattribute();
     }
+
+    public Accounts GetAccounts() throws IOException {
+        return new Accounts();
+    }
+
 }

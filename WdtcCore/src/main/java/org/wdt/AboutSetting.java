@@ -66,4 +66,16 @@ public class AboutSetting {
     public static JSONArray JavaList() throws IOException {
         return SettingObject().getJSONArray("JavaPath");
     }
+
+    public static String UserName() throws IOException {
+        return UserSetting().getString("userName");
+    }
+
+    public static JSONObject UserSetting() throws IOException {
+        return StringUtil.FileToJSONObject(FilePath.getUsersJson());
+    }
+
+    public static String GetUserType() throws IOException {
+        return UserSetting().getString("type");
+    }
 }

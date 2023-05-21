@@ -18,10 +18,15 @@ public class FileUrl {
     private static final String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
     private static final String LITTLESKIN_API = "https://littleskin.cn/api/yggdrasil";
     private static final String FABRIC_MAVEN = "https://maven.fabricmc.net/";
-    private static boolean BMCLAPI;
+    private static final String LITTLESKIN_URL = "https://littleskin.cn";
+    private final boolean BMCLAPI;
 
     public FileUrl() {
-        FileUrl.BMCLAPI = AboutSetting.GetBmclSwitch();
+        this.BMCLAPI = AboutSetting.GetBmclSwitch();
+    }
+
+    public static String getLittleskinUrl() {
+        return LITTLESKIN_URL;
     }
 
     public static String getFabricMaven() {

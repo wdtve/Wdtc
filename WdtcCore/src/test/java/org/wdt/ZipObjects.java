@@ -1,3 +1,5 @@
+package org.wdt;
+
 import org.junit.jupiter.api.Test;
 
 public final class ZipObjects {

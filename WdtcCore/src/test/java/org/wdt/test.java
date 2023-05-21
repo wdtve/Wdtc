@@ -1,12 +1,15 @@
+package org.wdt;
+
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.Version;
 import org.wdt.WdtcDownload.Fabric.VersionJson;
-import org.wdt.WdtcLauncher.GetJavaPath;
+import org.wdt.WdtcDownload.FileUrl;
+import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilAccounts;
+import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilTextures;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -95,8 +98,12 @@ public class test {
     }
 
     @Test
-    public void isnull() {
-        GetJavaPath.FindJava(new File("F:\\jdk"));
+    public void isnull() throws IOException {
+        YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
+        YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(yggdrasilAccounts);
+        yggdrasilTextures.setUrl(FileUrl.getLittleskinUrl());
+        System.out.println(yggdrasilTextures.GetUserJson());
     }
+
 
 }

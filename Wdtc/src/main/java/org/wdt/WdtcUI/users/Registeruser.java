@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class Registeruser {
-    public static void RegisterUser(String users_name) throws IOException {
+    public static void RegisterUser(String UserName) throws IOException {
         Users users = new Users();
-        users.setUser_name(users_name);
+        users.setUserName(UserName);
+        users.setType("offline");
         String users_string = JSONObject.toJSONString(users);
         File users_json = FilePath.getUsersJson();
         FileUtils.writeStringToFile(users_json, users_string, "UTF-8");

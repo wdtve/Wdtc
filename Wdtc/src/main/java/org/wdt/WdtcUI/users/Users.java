@@ -1,14 +1,23 @@
 package org.wdt.WdtcUI.users;
 
 public class Users {
-    private static String user_name;
+    private String UserName;
+    private String type;
 
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setUser_name(String user_name) {
-        Users.user_name = user_name;
+    public void setUserName(String userName) {
+        this.UserName = userName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

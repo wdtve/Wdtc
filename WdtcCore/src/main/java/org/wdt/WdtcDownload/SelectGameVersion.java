@@ -13,14 +13,14 @@ import java.net.URL;
 import java.util.Objects;
 
 public class SelectGameVersion {
-    private static final Logger LOGGER = Logger.getLogger(SelectGameVersion.class);
-    private static TextField label = new TextField();
-    private static final FileUrl fileUrl = new FileUrl();
-    private static Launcher launcher;
+    private final Logger LOGGER = Logger.getLogger(SelectGameVersion.class);
+    private final TextField label;
+    private final FileUrl fileUrl = new FileUrl();
+    private final Launcher launcher;
 
     public SelectGameVersion(Launcher launcher, TextField label) {
-        SelectGameVersion.label = label;
-        SelectGameVersion.launcher = launcher;
+        this.label = label;
+        this.launcher = launcher;
     }
 
     public SelectGameVersion(Launcher launcher) {

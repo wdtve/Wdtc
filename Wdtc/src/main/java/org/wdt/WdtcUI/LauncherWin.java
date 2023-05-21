@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.wdt.WdtcUI.users.ReadUserList;
 import org.wdt.WdtcUI.users.UsersWin;
 
 public class LauncherWin {
@@ -39,13 +40,17 @@ public class LauncherWin {
         Button Modify_Account = new Button("修改账户");
         Modify_Account.setLayoutX(269.0);
         Modify_Account.setLayoutY(88.0);
-        Modify_Account.setOnAction(event -> UsersWin.setUserWin("修改账户名"));
+        Modify_Account.setOnAction(event -> UsersWin.setUserWin("修改账户名", MainStage));
         JFXButton startGame = new JFXButton("启动游戏");
         startGame.setLayoutX(194.0);
         startGame.setLayoutY(191.0);
         startGame.setPrefHeight(189.0);
         startGame.setPrefWidth(213.0);
-        startGame.setOnAction(event -> new StartVersionList(Tips, stater_path).getStartList());
+        startGame.setOnAction(event -> {
+            if (ReadUserList.SetUserJson(MainStage)) {
+                new StartVersionList(Tips, stater_path).getStartList();
+            }
+        });
         startGame.setStyle("-fx-border-color: #000000");
         pane.getChildren().addAll(back, deletVersion, warningDelet, completioner, Tips, stater_path, Modify_Account, startGame);
         MainStage.setScene(new Scene(pane));
