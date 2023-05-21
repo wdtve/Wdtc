@@ -2,10 +2,10 @@ package org.wdt;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 public class AboutSetting {
     public static File GetSettingFile() {
@@ -45,7 +45,9 @@ public class AboutSetting {
     public static void GenerateSettingFile() {
         if (StringUtil.FileExistenceAndSize(GetSettingFile())) {
             try {
-                FileUtils.copyFile(new File("ResourceFile/setting.json"), GetSettingFile());
+                InputStream setting = AboutSetting.class.getResourceAsStream("/setting.json");
+                OutputStream writeSetting = new FileOutputStream(GetSettingFile());
+                IOUtils.copy(Objects.requireNonNull(setting), writeSetting);
                 JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
                 Setting.put("DefaultGamePath", System.getProperty("user.dir"));
                 StringUtil.PutJSONObject(GetSettingFile(), Setting);

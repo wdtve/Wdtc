@@ -1,11 +1,11 @@
-package org.wdt;
+package org.wdt.test;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.wdt.Version;
 import org.wdt.WdtcDownload.Fabric.VersionJson;
 import org.wdt.WdtcDownload.FileUrl;
 import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilAccounts;
@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -91,10 +92,10 @@ public class test {
     }
 
     @Test
-    public void commonio() {
+    public void commonio() throws URISyntaxException {
 //        File file = new File("F:\\");
 //        function("java.exe", file);
-        System.out.println(FilenameUtils.getExtension("hello.dll"));
+        System.out.println(new File(test.class.getResource("/jasd.json").toURI()));
     }
 
     @Test

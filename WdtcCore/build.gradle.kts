@@ -1,7 +1,7 @@
-
 plugins {
     id("java")
     id("org.openjfx.javafxplugin") version "0.0.14"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 
@@ -13,12 +13,15 @@ javafx {
 sourceSets {
     main {
         java {
-            srcDir("src/java")
+            srcDir("src/main/java")
         }
         resources {
-            srcDir("src/resources")
+            srcDir("src/main/resources")
         }
     }
+}
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 dependencies {
     implementation("dom4j:dom4j:1.6.1")

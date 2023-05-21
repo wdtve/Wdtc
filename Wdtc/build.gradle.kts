@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("org.openjfx.javafxplugin") version "0.0.14"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 javafx {
     version = "19.0.2.1"
@@ -9,12 +10,22 @@ javafx {
 sourceSets {
     main {
         java {
-            srcDir("src/java")
+            srcDir("src/main/java")
         }
         resources {
-            srcDir("src/resources")
+            srcDir("src/main/resources")
         }
     }
+}
+tasks.jar {
+    enabled = false
+    dependsOn(tasks["shadowJar"])
+    manifest {
+        "Main-Class" to "org.wdt.WdtcUI.WdtcMain"
+    }
+}
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 dependencies {
     implementation("commons-io:commons-io:2.11.0")

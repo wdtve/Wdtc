@@ -2,14 +2,12 @@ package org.wdt.WdtcDownload;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.StringUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -58,13 +56,14 @@ public class DownloadGameLibFile extends DownloadTask {
         }
         Thread thread = new Thread(() -> {
             try {
-                File log4j2 = FilePath.getLog4j2();
+                InputStream log4j2 = getClass().getResourceAsStream("/log4j2.xml");
                 File v_log = new File(version.getVersionLog4j2());
                 if (StringUtil.FileExistenceAndSize(v_log)) {
-                    FileUtils.copyFile(log4j2, v_log);
+                    OutputStream vlog = new FileOutputStream(v_log);
+                    IOUtils.copy(Objects.requireNonNull(log4j2), vlog);
                 }
             } catch (RuntimeException | IOException e) {
-                logmaker.error("* logej.xml不存在或路径错误!");
+                logmaker.error("* logej.xml不存在或路径错误!", e);
             }
             JSONObject client = v_e_j.getJSONObject("downloads").getJSONObject("client");
             try {
