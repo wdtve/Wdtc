@@ -7,19 +7,18 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.SocketException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class StringUtil extends FileUtils {
-    public static String GetUrlContent(URL url) throws IOException, SocketException {
+    public static String GetUrlContent(URL url) throws IOException {
         URLConnection uc = url.openConnection();
         return IOUtils.toString(uc.getInputStream(), StandardCharsets.UTF_8);
     }
 
-    public static String GetUrlContent(String url_string) throws IOException, SocketException {
+    public static String GetUrlContent(String url_string) throws IOException {
         return GetUrlContent(new URL(url_string));
     }
 
@@ -47,15 +46,19 @@ public class StringUtil extends FileUtils {
         return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static boolean FileExistenceAndSize(File file) {
+    public static boolean FileExistenceAndSize(File file) throws IOException {
         if (file.exists()) {
-            return sizeOf(file) == 0;
+            if (file.isFile()) {
+                return sizeOf(file) == 0;
+            } else {
+                throw new IOException(file + "is not file!");
+            }
         } else {
             return true;
         }
     }
 
-    public static boolean FileExistenceAndSize(String filePath) {
+    public static boolean FileExistenceAndSize(String filePath) throws IOException {
         return FileExistenceAndSize(new File(filePath));
     }
 }

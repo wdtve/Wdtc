@@ -1,5 +1,6 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
-    id("java")
     id("org.openjfx.javafxplugin") version "0.0.14"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
@@ -20,8 +21,10 @@ sourceSets {
 tasks.jar {
     enabled = false
     dependsOn(tasks["shadowJar"])
-    manifest {
-        "Main-Class" to "org.wdt.WdtcUI.WdtcMain"
+}
+tasks.withType<ShadowJar> {
+    manifest.attributes.apply {
+        put("Main-Class", "org.wdt.WdtcUI.WdtcMain")
     }
 }
 tasks.processResources {

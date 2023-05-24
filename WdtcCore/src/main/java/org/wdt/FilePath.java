@@ -3,7 +3,7 @@ package org.wdt;
 import java.io.File;
 
 public class FilePath {
-    private static final String STARTER_BAT = "ResourceFile/Launcher/WdtcGameLauncherScript.bat";
+    private static final String STARTER_BAT = System.getProperty("user.home") + "/.wdtc/WdtcGameLauncherScript.bat";
     private static final String USERS_JSON = System.getProperty("user.home") + "/.wdtc/users/users.json";
     private static final String LLBMPIPE_LOADER = System.getProperty("user.home") + "/.wdtc/llvmpipe-loader.jar";
     private static final String AUTHLIB_INJECTOR = System.getProperty("user.home") + "/.wdtc/authlib-injector.jar";

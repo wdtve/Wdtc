@@ -1,6 +1,9 @@
 package org.wdt.WdtcLauncher;
 
 import org.wdt.AboutSetting;
+import org.wdt.FilePath;
+import org.wdt.StringUtil;
+import org.wdt.WdtcDownload.FileUrl;
 import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilAccounts;
 
 import java.io.IOException;
@@ -38,6 +41,15 @@ public class Accounts {
         } else {
             YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
             return yggdrasilAccounts.GetAccessToken();
+        }
+    }
+
+    public String GetJvm() throws IOException {
+        if (offline) {
+            return "";
+        } else {
+            return "-javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
+                    StringUtil.StringToBase64(StringUtil.GetUrlContent(FileUrl.getLittleskinApi()));
         }
     }
 

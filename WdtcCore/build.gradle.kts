@@ -1,7 +1,5 @@
 plugins {
-    id("java")
     id("org.openjfx.javafxplugin") version "0.0.14"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 

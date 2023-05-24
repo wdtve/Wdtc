@@ -14,9 +14,9 @@ import java.util.zip.*;
 public class ExtractFile {
     private static final Logger logmaker = Logger.getLogger(ExtractFile.class);
 
-    public static void unzipByFile(String file, String path) {
+    public static void unzipByFile(File file, String path) {
         try {
-            ZipFile zip = new ZipFile(new File(file));
+            ZipFile zip = new ZipFile(file);
             for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
@@ -24,7 +24,7 @@ public class ExtractFile {
                     File unfile = new File(path + File.separator + name);
                     if (StringUtil.FileExistenceAndSize(unfile)) {
                         logmaker.debug("* 提取natives库dll文件" + name + "中");
-                        Files.createDirectories(Paths.get(path + File.separator + name));
+                        Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream fos = new FileOutputStream(unfile);
                         int len;
@@ -37,7 +37,7 @@ public class ExtractFile {
             }
             zip.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logmaker.error("* 压缩包提取发生错误:", e);
         }
     }
 
@@ -65,10 +65,9 @@ public class ExtractFile {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             out.putNextEntry(new ZipEntry(dir + "/"));
-
             dir = dir.length() == 0 ? "" : dir + "/";
-            for (int i = 0; i < files.length; i++) {
-                createCompressedFile(out, files[i], dir + files[i].getName());
+            for (File value : files) {
+                createCompressedFile(out, value, dir + value.getName());
             }
         } else {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));

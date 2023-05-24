@@ -56,7 +56,7 @@ public class Launcher extends Version {
     public void writeStartScript() {
         try {
             logmaker.info(GetStartScript());
-            FileUtils.writeStringToFile(FilePath.getStarterBat(), GetStartScript(), "UTF-8");
+            FileUtils.writeStringToFile(FilePath.getStarterBat(), GetStartScript(), "UTF-8", false);
         } catch (IOException e) {
             e.printStackTrace();
         }

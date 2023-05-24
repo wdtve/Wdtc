@@ -7,20 +7,34 @@ import org.wdt.StringUtil;
 import java.io.IOException;
 
 public class GetGame {
+    private static StringBuilder GameSet;
 
     public static void Getgame(Launcher version) throws IOException {
+        GameSet = new StringBuilder();
         Accounts accounts = version.GetAccounts();
-        StringBuilder game_set = new StringBuilder();
         JSONObject assetIndex_j = StringUtil.FileToJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
-        game_set.append("--username").append(" ").append(accounts.GetUserName()).append(" ");
-        game_set.append("--version").append(" ").append(version.getVersion()).append(" ");
-        game_set.append("--gameDir").append(" ").append(version.getGamePath()).append(" ");
-        game_set.append("--assetsDir").append(" ").append(version.getGameAssetsdir()).append(" ");
-        game_set.append("--assetIndex").append(" ").append(assetIndex_j.getString("id")).append(" ");
-        game_set.append("--uuid").append(" ").append(accounts.GetUserUUID()).append(" ");
-        game_set.append("--accessToken").append(" ").append(accounts.GetAccessToken()).append(" ");
-        game_set.append("--clientId").append(" ").append("${clientid}").append(" ");
-        game_set.append("--versionType").append(" ").append("Wdtc-dome");
-        version.setGameattribute(game_set);
+        append("--username");
+        append(accounts.GetUserName());
+        append("--version");
+        append(version.getVersion());
+        append("--gameDir");
+        append(version.getGamePath());
+        append("--assetsDir");
+        append(version.getGameAssetsdir());
+        append("--assetIndex");
+        append(assetIndex_j.getString("id"));
+        append("--uuid");
+        append(accounts.GetUserUUID());
+        append("--accessToken");
+        append(accounts.GetAccessToken());
+        append("--clientId");
+        append("${clientid}");
+        append("--versionType");
+        GameSet.append("Wdtc-dome");
+        version.setGameattribute(GameSet);
+    }
+
+    private static void append(String str) {
+        GameSet.append(str).append(" ");
     }
 }

@@ -9,16 +9,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GetLibPathAndUrl {
-    private static final String BMCLAPI_Libraries = FileUrl.getBmclapiLibraries();
-    private static final String MOJANG_Libraries = FileUrl.getMojangLibraries();
-    private static Launcher launcher;
+    private final String BMCLAPI_Libraries = FileUrl.getBmclapiLibraries();
+    private final String MOJANG_Libraries = FileUrl.getMojangLibraries();
+    private final Launcher launcher;
 
 
     public GetLibPathAndUrl(Launcher launcher) {
-        GetLibPathAndUrl.launcher = launcher;
+        this.launcher = launcher;
     }
 
-    public static File GetNativesLibPath(JSONObject lib_j) {
+    public File GetNativesLibPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject classifiers_j = lib_j.getJSONObject("downloads").getJSONObject("classifiers");
         String natives_name = lib_j.getJSONObject("natives").getString("windows");
@@ -28,7 +28,7 @@ public class GetLibPathAndUrl {
         return new File(natives_lib_path);
     }
 
-    public static URL GetNativesLibUrl(JSONObject lib_j) throws IOException {
+    public URL GetNativesLibUrl(JSONObject lib_j) throws IOException {
         JSONObject downloads_j = lib_j.getJSONObject("downloads");
         JSONObject natives_j = lib_j.getJSONObject("natives");
         JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
@@ -43,7 +43,7 @@ public class GetLibPathAndUrl {
         }
     }
 
-    public static File GetLibPath(JSONObject lib_j) {
+    public File GetLibPath(JSONObject lib_j) {
         String game_lib_path = launcher.GetGameLibPath();
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path");
@@ -52,7 +52,7 @@ public class GetLibPathAndUrl {
 
     }
 
-    public static URL GetLibUrl(JSONObject lib_j) throws MalformedURLException {
+    public URL GetLibUrl(JSONObject lib_j) throws MalformedURLException {
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_url = artifact_j.getString("url");
         if (launcher.bmclapi()) {

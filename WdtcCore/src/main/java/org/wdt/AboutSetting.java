@@ -42,7 +42,7 @@ public class AboutSetting {
         return LlvmpipeLoader;
     }
 
-    public static void GenerateSettingFile() {
+    public static void GenerateSettingFile() throws IOException {
         if (StringUtil.FileExistenceAndSize(GetSettingFile())) {
             try {
                 InputStream setting = AboutSetting.class.getResourceAsStream("/setting.json");

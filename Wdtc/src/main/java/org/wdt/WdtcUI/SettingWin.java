@@ -68,20 +68,16 @@ public class SettingWin extends AboutSetting {
         false_bmcl.setLayoutX(139.0);
         false_bmcl.setLayoutY(159.0);
         true_bmcl.setOnAction(event -> {
-            try {
-                false_bmcl.setSelected(false);
-                logmaker.info("* BMCLAPI下载加速已开启");
-                SettingJson.put("bmcl", true);
-                FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), SettingJson.toString(), "UTF-8");
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
+            false_bmcl.setSelected(false);
+            logmaker.info("* BMCLAPI下载加速已开启");
+            SettingJson.put("bmcl", true);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
         });
         false_bmcl.setOnAction(event -> {
             true_bmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已关闭");
             SettingJson.put("bmcl", false);
-            StringUtil.PutJSONObject(AboutSetting.GetSettingFile(), SettingJson);
+            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
         });
         Button export_log = new Button("导出日志");
         export_log.setLayoutX(76.0);
@@ -97,11 +93,10 @@ public class SettingWin extends AboutSetting {
                 if (Objects.nonNull(logDirectory)) {
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                    File srcFile = new File("ResourceFile/WdtcLog/Wdtc.log");
+                    File srcFile = new File(System.getProperty("user.home") + "/.wdtc/logs/Wdtc.log");
                     File logFile = new File(logDirectory.getAbsolutePath() + "/Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
                     FileUtils.copyFile(srcFile, logFile);
                     logmaker.info("* 日志已导出:" + logFile);
-                    ErrorWin.setWin(FileUtils.readFileToString(logFile, "UTF-8"), logFile.getAbsolutePath());
                 }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -139,7 +134,7 @@ public class SettingWin extends AboutSetting {
                     File file = fileChooser.showDialog(MainStage);
                     if (Objects.nonNull(file)) {
                         SettingJson.put("DefaultGamePath", file);
-                        StringUtil.PutJSONObject(file, SettingJson);
+                        StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
                         GamePath.setText(file.getCanonicalPath());
                         logmaker.info("* 游戏文件夹已更改为:" + file);
                     }

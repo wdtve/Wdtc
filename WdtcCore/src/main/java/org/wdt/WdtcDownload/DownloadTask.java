@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadTask extends GetLibPathAndUrl {
     private static final Logger logmaker = Logger.getLogger(DownloadTask.class);
-    private static Launcher launcher;
+    private final Launcher launcher;
 
     public DownloadTask(Launcher launcher) {
         super(launcher);
-        DownloadTask.launcher = launcher;
+        this.launcher = launcher;
     }
 
     public static void StartDownloadTask(URL url, File file) {
@@ -52,7 +52,7 @@ public class DownloadTask extends GetLibPathAndUrl {
                 wGet.download();
             }
             logmaker.info("* " + file + " 下载完成");
-        } catch (RuntimeException exception) {
+        } catch (RuntimeException | IOException exception) {
             logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
             try {
                 TimeUnit.SECONDS.sleep(5);
@@ -73,34 +73,7 @@ public class DownloadTask extends GetLibPathAndUrl {
         }
     }
 
-    public static Runnable StartDownloadLibTask(JSONObject lib_j) {
-        return () -> {
-            if (StringUtil.FileExistenceAndSize(GetLibPath(lib_j))) {
-                try {
-                    StartDownloadTask(GetLibUrl(lib_j), GetLibPath(lib_j));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        };
-    }
-
-    public static Runnable StartDownloadNativesLibTask(JSONObject lib_j) {
-        return () -> {
-            if (StringUtil.FileExistenceAndSize(GetNativesLibPath(lib_j))) {
-                try {
-                    StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        };
-    }
-
-
-    public static Runnable StartDownloadHashTask(String hash, CountDownLatch downLatch) throws IOException {
+    public Runnable StartDownloadHashTask(String hash, CountDownLatch downLatch) throws IOException {
         String hash_t = hash.substring(0, 2);
         File hash_path = new File(launcher.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
         URL hash_url;
@@ -110,12 +83,50 @@ public class DownloadTask extends GetLibPathAndUrl {
             hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
         }
         return () -> {
-            if (StringUtil.FileExistenceAndSize(hash_path)) {
-                StartDownloadTask(hash_url, hash_path);
-                downLatch.countDown();
-            } else {
-                downLatch.countDown();
+            try {
+                if (StringUtil.FileExistenceAndSize(hash_path)) {
+                    StartDownloadTask(hash_url, hash_path);
+                    downLatch.countDown();
+                } else {
+                    downLatch.countDown();
+                }
+            } catch (IOException e) {
+                logmaker.error("* 错误:", e);
             }
+        };
+    }
+
+    public Runnable StartDownloadLibTask(JSONObject lib_j) {
+        return () -> {
+            try {
+                if (StringUtil.FileExistenceAndSize(GetLibPath(lib_j))) {
+                    try {
+                        StartDownloadTask(GetLibUrl(lib_j), GetLibPath(lib_j));
+                    } catch (MalformedURLException e) {
+                        logmaker.error("* 错误:", e);
+                    }
+                }
+            } catch (IOException e) {
+                logmaker.error("* 错误:", e);
+            }
+
+        };
+    }
+
+    public Runnable StartDownloadNativesLibTask(JSONObject lib_j) {
+        return () -> {
+            try {
+                if (StringUtil.FileExistenceAndSize(GetNativesLibPath(lib_j))) {
+                    try {
+                        StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
+                    } catch (MalformedURLException e) {
+                        logmaker.error("* 错误:", e);
+                    }
+                }
+            } catch (IOException e) {
+                logmaker.error("* 错误:", e);
+            }
+
         };
     }
 

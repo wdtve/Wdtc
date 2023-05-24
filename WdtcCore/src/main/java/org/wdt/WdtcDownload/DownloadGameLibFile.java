@@ -8,20 +8,18 @@ import org.wdt.Launcher;
 import org.wdt.StringUtil;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-//1.19-
 public class DownloadGameLibFile extends DownloadTask {
-    private static final Logger logmaker = Logger.getLogger(DownloadGameLibFile.class);
-    private static Launcher version;
+    private final Logger logmaker = Logger.getLogger(DownloadGameLibFile.class);
+    private Launcher version;
 
     public DownloadGameLibFile(Launcher launcher) {
         super(launcher);
-        DownloadGameLibFile.version = launcher;
+        this.version = launcher;
     }
 
     public void DownloadLibFile() throws IOException, RuntimeException {
@@ -62,7 +60,7 @@ public class DownloadGameLibFile extends DownloadTask {
                     OutputStream vlog = new FileOutputStream(v_log);
                     IOUtils.copy(Objects.requireNonNull(log4j2), vlog);
                 }
-            } catch (RuntimeException | IOException e) {
+            } catch (IOException e) {
                 logmaker.error("* logej.xml不存在或路径错误!", e);
             }
             JSONObject client = v_e_j.getJSONObject("downloads").getJSONObject("client");
@@ -72,8 +70,8 @@ public class DownloadGameLibFile extends DownloadTask {
                 if (StringUtil.FileExistenceAndSize(VersionJar)) {
                     StartDownloadTask(jar_url, VersionJar);
                 }
-            } catch (MalformedURLException | RuntimeException e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                logmaker.error("* 错误:", e);
             }
         });
         thread.start();
