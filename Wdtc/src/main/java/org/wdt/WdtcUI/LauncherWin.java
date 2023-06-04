@@ -9,11 +9,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.wdt.WdtcUI.users.ReadUserList;
 import org.wdt.WdtcUI.users.UsersWin;
+import org.wdt.platform.Starter;
+
+import java.io.IOException;
 
 public class LauncherWin {
 
     public static void setLauncherWin(Stage MainStage) {
-        MainStage.setTitle("Wdtc - Demo - 启动游戏");
+        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 启动游戏");
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
@@ -47,12 +50,17 @@ public class LauncherWin {
         startGame.setPrefHeight(189.0);
         startGame.setPrefWidth(213.0);
         startGame.setOnAction(event -> {
-            if (ReadUserList.SetUserJson(MainStage)) {
-                new StartVersionList(Tips, stater_path).getStartList();
+            try {
+                if (ReadUserList.SetUserJson(MainStage)) {
+                    new StartVersionList(Tips, stater_path).getStartList();
+                }
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
             }
         });
         startGame.setStyle("-fx-border-color: #000000");
         pane.getChildren().addAll(back, deletVersion, warningDelet, completioner, Tips, stater_path, Modify_Account, startGame);
+        pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
     }
 }

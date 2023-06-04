@@ -35,8 +35,8 @@ public class AppMain extends Application {
                 ErrorWin.setErrorWin(e);
             }
             Platform.runLater(() -> {
-                MainStage.setWidth(615);
-                MainStage.setHeight(440);
+                MainStage.setWidth(616.0);
+                MainStage.setHeight(489.0);
                 MainStage.getIcons().add(new Image("ico.jpg"));
                 MainStage.setResizable(false);
                 HomeWin.setHome(MainStage);

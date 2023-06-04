@@ -11,9 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
-import org.wdt.GetGamePath;
 import org.wdt.Launcher;
-import org.wdt.WdtcDownload.SelectGameVersion;
+import org.wdt.download.SelectGameVersion;
+import org.wdt.launch.GetGamePath;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class CompletionGame {
                     try {
                         Launcher version = new Launcher(button.getText());
                         SelectGameVersion gameVersion = new SelectGameVersion(version);
-                        gameVersion.selectversion();
+                        gameVersion.DownloadGame();
                         logmaker.info("* 版本补全完成");
                     } catch (IOException | InterruptedException | RuntimeException e) {
                         ErrorWin.setErrorWin(e);

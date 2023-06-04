@@ -5,11 +5,10 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.wdt.Launcher;
 import org.wdt.Version;
-import org.wdt.WdtcDownload.Fabric.VersionJson;
-import org.wdt.WdtcDownload.FileUrl;
-import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilAccounts;
-import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilTextures;
+import org.wdt.download.dependency.DependencyDownload;
+import org.wdt.download.fabric.VersionJson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -100,10 +99,10 @@ public class test {
 
     @Test
     public void isnull() throws IOException {
-        YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
-        YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(yggdrasilAccounts);
-        yggdrasilTextures.setUrl(FileUrl.getLittleskinUrl());
-        System.out.println(yggdrasilTextures.GetUserJson());
+        DependencyDownload download = new DependencyDownload("[de.oceanlabs.mcp:mcp_config:1.19.4-20230314.122934:mappings@txt]");
+        Launcher launcher = new Launcher("1.19.4");
+        download.setPath(launcher.GetGameLibPath());
+        System.out.println(download.libFilePath());
     }
 
 

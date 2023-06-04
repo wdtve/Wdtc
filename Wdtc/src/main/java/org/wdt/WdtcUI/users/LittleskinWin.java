@@ -10,11 +10,12 @@ import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.FilePath;
-import org.wdt.WdtcDownload.FileUrl;
-import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilAccounts;
-import org.wdt.WdtcLauncher.Yggdrasil.YggdrasilTextures;
+import org.wdt.WdtcUI.Consoler;
 import org.wdt.WdtcUI.ErrorWin;
 import org.wdt.WdtcUI.LauncherWin;
+import org.wdt.auth.Yggdrasil.YggdrasilAccounts;
+import org.wdt.auth.Yggdrasil.YggdrasilTextures;
+import org.wdt.download.FileUrl;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -86,6 +87,7 @@ public class LittleskinWin {
                 ErrorWin.setErrorWin(e);
             }
         });
+        pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane, 600, 400));
     }
 }

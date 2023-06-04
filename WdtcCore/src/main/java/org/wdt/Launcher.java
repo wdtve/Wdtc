@@ -2,15 +2,20 @@ package org.wdt;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.WdtcLauncher.Accounts;
+import org.wdt.auth.Accounts;
+import org.wdt.download.DownloadVersionGameFile;
+import org.wdt.download.forge.ForgeDownloadTask;
+import org.wdt.download.forge.ForgeInstallTask;
+import org.wdt.download.forge.ForgeLaunchTask;
 
 import java.io.IOException;
 
 public class Launcher extends Version {
-    private final Logger logmaker = Logger.getLogger(Launcher.class);
+    private final Logger logmaker = Logger.getLogger(getClass());
     private String Gameattribute;
     private String Jvmattribute;
     private String Librartattribute;
+    private ForgeDownloadTask DownloadTask = null;
 
     public Launcher(String version) throws IOException {
         this(version, AboutSetting.GetDefaultGamePath());
@@ -18,6 +23,14 @@ public class Launcher extends Version {
 
     public Launcher(String version, String here) {
         super(version, here);
+    }
+
+    public ForgeDownloadTask getForgeDownloadTask() {
+        return DownloadTask;
+    }
+
+    public void setDownloadTask(ForgeDownloadTask downloadTask) {
+        DownloadTask = downloadTask;
     }
 
     public String getGameattribute() {
@@ -68,6 +81,22 @@ public class Launcher extends Version {
 
     public Accounts GetAccounts() throws IOException {
         return new Accounts();
+    }
+
+    public ForgeLaunchTask getForgeLaunchTask() {
+        return new ForgeLaunchTask(DownloadTask.getLauncher(), DownloadTask.getForgeVersion());
+    }
+
+    public ForgeInstallTask getForgeInstallTask() {
+        return new ForgeInstallTask(DownloadTask.getLauncher(), DownloadTask.getForgeVersion());
+    }
+
+    public DownloadVersionGameFile getDownloadVersionGameFile() throws IOException {
+        return new DownloadVersionGameFile(new Launcher(getVersion()));
+    }
+
+    public boolean getForgeDownloadTaskIsNull() {
+        return DownloadTask != null;
     }
 
 }

@@ -15,7 +15,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
 import org.wdt.FilePath;
-import org.wdt.StringUtil;
+import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.Starter;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,12 +32,11 @@ public class SettingWin extends AboutSetting {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        JSONObject SettingJson = StringUtil.FileToJSONObject(GetSettingFile());
+        JSONObject SettingJson = PlatformUtils.FileToJSONObject(GetSettingFile());
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
-        back.setStyle("-fx-border-color: #000000");
-        MainStage.setTitle("Wdtc - Demo - Setting");
+        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - Setting");
         RadioButton true_log = new RadioButton("显示");
         RadioButton false_log = new RadioButton("不显示");
         true_log.setLayoutX(77.0);
@@ -47,13 +47,13 @@ public class SettingWin extends AboutSetting {
             true_log.setSelected(false);
             logmaker.info("* 启动日志器关闭显示");
             SettingJson.put("log", false);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
         });
         true_log.setOnAction(event -> {
             false_log.setSelected(false);
             logmaker.info("* 启动日志器开启显示");
             SettingJson.put("log", true);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
         });
         Label cmd = new Label("启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):");
         cmd.setLayoutX(77.0);
@@ -71,13 +71,13 @@ public class SettingWin extends AboutSetting {
             false_bmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已开启");
             SettingJson.put("bmcl", true);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
         });
         false_bmcl.setOnAction(event -> {
             true_bmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已关闭");
             SettingJson.put("bmcl", false);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
         });
         Button export_log = new Button("导出日志");
         export_log.setLayoutX(76.0);
@@ -134,7 +134,7 @@ public class SettingWin extends AboutSetting {
                     File file = fileChooser.showDialog(MainStage);
                     if (Objects.nonNull(file)) {
                         SettingJson.put("DefaultGamePath", file);
-                        StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+                        PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
                         GamePath.setText(file.getCanonicalPath());
                         logmaker.info("* 游戏文件夹已更改为:" + file);
                     }
@@ -153,19 +153,20 @@ public class SettingWin extends AboutSetting {
         TrueOpenGl.setOnAction(event -> {
             FalseOpenGL.setSelected(false);
             SettingJson.put("llvmpipe-loader", true);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
             logmaker.info("* OpenGL软渲染已开启");
         });
         FalseOpenGL.setOnAction(event -> {
             TrueOpenGl.setSelected(false);
             SettingJson.put("llvmpipe-loader", false);
-            StringUtil.PutJSONObject(GetSettingFile(), SettingJson);
+            PlatformUtils.PutJSONObject(GetSettingFile(), SettingJson);
             logmaker.info("* OpenGL软渲染已关闭");
         });
         FalseOpenGL.setLayoutX(139.0);
         FalseOpenGL.setLayoutY(209.0);
         pane.getChildren().addAll(back, true_bmcl, false_bmcl, true_log, false_log, cmd, BMCLAPI_Mess, export_log, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL);
-        Scene scene = new Scene(pane, 600.0, 400.0);
+        pane.setBackground(Consoler.getBackground());
+        Scene scene = new Scene(pane, 600.0, 450.0);
         MainStage.setScene(scene);
         false_bmcl.setSelected(!GetBmclSwitch());
         false_log.setSelected(!GetLogSwitch());

@@ -3,6 +3,7 @@ package org.wdt;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.IOUtils;
+import org.wdt.platform.PlatformUtils;
 
 import java.io.*;
 import java.util.Objects;
@@ -15,7 +16,7 @@ public class AboutSetting {
     public static boolean GetBmclSwitch() {
         boolean bmcl = false;
         try {
-            bmcl = StringUtil.FileToJSONObject(GetSettingFile()).getBoolean("bmcl");
+            bmcl = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("bmcl");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -25,7 +26,7 @@ public class AboutSetting {
     public static boolean GetLogSwitch() {
         boolean log = false;
         try {
-            log = StringUtil.FileToJSONObject(GetSettingFile()).getBoolean("log");
+            log = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("log");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +36,7 @@ public class AboutSetting {
     public static boolean GetLlvmpipeSwitch() {
         boolean LlvmpipeLoader = false;
         try {
-            LlvmpipeLoader = StringUtil.FileToJSONObject(GetSettingFile()).getBoolean("llvmpipe-loader");
+            LlvmpipeLoader = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("llvmpipe-loader");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,14 +44,18 @@ public class AboutSetting {
     }
 
     public static void GenerateSettingFile() throws IOException {
-        if (StringUtil.FileExistenceAndSize(GetSettingFile())) {
+        InputStream readme = AboutSetting.class.getResourceAsStream("/readme.txt");
+        OutputStream writeReadme = new FileOutputStream(FilePath.getWdtcConfig() + "/readme.txt");
+        IOUtils.copy(readme, writeReadme);
+        if (PlatformUtils.FileExistenceAndSize(GetSettingFile())) {
             try {
                 InputStream setting = AboutSetting.class.getResourceAsStream("/setting.json");
                 OutputStream writeSetting = new FileOutputStream(GetSettingFile());
                 IOUtils.copy(Objects.requireNonNull(setting), writeSetting);
-                JSONObject Setting = StringUtil.FileToJSONObject(GetSettingFile());
+                JSONObject Setting = PlatformUtils.FileToJSONObject(GetSettingFile());
                 Setting.put("DefaultGamePath", System.getProperty("user.dir"));
-                StringUtil.PutJSONObject(GetSettingFile(), Setting);
+                PlatformUtils.PutJSONObject(GetSettingFile(), Setting);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -58,11 +63,11 @@ public class AboutSetting {
     }
 
     public static String GetDefaultGamePath() throws IOException {
-        return StringUtil.FileToJSONObject(GetSettingFile()).getString("DefaultGamePath");
+        return PlatformUtils.FileToJSONObject(GetSettingFile()).getString("DefaultGamePath");
     }
 
     public static JSONObject SettingObject() throws IOException {
-        return StringUtil.FileToJSONObject(GetSettingFile());
+        return PlatformUtils.FileToJSONObject(GetSettingFile());
     }
 
     public static JSONArray JavaList() throws IOException {
@@ -74,7 +79,7 @@ public class AboutSetting {
     }
 
     public static JSONObject UserSetting() throws IOException {
-        return StringUtil.FileToJSONObject(FilePath.getUsersJson());
+        return PlatformUtils.FileToJSONObject(FilePath.getUsersJson());
     }
 
     public static String GetUserType() throws IOException {

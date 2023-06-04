@@ -13,9 +13,11 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
 import org.wdt.FilePath;
-import org.wdt.GetGamePath;
 import org.wdt.Launcher;
-import org.wdt.WdtcLauncher.LauncherGame;
+import org.wdt.download.forge.ForgeDownloadTask;
+import org.wdt.launch.GetGamePath;
+import org.wdt.launch.LauncherGame;
+import org.wdt.platform.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +58,15 @@ public class StartVersionList extends LauncherGame {
                             new Thread(() -> {
                                 try {
                                     Launcher launcher = new Launcher(file2.getName());
+                                    try {
+                                        String str = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getString("id");
+                                        String str1 = str.substring(0, str.indexOf("_"));
+                                        String str2 = str.substring(str1.length() + 1);
+                                        ForgeDownloadTask forgeDownloadTask = new ForgeDownloadTask(launcher, str2);
+                                        launcher.setDownloadTask(forgeDownloadTask);
+                                    } catch (IOException | StringIndexOutOfBoundsException exception) {
+                                        logmaker.warn("* 警报:", exception);
+                                    }
                                     launchergame(launcher);
                                 } catch (IOException | RuntimeException e) {
                                     e.printStackTrace();

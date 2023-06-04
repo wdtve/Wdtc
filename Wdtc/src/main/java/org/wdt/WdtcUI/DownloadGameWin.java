@@ -7,15 +7,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.wdt.Launcher;
+import org.wdt.download.SelectGameVersion;
+import org.wdt.platform.Starter;
 
 import java.io.IOException;
 
 
 public class DownloadGameWin {
+    private final Launcher launcher;
 
+    public DownloadGameWin(Launcher launcher) {
+        this.launcher = launcher;
+    }
 
-    public static void setDownGameWin(Stage MainStage) {
-        MainStage.setTitle("Wdtc - Demo - 下载游戏");
+    public void setDownGameWin(Stage MainStage) {
+        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
@@ -24,18 +31,6 @@ public class DownloadGameWin {
         textField.setPromptText("三个阶段");
         textField.setLayoutX(218.0);
         textField.setLayoutY(320.0);
-        Button downGame = new Button("下载");
-        downGame.setLayoutX(235.0);
-        downGame.setLayoutY(227.0);
-        downGame.setPrefHeight(23.0);
-        downGame.setPrefWidth(108.0);
-        downGame.setOnAction(event -> {
-            try {
-                new DownloadVersionList(textField).getVersion_List();
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
-        });
         Label time = new Label("下载时间不会太长");
         Label status_bar = new Label("下面是状态栏");
         time.setLayoutX(241.0);
@@ -54,7 +49,22 @@ public class DownloadGameWin {
         Label read_bmcl = new Label("国内快速下载源→");
         read_bmcl.setLayoutX(429.0);
         read_bmcl.setLayoutY(4.0);
-        pane.getChildren().addAll(back, textField, downGame, time, status_bar, bmclHome, read_bmcl);
+        if (launcher.bmclapi()) {
+            textField.setText("BMCLAPI下载加速已开启");
+        } else {
+            textField.setText(launcher.getVersion() + "开始下载");
+        }
+        Thread thread = new Thread(() -> {
+            try {
+                new SelectGameVersion(launcher, textField).DownloadGame();
+
+            } catch (Exception e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
+        thread.start();
+        pane.setBackground(Consoler.getBackground());
+        pane.getChildren().addAll(back, textField, time, status_bar, bmclHome, read_bmcl);
         Scene down_scene = new Scene(pane);
         MainStage.setScene(down_scene);
     }

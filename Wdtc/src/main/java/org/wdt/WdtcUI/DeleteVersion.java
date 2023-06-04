@@ -11,8 +11,8 @@ import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
-import org.wdt.GetGamePath;
 import org.wdt.Launcher;
+import org.wdt.launch.GetGamePath;
 
 import java.io.File;
 import java.io.IOException;

@@ -8,11 +8,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.WdtcUI.Consoler;
 import org.wdt.WdtcUI.ErrorWin;
 import org.wdt.WdtcUI.LauncherWin;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UsersWin {
@@ -45,6 +45,7 @@ public class UsersWin {
         userspane.getChildren().addAll(Registerusername, label, buygame, button, attention, OKRegister, back, Littleskin);
         MainStage.setTitle(wintitle);
         MainStage.getIcons().add(new Image("/ico.jpg"));
+        userspane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(userspane, 600, 400));
         MainStage.setResizable(false);
         MainStage.show();
@@ -74,9 +75,7 @@ public class UsersWin {
     }
 
     public static boolean isContainChinese(String str) {
-        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
-        Matcher m = p.matcher(str);
-        return !m.find();
+        return !Pattern.compile("[\u4e00-\u9fa5]").matcher(str).find();
     }
 
 }

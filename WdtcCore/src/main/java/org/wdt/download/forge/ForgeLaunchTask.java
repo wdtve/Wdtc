@@ -1,0 +1,68 @@
+package org.wdt.download.forge;
+
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import org.apache.commons.io.FilenameUtils;
+import org.wdt.FilePath;
+import org.wdt.Launcher;
+import org.wdt.platform.PlatformUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ForgeLaunchTask extends ForgeDownloadTask {
+
+    public ForgeLaunchTask(String mcVersion, String forgeVersion) throws IOException {
+        super(mcVersion, forgeVersion);
+    }
+
+    public ForgeLaunchTask(Launcher launcher, String forgeVersion) {
+        super(launcher, forgeVersion);
+    }
+
+    public String getForgeVersionJsonPath() {
+        return FilePath.getWdtcCache() + "/version.json";
+    }
+
+    public void getForgeVersionJson() {
+        unzipByInstallProfile(getForgeInstallJarPath(), getForgeVersionJsonPath());
+    }
+
+    public JSONObject getForgeVersionJsonObject() throws IOException {
+        return PlatformUtils.FileToJSONObject(getForgeVersionJsonPath());
+    }
+
+    public void DownloadVersionJsonLibarary() throws IOException {
+        DownloadForgeLibraryFile(getForgeVersionJsonPath());
+    }
+
+    public List<String> getForgeLuanchJvm() throws IOException {
+        List<String> list = new ArrayList<>();
+        JSONArray JvmList = getForgeVersionJsonObject().getJSONObject("arguments").getJSONArray("jvm");
+        for (int i = 0; i < JvmList.size(); i++) {
+            list.add(JvmList.getString(i).replace("${library_directory}", launcher.GetGameLibPath())
+                    .replace("${classpath_separator}", ";").replace("${version_name}", launcher.getVersion()));
+        }
+        return list;
+    }
+
+    public List<String> getForgeLaunchGame() throws IOException {
+        List<String> list = new ArrayList<>();
+        JSONArray JvmList = getForgeVersionJsonObject().getJSONObject("arguments").getJSONArray("game");
+        for (int i = 0; i < JvmList.size(); i++) {
+            list.add(JvmList.getString(i));
+        }
+        return list;
+    }
+
+    public List<String> getForgeLaunchLibrary() throws IOException {
+        List<String> list = new ArrayList<>();
+        JSONArray LibraryList = getForgeVersionJsonObject().getJSONArray("libraries");
+        for (int i = 0; i < LibraryList.size(); i++) {
+            list.add(FilenameUtils.separatorsToSystem(launcher.GetGameLibPath() + LibraryList.getJSONObject(i)
+                    .getJSONObject("downloads").getJSONObject("artifact").getString("path")));
+        }
+        return list;
+    }
+}

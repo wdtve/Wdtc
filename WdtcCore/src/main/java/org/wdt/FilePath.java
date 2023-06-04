@@ -1,23 +1,21 @@
 package org.wdt;
 
+import com.alibaba.fastjson2.JSONObject;
+import org.wdt.platform.PlatformUtils;
+
 import java.io.File;
+import java.io.IOException;
 
 public class FilePath {
-    private static final String STARTER_BAT = System.getProperty("user.home") + "/.wdtc/WdtcGameLauncherScript.bat";
-    private static final String USERS_JSON = System.getProperty("user.home") + "/.wdtc/users/users.json";
-    private static final String LLBMPIPE_LOADER = System.getProperty("user.home") + "/.wdtc/llvmpipe-loader.jar";
-    private static final String AUTHLIB_INJECTOR = System.getProperty("user.home") + "/.wdtc/authlib-injector.jar";
     private static final String WDTC_CONFIG = System.getProperty("user.home") + "/.wdtc";
     private static final File SETTING_FILE = AboutSetting.GetSettingFile();
-    private static final String MINECRAFT_COM_SKIN = "C:/Users/yuwen/AppData/Roaming/.minecraft/assets/skins";
-    private static final String YGGDRASIL_FILE = System.getProperty("user.home") + "/.wdtc/users/Yggdrasil.json";
 
     public static File getYggdrasilFile() {
-        return new File(YGGDRASIL_FILE);
+        return new File(WDTC_CONFIG + "/users/Yggdrasil.json");
     }
 
     public static File getMinecraftComSkin() {
-        return new File(MINECRAFT_COM_SKIN);
+        return new File("C:/Users/yuwen/AppData/Roaming/.minecraft/assets/skins");
     }
 
     public static File getSettingFile() {
@@ -30,20 +28,26 @@ public class FilePath {
 
 
     public static File getStarterBat() {
-        return new File(STARTER_BAT);
+        return new File(WDTC_CONFIG + "/WdtcGameLauncherScript.bat");
     }
 
-    public static File getAuthlibInjector() {
-        return new File(AUTHLIB_INJECTOR);
+    public static File getAuthlibInjector() throws IOException {
+        String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
+        String authlib_injector_url = JSONObject.parseObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR + "/artifact/latest.json")).getString("download_url");
+        return new File(WDTC_CONFIG + "/" + authlib_injector_url.substring(authlib_injector_url.lastIndexOf("/") + 1));
     }
 
     public static File getUsersJson() {
-        return new File(USERS_JSON);
+        return new File(WDTC_CONFIG + "/users/users.json");
     }
 
 
     public static File getLlbmpipeLoader() {
-        return new File(LLBMPIPE_LOADER);
+        return new File(WDTC_CONFIG + "/llvmpipe-loader.jar");
+    }
+
+    public static File getWdtcCache() {
+        return new File(WDTC_CONFIG + "/cache");
     }
 
 

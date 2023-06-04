@@ -1,16 +1,13 @@
 package org.wdt;
 
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.wdt.download.dependency.DefaultDependency;
+import org.wdt.download.dependency.DependencyDownload;
 
 public class Pack {
 
-    @Test
-    public void getname() throws IOException {
-        Files.createDirectories(Paths.get(System.getProperty("user.home") + "\\Wdtc"));
+    public static void main(String[] args) {
+        DefaultDependency dependency = new DependencyDownload("net.minecraft:client:1.19.4-20230314.122934:slim");
+        System.out.println(dependency.formJar());
     }
 
 }

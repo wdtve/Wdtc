@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19">
+   <Label layoutX="283.0" layoutY="69.0" text="1.19.4"/>
+   <Label layoutX="104.0" layoutY="124.0" text="Forge : 不安装"/>
+   <Button layoutX="136.0" layoutY="146.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0" text="-&gt;"/>
+   <Button layoutX="104.0" layoutY="146.0" mnemonicParsing="false" text="X"/>
+   <Button layoutX="435.0" layoutY="337.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="107.0" text="安装游戏"/>
+</Pane>
