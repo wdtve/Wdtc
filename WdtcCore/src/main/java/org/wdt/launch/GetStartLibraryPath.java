@@ -49,13 +49,13 @@ public class GetStartLibraryPath {
                 }
             }
         }
-        if (launcher.getForgeDownloadTaskIsNull()) {
+        if (launcher.getForgeDownloadTaskNoNull()) {
             for (String s : forgeLaunchTask.getForgeLaunchLibrary()) {
                 Space(s);
             }
         }
         Add(launcher.getVersionJar());
-        if (launcher.getForgeDownloadTaskIsNull()) {
+        if (launcher.getForgeDownloadTaskNoNull()) {
             for (String s : forgeLaunchTask.getForgeLuanchJvm()) {
                 Add(FilenameUtils.separatorsToUnix(s));
             }
@@ -64,7 +64,7 @@ public class GetStartLibraryPath {
         if (AboutSetting.GetLlvmpipeSwitch()) {
             Add(LlbmpipeLoader());
         }
-        if (launcher.getForgeDownloadTaskIsNull()) {
+        if (launcher.getForgeDownloadTaskNoNull()) {
             Add("cpw.mods.bootstraplauncher.BootstrapLauncher");
         } else {
             Add(v_e_j.getString("mainClass"));

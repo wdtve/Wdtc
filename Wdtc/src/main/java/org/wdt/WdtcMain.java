@@ -1,10 +1,8 @@
-package org.wdt.WdtcUI;
+package org.wdt;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
-import org.wdt.AboutSetting;
-import org.wdt.FilePath;
 import org.wdt.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.download.DownloadTask;
 import org.wdt.platform.PlatformUtils;
@@ -23,10 +21,10 @@ public class WdtcMain {
         logger.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
         logger.info("* Setting File:" + FilePath.getSettingFile());
         logger.info("* Here:" + System.getProperty("user.dir"));
+        AboutSetting.GenerateSettingFile();
         StartTask();
         Ergodic();
-        AboutSetting.GenerateSettingFile();
-        AuthlibInjector.DownloadauthlibInjector();
+        AuthlibInjector.UpdateAuthlibInjector();
         logger.info("* 程序开始运行");
         AppMain.main(args);
     }
@@ -47,7 +45,6 @@ public class WdtcMain {
                 logger.info("* " + JavaList.getString(i) + " 无效");
             }
         }
-        SettingObject.put("JavaPath", JavaList);
-        PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), SettingObject);
+        PlatformUtils.PutKeyToFile(AboutSetting.GetSettingFile(), SettingObject, "JavaPath", JavaList);
     }
 }

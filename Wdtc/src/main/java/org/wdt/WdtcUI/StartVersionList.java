@@ -7,7 +7,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -21,14 +20,12 @@ import org.wdt.platform.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class StartVersionList extends LauncherGame {
-    private static final Stage stage = new Stage();
 
-    private static final VBox V_BOX = new VBox();
-    private static final ScrollPane SCROLL_PANE = new ScrollPane();
-    private static final Scene SCENE = new Scene(SCROLL_PANE);
     private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
     private static Label start_label;
     private static TextField textField;
@@ -38,38 +35,43 @@ public class StartVersionList extends LauncherGame {
         StartVersionList.textField = textField;
     }
 
-    public void getStartList() {
+    public void getStartList(Stage MainStage) {
+        Stage stage = new Stage();
+        VBox vBox = new VBox();
+        ScrollPane sp = new ScrollPane();
         logmaker.info("* 开始加载版本列表");
         try {
             GetGamePath GetPath = new GetGamePath(AboutSetting.GetDefaultGamePath());
             File version_path = new File(GetPath.getGameVersionPath());
             File[] files = version_path.listFiles();
+            Map<String, Launcher> GameList = new HashMap<>();
             if (Objects.nonNull(files)) {
                 for (File file2 : files) {
+                    Launcher launcher = new Launcher(file2.getName());
+                    try {
+                        String str = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getString("id");
+                        String str1 = str.substring(0, str.indexOf("-"));
+                        String str2 = str.substring(str1.length() + 1);
+                        ForgeDownloadTask forgeDownloadTask = new ForgeDownloadTask(launcher, str2);
+                        launcher.setDownloadTask(forgeDownloadTask);
+                    } catch (IOException | StringIndexOutOfBoundsException exception) {
+                        logmaker.warn("* 警报:", exception);
+                    }
+                    GameList.put(file2.getName(), launcher);
                     Button button = new Button(file2.getName());
-                    V_BOX.getChildren().add(button);
+                    vBox.getChildren().add(button);
                     button.setMaxSize(100, 50);
                     button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                        V_BOX.getChildren().clear();
+                        vBox.getChildren().clear();
                         stage.close();
                         try {
                             start_label.setText("\t\t\t\t开始启动");
                             logmaker.info("* 开始启动");
                             new Thread(() -> {
                                 try {
-                                    Launcher launcher = new Launcher(file2.getName());
-                                    try {
-                                        String str = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getString("id");
-                                        String str1 = str.substring(0, str.indexOf("_"));
-                                        String str2 = str.substring(str1.length() + 1);
-                                        ForgeDownloadTask forgeDownloadTask = new ForgeDownloadTask(launcher, str2);
-                                        launcher.setDownloadTask(forgeDownloadTask);
-                                    } catch (IOException | StringIndexOutOfBoundsException exception) {
-                                        logmaker.warn("* 警报:", exception);
-                                    }
-                                    launchergame(launcher);
-                                } catch (IOException | RuntimeException e) {
-                                    e.printStackTrace();
+                                    launchergame(GameList.get(button.getText()));
+                                } catch (RuntimeException e) {
+                                    logmaker.error(e);
                                 }
                             }).start();
                             textField.setText(FilePath.getStarterBat().getCanonicalPath());
@@ -79,34 +81,21 @@ public class StartVersionList extends LauncherGame {
 
                     });
                 }
-                SCROLL_PANE.setContent(V_BOX);
+                sp.setContent(vBox);
                 stage.setHeight(500);
                 stage.setWidth(500);
                 stage.getIcons().add(new Image("ico.jpg"));
                 stage.setTitle("Start Version List");
-                stage.setScene(SCENE);
+                stage.setScene(new Scene(sp));
                 stage.setResizable(false);
                 logmaker.info("* 版本列表加载成功");
                 stage.show();
-                stage.setOnCloseRequest(windowEvent -> V_BOX.getChildren().clear());
+                stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
             } else {
-                Label label = new Label("您没有游戏版本,请去下载");
-                Pane pane = new Pane();
-                pane.prefHeight(400.0);
-                pane.prefWidth(600.0);
-                label.setLayoutX(217.0);
-                label.setLayoutY(193.0);
-                pane.getChildren().add(label);
-                Scene scene = new Scene(pane, 600, 400);
-                stage.setScene(scene);
-                stage.setResizable(false);
-                stage.getIcons().add(new Image("/ico.jpg"));
-                stage.setTitle("版本文件夹为空");
-                stage.show();
-                logmaker.error("* 版本文件夹为空");
+                VersionDirNull.setNullWin(MainStage);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logmaker.error(e);
         }
     }
 }

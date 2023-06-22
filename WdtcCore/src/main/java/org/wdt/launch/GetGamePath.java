@@ -28,7 +28,7 @@ public class GetGamePath {
         return here + "\\.minecraft\\";
     }
 
-    public String GetGameLibPath() {
+    public String GetGameLibraryPath() {
         return here + "\\.minecraft\\libraries\\";
     }
 

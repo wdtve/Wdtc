@@ -5,12 +5,12 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.wdt.FilePath;
+import org.wdt.GetJavaPath;
 import org.wdt.Launcher;
 import org.wdt.download.DownloadTask;
 import org.wdt.download.FileUrl;
 import org.wdt.download.dependency.DefaultDependency;
 import org.wdt.download.dependency.DependencyDownload;
-import org.wdt.launch.GetJavaPath;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.BufferedReader;
@@ -38,15 +38,16 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         JSONArray JarList = JsonObject.getJSONArray("classpath");
         for (int i = 0; i < JarList.size(); i++) {
             DefaultDependency Jar = new DefaultDependency(JarList.getString(i));
-            CommandLine.append(FilenameUtils.separatorsToWindows(launcher.GetGameLibPath() + Jar.formJar())).append(";");
+            CommandLine.append(FilenameUtils.separatorsToWindows(launcher.GetGameLibraryPath() + Jar.formJar())).append(";");
         }
-        if (JsonObject.getString("jar").equals("net.minecraftforge:ForgeAutoRenamingTool:0.1.22:all")) {
-            CommandLine.append(launcher.GetGameLibPath()).append(FilenameUtils.separatorsToWindows("net/minecraftforge/ForgeAutoRenamingTool/0.1.22/ForgeAutoRenamingTool-0.1.22-all.jar"));
+        if (Pattern.compile("net.minecraftforge:ForgeAutoRenamingTool").matcher(JsonObject.getString("jar")).find()) {
+            DefaultDependency Jar = new DependencyDownload(JsonObject.getString("jar"));
+            CommandLine.append(launcher.GetGameLibraryPath()).append(FilenameUtils.separatorsToWindows(Jar.formJar()));
             CommandLine.append(" ").append("net.minecraftforge.fart.Main").append(" ");
         } else {
 
             DefaultDependency MainJar = new DependencyDownload(JsonObject.getString("jar"));
-            CommandLine.append(launcher.GetGameLibPath()).append(MainJar.formJar()).append(" ").append(MainJar.getGroupId())
+            CommandLine.append(launcher.GetGameLibraryPath()).append(MainJar.formJar()).append(" ").append(MainJar.getGroupId())
                     .append(".").append(MainJar.getArtifactId()).append(".ConsoleTool ");
         }
         JSONArray ArgsList = JsonObject.getJSONArray("args");
@@ -65,10 +66,10 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                 } else if (Pattern.compile("\\{").matcher(ArgeStr).find()) {
                     DefaultDependency client = new DefaultDependency(Clean(getInstallPrefileJSONObject().getJSONObject("data")
                             .getJSONObject(Clean(ArgeStr)).getString("client")));
-                    CommandLine.append(launcher.GetGameLibPath()).append(client.formJar()).append(" ");
+                    CommandLine.append(launcher.GetGameLibraryPath()).append(client.formJar()).append(" ");
                 } else if (Pattern.compile("\\[").matcher(ArgeStr).find()) {
                     DefaultDependency arge = new DefaultDependency(Clean(ArgeStr));
-                    CommandLine.append(launcher.GetGameLibPath()).append(arge.formJar()).append(" ");
+                    CommandLine.append(launcher.GetGameLibraryPath()).append(arge.formJar()).append(" ");
                 } else {
                     CommandLine.append(ArgeStr).append(" ");
                 }
@@ -85,7 +86,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         if (launcher.bmclapi()) {
             TxtUrl = TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), FileUrl.getBmcalapiCom());
         }
-        DownloadTask.StartWGetDownloadTask(TxtUrl, launcher.GetGameLibPath() + TxtPath.formJar());
+        DownloadTask.StartWGetDownloadTask(TxtUrl, launcher.GetGameLibraryPath() + TxtPath.formJar());
 
     }
 
@@ -97,9 +98,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                 if (!TaskJson.getJSONArray("args").getString(1).equals("DOWNLOAD_MOJMAPS")) {
                     StartCommand(i);
                 }
-
             }
-
         }
     }
 
@@ -119,5 +118,6 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         while ((line = bufferedReader.readLine()) != null) {
             logmaker.info(line);
         }
+        process.destroy();
     }
 }

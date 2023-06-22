@@ -25,11 +25,11 @@ public class SelectGameVersion {
     }
 
     public void DownloadGame() throws IOException, InterruptedException {
-        DownloadVersionGameFile DownloadGame = launcher.getDownloadVersionGameFile();
+        DownloadVersionGameFile DownloadGame = new DownloadVersionGameFile(launcher);
         DownloadGame.DownloadGameVersionJson();
         DownloadGame.DownloadGameAssetsListJson();
         DownloadGame.DownloadVersionJar();
-        if (launcher.getForgeDownloadTaskIsNull()) {
+        if (launcher.getForgeDownloadTaskNoNull()) {
             DownloadForge();
         }
         DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();

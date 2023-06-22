@@ -50,5 +50,8 @@ public class FilePath {
         return new File(WDTC_CONFIG + "/cache");
     }
 
+    public static File getJavaHomeJarFile() {
+        return new File(WDTC_CONFIG + "/WdtcGetJavaHome.jar");
+    }
 
 }

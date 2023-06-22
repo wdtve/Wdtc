@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+      xmlns:fx="http://javafx.com/fxml/1" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <RadioButton fx:id="true_log" layoutX="77.0" layoutY="111.0" mnemonicParsing="false" text="显示"/>
     <RadioButton fx:id="false_log" layoutX="139.0" layoutY="111.0" mnemonicParsing="false" selected="true"
                  text="不显示"/>
@@ -17,8 +17,11 @@
     <Label layoutX="168.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;" textFill="#0000007c"/>
     <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..."/>
     <Label layoutX="76.0" layoutY="185.0" text="是否启用OpenGL软渲染器:"/>
-    <RadioButton layoutX="78.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
+    <RadioButton layoutX="77.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
     <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用"/>
+    <Label layoutX="76.0" layoutY="235.0" text="将游戏设置成中文(默认开启):"/>
+    <RadioButton layoutX="77.0" layoutY="254.0" mnemonicParsing="false" text="启用"/>
+    <RadioButton layoutX="139.0" layoutY="254.0" mnemonicParsing="false" text="不启用"/>
     <!--    <JFXButton style="-fx-border-color: #000000;" text="返回"/>-->
 
 

@@ -3,6 +3,7 @@ package org.wdt.launch;
 import org.apache.log4j.Logger;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
+import org.wdt.download.SelectGameVersion;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,13 +20,14 @@ public class LauncherGame {
 
     public static void launchergame(Launcher launcher) {
         try {
+            launcher.LaunchTask();
             logmaker.info("* 开始文件补全");
-//            SelectGameVersion gameVersion = new SelectGameVersion(launcher);
-//            try {
-//                gameVersion.DownloadGame();
-//            } catch (Exception e) {
-//                logmaker.error("错误:", e);
-//            }
+            SelectGameVersion gameVersion = new SelectGameVersion(launcher);
+            try {
+                gameVersion.DownloadGame();
+            } catch (Exception e) {
+                logmaker.error("错误:", e);
+            }
             logmaker.info("* 文件补全完成");
             logmaker.info("* 开始写入启动脚本");
             GetJvm.GetJvmList(launcher);
@@ -38,15 +40,15 @@ public class LauncherGame {
                 bat(m_t.getCanonicalPath());
             } else {
                 logmaker.info("* 开始运行启动脚本,日志:不显示");
-                executeBatFile(m_t.getCanonicalPath());
+                executeBatFile(m_t.getCanonicalPath()).start();
             }
         } catch (Exception e) {
             logmaker.error("错误:", e);
         }
     }
 
-    public static void executeBatFile(String file) {
-        Thread thread = new Thread(() -> {
+    public static Thread executeBatFile(String file) {
+        return new Thread(() -> {
             try {
                 Process process = Runtime.getRuntime().exec("cmd.exe /c" + file);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
@@ -54,10 +56,10 @@ public class LauncherGame {
                 while ((line = bufferedReader.readLine()) != null) {
                     System.out.println(line);
                 }
+                process.destroy();
             } catch (Exception e) {
                 logmaker.error("错误:", e);
             }
         });
-        thread.start();
     }
 }

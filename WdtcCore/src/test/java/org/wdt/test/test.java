@@ -101,7 +101,7 @@ public class test {
     public void isnull() throws IOException {
         DependencyDownload download = new DependencyDownload("[de.oceanlabs.mcp:mcp_config:1.19.4-20230314.122934:mappings@txt]");
         Launcher launcher = new Launcher("1.19.4");
-        download.setPath(launcher.GetGameLibPath());
+        download.setPath(launcher.GetGameLibraryPath());
         System.out.println(download.libFilePath());
     }
 

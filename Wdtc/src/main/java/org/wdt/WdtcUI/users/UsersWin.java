@@ -1,5 +1,6 @@
 package org.wdt.WdtcUI.users;
 
+import com.alibaba.fastjson2.JSONObject;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,12 +8,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.FilePath;
 import org.wdt.WdtcUI.Consoler;
 import org.wdt.WdtcUI.ErrorWin;
 import org.wdt.WdtcUI.LauncherWin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class UsersWin {
@@ -60,7 +65,10 @@ public class UsersWin {
             try {
                 String username = Registerusername.getText();
                 if (isContainChinese(username)) {
-                    Registeruser.RegisterUser(username);
+                    Map<String, String> StringMap = new HashMap<>();
+                    StringMap.put("userName", username);
+                    StringMap.put("type", "offline");
+                    FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(StringMap), "UTF-8");
                     loggmaker.info("* 离线账户" + username + "注册成功");
                     LauncherWin.setLauncherWin(MainStage);
                 } else {

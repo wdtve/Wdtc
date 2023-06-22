@@ -1,13 +1,25 @@
 package org.wdt;
 
-import org.wdt.download.dependency.DefaultDependency;
-import org.wdt.download.dependency.DependencyDownload;
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Pack {
-
-    public static void main(String[] args) {
-        DefaultDependency dependency = new DependencyDownload("net.minecraft:client:1.19.4-20230314.122934:slim");
-        System.out.println(dependency.formJar());
+    @Test
+    public void exec() {
+        try {
+            Process process = Runtime.getRuntime().exec("cmd.exe /c C:\\Users\\yuwen\\.wdtc\\WdtcGameLauncherScript.bat");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
+            String line;
+            while (bufferedReader.readLine() != null) {
+                System.out.println(IOUtils.toString(bufferedReader));
+            }
+            process.destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

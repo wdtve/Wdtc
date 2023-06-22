@@ -36,7 +36,6 @@ public class VersionJson {
         for (int i = 0; i < common.size(); i++) {
             LibraryList.add(common.getJSONObject(i));
         }
-        VersionJson_json.put("libraries", LibraryList);
-        PlatformUtils.PutJSONObject(versionJson, VersionJson_json);
+        PlatformUtils.PutKeyToFile(versionJson, VersionJson_json, "libraries", LibraryList);
     }
 }

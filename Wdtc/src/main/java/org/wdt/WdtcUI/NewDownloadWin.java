@@ -26,14 +26,12 @@ public class NewDownloadWin {
         Label tips = new Label("选择右侧的一个版本");
         tips.setLayoutX(27.0);
         tips.setLayoutY(71.0);
-        back.setStyle("-fx-border-color: #000000");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
         Platform.runLater(() -> {
             List<String> Versionlist = VersionList.getVersionList();
             for (String s : Versionlist) {
                 JFXButton button = new JFXButton(s);
                 list.getChildren().add(button);
-                button.setStyle("-fx-border-color: #000000");
                 button.setPrefWidth(440.0);
                 button.setOnAction(event -> {
                     try {
@@ -51,6 +49,7 @@ public class NewDownloadWin {
         sp.setPrefHeight(450.0);
         sp.setPrefWidth(445.0);
         pane.getChildren().addAll(sp, back);
+        pane.getStylesheets().addAll(Consoler.getCssFile());
         pane.setBackground(Consoler.getBackground());
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
         MainStage.setScene(new Scene(pane, 600, 450));

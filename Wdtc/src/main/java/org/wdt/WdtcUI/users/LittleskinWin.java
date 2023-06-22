@@ -18,6 +18,8 @@ import org.wdt.auth.Yggdrasil.YggdrasilTextures;
 import org.wdt.download.FileUrl;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -64,10 +66,10 @@ public class LittleskinWin {
                     YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(FileUrl.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
                     yggdrasilAccounts.WriteYggdrasilFile();
                     try {
-                        Users littleskinUsers = new Users();
-                        littleskinUsers.setUserName(Inputusername.getText());
-                        littleskinUsers.setType("Yggdrasil");
-                        FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(littleskinUsers), "UTF-8");
+                        Map<String, String> StringMap = new HashMap<>();
+                        StringMap.put("userName", Inputusername.getText());
+                        StringMap.put("type", "Yggdrasil");
+                        FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(StringMap), "UTF-8");
                         YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(yggdrasilAccounts);
                         yggdrasilTextures.DownloadUserSkin();
                         LauncherWin.setLauncherWin(MainStage);

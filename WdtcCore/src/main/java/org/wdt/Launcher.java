@@ -1,14 +1,18 @@
 package org.wdt;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.auth.Accounts;
 import org.wdt.download.DownloadVersionGameFile;
 import org.wdt.download.forge.ForgeDownloadTask;
 import org.wdt.download.forge.ForgeInstallTask;
 import org.wdt.download.forge.ForgeLaunchTask;
+import org.wdt.platform.PlatformUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Launcher extends Version {
     private final Logger logmaker = Logger.getLogger(getClass());
@@ -95,8 +99,16 @@ public class Launcher extends Version {
         return new DownloadVersionGameFile(new Launcher(getVersion()));
     }
 
-    public boolean getForgeDownloadTaskIsNull() {
+    public boolean getForgeDownloadTaskNoNull() {
         return DownloadTask != null;
+    }
+
+    public void LaunchTask() throws IOException {
+        if (AboutSetting.GetZHCNSwitch() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
+            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
+            File OptionsFile = new File(getGameOptionsFile());
+            FileUtils.writeStringToFile(OptionsFile, Options, "UTF-8");
+        }
     }
 
 }

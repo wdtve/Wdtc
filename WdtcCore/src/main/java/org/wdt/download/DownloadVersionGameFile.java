@@ -28,10 +28,10 @@ public class DownloadVersionGameFile extends DownloadTask {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), FileUrl.getBmcalapiCom());
                 }
                 StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
-                if (launcher.getForgeDownloadTaskIsNull()) {
+                if (launcher.getForgeDownloadTaskNoNull()) {
                     JSONObject VersionJSONObject = PlatformUtils.FileToJSONObject(launcher.getVersionJson());
-                    VersionJSONObject.put("id", launcher.getVersion() + "-" + launcher.getForgeDownloadTask().getForgeVersion());
-                    PlatformUtils.PutJSONObject(launcher.getVersionJson(), VersionJSONObject);
+                    PlatformUtils.PutKeyToFile(launcher.getVersionJson(), VersionJSONObject, "id",
+                            launcher.getVersion() + "-" + launcher.getForgeDownloadTask().getForgeVersion());
                 }
             }
         }

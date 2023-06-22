@@ -22,12 +22,10 @@ public class Version extends GetGamePath {
         return version;
     }
 
-    public String getVersionLibPath() {
-        return getGameVersionPath();
-    }
+
 
     public String getVersionPath() {
-        return getVersionLibPath() + version + "\\";
+        return getGameVersionPath() + version + "\\";
     }
 
     public String getVersionJson() {
@@ -47,8 +45,12 @@ public class Version extends GetGamePath {
     }
 
     public String getGameAssetsListJson() throws IOException {
-        JSONObject assetIndex_j = PlatformUtils.FileToJSONObject(getVersionJson()).getJSONObject("assetIndex");
-        String id = assetIndex_j.getString("id");
+        JSONObject AssetIndexJson = PlatformUtils.FileToJSONObject(getVersionJson()).getJSONObject("assetIndex");
+        String id = AssetIndexJson.getString("id");
         return getGameAssetsdir() + "indexes\\" + id + ".json";
+    }
+
+    public String getGameOptionsFile() {
+        return getGamePath() + "options.txt";
     }
 }

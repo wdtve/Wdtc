@@ -24,14 +24,14 @@ public class LauncherWin {
         Button deletVersion = new Button("删除版本");
         deletVersion.setLayoutX(451.0);
         deletVersion.setLayoutY(88.0);
-        deletVersion.setOnAction(event -> DeleteVersion.getStartList());
+        deletVersion.setOnAction(event -> DeleteVersion.getStartList(MainStage));
         Label warningDelet = new Label("版本删除就找不回来了哦");
         warningDelet.setLayoutX(417.0);
         warningDelet.setLayoutY(65.0);
         Button completioner = new Button("补全文件");
         completioner.setLayoutX(88.0);
         completioner.setLayoutY(88.0);
-        completioner.setOnAction(event -> CompletionGame.completion_game());
+        completioner.setOnAction(event -> CompletionGame.CompletionGameVersion(MainStage));
         Label Tips = new Label("点击后没有反应是正常的,等一会就可以看到游戏窗口");
         Tips.setLayoutX(161.0);
         Tips.setLayoutY(166.0);
@@ -52,7 +52,7 @@ public class LauncherWin {
         startGame.setOnAction(event -> {
             try {
                 if (ReadUserList.SetUserJson(MainStage)) {
-                    new StartVersionList(Tips, stater_path).getStartList();
+                    new StartVersionList(Tips, stater_path).getStartList(MainStage);
                 }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);

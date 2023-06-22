@@ -22,7 +22,6 @@ public class HomeWin {
         JFXButton home = new JFXButton("首页");
         home.setPrefHeight(23.0);
         home.setPrefWidth(64.0);
-        home.setDisable(false);
         JFXButton downgame = new JFXButton("下载游戏");
         downgame.setLayoutY(23.0);
         downgame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));

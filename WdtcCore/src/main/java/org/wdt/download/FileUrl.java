@@ -11,11 +11,7 @@ public class FileUrl {
     private static final String PISTON_DATA_MOJANG = "https://piston-data.mojang.com";
 
     private static final String LITTLESKIN_URL = "https://littleskin.cn";
-    private final boolean BMCLAPI;
 
-    public FileUrl() {
-        this.BMCLAPI = AboutSetting.GetBmclSwitch();
-    }
 
     public static String getPistonDataMojang() {
         return PISTON_DATA_MOJANG;
@@ -63,24 +59,24 @@ public class FileUrl {
         return LITTLESKIN_URL + "/api/yggdrasil";
     }
 
-    public String getVersionManifest() {
-        if (BMCLAPI) {
+    public static String getVersionManifest() {
+        if (AboutSetting.GetBmclSwitch()) {
             return getBmclapiVersionManifest();
         } else {
             return getMojangVersionManifest();
         }
     }
 
-    public String getAssets() {
-        if (BMCLAPI) {
+    public static String getAssets() {
+        if (AboutSetting.GetBmclSwitch()) {
             return getBmclapiAssets();
         } else {
             return getMojangAssets();
         }
     }
 
-    public String getLibrary() {
-        if (BMCLAPI) {
+    public static String getLibrary() {
+        if (AboutSetting.GetBmclSwitch()) {
             return getBmclapiLibraries();
         } else {
             return getMojangLibraries();

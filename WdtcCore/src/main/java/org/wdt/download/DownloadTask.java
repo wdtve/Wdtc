@@ -95,7 +95,7 @@ public class DownloadTask extends GetLibraryPathAndUrl {
 
     public Thread StartDownloadHashTask(String hash, SpeedOfProgress downLatch) throws IOException {
         String hash_t = hash.substring(0, 2);
-        File hash_path = new File(launcher.getGameAssetsdir() + "objects\\" + hash_t + "\\" + hash);
+        File hash_path = new File(launcher.getGameObjects() + hash_t + "\\" + hash);
         URL hash_url;
         if (launcher.bmclapi()) {
             hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);

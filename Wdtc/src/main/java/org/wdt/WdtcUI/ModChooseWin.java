@@ -26,24 +26,32 @@ public class ModChooseWin {
         Label title = new Label(launcher.getVersion());
         title.setLayoutX(283.0);
         title.setLayoutY(69.0);
+        Pane ForgePane = new Pane();
+        ForgePane.setLayoutX(65.0);
+        ForgePane.setLayoutY(86.0);
+        ForgePane.setPrefHeight(106.0);
+        ForgePane.setPrefWidth(160.0);
         Label forge = new Label();
-        if (launcher.getForgeDownloadTaskIsNull()) {
+        if (launcher.getForgeDownloadTaskNoNull()) {
             forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersion());
         } else {
             forge.setText("Forge : 不安装");
         }
-        forge.setLayoutX(104.0);
-        forge.setLayoutY(124.0);
+        forge.setLayoutX(36.0);
+        forge.setLayoutY(27.0);
         JFXButton install = new JFXButton("->");
-        install.setLayoutX(136.0);
-        install.setLayoutY(146.0);
+        install.setLayoutX(67.0);
+        install.setLayoutY(53.0);
         install.setPrefHeight(23.0);
         install.setPrefWidth(47.0);
+        install.setDisable(true);
         install.setStyle(Consoler.BlackBorder());
         JFXButton cancel = new JFXButton("X");
-        cancel.setLayoutX(104.0);
-        cancel.setLayoutY(146.0);
+        cancel.setLayoutX(36.0);
+        cancel.setLayoutY(53.0);
         cancel.setStyle(Consoler.BlackBorder());
+        ForgePane.getChildren().addAll(forge, install, cancel);
+        ForgePane.setStyle("-fx-border-color: #000000; -fx-background-color: #FFFFFF");
         JFXButton confirm = new JFXButton("安装游戏");
         confirm.setLayoutX(435.0);
         confirm.setLayoutY(337.0);
@@ -51,7 +59,7 @@ public class ModChooseWin {
         confirm.setPrefWidth(107.0);
         confirm.setStyle(Consoler.BlackBorder());
         pane.setBackground(Consoler.getBackground());
-        pane.getChildren().addAll(back, title, forge, install, cancel, confirm);
+        pane.getChildren().addAll(back, title, ForgePane, confirm);
         MainStage.setScene(new Scene(pane));
         install.setOnAction(event -> {
             try {

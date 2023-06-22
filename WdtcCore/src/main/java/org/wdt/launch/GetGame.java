@@ -15,7 +15,6 @@ public class GetGame {
         GameSet = new StringBuilder();
         Accounts accounts = version.GetAccounts();
         JSONObject AssetIndexJson = PlatformUtils.FileToJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
-        ForgeLaunchTask forgeLaunchTask = version.getForgeLaunchTask();
         append("--username");
         append(accounts.GetUserName());
         append("--version");
@@ -32,7 +31,8 @@ public class GetGame {
         append(accounts.GetAccessToken());
         append("--clientId");
         append("${clientid}");
-        if (version.getForgeDownloadTaskIsNull()) {
+        if (version.getForgeDownloadTaskNoNull()) {
+            ForgeLaunchTask forgeLaunchTask = version.getForgeLaunchTask();
             for (String s : forgeLaunchTask.getForgeLaunchGame()) {
                 append(s);
             }

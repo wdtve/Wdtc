@@ -2,6 +2,7 @@ package org.wdt.download.forge;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.wdt.AboutSetting;
@@ -16,8 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -83,22 +82,21 @@ public class ForgeDownloadTask {
 
     public void unzipByInstallProfile(String file, String path) {
         try {
+            File unZipPath = new File(path);
             ZipFile zip = new ZipFile(new File(file));
             for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
-                if (name.equals(new File(path).getName())) {
+                if (name.equals(unZipPath.getName())) {
                     File unfile = new File(FilenameUtils.separatorsToWindows(path));
-                    if (PlatformUtils.FileExistenceAndSize(unfile)) {
-                        Files.createFile(Paths.get(path));
-                        InputStream in = zip.getInputStream(entry);
-                        FileOutputStream fos = new FileOutputStream(unfile);
-                        int len;
-                        byte[] buf = new byte[1024];
-                        while ((len = in.read(buf)) != -1) fos.write(buf, 0, len);
-                        fos.close();
-                        in.close();
-                    }
+                    FileUtils.touch(unZipPath);
+                    InputStream in = zip.getInputStream(entry);
+                    FileOutputStream fos = new FileOutputStream(unfile);
+                    int len;
+                    byte[] buf = new byte[1024];
+                    while ((len = in.read(buf)) != -1) fos.write(buf, 0, len);
+                    fos.close();
+                    in.close();
                 }
             }
             zip.close();
@@ -131,16 +129,16 @@ public class ForgeDownloadTask {
                 try {
                     DependencyDownload download = new DependencyDownload(LibraryObject.getString("name"));
                     download.setDefaultUrl(FileUrl.getBmclapiLibraries());
-                    download.setPath(launcher.GetGameLibPath());
+                    download.setPath(launcher.GetGameLibraryPath());
                     download.download();
                 } catch (IOException e) {
                     String LibraryUrl = LibraryArtifact.getString("url");
-                    String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibPath() + LibraryArtifact.getString("path"));
+                    String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibraryPath() + LibraryArtifact.getString("path"));
                     DownloadTask.StartWGetDownloadTask(LibraryUrl, LibraryPath);
                 }
             } else {
                 String LibraryUrl = LibraryArtifact.getString("url");
-                String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibPath() + LibraryArtifact.getString("path"));
+                String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibraryPath() + LibraryArtifact.getString("path"));
                 DownloadTask.StartWGetDownloadTask(LibraryUrl, LibraryPath);
             }
         }

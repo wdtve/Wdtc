@@ -41,7 +41,7 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
         List<String> list = new ArrayList<>();
         JSONArray JvmList = getForgeVersionJsonObject().getJSONObject("arguments").getJSONArray("jvm");
         for (int i = 0; i < JvmList.size(); i++) {
-            list.add(JvmList.getString(i).replace("${library_directory}", launcher.GetGameLibPath())
+            list.add(JvmList.getString(i).replace("${library_directory}", launcher.GetGameLibraryPath())
                     .replace("${classpath_separator}", ";").replace("${version_name}", launcher.getVersion()));
         }
         return list;
@@ -60,7 +60,7 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
         List<String> list = new ArrayList<>();
         JSONArray LibraryList = getForgeVersionJsonObject().getJSONArray("libraries");
         for (int i = 0; i < LibraryList.size(); i++) {
-            list.add(FilenameUtils.separatorsToSystem(launcher.GetGameLibPath() + LibraryList.getJSONObject(i)
+            list.add(FilenameUtils.separatorsToSystem(launcher.GetGameLibraryPath() + LibraryList.getJSONObject(i)
                     .getJSONObject("downloads").getJSONObject("artifact").getString("path")));
         }
         return list;

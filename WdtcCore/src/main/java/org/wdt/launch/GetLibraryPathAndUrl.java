@@ -21,7 +21,7 @@ public class GetLibraryPathAndUrl {
     }
 
     public File GetNativesLibPath(JSONObject lib_j) {
-        String game_lib_path = launcher.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibraryPath();
         JSONObject classifiers_j = lib_j.getJSONObject("downloads").getJSONObject("classifiers");
         String natives_name = lib_j.getJSONObject("natives").getString("windows");
         JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
@@ -45,7 +45,7 @@ public class GetLibraryPathAndUrl {
     }
 
     public File GetLibPath(JSONObject lib_j) {
-        String game_lib_path = launcher.GetGameLibPath();
+        String game_lib_path = launcher.GetGameLibraryPath();
         JSONObject artifact_j = lib_j.getJSONObject("downloads").getJSONObject("artifact");
         String lib_path = game_lib_path + artifact_j.getString("path");
         return new File(FilenameUtils.separatorsToWindows(lib_path));
