@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.wdt.Launcher;
 import org.wdt.download.forge.ForgeVersionList;
+import org.wdt.platform.Starter;
 
 import java.io.IOException;
 
@@ -44,7 +45,7 @@ public class ModChooseWin {
         install.setLayoutY(53.0);
         install.setPrefHeight(23.0);
         install.setPrefWidth(47.0);
-        install.setDisable(true);
+        install.setDisable(!Starter.getForgeSwitch());
         install.setStyle(Consoler.BlackBorder());
         JFXButton cancel = new JFXButton("X");
         cancel.setLayoutX(36.0);

@@ -20,6 +20,7 @@ public class LauncherGame {
 
     public static void launchergame(Launcher launcher) {
         try {
+            logmaker.info("Launch Version: " + launcher.getVersion());
             launcher.LaunchTask();
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);

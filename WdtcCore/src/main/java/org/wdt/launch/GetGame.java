@@ -1,10 +1,11 @@
 package org.wdt.launch;
 
-import com.alibaba.fastjson2.JSONObject;
+
 import org.wdt.Launcher;
 import org.wdt.auth.Accounts;
 import org.wdt.download.forge.ForgeLaunchTask;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class GetGame {
     public static void Getgame(Launcher version) throws IOException {
         GameSet = new StringBuilder();
         Accounts accounts = version.GetAccounts();
-        JSONObject AssetIndexJson = PlatformUtils.FileToJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = Utils.getJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
         append("--username");
         append(accounts.GetUserName());
         append("--version");

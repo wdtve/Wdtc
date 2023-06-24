@@ -1,13 +1,14 @@
 package org.wdt.launch;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.wdt.AboutSetting;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
 import org.wdt.download.forge.ForgeLaunchTask;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,42 +21,43 @@ public class GetStartLibraryPath {
 
     public static void getLibPath(Launcher launcher) throws IOException {
         ClassPathBuilder = new StringBuilder();
-        ForgeLaunchTask forgeLaunchTask = new ForgeLaunchTask(launcher, "45.0.64");
         GetLibraryPathAndUrl getLibraryPathAndUrl = new GetLibraryPathAndUrl(launcher);
         Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
-        JSONObject v_e_j = PlatformUtils.FileToJSONObject(launcher.getVersionJson());
-        JSONArray libraries_j = v_e_j.getJSONArray("libraries");
-        for (int i = 0; i < libraries_j.size(); i++) {
-            JSONObject lib_j = libraries_j.getJSONObject(i);
-            JSONObject natives_j = lib_j.getJSONObject("natives");
-            if (Objects.isNull(natives_j)) {
-                JSONArray rules = lib_j.getJSONArray("rules");
-                if (Objects.isNull(rules)) {
-                    Space(getLibraryPathAndUrl.GetLibPath(lib_j));
-                } else {
-                    JSONObject action_j = rules.getJSONObject(rules.size() - 1);
-                    String action = action_j.getString("action");
-                    String os_n = action_j.getJSONObject("os").getString("name");
-                    if (Objects.equals(action, "disallow") && Objects.equals(os_n, "osx")) {
-                        Space(getLibraryPathAndUrl.GetLibPath(lib_j));
-                    } else if (Objects.equals(action, "allow") && Objects.equals(os_n, "windows")) {
-                        Space(getLibraryPathAndUrl.GetLibPath(lib_j));
-                    }
+        JSONObject VersionJsonObject = Utils.getJSONObject(launcher.getVersionJson());
+        JSONArray LibrariesJsonObject = VersionJsonObject.getJSONArray("libraries");
+        for (int i = 0; i < LibrariesJsonObject.size(); i++) {
+            JSONObject LibraryObject = LibrariesJsonObject.getJSONObject(i);
+            if (LibraryObject.has("natives")) {
+                JSONObject NativesJson = LibraryObject.getJSONObject("natives");
+                if (NativesJson.has("windows")) {
+                    ExtractFile.unzipByFile(getLibraryPathAndUrl.GetNativesLibPath(LibraryObject), launcher.getVersionNativesPath());
                 }
             } else {
-                String natives_name = natives_j.getString("windows");
-                if (Objects.nonNull(natives_name)) {
-                    ExtractFile.unzipByFile(getLibraryPathAndUrl.GetNativesLibPath(lib_j), launcher.getVersionNativesPath());
+                JSONArray rules = LibraryObject.getJSONArray("rules");
+                if (LibraryObject.has("rules")) {
+                    JSONObject ActionObject = rules.getJSONObject(rules.size() - 1);
+                    String action = ActionObject.getString("action");
+                    String OsName = ActionObject.getJSONObject("os").getString("name");
+                    if (Objects.equals(action, "disallow") && Objects.equals(OsName, "osx")) {
+                        Space(getLibraryPathAndUrl.GetLibPath(LibraryObject));
+                    } else if (Objects.equals(action, "allow") && Objects.equals(OsName, "windows")) {
+                        Space(getLibraryPathAndUrl.GetLibPath(LibraryObject));
+                    }
+
+                } else {
+                    Space(getLibraryPathAndUrl.GetLibPath(LibraryObject));
                 }
             }
         }
         if (launcher.getForgeDownloadTaskNoNull()) {
+            ForgeLaunchTask forgeLaunchTask = launcher.getForgeLaunchTask();
             for (String s : forgeLaunchTask.getForgeLaunchLibrary()) {
                 Space(s);
             }
         }
         Add(launcher.getVersionJar());
         if (launcher.getForgeDownloadTaskNoNull()) {
+            ForgeLaunchTask forgeLaunchTask = launcher.getForgeLaunchTask();
             for (String s : forgeLaunchTask.getForgeLuanchJvm()) {
                 Add(FilenameUtils.separatorsToUnix(s));
             }
@@ -67,7 +69,7 @@ public class GetStartLibraryPath {
         if (launcher.getForgeDownloadTaskNoNull()) {
             Add("cpw.mods.bootstraplauncher.BootstrapLauncher");
         } else {
-            Add(v_e_j.getString("mainClass"));
+            Add(VersionJsonObject.getString("mainClass"));
         }
         launcher.setLibrartattribute(ClassPathBuilder);
     }

@@ -1,11 +1,12 @@
 package org.wdt.download.forge;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.wdt.FilePath;
 import org.wdt.Launcher;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
     }
 
     public JSONObject getForgeVersionJsonObject() throws IOException {
-        return PlatformUtils.FileToJSONObject(getForgeVersionJsonPath());
+        return Utils.getJSONObject(getForgeVersionJsonPath());
     }
 
     public void DownloadVersionJsonLibarary() throws IOException {

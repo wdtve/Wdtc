@@ -1,7 +1,6 @@
 package org.wdt.download.forge;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.wdt.FilePath;
@@ -12,11 +11,12 @@ import org.wdt.download.FileUrl;
 import org.wdt.download.dependency.DefaultDependency;
 import org.wdt.download.dependency.DependencyDownload;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadTask {
@@ -94,7 +94,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         JSONArray objects = getInstallPrefileJSONObject().getJSONArray("processors");
         for (int i = 0; i < objects.size(); i++) {
             JSONObject TaskJson = objects.getJSONObject(i);
-            if (Objects.isNull(TaskJson.getJSONArray("sides")) || TaskJson.getJSONArray("sides").getString(0).equals("client")) {
+            if (!TaskJson.has("sides") || TaskJson.getJSONArray("sides").getString(0).equals("client")) {
                 if (!TaskJson.getJSONArray("args").getString(1).equals("DOWNLOAD_MOJMAPS")) {
                     StartCommand(i);
                 }

@@ -71,4 +71,5 @@ public class PlatformUtils extends FileUtils {
     public static boolean FileExistenceAndSize(String filePath) throws IOException {
         return FileExistenceAndSize(new File(filePath));
     }
+
 }

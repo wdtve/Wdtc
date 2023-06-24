@@ -1,6 +1,6 @@
 package org.wdt.WdtcUI.users;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.google.gson.Gson;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -68,7 +68,7 @@ public class UsersWin {
                     Map<String, String> StringMap = new HashMap<>();
                     StringMap.put("userName", username);
                     StringMap.put("type", "offline");
-                    FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(StringMap), "UTF-8");
+                    FileUtils.writeStringToFile(FilePath.getUsersJson(), new Gson().toJson(StringMap), "UTF-8");
                     loggmaker.info("* 离线账户" + username + "注册成功");
                     LauncherWin.setLauncherWin(MainStage);
                 } else {

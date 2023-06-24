@@ -1,8 +1,9 @@
 package org.wdt;
 
-import com.alibaba.fastjson2.JSONObject;
+
 import org.wdt.launch.GetGamePath;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class Version extends GetGamePath {
     }
 
     public String getGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = PlatformUtils.FileToJSONObject(getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = Utils.getJSONObject(getVersionJson()).getJSONObject("assetIndex");
         String id = AssetIndexJson.getString("id");
         return getGameAssetsdir() + "indexes\\" + id + ".json";
     }

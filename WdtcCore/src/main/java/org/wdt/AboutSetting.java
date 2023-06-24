@@ -2,10 +2,12 @@ package org.wdt;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.Utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +27,7 @@ public class AboutSetting {
     public static boolean GetBmclSwitch() {
         boolean bmcl = false;
         try {
-            bmcl = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("bmcl");
+            bmcl = Utils.getJSONObject(GetSettingFile()).getBoolean("bmcl");
         } catch (IOException e) {
             logmaker.error("* 错误:", e);
         }
@@ -35,7 +37,7 @@ public class AboutSetting {
     public static boolean GetLogSwitch() {
         boolean log = false;
         try {
-            log = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("log");
+            log = Utils.getJSONObject(GetSettingFile()).getBoolean("log");
         } catch (IOException e) {
             logmaker.error("* 错误:", e);
         }
@@ -45,7 +47,7 @@ public class AboutSetting {
     public static boolean GetLlvmpipeSwitch() {
         boolean LlvmpipeLoader = false;
         try {
-            LlvmpipeLoader = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("llvmpipe-loader");
+            LlvmpipeLoader = Utils.getJSONObject(GetSettingFile()).getBoolean("llvmpipe-loader");
         } catch (IOException e) {
             logmaker.error("* 错误:", e);
         }
@@ -55,7 +57,7 @@ public class AboutSetting {
     public static boolean GetZHCNSwitch() {
         boolean ZHCN = false;
         try {
-            ZHCN = PlatformUtils.FileToJSONObject(GetSettingFile()).getBoolean("ZH-CN");
+            ZHCN = Utils.getJSONObject(GetSettingFile()).getBoolean("ZH-CN");
         } catch (IOException e) {
             logmaker.error("* 错误:", e);
         }
@@ -74,12 +76,13 @@ public class AboutSetting {
             ObjectMap.put("DefaultGamePath", System.getProperty("user.dir"));
             ObjectMap.put("JavaPath", new ArrayList<>());
             ObjectMap.put("ZH-CN", true);
-            FileUtils.writeStringToFile(GetSettingFile(), JSONObject.toJSONString(ObjectMap), "UTF-8");
+            Gson gson = new Gson();
+            FileUtils.writeStringToFile(GetSettingFile(), gson.toJson(ObjectMap), "UTF-8");
         }
     }
 
     public static String GetDefaultGamePath() throws IOException {
-        return PlatformUtils.FileToJSONObject(GetSettingFile()).getString("DefaultGamePath");
+        return Utils.getJSONObject(GetSettingFile()).getString("DefaultGamePath");
     }
 
     public static JSONObject SettingObject() throws IOException {

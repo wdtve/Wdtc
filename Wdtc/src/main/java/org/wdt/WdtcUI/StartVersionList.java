@@ -20,8 +20,6 @@ import org.wdt.platform.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class StartVersionList extends LauncherGame {
@@ -44,20 +42,9 @@ public class StartVersionList extends LauncherGame {
             GetGamePath GetPath = new GetGamePath(AboutSetting.GetDefaultGamePath());
             File version_path = new File(GetPath.getGameVersionPath());
             File[] files = version_path.listFiles();
-            Map<String, Launcher> GameList = new HashMap<>();
+
             if (Objects.nonNull(files)) {
                 for (File file2 : files) {
-                    Launcher launcher = new Launcher(file2.getName());
-                    try {
-                        String str = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getString("id");
-                        String str1 = str.substring(0, str.indexOf("-"));
-                        String str2 = str.substring(str1.length() + 1);
-                        ForgeDownloadTask forgeDownloadTask = new ForgeDownloadTask(launcher, str2);
-                        launcher.setDownloadTask(forgeDownloadTask);
-                    } catch (IOException | StringIndexOutOfBoundsException exception) {
-                        logmaker.warn("* 警报:", exception);
-                    }
-                    GameList.put(file2.getName(), launcher);
                     Button button = new Button(file2.getName());
                     vBox.getChildren().add(button);
                     button.setMaxSize(100, 50);
@@ -67,9 +54,19 @@ public class StartVersionList extends LauncherGame {
                         try {
                             start_label.setText("\t\t\t\t开始启动");
                             logmaker.info("* 开始启动");
+                            Launcher launcher = new Launcher(button.getText());
+                            try {
+                                String str = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getString("id");
+                                String str1 = str.substring(0, str.indexOf("-"));
+                                String str2 = str.substring(str1.length() + 1);
+                                ForgeDownloadTask forgeDownloadTask = new ForgeDownloadTask(launcher, str2);
+                                launcher.setDownloadTask(forgeDownloadTask);
+                            } catch (IOException | StringIndexOutOfBoundsException exception) {
+                                logmaker.warn("* 警报:", exception);
+                            }
                             new Thread(() -> {
                                 try {
-                                    launchergame(GameList.get(button.getText()));
+                                    launchergame(launcher);
                                 } catch (RuntimeException e) {
                                     logmaker.error(e);
                                 }

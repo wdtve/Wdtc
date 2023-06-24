@@ -1,9 +1,10 @@
 package org.wdt.download;
 
-import com.alibaba.fastjson2.JSONArray;
+
 import org.apache.log4j.Logger;
 import org.wdt.Launcher;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class DownloadGameAssetsFile extends DownloadTask {
 
     public void DownloadResourceFile() throws IOException, InterruptedException {
         String list = PlatformUtils.FileToJSONObject(version.getGameAssetsListJson()).getJSONObject("objects").values().toString();
-        JSONArray ListArray = JSONArray.parseArray(list);
+        JSONArray ListArray = JSONArray.parseWdtArray(list);
         SpeedOfProgress countDownLatch = new SpeedOfProgress(ListArray.size());
         for (int i = 0; i < ListArray.size(); i++) {
             String hash = ListArray.getJSONObject(i).getString("hash");

@@ -1,12 +1,13 @@
 package org.wdt.download;
 
-import com.alibaba.fastjson2.JSONObject;
+
 import com.github.axet.wget.WGet;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.Launcher;
 import org.wdt.launch.GetLibraryPathAndUrl;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,21 +35,21 @@ public class DownloadTask extends GetLibraryPathAndUrl {
     public static void StartDownloadTask(URL url, File file) {
         try {
             Thread.sleep(20);
-            logmaker.info("* " + url + " 开始下载");
+            logmaker.info("* Task Start: " + url);
             if (PlatformUtils.FileExistenceAndSize(file)) {
                 FileUtils.copyURLToFile(url, file);
             }
-            logmaker.info("* " + file + " 下载完成");
+            logmaker.info("* Task Finish: " + file);
         } catch (IOException | InterruptedException e) {
-            logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
+            logmaker.warn("* Task: " + url, e);
             try {
                 TimeUnit.SECONDS.sleep(5);
-                logmaker.info("* " + url + " 开始重试");
+                logmaker.info("* Task: " + url + " Start retry");
                 FileUtils.copyURLToFile(url, file);
-                logmaker.info("* " + file + " 重试成功");
+                logmaker.info("* Task: " + file + " Successfully retried");
             } catch (IOException | InterruptedException exception) {
                 if (file.delete()) {
-                    logmaker.error("* 下载任务" + url + " 重试失败,任务取消", exception);
+                    logmaker.error("* Task: " + url + " Error", exception);
                 }
             }
         }
@@ -57,21 +58,21 @@ public class DownloadTask extends GetLibraryPathAndUrl {
     public static void StartWGetDownloadTask(URL url, File file) {
         WGet wGet = new WGet(url, file);
         try {
-            logmaker.info("* " + url + " 开始下载");
+            logmaker.info("* Task Start: " + url);
             if (PlatformUtils.FileExistenceAndSize(file)) {
                 wGet.download();
             }
-            logmaker.info("* " + file + " 下载完成");
+            logmaker.info("* Task Finish: " + file);
         } catch (RuntimeException | IOException exception) {
-            logmaker.error("* 下载任务" + url + "遇到错误,正在重试");
+            logmaker.warn("* Task: " + url, exception);
             try {
                 TimeUnit.SECONDS.sleep(5);
-                logmaker.info("* " + url + " 开始重试");
+                logmaker.info("* Task: " + url + " Start retry");
                 wGet.download();
-                logmaker.info("* " + file + " 重试成功");
+                logmaker.info("* Task: " + file + " Successfully retried");
             } catch (InterruptedException | RuntimeException e) {
                 if (file.delete()) {
-                    logmaker.error("* 下载任务" + url + " 重试失败,任务取消", e);
+                    logmaker.error("* Task: " + url + " Error", e);
                 }
             }
         }
@@ -81,7 +82,7 @@ public class DownloadTask extends GetLibraryPathAndUrl {
         try {
             StartDownloadTask(new URL(url), file);
         } catch (MalformedURLException e) {
-            logmaker.error("* 错误:", e);
+            logmaker.error("* Error:", e);
         }
     }
 
@@ -89,7 +90,7 @@ public class DownloadTask extends GetLibraryPathAndUrl {
         try {
             StartDownloadTask(new URL(url), new File(file));
         } catch (MalformedURLException e) {
-            logmaker.error("* 错误:", e);
+            logmaker.error("* Error:", e);
         }
     }
 
@@ -113,7 +114,7 @@ public class DownloadTask extends GetLibraryPathAndUrl {
             try {
                 StartDownloadTask(GetLibUrl(lib_j), GetLibPath(lib_j));
             } catch (MalformedURLException e) {
-                logmaker.error("* 错误:", e);
+                logmaker.error("* Error:", e);
             }
 
         });
@@ -125,10 +126,10 @@ public class DownloadTask extends GetLibraryPathAndUrl {
                 try {
                     StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
                 } catch (MalformedURLException e) {
-                    logmaker.error("* 错误:", e);
+                    logmaker.error("* Error:", e);
                 }
             } catch (IOException e) {
-                logmaker.error("* 错误:", e);
+                logmaker.error("* Error:", e);
             }
 
         });

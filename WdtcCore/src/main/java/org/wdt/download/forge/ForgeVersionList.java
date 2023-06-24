@@ -1,9 +1,10 @@
 package org.wdt.download.forge;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.wdt.Launcher;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class ForgeVersionList {
 
     public List<String> getForgeVersion() throws IOException {
         List<String> VersionName = new ArrayList<>();
-        JSONArray VersionList = JSONArray.parseArray(PlatformUtils.GetUrlContent(getForgeListUrl()));
+        JSONArray VersionList = JSONArray.parseWdtArray(PlatformUtils.GetUrlContent(getForgeListUrl()));
         for (int i = 0; i < VersionList.size(); i++) {
             JSONObject VersionObject = VersionList.getJSONObject(i);
             VersionName.add(VersionObject.getString("version"));

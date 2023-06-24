@@ -1,9 +1,11 @@
 package org.wdt.download;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.wdt.Launcher;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,6 @@ import java.util.Objects;
 
 public class DownloadVersionGameFile extends DownloadTask {
     public final Launcher launcher;
-    private final FileUrl fileUrl = new FileUrl();
 
     public DownloadVersionGameFile(Launcher launcher) {
         super(launcher);
@@ -19,7 +20,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameVersionJson() throws IOException {
-        JSONArray VersionList = JSONObject.parseObject(PlatformUtils.GetUrlContent(fileUrl.getVersionManifest())).getJSONArray("versions");
+        JSONArray VersionList = JSONObject.parseWdtObject(PlatformUtils.GetUrlContent(FileUrl.getVersionManifest())).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
             if (Objects.equals(launcher.getVersion(), version_name)) {
@@ -29,8 +30,8 @@ public class DownloadVersionGameFile extends DownloadTask {
                 }
                 StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
                 if (launcher.getForgeDownloadTaskNoNull()) {
-                    JSONObject VersionJSONObject = PlatformUtils.FileToJSONObject(launcher.getVersionJson());
-                    PlatformUtils.PutKeyToFile(launcher.getVersionJson(), VersionJSONObject, "id",
+                    JSONObject VersionJSONObject = Utils.getJSONObject(launcher.getVersionJson());
+                    JSONObject.PutKetToFile(launcher.getVersionJson(), VersionJSONObject, "id",
                             launcher.getVersion() + "-" + launcher.getForgeDownloadTask().getForgeVersion());
                 }
             }
@@ -38,7 +39,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
         if (launcher.bmclapi()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), FileUrl.getBmcalapiCom());
@@ -47,7 +48,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadVersionJar() throws IOException {
-        String JarUrl = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client").getString("url");
+        String JarUrl = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client").getString("url");
         if (launcher.bmclapi()) {
             JarUrl = JarUrl.replaceAll(FileUrl.getPistonDataMojang(), FileUrl.getBmcalapiCom());
         }

@@ -15,6 +15,16 @@ public class Starter {
         }
     }
 
+    public static boolean getForgeSwitch() {
+        if (Objects.nonNull(System.getProperty("download.forge.true"))) {
+            return true;
+        } else if (Objects.nonNull(System.getProperty("download.forge.false"))) {
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     public static String getLauncherAuthor() {
         return LAUNCHER_AUTHOR;
     }

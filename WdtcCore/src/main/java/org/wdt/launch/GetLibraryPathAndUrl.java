@@ -1,9 +1,10 @@
 package org.wdt.launch;
 
-import com.alibaba.fastjson2.JSONObject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.wdt.Launcher;
 import org.wdt.download.FileUrl;
+import org.wdt.platform.gson.JSONObject;
 
 import java.io.File;
 import java.io.IOException;

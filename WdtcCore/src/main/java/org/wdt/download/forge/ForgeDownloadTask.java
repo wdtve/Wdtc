@@ -1,7 +1,6 @@
 package org.wdt.download.forge;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -12,6 +11,9 @@ import org.wdt.download.DownloadTask;
 import org.wdt.download.FileUrl;
 import org.wdt.download.dependency.DependencyDownload;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,7 +115,7 @@ public class ForgeDownloadTask {
         if (PlatformUtils.FileExistenceAndSize(getInstallProfilePath())) {
             getInstallProfile();
         }
-        return PlatformUtils.FileToJSONObject(getInstallProfilePath());
+        return Utils.getJSONObject(getInstallProfilePath());
     }
 
     public void DownloadInstallPrefileLibarary() throws IOException {
@@ -121,7 +123,7 @@ public class ForgeDownloadTask {
     }
 
     public void DownloadForgeLibraryFile(String FilePath) throws IOException {
-        JSONArray LibraryList = PlatformUtils.FileToJSONObject(FilePath).getJSONArray("libraries");
+        JSONArray LibraryList = Utils.getJSONObject(FilePath).getJSONArray("libraries");
         for (int i = 0; i < LibraryList.size(); i++) {
             JSONObject LibraryObject = LibraryList.getJSONObject(i);
             JSONObject LibraryArtifact = LibraryObject.getJSONObject("downloads").getJSONObject("artifact");

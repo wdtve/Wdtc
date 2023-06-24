@@ -23,7 +23,7 @@
 ### 构建方法:
 
 - 等gradle自动下载好依赖后(个人技术能力有限,不太会自己造轮子,所以依赖比较多)
-- 找到[WdtcMain](Wdtc/src/main/java/org/wdt/WdtcUI/WdtcMain.java)类文件里的main函数
+- 找到[WdtcMain](Wdtc/src/main/java/org/wdt/WdtcMain.java)类文件里的main函数
 
 ```java
 public static class WdtcMain {
