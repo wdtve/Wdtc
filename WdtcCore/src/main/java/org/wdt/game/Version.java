@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.game;
 
 
 import org.wdt.launch.GetGamePath;

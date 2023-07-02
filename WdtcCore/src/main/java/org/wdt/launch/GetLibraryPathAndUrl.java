@@ -2,8 +2,8 @@ package org.wdt.launch;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.wdt.Launcher;
 import org.wdt.download.FileUrl;
+import org.wdt.game.Launcher;
 import org.wdt.platform.gson.JSONObject;
 
 import java.io.File;

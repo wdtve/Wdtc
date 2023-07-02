@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.wdt.Version;
+import org.wdt.game.Version;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.File;
@@ -13,14 +13,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
-public class VersionJson {
+public class FabricVersionJson {
     private static final String FabricFileList = "https://meta.fabricmc.net/v2/versions/loader/%s/%s";
     private final String FabricVersionNumber;
     private final String GameVersionNumber;
     private final File versionJson;
 
 
-    public VersionJson(String FabricVersionNumber, Version version) {
+    public FabricVersionJson(String FabricVersionNumber, Version version) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.GameVersionNumber = version.getVersion();
         this.versionJson = new File(version.getVersionJson());

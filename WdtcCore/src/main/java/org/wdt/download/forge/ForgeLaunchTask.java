@@ -2,8 +2,9 @@ package org.wdt.download.forge;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.wdt.FilePath;
-import org.wdt.Launcher;
+import org.wdt.game.FilePath;
+import org.wdt.game.Launcher;
+import org.wdt.launch.ExtractFile;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
@@ -27,7 +28,7 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
     }
 
     public void getForgeVersionJson() {
-        unzipByInstallProfile(getForgeInstallJarPath(), getForgeVersionJsonPath());
+        ExtractFile.unZipBySpecifyFile(getForgeInstallJarPath(), getForgeVersionJsonPath());
     }
 
     public JSONObject getForgeVersionJsonObject() throws IOException {

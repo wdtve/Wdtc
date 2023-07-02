@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.WdtcUI.ErrorWin;
 import org.wdt.WdtcUI.HomeWin;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.Starter;
 
 import java.io.IOException;

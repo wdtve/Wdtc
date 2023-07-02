@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
+import org.wdt.game.FilePath;
 import org.wdt.platform.Starter;
 
 import java.io.IOException;

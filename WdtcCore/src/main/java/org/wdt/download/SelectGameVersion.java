@@ -2,10 +2,7 @@ package org.wdt.download;
 
 import javafx.scene.control.TextField;
 import org.apache.log4j.Logger;
-import org.wdt.Launcher;
-import org.wdt.download.forge.ForgeDownloadTask;
-import org.wdt.download.forge.ForgeInstallTask;
-import org.wdt.download.forge.ForgeLaunchTask;
+import org.wdt.game.Launcher;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -29,9 +26,7 @@ public class SelectGameVersion {
         DownloadGame.DownloadGameVersionJson();
         DownloadGame.DownloadGameAssetsListJson();
         DownloadGame.DownloadVersionJar();
-        if (launcher.getForgeDownloadTaskNoNull()) {
-            DownloadForge();
-        }
+        ModDonwloadTask.DownloadMod(launcher);
         DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
         LOGGER.debug("库下载完成");
         DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
@@ -41,18 +36,6 @@ public class SelectGameVersion {
         }
     }
 
-    private void DownloadForge() throws IOException {
-        ForgeDownloadTask download = launcher.getForgeDownloadTask();
-        ForgeInstallTask install = launcher.getForgeInstallTask();
-        ForgeLaunchTask forgeLaunchTask = launcher.getForgeLaunchTask();
-        download.DownloadInstallJar();
-        download.getInstallProfile();
-        download.DownloadInstallPrefileLibarary();
-        install.DownloadClientText();
-        install.InstallForge();
-        forgeLaunchTask.getForgeVersionJson();
-        forgeLaunchTask.DownloadVersionJsonLibarary();
-    }
 }
 
 

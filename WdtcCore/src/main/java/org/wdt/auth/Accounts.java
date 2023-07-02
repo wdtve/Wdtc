@@ -1,9 +1,9 @@
 package org.wdt.auth;
 
-import org.wdt.AboutSetting;
-import org.wdt.FilePath;
 import org.wdt.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.download.FileUrl;
+import org.wdt.game.FilePath;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.IOException;

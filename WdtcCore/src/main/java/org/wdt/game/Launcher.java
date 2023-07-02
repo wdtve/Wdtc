@@ -1,13 +1,12 @@
-package org.wdt;
+package org.wdt.game;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.auth.Accounts;
-import org.wdt.download.DownloadVersionGameFile;
+import org.wdt.download.fabric.FabricDownloadTask;
 import org.wdt.download.forge.ForgeDownloadTask;
-import org.wdt.download.forge.ForgeInstallTask;
-import org.wdt.download.forge.ForgeLaunchTask;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.File;
@@ -19,9 +18,11 @@ public class Launcher extends Version {
     private String Gameattribute;
     private String Jvmattribute;
     private String Librartattribute;
-    private ForgeDownloadTask DownloadTask = null;
+    private FabricDownloadTask FabricModDownloadTask;
+    private ModList.KindOfMod kind = ModList.KindOfMod.Original;
+    private ForgeDownloadTask ForgeModDownloadTask;
 
-    public Launcher(String version) throws IOException {
+    public Launcher(String version) {
         this(version, AboutSetting.GetDefaultGamePath());
     }
 
@@ -29,12 +30,30 @@ public class Launcher extends Version {
         super(version, here);
     }
 
-    public ForgeDownloadTask getForgeDownloadTask() {
-        return DownloadTask;
+    public FabricDownloadTask getFabricModDownloadTask() {
+        return FabricModDownloadTask;
     }
 
-    public void setDownloadTask(ForgeDownloadTask downloadTask) {
-        DownloadTask = downloadTask;
+    public void setFabricModDownloadTask(FabricDownloadTask fabricModDownloadTask) {
+        kind = ModList.KindOfMod.FABRIC;
+        this.FabricModDownloadTask = fabricModDownloadTask;
+    }
+
+    public ModList.KindOfMod getKind() {
+        return kind;
+    }
+
+    public void setKind(ModList.KindOfMod kind) {
+        this.kind = kind;
+    }
+
+    public ForgeDownloadTask getForgeDownloadTask() {
+        return ForgeModDownloadTask;
+    }
+
+    public void setForgeModDownloadTask(ForgeDownloadTask forgeModDownloadTask) {
+        kind = ModList.KindOfMod.FORGE;
+        ForgeModDownloadTask = forgeModDownloadTask;
     }
 
     public String getGameattribute() {
@@ -85,22 +104,6 @@ public class Launcher extends Version {
 
     public Accounts GetAccounts() throws IOException {
         return new Accounts();
-    }
-
-    public ForgeLaunchTask getForgeLaunchTask() {
-        return new ForgeLaunchTask(DownloadTask.getLauncher(), DownloadTask.getForgeVersion());
-    }
-
-    public ForgeInstallTask getForgeInstallTask() {
-        return new ForgeInstallTask(DownloadTask.getLauncher(), DownloadTask.getForgeVersion());
-    }
-
-    public DownloadVersionGameFile getDownloadVersionGameFile() throws IOException {
-        return new DownloadVersionGameFile(new Launcher(getVersion()));
-    }
-
-    public boolean getForgeDownloadTaskNoNull() {
-        return DownloadTask != null;
     }
 
     public void LaunchTask() throws IOException {

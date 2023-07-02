@@ -1,7 +1,8 @@
 package org.wdt.download;
 
 
-import org.wdt.Launcher;
+import org.wdt.game.Launcher;
+import org.wdt.game.ModList;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
@@ -29,11 +30,7 @@ public class DownloadVersionGameFile extends DownloadTask {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), FileUrl.getBmcalapiCom());
                 }
                 StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
-                if (launcher.getForgeDownloadTaskNoNull()) {
-                    JSONObject VersionJSONObject = Utils.getJSONObject(launcher.getVersionJson());
-                    JSONObject.PutKetToFile(launcher.getVersionJson(), VersionJSONObject, "id",
-                            launcher.getVersion() + "-" + launcher.getForgeDownloadTask().getForgeVersion());
-                }
+                ModList.putGameId(launcher);
             }
         }
     }

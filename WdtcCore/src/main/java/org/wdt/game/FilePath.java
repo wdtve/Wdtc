@@ -1,5 +1,6 @@
-package org.wdt;
+package org.wdt.game;
 
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONObject;
 

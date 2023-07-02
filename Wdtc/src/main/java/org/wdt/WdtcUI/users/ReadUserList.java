@@ -2,7 +2,7 @@ package org.wdt.WdtcUI.users;
 
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
+import org.wdt.game.FilePath;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.File;

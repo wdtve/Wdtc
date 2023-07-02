@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.wdt.Launcher;
 import org.wdt.download.SelectGameVersion;
+import org.wdt.game.Launcher;
 import org.wdt.platform.Starter;
 
 import java.io.IOException;

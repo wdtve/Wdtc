@@ -1,7 +1,7 @@
 package org.wdt.launch;
 
-import org.wdt.GetJavaPath;
-import org.wdt.Launcher;
+import org.wdt.game.Launcher;
+import org.wdt.platform.GetJavaPath;
 
 import java.io.IOException;
 import java.nio.file.Files;

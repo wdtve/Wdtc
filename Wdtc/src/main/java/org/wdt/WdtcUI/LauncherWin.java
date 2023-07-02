@@ -24,7 +24,13 @@ public class LauncherWin {
         Button deletVersion = new Button("删除版本");
         deletVersion.setLayoutX(451.0);
         deletVersion.setLayoutY(88.0);
-        deletVersion.setOnAction(event -> DeleteVersion.getStartList(MainStage));
+        deletVersion.setOnAction(event -> {
+            try {
+                DeleteVersion.getStartList(MainStage);
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
         Label warningDelet = new Label("版本删除就找不回来了哦");
         warningDelet.setLayoutX(417.0);
         warningDelet.setLayoutY(65.0);

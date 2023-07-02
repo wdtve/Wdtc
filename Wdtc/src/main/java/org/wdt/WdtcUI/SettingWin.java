@@ -10,8 +10,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.AboutSetting;
-import org.wdt.FilePath;
+import org.wdt.game.FilePath;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.Starter;
 

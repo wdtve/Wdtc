@@ -2,8 +2,8 @@ package org.wdt.auth.Yggdrasil;
 
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
-import org.wdt.FilePath;
 import org.wdt.download.DownloadTask;
+import org.wdt.game.FilePath;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.File;

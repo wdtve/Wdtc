@@ -5,8 +5,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
 import org.wdt.download.DownloadTask;
+import org.wdt.game.FilePath;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.platform;
 
 import org.apache.log4j.Logger;
 

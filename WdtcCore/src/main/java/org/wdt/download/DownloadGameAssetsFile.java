@@ -2,7 +2,7 @@ package org.wdt.download;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.Launcher;
+import org.wdt.game.Launcher;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONArray;
 

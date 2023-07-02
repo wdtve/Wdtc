@@ -5,10 +5,10 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.Launcher;
-import org.wdt.Version;
-import org.wdt.download.dependency.DependencyDownload;
-import org.wdt.download.fabric.VersionJson;
+import org.wdt.download.fabric.FabricVersionJson;
+import org.wdt.game.Launcher;
+import org.wdt.game.Version;
+import org.wdt.platform.DependencyDownload;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,8 +69,8 @@ public class test {
     @Test
     public void urlio() throws IOException {
         Version version = new Version("1.19.4");
-        VersionJson versionJson = new VersionJson("0.14.17", version);
-        versionJson.modify();
+        FabricVersionJson fabricVersionJson = new FabricVersionJson("0.14.17", version);
+        fabricVersionJson.modify();
     }
 
     @Test
@@ -101,8 +101,8 @@ public class test {
     public void isnull() throws IOException {
         DependencyDownload download = new DependencyDownload("[de.oceanlabs.mcp:mcp_config:1.19.4-20230314.122934:mappings@txt]");
         Launcher launcher = new Launcher("1.19.4");
-        download.setPath(launcher.GetGameLibraryPath());
-        System.out.println(download.libFilePath());
+        download.setDownloadPath(launcher.GetGameLibraryPath());
+        System.out.println(download.getLibraryFilePath());
     }
 
 

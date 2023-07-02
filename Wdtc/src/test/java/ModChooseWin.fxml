@@ -7,10 +7,14 @@
     <Label layoutX="283.0" layoutY="69.0" text="1.19.4"/>
     <Button layoutX="435.0" layoutY="337.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="107.0"
             text="安装游戏"/>
-    <Pane layoutX="65.0" layoutY="86.0" prefHeight="106.0" prefWidth="160.0">
+    <Pane layoutX="62.0" layoutY="96.0" prefHeight="87.0" prefWidth="160.0">
         <Label layoutX="36.0" layoutY="27.0" text="Forge : 不安装"/>
-        <Button layoutX="67.0" layoutY="53.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0"
-                text="-&gt;"/>
+        <Button layoutX="67.0" layoutY="53.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0" text="-&gt;"/>
         <Button layoutX="36.0" layoutY="53.0" mnemonicParsing="false" text="X"/>
+    </Pane>
+    <Pane layoutX="220.0" layoutY="96.0" prefHeight="87.0" prefWidth="160.0">
+        <Label layoutX="43.0" layoutY="27.0" text="Fabric:不安装"/>
+        <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" text="X"/>
+        <Button layoutX="73.0" layoutY="53.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0" text="-&gt;"/>
     </Pane>
 </Pane>

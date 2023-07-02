@@ -1,7 +1,7 @@
 package org.wdt.download.forge;
 
 
-import org.wdt.Launcher;
+import org.wdt.game.Launcher;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;

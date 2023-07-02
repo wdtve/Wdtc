@@ -1,16 +1,19 @@
 package org.wdt;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.EmptyFileFilter;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class list {
-    public static void main(String[] args) {
-        Collection<File> list = FileUtils.listFilesAndDirs(new File(System.getProperty("user.dir")), EmptyFileFilter.NOT_EMPTY, null);
-        for (File s : list) {
-            System.out.println(s.getName());
+    @Test
+    public void ep() {
+        String str = "fabric-loader-0.14.21-1.19.4";
+
+        Pattern r = Pattern.compile("(.+)-(.+)-(.+)");
+        Matcher m = r.matcher(str);
+        if (m.find()) {
+            System.out.println(m.group(1));
         }
     }
 }

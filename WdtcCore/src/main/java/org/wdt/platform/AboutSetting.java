@@ -1,4 +1,4 @@
-package org.wdt;
+package org.wdt.platform;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.game.FilePath;
 import org.wdt.platform.gson.Utils;
 
 import java.io.*;
@@ -81,8 +81,14 @@ public class AboutSetting {
         }
     }
 
-    public static String GetDefaultGamePath() throws IOException {
-        return Utils.getJSONObject(GetSettingFile()).getString("DefaultGamePath");
+    public static String GetDefaultGamePath() {
+        String DefaultGamePath = System.getenv("user.dir");
+        try {
+            DefaultGamePath = Utils.getJSONObject(GetSettingFile()).getString("DefaultGamePath");
+        } catch (IOException e) {
+            logmaker.error(e);
+        }
+        return DefaultGamePath;
     }
 
     public static JSONObject SettingObject() throws IOException {

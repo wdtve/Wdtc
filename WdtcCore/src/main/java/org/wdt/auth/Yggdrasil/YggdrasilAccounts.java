@@ -7,7 +7,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
+import org.wdt.game.FilePath;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.IOException;

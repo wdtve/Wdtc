@@ -5,6 +5,8 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
 import org.wdt.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.download.DownloadTask;
+import org.wdt.game.FilePath;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.Starter;
 

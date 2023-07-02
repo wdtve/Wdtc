@@ -3,13 +3,14 @@ package org.wdt.download.forge;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.wdt.FilePath;
-import org.wdt.GetJavaPath;
-import org.wdt.Launcher;
 import org.wdt.download.DownloadTask;
 import org.wdt.download.FileUrl;
-import org.wdt.download.dependency.DefaultDependency;
-import org.wdt.download.dependency.DependencyDownload;
+import org.wdt.game.FilePath;
+import org.wdt.game.Launcher;
+import org.wdt.launch.ExtractFile;
+import org.wdt.platform.DefaultDependency;
+import org.wdt.platform.DependencyDownload;
+import org.wdt.platform.GetJavaPath;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
@@ -59,7 +60,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                 if (ArgeStr.equals("{MINECRAFT_JAR}")) {
                     CommandLine.append(launcher.getVersionJar()).append(" ");
                 } else if (ArgeStr.equals("{BINPATCH}")) {
-                    unzipByInstallProfile(getForgeInstallJarPath(), ClientLzmaPath());
+                    ExtractFile.unZipBySpecifyFile(getForgeInstallJarPath(), ClientLzmaPath());
                     CommandLine.append(ClientLzmaPath()).append(" ");
                 } else if (ArgeStr.equals("{SIDE}")) {
                     CommandLine.append("client").append(" ");

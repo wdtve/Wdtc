@@ -1,6 +1,8 @@
 package org.wdt.launch;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.PlatformUtils;
 
@@ -11,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -36,6 +39,31 @@ public class ExtractFile {
                         fos.close();
                         in.close();
                     }
+                }
+            }
+            zip.close();
+        } catch (Exception e) {
+            logmaker.error("* 压缩包提取发生错误:", e);
+        }
+    }
+
+    public static void unZipBySpecifyFile(String ZipFile, String unFilePath) {
+        try {
+            File unZipPath = new File(unFilePath);
+            ZipFile zip = new ZipFile(new File(FilenameUtils.separatorsToWindows(ZipFile)));
+            for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
+                ZipEntry entry = (ZipEntry) entries.nextElement();
+                String name = entry.getName();
+                System.out.println(name);
+                System.out.println(unZipPath.getName());
+                if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
+                    File unfile = new File(FilenameUtils.separatorsToWindows(unFilePath));
+                    FileUtils.touch(unZipPath);
+                    InputStream in = zip.getInputStream(entry);
+                    FileOutputStream fos = new FileOutputStream(unfile);
+                    IOUtils.copy(in, fos);
+                    fos.close();
+                    in.close();
                 }
             }
             zip.close();

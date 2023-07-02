@@ -57,9 +57,13 @@ public class PlatformUtils extends FileUtils {
     }
 
     public static boolean FileExistenceAndSize(File file) throws IOException {
+        return FileExistenceAndSize(file, 0);
+    }
+
+    public static boolean FileExistenceAndSize(File file, long size) throws IOException {
         if (file.exists()) {
             if (file.isFile()) {
-                return sizeOf(file) == 0;
+                return sizeOf(file) == size;
             } else {
                 throw new IOException(file + "is not file!");
             }
@@ -67,6 +71,11 @@ public class PlatformUtils extends FileUtils {
             return true;
         }
     }
+
+    public static boolean FileExistenceAndSize(String path, long size) throws IOException {
+        return FileExistenceAndSize(new File(path), size);
+    }
+
 
     public static boolean FileExistenceAndSize(String filePath) throws IOException {
         return FileExistenceAndSize(new File(filePath));

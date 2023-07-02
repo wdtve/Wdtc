@@ -1,6 +1,6 @@
 package org.wdt.download;
 
-import org.wdt.AboutSetting;
+import org.wdt.platform.AboutSetting;
 
 public class FileUrl {
     private static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";

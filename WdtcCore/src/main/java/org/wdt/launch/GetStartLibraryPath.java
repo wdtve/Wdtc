@@ -1,11 +1,9 @@
 package org.wdt.launch;
 
 
-import org.apache.commons.io.FilenameUtils;
-import org.wdt.AboutSetting;
-import org.wdt.FilePath;
-import org.wdt.Launcher;
-import org.wdt.download.forge.ForgeLaunchTask;
+import org.wdt.game.FilePath;
+import org.wdt.game.Launcher;
+import org.wdt.platform.AboutSetting;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
@@ -19,7 +17,7 @@ import java.util.Objects;
 public class GetStartLibraryPath {
     private static StringBuilder ClassPathBuilder;
 
-    public static void getLibPath(Launcher launcher) throws IOException {
+    public static void getLibraryPath(Launcher launcher) throws IOException {
         ClassPathBuilder = new StringBuilder();
         GetLibraryPathAndUrl getLibraryPathAndUrl = new GetLibraryPathAndUrl(launcher);
         Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
@@ -49,28 +47,14 @@ public class GetStartLibraryPath {
                 }
             }
         }
-        if (launcher.getForgeDownloadTaskNoNull()) {
-            ForgeLaunchTask forgeLaunchTask = launcher.getForgeLaunchTask();
-            for (String s : forgeLaunchTask.getForgeLaunchLibrary()) {
-                Space(s);
-            }
-        }
+        ClassPathBuilder.append(AdditionalCommand.AdditionalLibrary(launcher));
         Add(launcher.getVersionJar());
-        if (launcher.getForgeDownloadTaskNoNull()) {
-            ForgeLaunchTask forgeLaunchTask = launcher.getForgeLaunchTask();
-            for (String s : forgeLaunchTask.getForgeLuanchJvm()) {
-                Add(FilenameUtils.separatorsToUnix(s));
-            }
-        }
+        ClassPathBuilder.append(AdditionalCommand.AdditionalJvm(launcher));
         Add(launcher.GetAccounts().GetJvm());
         if (AboutSetting.GetLlvmpipeSwitch()) {
             Add(LlbmpipeLoader());
         }
-        if (launcher.getForgeDownloadTaskNoNull()) {
-            Add("cpw.mods.bootstraplauncher.BootstrapLauncher");
-        } else {
-            Add(VersionJsonObject.getString("mainClass"));
-        }
+        ClassPathBuilder.append(AdditionalCommand.GameMainClass(launcher));
         launcher.setLibrartattribute(ClassPathBuilder);
     }
 

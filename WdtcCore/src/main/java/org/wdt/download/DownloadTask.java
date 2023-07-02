@@ -4,7 +4,7 @@ package org.wdt.download;
 import com.github.axet.wget.WGet;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.Launcher;
+import org.wdt.game.Launcher;
 import org.wdt.launch.GetLibraryPathAndUrl;
 import org.wdt.platform.PlatformUtils;
 import org.wdt.platform.gson.JSONObject;

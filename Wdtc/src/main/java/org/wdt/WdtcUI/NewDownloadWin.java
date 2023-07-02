@@ -8,11 +8,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.wdt.Launcher;
 import org.wdt.download.VersionList;
+import org.wdt.game.Launcher;
 import org.wdt.platform.Starter;
 
-import java.io.IOException;
 import java.util.List;
 
 public class NewDownloadWin {
@@ -34,13 +33,9 @@ public class NewDownloadWin {
                 list.getChildren().add(button);
                 button.setPrefWidth(440.0);
                 button.setOnAction(event -> {
-                    try {
-                        Launcher launcher = new Launcher(button.getText());
-                        ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
-                        Choose.setChooseWin();
-                    } catch (IOException e) {
-                        ErrorWin.setErrorWin(e);
-                    }
+                    Launcher launcher = new Launcher(button.getText());
+                    ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
+                    Choose.setChooseWin();
                 });
             }
         });

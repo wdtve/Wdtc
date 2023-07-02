@@ -1,9 +1,8 @@
 package org.wdt.launch;
 
 
-import org.wdt.Launcher;
 import org.wdt.auth.Accounts;
-import org.wdt.download.forge.ForgeLaunchTask;
+import org.wdt.game.Launcher;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
 
@@ -12,18 +11,18 @@ import java.io.IOException;
 public class GetGame {
     private static StringBuilder GameSet;
 
-    public static void Getgame(Launcher version) throws IOException {
+    public static void Getgame(Launcher launcher) throws IOException {
         GameSet = new StringBuilder();
-        Accounts accounts = version.GetAccounts();
-        JSONObject AssetIndexJson = Utils.getJSONObject(version.getVersionJson()).getJSONObject("assetIndex");
+        Accounts accounts = launcher.GetAccounts();
+        JSONObject AssetIndexJson = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         append("--username");
         append(accounts.GetUserName());
         append("--version");
-        append(version.getVersion());
+        append(launcher.getVersion());
         append("--gameDir");
-        append(version.getGamePath());
+        append(launcher.getGamePath());
         append("--assetsDir");
-        append(version.getGameAssetsdir());
+        append(launcher.getGameAssetsdir());
         append("--assetIndex");
         append(AssetIndexJson.getString("id"));
         append("--uuid");
@@ -32,15 +31,10 @@ public class GetGame {
         append(accounts.GetAccessToken());
         append("--clientId");
         append("${clientid}");
-        if (version.getForgeDownloadTaskNoNull()) {
-            ForgeLaunchTask forgeLaunchTask = version.getForgeLaunchTask();
-            for (String s : forgeLaunchTask.getForgeLaunchGame()) {
-                append(s);
-            }
-        }
+        GameSet.append(AdditionalCommand.AdditionalGame(launcher));
         append("--versionType");
         GameSet.append("Wdtc-dome");
-        version.setGameattribute(GameSet);
+        launcher.setGameattribute(GameSet);
     }
 
     private static void append(String str) {
