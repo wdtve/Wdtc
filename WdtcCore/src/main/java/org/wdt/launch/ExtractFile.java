@@ -54,8 +54,6 @@ public class ExtractFile {
             for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
-                System.out.println(name);
-                System.out.println(unZipPath.getName());
                 if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
                     File unfile = new File(FilenameUtils.separatorsToWindows(unFilePath));
                     FileUtils.touch(unZipPath);

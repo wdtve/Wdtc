@@ -14,43 +14,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class test {
     private static final Logger logmaker = Logger.getLogger(test.class);
 
-    static void function(File dir) {
-        File[] files = dir.listFiles();
-        if (Objects.nonNull(files)) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    function(file.getAbsoluteFile());
-                }
-                if (file.isFile() && "java.exe".equals(file.getName())) {
-                    File file1 = new File(file.getParent());
-                    try {
-                        List<String> allLines = Files.readAllLines(Paths.get(file1.getParent() + "/release"));
-                        for (String line : allLines) {
-                            Pattern p = Pattern.compile("JAVA_VERSION=");
-                            Matcher m = p.matcher(line);
-                            if (m.find()) {
-                                logmaker.info("* 已找到Java:" + file.getAbsolutePath() + "版本:" + line.replace("JAVA_VERSION=", "").replace("\"", ""));
-                            }
-                        }
-                    } catch (IOException e) {
-                        logmaker.info("* 已找到Java:" + file.getAbsolutePath());
-                    }
-                    break;
-                }
-            }
-        }
-    }
 
     public static void executeCmdCommand(String cmdCommand) {
         try {
@@ -91,10 +60,10 @@ public class test {
     }
 
     @Test
-    public void commonio() throws URISyntaxException {
-//        File file = new File("F:\\");
-//        function("java.exe", file);
-        System.out.println(new File(test.class.getResource("/jasd.json").toURI()));
+    public void commonio() throws IOException, InterruptedException {
+        String[] s = {"cmd", "/K cmd start", "C:\\Users\\yuwen\\.wdtc\\WdtcGameLauncherScript.bat"};
+        Runtime.getRuntime().exec(s);
+
     }
 
     @Test
@@ -104,6 +73,4 @@ public class test {
         download.setDownloadPath(launcher.GetGameLibraryPath());
         System.out.println(download.getLibraryFilePath());
     }
-
-
 }

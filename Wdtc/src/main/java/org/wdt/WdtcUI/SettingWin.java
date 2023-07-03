@@ -163,7 +163,7 @@ public class SettingWin extends AboutSetting {
         RadioButton FalseZhcn = new RadioButton("不启用");
         FalseZhcn.setLayoutX(139.0);
         FalseZhcn.setLayoutY(254.0);
-        FalseOpenGL.setOnAction(event -> {
+        FalseZhcn.setOnAction(event -> {
             PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "ZH-CN", false);
             TrueZhcn.setSelected(false);
             logmaker.info("* 取消将游戏设置为中文");

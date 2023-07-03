@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.wdt.download.SelectGameVersion;
 import org.wdt.game.FilePath;
 import org.wdt.game.Launcher;
+import org.wdt.game.ModList;
+import org.wdt.platform.Starter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,19 +15,26 @@ import java.io.InputStreamReader;
 public class LauncherGame {
     private static final File StartBat = FilePath.getStarterBat();
     private static final Logger logmaker = Logger.getLogger(LauncherGame.class);
+    private final Launcher launcher;
 
-    public static void bat(String file) throws IOException {
-        Runtime.getRuntime().exec("cmd.exe /C start " + file);
+    public LauncherGame(Launcher launcher) {
+        this.launcher = launcher;
     }
 
-    public static void LauncherVersion(Launcher launcher) {
+    public static void bat() throws IOException {
+        Runtime.getRuntime().exec("cmd.exe /C start " + StartBat.getCanonicalPath());
+    }
+
+    public void LauncherVersion() {
         try {
             logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
             launcher.LaunchTask();
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);
             try {
-                gameVersion.DownloadGame();
+                if (!ModList.GameModIsForge(launcher) || !Starter.getForgeSwitch()) {
+                    gameVersion.DownloadGame();
+                }
             } catch (Exception e) {
                 logmaker.error("错误:", e);
             }
@@ -38,24 +47,25 @@ public class LauncherGame {
             logmaker.info("* 启动脚本写入完成");
             if (launcher.log()) {
                 logmaker.info("* 开始运行启动脚本,日志:显示");
-                bat(StartBat.getCanonicalPath());
+                bat();
             } else {
                 logmaker.info("* 开始运行启动脚本,日志:不显示");
-                executeBatFile(StartBat.getCanonicalPath()).start();
+                executeBatFile().start();
             }
         } catch (Exception e) {
             logmaker.error("错误:", e);
         }
     }
 
-    public static Thread executeBatFile(String file) {
+    public Thread executeBatFile() {
         return new Thread(() -> {
             try {
-                Process process = Runtime.getRuntime().exec("cmd.exe /c" + file);
+                ProcessBuilder pb = new ProcessBuilder(StartBat.getCanonicalPath());
+                pb.directory(new File(launcher.getVersionPath()));
+                Process process = pb.start();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    System.out.println(line);
+                while (bufferedReader.readLine() != null) {
+                    System.out.println(bufferedReader.readLine());
                 }
                 process.destroy();
             } catch (Exception e) {

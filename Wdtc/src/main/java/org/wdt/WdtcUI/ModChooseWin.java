@@ -7,7 +7,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.wdt.game.Launcher;
 import org.wdt.game.ModList;
-import org.wdt.platform.Starter;
 
 import java.io.IOException;
 
@@ -34,12 +33,6 @@ public class ModChooseWin {
         ForgePane.setLayoutY(96.0);
         ForgePane.setPrefHeight(87.0);
         ForgePane.setPrefWidth(160.0);
-        if (ModList.GameModIsForge(launcher)) {
-            forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersion());
-            Fabric.setText("与Forge不兼容");
-        } else {
-            forge.setText("Forge : 不安装");
-        }
         forge.setLayoutX(36.0);
         forge.setLayoutY(27.0);
         JFXButton install = new JFXButton("->");
@@ -47,7 +40,6 @@ public class ModChooseWin {
         install.setLayoutY(53.0);
         install.setPrefHeight(23.0);
         install.setPrefWidth(47.0);
-        install.setDisable(!Starter.getForgeSwitch());
         install.setStyle(Consoler.BlackBorder());
         JFXButton cancel = new JFXButton("X");
         cancel.setLayoutX(36.0);
@@ -60,12 +52,6 @@ public class ModChooseWin {
         FabricPane.setLayoutY(96.0);
         FabricPane.setPrefHeight(87.0);
         FabricPane.setPrefWidth(160.0);
-        if (ModList.GameModIsFabric(launcher)) {
-            Fabric.setText("Fabric:" + launcher.getFabricModDownloadTask().getFabricVersionNumber());
-            forge.setText("Forge:与Fabric不兼容");
-        } else {
-            Fabric.setText("Fabric:不安装");
-        }
         Fabric.setLayoutX(43.0);
         Fabric.setLayoutY(27.0);
         JFXButton DownloadFabric = new JFXButton("->");
@@ -102,7 +88,8 @@ public class ModChooseWin {
         cancel.setOnAction(event -> {
             launcher.setKind(ModList.KindOfMod.Original);
             DownloadFabric.setDisable(false);
-            forge.setText("Forge:不安装");
+            forge.setText("Forge : 不安装");
+            Fabric.setText("Fabric : 不安装");
         });
         confirm.setOnAction(event -> {
             DownloadGameWin downloadGameWin = new DownloadGameWin(launcher);
@@ -111,7 +98,6 @@ public class ModChooseWin {
         DownloadFabric.setOnAction(event -> {
             try {
                 ModChoose Choose = new ModChoose(MainStage, launcher, ModList.KindOfMod.FABRIC);
-
                 Choose.setModChooser();
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -119,12 +105,25 @@ public class ModChooseWin {
         });
         CancelFabric.setOnAction(event -> {
             launcher.setKind(ModList.KindOfMod.Original);
-            if (Starter.getForgeSwitch()) {
-                forge.setDisable(false);
-            }
-            Fabric.setText("Fabric:不安装");
+            install.setDisable(false);
+            forge.setText("Forge : 不安装");
+            Fabric.setText("Fabric : 不安装");
 
         });
+        if (ModList.GameModIsForge(launcher)) {
+            forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersion());
+            Fabric.setText("Fabric : 与Forge不兼容");
+            DownloadFabric.setDisable(true);
+        } else {
+            forge.setText("Forge : 不安装");
+        }
+        if (ModList.GameModIsFabric(launcher)) {
+            Fabric.setText("Fabric : " + launcher.getFabricModDownloadTask().getFabricVersionNumber());
+            forge.setText("Forge : 与Fabric不兼容");
+            install.setDisable(true);
+        } else {
+            Fabric.setText("Fabric : 不安装");
+        }
         back.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
     }
 }

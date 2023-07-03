@@ -115,9 +115,8 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         logmaker.info("* Command Line:" + CommandLine(i));
         Process process = Runtime.getRuntime().exec("cmd.exe /c" + CommandLine(i));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            logmaker.info(line);
+        while (bufferedReader.readLine() != null) {
+            logmaker.info(bufferedReader.readLine());
         }
         process.destroy();
     }

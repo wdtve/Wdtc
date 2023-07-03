@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class StartVersionList extends LauncherGame {
+public class StartVersionList {
 
     private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
     private static Label start_label;
@@ -54,7 +54,7 @@ public class StartVersionList extends LauncherGame {
                         logmaker.info("* 开始启动");
                         Launcher launcher = new Launcher(button.getText());
                         ModList.getModTask(launcher);
-                        new Thread(() -> LauncherVersion(launcher)).start();
+                        new Thread(() -> new LauncherGame(launcher).LauncherVersion()).start();
                         textField.setText(FilePath.getStarterBat().getCanonicalPath());
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);
