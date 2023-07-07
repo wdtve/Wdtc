@@ -13,7 +13,7 @@ public class PostTest {
         YggdrasilAccounts accounts = new YggdrasilAccounts("https://littleskin.cn", "Wd_t", "zjh7454188");
 //        YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(accounts);
 //        yggdrasilTextures.DownloadUserSkin();
-        accounts.WriteYggdrasilFile();
+        accounts.sendPostWithJson();
     }
 
     @Test

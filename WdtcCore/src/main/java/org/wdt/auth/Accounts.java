@@ -53,4 +53,9 @@ public class Accounts {
         }
     }
 
+    public enum AccountsType {
+        OFFLINE,
+        YGGDRASIL
+    }
+
 }

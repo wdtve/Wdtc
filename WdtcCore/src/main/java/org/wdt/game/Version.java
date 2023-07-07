@@ -8,15 +8,15 @@ import org.wdt.platform.gson.Utils;
 import java.io.IOException;
 
 public class Version extends GetGamePath {
-    private static String version;
+    private final String version;
 
     public Version(String version) {
-        Version.version = version;
+        this.version = version;
     }
 
     public Version(String version, String here) {
         super(here);
-        Version.version = version;
+        this.version = version;
     }
 
     public String getVersion() {
@@ -54,4 +54,9 @@ public class Version extends GetGamePath {
     public String getGameOptionsFile() {
         return getGamePath() + "options.txt";
     }
+
+    public String getGameModsPath() {
+        return getGamePath() + "mods\\";
+    }
+
 }

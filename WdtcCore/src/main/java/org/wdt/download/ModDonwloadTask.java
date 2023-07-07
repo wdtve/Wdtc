@@ -26,6 +26,9 @@ public class ModDonwloadTask extends ModList {
     private static void DownloadFabric(Launcher launcher) throws IOException {
         FabricDownloadTask fabricDownloadTask = launcher.getFabricModDownloadTask();
         fabricDownloadTask.DownloadFile();
+        if (fabricDownloadTask.getAPIDownloadTaskNoNull()) {
+            fabricDownloadTask.getAPIDownloadTask().DownloadFabricAPI();
+        }
     }
 
     public static void DownloadMod(Launcher launcher) throws IOException {

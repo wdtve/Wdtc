@@ -29,13 +29,13 @@ public class FilePath {
 
 
     public static File getStarterBat() {
-        return new File(WDTC_CONFIG + "/WdtcGameLauncherScript.bat");
+        return new File(getWdtcCache() + "/WdtcGameLauncherScript.bat");
     }
 
     public static File getAuthlibInjector() throws IOException {
         String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
         String authlib_injector_url = JSONObject.parseWdtObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR + "/artifact/latest.json")).getString("download_url");
-        return new File(WDTC_CONFIG + "/" + authlib_injector_url.substring(authlib_injector_url.lastIndexOf("/") + 1));
+        return new File(getWdtcImplementationPath() + "/" + authlib_injector_url.substring(authlib_injector_url.lastIndexOf("/") + 1));
     }
 
     public static File getUsersJson() {
@@ -44,7 +44,7 @@ public class FilePath {
 
 
     public static File getLlbmpipeLoader() {
-        return new File(WDTC_CONFIG + "/llvmpipe-loader.jar");
+        return new File(getWdtcImplementationPath() + "/llvmpipe-loader.jar");
     }
 
     public static File getWdtcCache() {
@@ -52,7 +52,11 @@ public class FilePath {
     }
 
     public static File getJavaHomeJarFile() {
-        return new File(WDTC_CONFIG + "/WdtcGetJavaHome.jar");
+        return new File(getWdtcImplementationPath() + "/WdtcGetJavaHome.jar");
+    }
+
+    public static File getWdtcImplementationPath() {
+        return new File(WDTC_CONFIG + "/implementation");
     }
 
 }

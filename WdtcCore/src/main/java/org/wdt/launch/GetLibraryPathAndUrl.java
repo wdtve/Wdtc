@@ -39,10 +39,8 @@ public class GetLibraryPathAndUrl {
         String natives_lib_url = natives_os.getString("url");
         if (launcher.bmclapi()) {
             natives_lib_url = natives_lib_url.replaceAll(MOJANG_Libraries, BMCLAPI_Libraries);
-            return new URL(natives_lib_url);
-        } else {
-            return new URL(natives_lib_url);
         }
+        return new URL(natives_lib_url);
     }
 
     public File GetLibPath(JSONObject lib_j) {
@@ -58,10 +56,8 @@ public class GetLibraryPathAndUrl {
         String lib_url = artifact_j.getString("url");
         if (launcher.bmclapi()) {
             lib_url = lib_url.replaceAll(MOJANG_Libraries, BMCLAPI_Libraries);
-            return new URL(lib_url);
-        } else {
-            return new URL(lib_url);
         }
+        return new URL(lib_url);
     }
 
 }

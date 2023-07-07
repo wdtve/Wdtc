@@ -11,7 +11,6 @@ import org.wdt.game.FilePath;
 import org.wdt.platform.PlatformUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class YggdrasilAccounts {
     private final Logger logmaker = Logger.getLogger(YggdrasilAccounts.class);
@@ -28,8 +27,7 @@ public class YggdrasilAccounts {
     public YggdrasilAccounts() {
     }
 
-    public String sendPostWithJson() throws IOException {
-        HashMap<String, String> headers = new HashMap<>(3);
+    public void sendPostWithJson() throws IOException {
         String requestUrl = url + "/api/yggdrasil/authserver/authenticate";
         String jsonStr = "{" +
                 "\"username\":\"" + username + "\"," +
@@ -40,24 +38,21 @@ public class YggdrasilAccounts {
                 "\"version\":1" +
                 "}" +
                 "}";
-        headers.put("content-type", "application/json");
-        String jsonResult;
         HttpClient client = new HttpClient();
         client.getHttpConnectionManager().getParams().setConnectionTimeout(3 * 1000);
         client.getHttpConnectionManager().getParams().setSoTimeout(3 * 60 * 1000);
         client.getParams().setContentCharset("UTF-8");
         PostMethod postMethod = new PostMethod(requestUrl);
-        postMethod.setRequestHeader("content-type", headers.get("content-type"));
-        StringRequestEntity requestEntity = new StringRequestEntity(jsonStr, headers.get("content-type"), "UTF-8");
+        postMethod.setRequestHeader("content-type", "application/json");
+        StringRequestEntity requestEntity = new StringRequestEntity(jsonStr, "application/json", "UTF-8");
         postMethod.setRequestEntity(requestEntity);
         int status = client.executeMethod(postMethod);
         if (status == HttpStatus.SC_OK) {
-            jsonResult = postMethod.getResponseBodyAsString();
+            FileUtils.writeStringToFile(FilePath.getYggdrasilFile(), postMethod.getResponseBodyAsString(), "UTF-8");
         } else {
             throw new RuntimeException("接口连接失败！");
         }
 
-        return jsonResult;
     }
 
     public String getUrl() {
@@ -89,9 +84,6 @@ public class YggdrasilAccounts {
         return YggdrasilFileObject().getString("accessToken");
     }
 
-    public void WriteYggdrasilFile() throws IOException {
-        FileUtils.writeStringToFile(FilePath.getYggdrasilFile(), sendPostWithJson(), "UTF-8");
-    }
 
     public JSONObject YggdrasilFileObject() throws IOException {
         return PlatformUtils.FileToJSONObject(FilePath.getYggdrasilFile());

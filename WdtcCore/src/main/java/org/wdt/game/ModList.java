@@ -46,6 +46,7 @@ public class ModList {
     public enum KindOfMod {
         Original,
         FABRIC,
+        FABRICAPI,
         FORGE
     }
 

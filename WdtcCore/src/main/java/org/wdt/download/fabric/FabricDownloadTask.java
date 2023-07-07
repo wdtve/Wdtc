@@ -13,6 +13,7 @@ public class FabricDownloadTask extends FabricFileList {
     private final String FabricMavenUrl = "https://maven.fabricmc.net/";
     private final String BmclMavenUrl = FileUrl.getBmclapiLibraries();
     private final Launcher launcher;
+    private FabricAPIDownloadTask APIDownloadTask = null;
 
     public FabricDownloadTask(String FabricVersionNumber, String GameVersionNumber) {
         super(FabricVersionNumber, GameVersionNumber);
@@ -45,6 +46,18 @@ public class FabricDownloadTask extends FabricFileList {
                 DownloadTask.StartDownloadTask(dependency.getLibraryUrl(), dependency.getLibraryFile());
             }
         }
+    }
+
+    public FabricAPIDownloadTask getAPIDownloadTask() {
+        return APIDownloadTask;
+    }
+
+    public void setAPIDownloadTask(FabricAPIDownloadTask APIDownloadTask) {
+        this.APIDownloadTask = APIDownloadTask;
+    }
+
+    public boolean getAPIDownloadTaskNoNull() {
+        return APIDownloadTask != null;
     }
 
 }

@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.game.FilePath;
@@ -24,12 +24,12 @@ import java.util.Objects;
 public class StartVersionList {
 
     private static final Logger logmaker = Logger.getLogger(StartVersionList.class);
-    private static Label start_label;
-    private static TextField textField;
+    private final Label start_label;
+    private final TextField textField;
 
     public StartVersionList(Label start_label, TextField textField) {
-        StartVersionList.start_label = start_label;
-        StartVersionList.textField = textField;
+        this.start_label = start_label;
+        this.textField = textField;
     }
 
     public void getStartList(Stage MainStage) {
@@ -40,13 +40,12 @@ public class StartVersionList {
         GetGamePath GetPath = new GetGamePath(AboutSetting.GetDefaultGamePath());
         File version_path = new File(GetPath.getGameVersionPath());
         File[] files = version_path.listFiles();
-
         if (Objects.nonNull(files)) {
             for (File file2 : files) {
                 Button button = new Button(file2.getName());
                 vBox.getChildren().add(button);
                 button.setMaxSize(100, 50);
-                button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                button.setOnAction(event -> {
                     vBox.getChildren().clear();
                     stage.close();
                     try {
@@ -69,6 +68,8 @@ public class StartVersionList {
             stage.setTitle("Start Version List");
             stage.setScene(new Scene(sp));
             stage.setResizable(false);
+            stage.initOwner(MainStage);
+            stage.initModality(Modality.WINDOW_MODAL);
             logmaker.info("* 版本列表加载成功");
             stage.show();
             stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());

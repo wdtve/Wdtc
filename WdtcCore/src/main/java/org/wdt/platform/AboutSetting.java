@@ -21,7 +21,7 @@ public class AboutSetting {
     private static final Logger logmaker = Logger.getLogger(AboutSetting.class);
 
     public static File GetSettingFile() {
-        return new File(System.getProperty("user.home") + "\\.wdtc\\setting\\setting.json");
+        return new File(FilePath.getWdtcConfig() + "/setting/setting.json");
     }
 
     public static boolean GetBmclSwitch() {
@@ -114,7 +114,7 @@ public class AboutSetting {
     public static Thread RunGetJavaHome() {
         try {
             if (PlatformUtils.FileExistenceAndSize(FilePath.getJavaHomeJarFile())) {
-                InputStream inputStream = AboutSetting.class.getResourceAsStream("/WdtcGetJavaHome.jar");
+                InputStream inputStream = AboutSetting.class.getResourceAsStream("/WdtcGetJavaHome-all.jar");
                 FileOutputStream outputStream = new FileOutputStream(FilePath.getJavaHomeJarFile());
                 IOUtils.copy(requireNonNull(inputStream), outputStream);
             }

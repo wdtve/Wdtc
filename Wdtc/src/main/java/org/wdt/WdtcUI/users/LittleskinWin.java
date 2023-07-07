@@ -64,7 +64,7 @@ public class LittleskinWin {
             } else {
                 try {
                     YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(FileUrl.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
-                    yggdrasilAccounts.WriteYggdrasilFile();
+                    yggdrasilAccounts.sendPostWithJson();
                     try {
                         Map<String, String> StringMap = new HashMap<>();
                         StringMap.put("userName", Inputusername.getText());

@@ -14,7 +14,7 @@ repositories {
 }
 tasks.jar {
     enabled = true
-    dependsOn(tasks["shadowJar"])
+    tasks.shadowJar
 }
 tasks.withType<ShadowJar> {
     manifest.attributes.apply {
@@ -31,3 +31,4 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+defaultTasks("shadowJar")

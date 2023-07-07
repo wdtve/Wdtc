@@ -20,6 +20,11 @@ sourceSets {
 }
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    copy {
+        from("../libs/WdtcGetJavaHome/build/libs/WdtcGetJavaHome-all.jar")
+        into("/build/resources/main")
+
+    }
 }
 dependencies {
     implementation(project(":DependencyDownloader"))

@@ -4,8 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.download.SelectGameVersion;
@@ -19,25 +19,22 @@ import java.util.Objects;
 
 public class CompletionGame {
     private static final Logger logmaker = Logger.getLogger(CompletionGame.class);
-    private static final Stage stage = new Stage();
-
-    private static final VBox V_BOX = new VBox();
-    private static final ScrollPane SCROLL_PANE = new ScrollPane();
-    private static final Scene SCENE = new Scene(SCROLL_PANE);
 
 
     public static void CompletionGameVersion(Stage MainStage) {
+        Stage stage = new Stage();
+        VBox vBox = new VBox();
+        ScrollPane sp = new ScrollPane();
         GetGamePath getGamePath = new GetGamePath(AboutSetting.GetDefaultGamePath());
         File version_path = new File(getGamePath.getGameVersionPath());
         File[] files = version_path.listFiles();
         if (Objects.nonNull(files)) {
-
             for (File file2 : files) {
                 Button button = new Button(file2.getName());
-                V_BOX.getChildren().add(button);
+                vBox.getChildren().add(button);
                 button.setMaxSize(100, 50);
-                button.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    V_BOX.getChildren().clear();
+                button.setOnAction(event -> {
+                    vBox.getChildren().clear();
                     stage.close();
                     try {
                         Launcher version = new Launcher(button.getText());
@@ -49,15 +46,17 @@ public class CompletionGame {
                     }
                 });
             }
-            SCROLL_PANE.setContent(V_BOX);
+            sp.setContent(vBox);
             stage.setHeight(500);
             stage.setWidth(500);
             stage.getIcons().add(new Image("ico.jpg"));
             stage.setTitle("Start Version List");
-            stage.setScene(SCENE);
+            stage.setScene(new Scene(sp));
             stage.setResizable(false);
+            stage.initOwner(MainStage);
+            stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
-            stage.setOnCloseRequest(windowEvent -> V_BOX.getChildren().clear());
+            stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
         } else {
             VersionDirNull.setNullWin(MainStage);
         }

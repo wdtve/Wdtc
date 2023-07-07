@@ -33,9 +33,7 @@ public class ExtractFile {
                         Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream fos = new FileOutputStream(unfile);
-                        int len;
-                        byte[] buf = new byte[1024];
-                        while ((len = in.read(buf)) != -1) fos.write(buf, 0, len);
+                        IOUtils.copy(in, fos);
                         fos.close();
                         in.close();
                     }
@@ -55,6 +53,7 @@ public class ExtractFile {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String name = entry.getName();
                 if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
+                    logmaker.info("* 提取 " + unZipPath + " 中");
                     File unfile = new File(FilenameUtils.separatorsToWindows(unFilePath));
                     FileUtils.touch(unZipPath);
                     InputStream in = zip.getInputStream(entry);

@@ -7,6 +7,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.wdt.download.fabric.FabricAPIDownloadTask;
+import org.wdt.download.fabric.FabricAPIVersionList;
 import org.wdt.download.fabric.FabricDownloadTask;
 import org.wdt.download.fabric.FabricVersionList;
 import org.wdt.download.forge.ForgeDownloadTask;
@@ -23,15 +25,17 @@ public class ModChoose {
     private final Stage MainStage;
     private final Launcher launcher;
 
-    public ModChoose(Stage mainStage, Launcher launcher, ModList.KindOfMod kind) {
+    public ModChoose(ModList.KindOfMod kind, Stage MainStage, Launcher launcher) {
         this.kind = kind;
-        MainStage = mainStage;
+        this.MainStage = MainStage;
         this.launcher = launcher;
     }
 
     public List<String> ModVersionList() throws IOException {
         if (kind == ModList.KindOfMod.FORGE) {
             return new ForgeVersionList(launcher).getForgeVersion();
+        } else if (kind == ModList.KindOfMod.FABRICAPI) {
+            return new FabricAPIVersionList(launcher).getFabricAPIVersionList();
         } else {
             return FabricVersionList.getList();
         }
@@ -47,25 +51,11 @@ public class ModChoose {
         tips.setLayoutX(149.0);
         tips.setLayoutY(67.0);
         list.setLayoutY(134.0);
-        list.setPrefHeight(316.0);
-        list.setPrefWidth(600.0);
+        list.setPrefSize(600, 316);
         for (String s : ModVersionList()) {
-            JFXButton VersionButton = new JFXButton(s);
-            VersionButton.setStyle("-fx-border-color: #000000");
-            VersionButton.setPrefWidth(600.0);
-            VersionButton.setOnAction(event -> {
-                if (kind == ModList.KindOfMod.FORGE) {
-                    launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, s));
-                } else if (kind == ModList.KindOfMod.FABRIC) {
-                    launcher.setFabricModDownloadTask(new FabricDownloadTask(s, launcher));
-                }
-                ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
-                Choose.setChooseWin();
-                ButtonList.getChildren().clear();
-            });
+            JFXButton VersionButton = getVersionButton(s, ButtonList);
             ButtonList.getChildren().add(VersionButton);
         }
-
         list.setContent(ButtonList);
         pane.getChildren().addAll(list, tips, back);
         pane.setBackground(Consoler.getBackground());
@@ -74,5 +64,24 @@ public class ModChoose {
             ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
             Choose.setChooseWin();
         });
+    }
+
+    private JFXButton getVersionButton(String s, VBox ButtonList) {
+        JFXButton VersionButton = new JFXButton(s);
+        VersionButton.setStyle("-fx-border-color: #000000");
+        VersionButton.setPrefWidth(600.0);
+        VersionButton.setOnAction(event -> {
+            if (kind == ModList.KindOfMod.FORGE) {
+                launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, s));
+            } else if (kind == ModList.KindOfMod.FABRIC) {
+                launcher.setFabricModDownloadTask(new FabricDownloadTask(s, launcher));
+            } else if (kind == ModList.KindOfMod.FABRICAPI) {
+                launcher.getFabricModDownloadTask().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, s));
+            }
+            ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
+            Choose.setChooseWin();
+            ButtonList.getChildren().clear();
+        });
+        return VersionButton;
     }
 }

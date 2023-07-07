@@ -37,6 +37,7 @@ public class NewDownloadWin {
                     ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
                     Choose.setChooseWin();
                 });
+
             }
         });
         sp.setContent(list);
