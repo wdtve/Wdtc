@@ -27,10 +27,10 @@ public class ModList {
     public static void putGameId(Launcher launcher) throws IOException {
         JSONObject VersionJSONObject = Utils.getJSONObject(launcher.getVersionJson());
         if (launcher.getKind() == ModList.KindOfMod.FORGE) {
-            JSONObject.PutKetToFile(launcher.getVersionJson(), VersionJSONObject, "id",
+            JSONObject.PutKeyToFile(launcher.getVersionJson(), VersionJSONObject, "id",
                     launcher.getVersion() + "-forge-" + launcher.getForgeDownloadTask().getForgeVersion());
         } else if (launcher.getKind() == ModList.KindOfMod.FABRIC) {
-            JSONObject.PutKetToFile(launcher.getVersionJson(), VersionJSONObject, "id",
+            JSONObject.PutKeyToFile(launcher.getVersionJson(), VersionJSONObject, "id",
                     launcher.getVersion() + "-fabric-" + launcher.getFabricModDownloadTask().getFabricVersionNumber());
         }
     }

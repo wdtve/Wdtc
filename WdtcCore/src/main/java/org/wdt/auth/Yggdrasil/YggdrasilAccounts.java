@@ -1,30 +1,28 @@
 package org.wdt.auth.Yggdrasil;
 
-import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.auth.Users;
 import org.wdt.game.FilePath;
-import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
 
 public class YggdrasilAccounts {
     private final Logger logmaker = Logger.getLogger(YggdrasilAccounts.class);
-    private String url;
-    private String username;
+    private final String url;
+    private final String username;
     private String password;
 
     public YggdrasilAccounts(String url, String username, String password) {
         this.password = password;
         this.username = username;
         this.url = url;
-    }
-
-    public YggdrasilAccounts() {
     }
 
     public void sendPostWithJson() throws IOException {
@@ -52,7 +50,6 @@ public class YggdrasilAccounts {
         } else {
             throw new RuntimeException("接口连接失败！");
         }
-
     }
 
     public String getUrl() {
@@ -86,6 +83,19 @@ public class YggdrasilAccounts {
 
 
     public JSONObject YggdrasilFileObject() throws IOException {
-        return PlatformUtils.FileToJSONObject(FilePath.getYggdrasilFile());
+        return Utils.getJSONObject(FilePath.getYggdrasilFile());
     }
+
+    public void WriteUserJson() throws IOException {
+        sendPostWithJson();
+        Users users = new Users();
+        users.setType("Yggdrasil");
+        users.setUserName(username);
+        users.setUuid(GetUserUuid());
+        users.setAccessToken(GetAccessToken());
+        users.setClientToken(GetClientToken());
+        FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(users), "UTF-8");
+        logmaker.info(users);
+    }
+
 }

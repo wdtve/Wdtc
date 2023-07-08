@@ -1,57 +1,54 @@
 package org.wdt.auth;
 
-import org.wdt.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.download.FileUrl;
 import org.wdt.game.FilePath;
-import org.wdt.platform.AboutSetting;
 import org.wdt.platform.PlatformUtils;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
 
 public class Accounts {
-    private final boolean offline;
+    private final AccountsType type;
 
     public Accounts() throws IOException {
-        this.offline = AboutSetting.GetUserType().equals("offline");
-    }
-
-    public String GetUserUUID() throws IOException {
-        if (offline) {
-            OfflineAccounts offlineAccounts = new OfflineAccounts(AboutSetting.UserName());
-            return offlineAccounts.GetUserUuid();
+        if (getUserType().equals("offline")) {
+            type = AccountsType.OFFLINE;
         } else {
-            YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
-            return yggdrasilAccounts.GetUserUuid();
+            type = AccountsType.YGGDRASIL;
         }
     }
 
-    public String GetUserName() throws IOException {
-        if (offline) {
-            return AboutSetting.UserName();
-        } else {
-            YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
-            return yggdrasilAccounts.GetUserName();
-        }
+    public String getUserUUID() throws IOException {
+        return UserSetting().getString("Uuid");
     }
 
-    public String GetAccessToken() throws IOException {
-        if (offline) {
-            OfflineAccounts offlineAccounts = new OfflineAccounts(AboutSetting.UserName());
-            return offlineAccounts.GetAccessToken();
-        } else {
-            YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts();
-            return yggdrasilAccounts.GetAccessToken();
-        }
+
+    public String getAccessToken() throws IOException {
+        return UserSetting().getString("AccessToken");
     }
 
-    public String GetJvm() throws IOException {
-        if (offline) {
+    public String getJvm() throws IOException {
+        if (type == AccountsType.OFFLINE) {
             return "";
         } else {
             return "-javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
                     PlatformUtils.StringToBase64(PlatformUtils.GetUrlContent(FileUrl.getLittleskinApi()));
         }
     }
+
+    public String getUserName() throws IOException {
+        return UserSetting().getString("UserName");
+    }
+
+    public JSONObject UserSetting() throws IOException {
+        return Utils.getJSONObject(FilePath.getUsersJson());
+    }
+
+    public String getUserType() throws IOException {
+        return UserSetting().getString("Type");
+    }
+
 
     public enum AccountsType {
         OFFLINE,

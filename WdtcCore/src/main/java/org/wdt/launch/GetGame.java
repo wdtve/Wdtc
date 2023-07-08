@@ -3,7 +3,6 @@ package org.wdt.launch;
 
 import org.wdt.auth.Accounts;
 import org.wdt.game.Launcher;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
 
 import java.io.IOException;
@@ -14,9 +13,8 @@ public class GetGame {
     public static void Getgame(Launcher launcher) throws IOException {
         GameSet = new StringBuilder();
         Accounts accounts = launcher.GetAccounts();
-        JSONObject AssetIndexJson = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         append("--username");
-        append(accounts.GetUserName());
+        append(accounts.getUserName());
         append("--version");
         append(launcher.getVersion());
         append("--gameDir");
@@ -24,11 +22,11 @@ public class GetGame {
         append("--assetsDir");
         append(launcher.getGameAssetsdir());
         append("--assetIndex");
-        append(AssetIndexJson.getString("id"));
+        append(Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex").getString("id"));
         append("--uuid");
-        append(accounts.GetUserUUID());
+        append(accounts.getUserUUID());
         append("--accessToken");
-        append(accounts.GetAccessToken());
+        append(accounts.getAccessToken());
         append("--clientId");
         append("${clientid}");
         GameSet.append(AdditionalCommand.AdditionalGame(launcher));

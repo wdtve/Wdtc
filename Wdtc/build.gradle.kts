@@ -29,9 +29,14 @@ tasks.withType<ShadowJar> {
 }
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    copy {
+        from("../WdtcCore/src/main/resources/log4j.properties")
+        into("build/resources/main")
+    }
 }
 dependencies {
     implementation(project(":WdtcCore"))
+    implementation(project(":GsonOrFastJson"))
     implementation("commons-io:commons-io:2.13.0")
     implementation("log4j:log4j:1.2.17")
     implementation("com.github.axet:wget:1.7.0")

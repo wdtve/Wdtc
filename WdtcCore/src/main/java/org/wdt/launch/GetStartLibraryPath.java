@@ -50,7 +50,7 @@ public class GetStartLibraryPath {
         ClassPathBuilder.append(AdditionalCommand.AdditionalLibrary(launcher));
         Add(launcher.getVersionJar());
         ClassPathBuilder.append(AdditionalCommand.AdditionalJvm(launcher));
-        Add(launcher.GetAccounts().GetJvm());
+        Add(launcher.GetAccounts().getJvm());
         if (AboutSetting.GetLlvmpipeSwitch()) {
             Add(LlbmpipeLoader());
         }

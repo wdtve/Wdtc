@@ -1,5 +1,6 @@
 package org.wdt;
 
+
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
@@ -39,7 +40,7 @@ public class WdtcMain {
     }
 
     public static void Ergodic() throws IOException {
-        JSONObject SettingObject = AboutSetting.SettingObject();
+        JSONObject SettingObject = AboutSetting.SettingObject().getFastJSONObject();
         JSONArray JavaList = SettingObject.getJSONArray("JavaPath");
         for (int i = 0; i < JavaList.size(); i++) {
             if (PlatformUtils.FileExistenceAndSize(JavaList.getString(i))) {

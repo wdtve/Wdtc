@@ -1,12 +1,13 @@
 package org.wdt.platform;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
 import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.game.FilePath;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
 
 import java.io.*;
@@ -92,24 +93,14 @@ public class AboutSetting {
     }
 
     public static JSONObject SettingObject() throws IOException {
-        return PlatformUtils.FileToJSONObject(GetSettingFile());
+        return Utils.getJSONObject(GetSettingFile());
     }
 
     public static JSONArray JavaList() throws IOException {
         return SettingObject().getJSONArray("JavaPath");
     }
 
-    public static String UserName() throws IOException {
-        return UserSetting().getString("userName");
-    }
 
-    public static JSONObject UserSetting() throws IOException {
-        return PlatformUtils.FileToJSONObject(FilePath.getUsersJson());
-    }
-
-    public static String GetUserType() throws IOException {
-        return UserSetting().getString("type");
-    }
 
     public static Thread RunGetJavaHome() {
         try {

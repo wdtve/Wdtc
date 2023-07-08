@@ -22,12 +22,16 @@ public class JSONObject extends JSON {
         return new Gson().toJson(o);
     }
 
-    public static void PutKetToFile(File file, JSONObject jsonObject, String str, String put) throws IOException {
+    public static void PutKeyToFile(File file, JSONObject jsonObject, String str, String put) throws IOException {
         FileUtils.writeStringToFile(file, jsonObject.put(str, put).toString(), "UTF-8");
     }
 
-    public static void PutKetToFile(String s, JSONObject jsonObject, String str, String put) throws IOException {
-        PutKetToFile(new File(s), jsonObject, str, put);
+    public static void PutKeyToFile(String s, JSONObject jsonObject, String str, String put) throws IOException {
+        PutKeyToFile(new File(s), jsonObject, str, put);
+    }
+
+    public static void PutKeyToFile(File file, JSONObject jsonObject, String str, boolean put) throws IOException {
+        FileUtils.writeStringToFile(file, jsonObject.put(str, put).toString(), "UTF-8");
     }
 
     public static JSONObject parseObject(String json) {
@@ -94,4 +98,9 @@ public class JSONObject extends JSON {
     public boolean has(String str) {
         return JsonObjects.has(str);
     }
+
+    public com.alibaba.fastjson2.JSONObject getFastJSONObject() {
+        return com.alibaba.fastjson2.JSONObject.parseObject(JsonObjects.toString());
+    }
+
 }

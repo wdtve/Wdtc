@@ -1,23 +1,19 @@
 package org.wdt.WdtcUI.users;
 
-import com.google.gson.Gson;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.WdtcUI.Consoler;
 import org.wdt.WdtcUI.ErrorWin;
-import org.wdt.WdtcUI.LauncherWin;
-import org.wdt.game.FilePath;
+import org.wdt.auth.OfflineAccounts;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class UsersWin {
@@ -26,6 +22,7 @@ public class UsersWin {
     private final static Logger loggmaker = Logger.getLogger(UsersWin.class);
 
     public static void setUserWin(String wintitle, Stage MainStage) {
+        Stage UserStage = new Stage();
         Pane userspane = new Pane();
         TextField Registerusername = new TextField();
         Registerusername.setLayoutX(224.0);
@@ -48,12 +45,14 @@ public class UsersWin {
         Button Littleskin = new Button("Littleskin外置登录");
         Littleskin.setLayoutY(23.0);
         userspane.getChildren().addAll(Registerusername, label, buygame, button, attention, OKRegister, back, Littleskin);
-        MainStage.setTitle(wintitle);
-        MainStage.getIcons().add(new Image("/ico.jpg"));
+        UserStage.setTitle(wintitle);
+        UserStage.getIcons().add(new Image("/ico.jpg"));
         userspane.setBackground(Consoler.getBackground());
-        MainStage.setScene(new Scene(userspane, 600, 400));
-        MainStage.setResizable(false);
-        MainStage.show();
+        UserStage.setScene(new Scene(userspane, 600, 400));
+        UserStage.setResizable(false);
+        UserStage.initOwner(MainStage);
+        UserStage.initModality(Modality.WINDOW_MODAL);
+        UserStage.show();
         buygame.setOnAction(event -> {
             try {
                 Runtime.getRuntime().exec("cmd.exe /C start https://www.minecraft.net/");
@@ -65,12 +64,10 @@ public class UsersWin {
             try {
                 String username = Registerusername.getText();
                 if (isContainChinese(username)) {
-                    Map<String, String> StringMap = new HashMap<>();
-                    StringMap.put("userName", username);
-                    StringMap.put("type", "offline");
-                    FileUtils.writeStringToFile(FilePath.getUsersJson(), new Gson().toJson(StringMap), "UTF-8");
+                    OfflineAccounts offline = new OfflineAccounts(username);
+                    offline.WriteUserJson();
                     loggmaker.info("* 离线账户" + username + "注册成功");
-                    LauncherWin.setLauncherWin(MainStage);
+                    UserStage.close();
                 } else {
                     OKRegister.setText("不能带中文字符哦");
                 }
@@ -78,12 +75,13 @@ public class UsersWin {
                 ErrorWin.setErrorWin(exception);
             }
         });
-        back.setOnAction(event -> LauncherWin.setLauncherWin(MainStage));
-        Littleskin.setOnAction(event -> LittleskinWin.setLittleskinWin(MainStage));
+        back.setOnAction(event -> UserStage.close());
+        Littleskin.setOnAction(event -> LittleskinWin.setLittleskinWin(UserStage));
+
     }
 
     public static boolean isContainChinese(String str) {
-        return Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{4,15}$").matcher(str).find();
+        return Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,999}$").matcher(str).find();
     }
 
 }

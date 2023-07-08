@@ -29,7 +29,7 @@ public class SettingWin extends AboutSetting {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        JSONObject SettingJson = SettingObject();
+        JSONObject SettingJson = SettingObject().getFastJSONObject();
         Pane SonPane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));

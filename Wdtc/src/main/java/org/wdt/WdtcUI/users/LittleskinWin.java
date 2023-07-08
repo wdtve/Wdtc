@@ -1,32 +1,26 @@
 package org.wdt.WdtcUI.users;
 
-import com.alibaba.fastjson2.JSONObject;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.WdtcUI.Consoler;
 import org.wdt.WdtcUI.ErrorWin;
-import org.wdt.WdtcUI.LauncherWin;
 import org.wdt.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.auth.Yggdrasil.YggdrasilTextures;
 import org.wdt.download.FileUrl;
-import org.wdt.game.FilePath;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 
 public class LittleskinWin {
     private static final Logger logmaker = Logger.getLogger(LittleskinWin.class);
 
-    public static void setLittleskinWin(Stage MainStage) {
+    public static void setLittleskinWin(Stage UserStage) {
         Pane pane = new Pane();
         Label littleskinTitle = new Label("Littleskin外置登录");
         littleskinTitle.setLayoutX(250.0);
@@ -54,7 +48,7 @@ public class LittleskinWin {
         Button back = new Button("返回");
         Button LittleskinCom = new Button("Littleskin官网");
         LittleskinCom.setLayoutY(23.0);
-        back.setOnAction(event -> UsersWin.setUserWin(MainStage.getTitle(), MainStage));
+        back.setOnAction(event -> UserStage.close());
         pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok, back, LittleskinCom);
         ok.setOnAction(event -> {
             if (Objects.nonNull(inputpowerword.getText()) && Objects.nonNull(Inputusername.getText())
@@ -64,20 +58,16 @@ public class LittleskinWin {
             } else {
                 try {
                     YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(FileUrl.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
-                    yggdrasilAccounts.sendPostWithJson();
+                    yggdrasilAccounts.WriteUserJson();
                     try {
-                        Map<String, String> StringMap = new HashMap<>();
-                        StringMap.put("userName", Inputusername.getText());
-                        StringMap.put("type", "Yggdrasil");
-                        FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(StringMap), "UTF-8");
                         YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(yggdrasilAccounts);
                         yggdrasilTextures.DownloadUserSkin();
-                        LauncherWin.setLauncherWin(MainStage);
                         logmaker.info("* Littleskin用户:" + Inputusername.getText() + "登陆成功!");
+                        UserStage.close();
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);
                     }
-                } catch (IOException | RuntimeException e) {
+                } catch (RuntimeException | IOException e) {
                     label.setText("用户名或密码错误");
                 }
             }
@@ -90,6 +80,6 @@ public class LittleskinWin {
             }
         });
         pane.setBackground(Consoler.getBackground());
-        MainStage.setScene(new Scene(pane, 600, 400));
+        UserStage.setScene(new Scene(pane, 600, 400));
     }
 }
