@@ -13,8 +13,7 @@ repositories {
     mavenCentral()
 }
 tasks.jar {
-    enabled = true
-    tasks.shadowJar
+    dependsOn(tasks["shadowJar"])
 }
 tasks.withType<ShadowJar> {
     manifest.attributes.apply {

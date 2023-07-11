@@ -19,7 +19,6 @@ sourceSets {
     }
 }
 tasks.jar {
-    enabled = false
     dependsOn(tasks["shadowJar"])
 }
 tasks.withType<ShadowJar> {

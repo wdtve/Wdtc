@@ -5,10 +5,10 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.download.fabric.FabricVersionJson;
-import org.wdt.game.Launcher;
-import org.wdt.game.Version;
 import org.wdt.platform.DependencyDownload;
+import org.wdt.wdtc.download.fabric.FabricVersionJson;
+import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.Version;
 
 import java.io.BufferedReader;
 import java.io.File;

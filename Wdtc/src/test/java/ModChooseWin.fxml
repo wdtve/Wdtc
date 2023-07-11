@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
     <Label layoutX="283.0" layoutY="69.0" text="1.19.4"/>
@@ -18,6 +18,11 @@
         <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" text="X"/>
     </Pane>
     <Pane layoutX="380.0" layoutY="96.0" prefHeight="87.0" prefWidth="160.0">
+        <Label layoutX="43.0" layoutY="27.0" text="Fabric:不安装"/>
+        <Button layoutX="73.0" layoutY="53.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0" text="-&gt;"/>
+        <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" text="X"/>
+    </Pane>
+    <Pane layoutX="60.0" layoutY="183.0" prefHeight="87.0" prefWidth="160.0">
         <Label layoutX="43.0" layoutY="27.0" text="Fabric:不安装"/>
         <Button layoutX="73.0" layoutY="53.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="47.0" text="-&gt;"/>
         <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" text="X"/>
