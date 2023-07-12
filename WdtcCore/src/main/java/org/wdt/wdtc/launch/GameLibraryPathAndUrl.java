@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GetLibraryPathAndUrl {
+public class GameLibraryPathAndUrl {
     private final String BMCLAPI_Libraries = FileUrl.getBmclapiLibraries();
     private final String MOJANG_Libraries = FileUrl.getMojangLibraries();
     private final Launcher launcher;
 
 
-    public GetLibraryPathAndUrl(Launcher launcher) {
+    public GameLibraryPathAndUrl(Launcher launcher) {
         this.launcher = launcher;
     }
 

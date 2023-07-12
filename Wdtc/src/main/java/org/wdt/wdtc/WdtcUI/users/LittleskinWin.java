@@ -12,13 +12,14 @@ import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilTextures;
 import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.Objects;
 
 
 public class LittleskinWin {
-    private static final Logger logmaker = Logger.getLogger(LittleskinWin.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(LittleskinWin.class);
 
     public static void setLittleskinWin(Stage UserStage) {
         Pane pane = new Pane();

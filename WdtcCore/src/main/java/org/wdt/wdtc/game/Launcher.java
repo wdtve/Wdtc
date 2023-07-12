@@ -6,16 +6,18 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
+import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class Launcher extends Version {
-    private final Logger logmaker = Logger.getLogger(getClass());
+    private final Logger logmaker = getWdtcLogger.getLogger(getClass());
     private String Gameattribute;
     private String Jvmattribute;
     private String Librartattribute;
@@ -123,6 +125,10 @@ public class Launcher extends Version {
             File OptionsFile = new File(getGameOptionsFile());
             FileUtils.writeStringToFile(OptionsFile, Options, "UTF-8");
         }
+    }
+
+    public DownloadVersionGameFile getDownloadVersionGameFile() {
+        return new DownloadVersionGameFile(this);
     }
 
     @Override

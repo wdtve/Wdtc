@@ -7,7 +7,7 @@ import org.wdt.wdtc.game.Launcher;
 
 import java.io.IOException;
 
-public class GetGame {
+public class GameCommand {
     private static StringBuilder GameSet;
 
     public static void Getgame(Launcher launcher) throws IOException {

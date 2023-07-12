@@ -8,11 +8,12 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class HomeWin {
-    private static final Logger logmaker = Logger.getLogger(HomeWin.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(HomeWin.class);
 
     public static void setHome(Stage MainStage) {
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());

@@ -23,15 +23,11 @@ tasks.jar {
 }
 tasks.withType<ShadowJar> {
     manifest.attributes.apply {
-        put("Main-Class", "org.wdt.WdtcMain")
+        put("Main-Class", "org.wdt.wdtc.WdtcMain")
     }
 }
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    copy {
-        from("../WdtcCore/src/main/resources/log4j.properties")
-        into("build/resources/main")
-    }
 }
 dependencies {
     implementation(project(":WdtcCore"))

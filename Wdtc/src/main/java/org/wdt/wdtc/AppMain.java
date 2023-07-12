@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.WdtcUI.HomeWin;
-import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,8 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AppMain extends Application {
-    private static final Logger logmaker = Logger.getLogger(AppMain.class);
-    private static final Thread FoundJavaThread = AboutSetting.RunGetJavaHome();
+    private static final Logger logmaker = getWdtcLogger.getLogger(AppMain.class);
 
     public static void main(String[] args) {
         if (System.getProperty("wdtc.config.path") == null)
@@ -27,7 +26,6 @@ public class AppMain extends Application {
 
     @Override
     public void start(Stage MainStage) {
-//        FoundJavaThread.start();
         try {
             try {
                 URL url = new URL("https://www.bilibili.com");
@@ -51,7 +49,6 @@ public class AppMain extends Application {
                 MainStage.show();
             });
             MainStage.setOnCloseRequest(windowEvent -> {
-                FoundJavaThread.interrupt();
                 logmaker.info("===== 程序已退出 =====");
                 System.exit(0);
             });

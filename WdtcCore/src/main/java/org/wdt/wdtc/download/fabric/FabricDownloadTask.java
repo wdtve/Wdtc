@@ -5,11 +5,12 @@ import org.wdt.platform.DependencyDownload;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class FabricDownloadTask extends FabricFileList {
-    private final Logger logger = Logger.getLogger(getClass());
+    private final Logger logger = getWdtcLogger.getLogger(getClass());
     private final String FabricMavenUrl = "https://maven.fabricmc.net/";
     private final String BmclMavenUrl = FileUrl.getBmclapiLibraries();
     private final Launcher launcher;

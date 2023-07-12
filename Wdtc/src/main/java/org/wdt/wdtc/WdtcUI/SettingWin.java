@@ -14,6 +14,7 @@ import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.util.Objects;
 
 
 public class SettingWin extends AboutSetting {
-    private static final Logger logmaker = Logger.getLogger(SettingWin.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(SettingWin.class);
 
     private SettingWin() {
     }

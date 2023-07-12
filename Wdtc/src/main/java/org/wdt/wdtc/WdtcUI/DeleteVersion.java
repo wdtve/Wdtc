@@ -12,13 +12,14 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class DeleteVersion {
-    private static final Logger logmaker = Logger.getLogger(DeleteVersion.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(DeleteVersion.class);
 
 
     public static void getStartList(Stage MainStage) throws IOException {

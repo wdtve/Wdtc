@@ -28,4 +28,8 @@ public class JSONArray extends JSON {
     public int size() {
         return JsonArrays.size();
     }
+
+    public com.alibaba.fastjson2.JSONArray getFastJSONArray() {
+        return com.alibaba.fastjson2.JSONArray.parseArray(JsonArrays.toString());
+    }
 }

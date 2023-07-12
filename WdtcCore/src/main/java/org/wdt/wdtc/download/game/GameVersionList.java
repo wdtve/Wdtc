@@ -6,13 +6,14 @@ import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameVersionList {
-    private static final Logger logmaker = Logger.getLogger(GameVersionList.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(GameVersionList.class);
 
 
     public static List<String> getVersionList() {

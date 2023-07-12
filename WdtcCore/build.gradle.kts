@@ -20,16 +20,10 @@ sourceSets {
 }
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    copy {
-        from("../libs/WdtcGetJavaHome/build/libs/WdtcGetJavaHome-all.jar")
-        into("/build/resources/main")
-
-    }
 }
 dependencies {
     implementation(project(":DependencyDownloader"))
     implementation(project(":GsonOrFastJson"))
-    implementation(project(":WdtcGetJavaHome"))
     implementation("dom4j:dom4j:1.6.1")
     implementation("commons-io:commons-io:2.13.0")
     implementation("log4j:log4j:1.2.17")

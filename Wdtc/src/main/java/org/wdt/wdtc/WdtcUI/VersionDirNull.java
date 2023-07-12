@@ -8,9 +8,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 public class VersionDirNull {
-    private static final Logger logmaker = Logger.getLogger(VersionDirNull.class.getName());
+    private static final Logger logmaker = getWdtcLogger.getLogger(VersionDirNull.class);
 
     public static void setNullWin(Stage MainStage) {
         Platform.runLater(() -> {

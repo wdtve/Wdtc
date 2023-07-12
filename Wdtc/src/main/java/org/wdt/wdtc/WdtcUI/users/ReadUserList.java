@@ -4,13 +4,14 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ReadUserList {
     private static final File UserJson = FilePath.getUsersJson();
-    private static final Logger logmaker = Logger.getLogger(ReadUserList.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(ReadUserList.class);
 
     public static boolean SetUserJson(Stage MainStage) throws IOException {
         if (PlatformUtils.FileExistenceAndSize(UserJson)) {

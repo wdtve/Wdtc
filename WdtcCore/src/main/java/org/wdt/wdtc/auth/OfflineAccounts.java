@@ -4,12 +4,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.UUID;
 
 public class OfflineAccounts {
-    private final Logger logmaker = Logger.getLogger(getClass());
+    private static final Logger logmaker = getWdtcLogger.getLogger(OfflineAccounts.class);
     private final String username;
     private final String UserUuid = String.valueOf(UUID.randomUUID()).replaceAll("-", "");
 

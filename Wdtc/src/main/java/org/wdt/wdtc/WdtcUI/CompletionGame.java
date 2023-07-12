@@ -12,13 +12,14 @@ import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class CompletionGame {
-    private static final Logger logmaker = Logger.getLogger(CompletionGame.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(CompletionGame.class);
 
 
     public static void CompletionGameVersion(Stage MainStage) {

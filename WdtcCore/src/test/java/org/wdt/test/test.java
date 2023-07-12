@@ -5,10 +5,9 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.platform.DependencyDownload;
 import org.wdt.wdtc.download.fabric.FabricVersionJson;
-import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.Version;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,10 +66,9 @@ public class test {
     }
 
     @Test
-    public void isnull() throws IOException {
-        DependencyDownload download = new DependencyDownload("[de.oceanlabs.mcp:mcp_config:1.19.4-20230314.122934:mappings@txt]");
-        Launcher launcher = new Launcher("1.19.4");
-        download.setDownloadPath(launcher.GetGameLibraryPath());
-        System.out.println(download.getLibraryFilePath());
+    public void log() {
+        Logger logger = getWdtcLogger.getLogger(test.class);
+        logger.info("* asd");
     }
+
 }

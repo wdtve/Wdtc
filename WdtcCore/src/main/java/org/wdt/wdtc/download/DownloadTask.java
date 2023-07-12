@@ -6,8 +6,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.GetLibraryPathAndUrl;
+import org.wdt.wdtc.launch.GameLibraryPathAndUrl;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +16,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class DownloadTask extends GetLibraryPathAndUrl {
-    private static final Logger logmaker = Logger.getLogger(DownloadTask.class);
+public class DownloadTask extends GameLibraryPathAndUrl {
+    private static final Logger logmaker = getWdtcLogger.getLogger(DownloadTask.class);
     private final Launcher launcher;
 
     public DownloadTask(Launcher launcher) {

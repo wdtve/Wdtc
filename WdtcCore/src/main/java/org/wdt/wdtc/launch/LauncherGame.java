@@ -40,9 +40,9 @@ public class LauncherGame {
             }
             logmaker.info("* 文件补全完成");
             logmaker.info("* 开始写入启动脚本");
-            GetJvm.GetJvmList(launcher);
+            GameJvmCommand.GetJvmList(launcher);
             GetStartLibraryPath.getLibraryPath(launcher);
-            GetGame.Getgame(launcher);
+            GameCommand.Getgame(launcher);
             launcher.writeStartScript();
             logmaker.info("* 启动脚本写入完成");
             if (launcher.log()) {

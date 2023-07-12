@@ -11,6 +11,7 @@ import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class QuiltDownloadTask {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s";
-    private static final Logger logmaker = Logger.getLogger(QuiltDownloadTask.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(QuiltDownloadTask.class);
     private final Launcher launcher;
     private final String QuiltVersionNumber;
 

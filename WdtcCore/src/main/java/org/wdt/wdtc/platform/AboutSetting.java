@@ -5,13 +5,13 @@ import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.GetJavaPath;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
 import org.wdt.wdtc.game.FilePath;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,34 +99,5 @@ public class AboutSetting {
 
     public static JSONArray JavaList() throws IOException {
         return SettingObject().getJSONArray("JavaPath");
-    }
-
-
-
-    public static Thread RunGetJavaHome() {
-        try {
-            if (PlatformUtils.FileExistenceAndSize(FilePath.getJavaHomeJarFile())) {
-                InputStream inputStream = AboutSetting.class.getResourceAsStream("/WdtcGetJavaHome-all.jar");
-                FileOutputStream outputStream = new FileOutputStream(FilePath.getJavaHomeJarFile());
-                IOUtils.copy(requireNonNull(inputStream), outputStream);
-            }
-        } catch (IOException e) {
-            logmaker.error("* 错误:", e);
-        }
-        String CommandLine = GetJavaPath.GetRunJavaHome() + " -jar " + FilePath.getJavaHomeJarFile();
-        return new Thread(() -> {
-            logmaker.info("* Command Line:" + CommandLine);
-            try {
-                Process process = Runtime.getRuntime().exec("cmd.exe /c" + CommandLine);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    logmaker.info(line);
-                }
-            } catch (IOException e) {
-                logmaker.error(e);
-            }
-        }, "Found Java");
-
     }
 }

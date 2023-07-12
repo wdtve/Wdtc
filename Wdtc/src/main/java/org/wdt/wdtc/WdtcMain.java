@@ -4,31 +4,41 @@ package org.wdt.wdtc;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
+import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.java.JavaHomePath;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class WdtcMain {
-    private static final Logger logger = Logger.getLogger(WdtcMain.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(WdtcMain.class);
 
     public static void main(String[] args) throws Exception {
-        logger.info("===== Wdtc - " + Starter.getLauncherVersion() + " =====");
-        logger.info("* Java Version:" + System.getProperty("java.version"));
-        logger.info("* Java VM Version:" + System.getProperty("java.vm.name"));
-        logger.info("* Java Home:" + System.getProperty("java.home"));
-        logger.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
-        logger.info("* Setting File:" + FilePath.getSettingFile());
-        logger.info("* Here:" + System.getProperty("user.dir"));
+        logmaker.info("===== Wdtc - " + Starter.getLauncherVersion() + " =====");
+        logmaker.info("* Java Version:" + System.getProperty("java.version"));
+        logmaker.info("* Java VM Version:" + System.getProperty("java.vm.name"));
+        logmaker.info("* Java Home:" + System.getProperty("java.home"));
+        logmaker.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
+        logmaker.info("* Setting File:" + FilePath.getSettingFile());
+        logmaker.info("* Here:" + System.getProperty("user.dir"));
         AboutSetting.GenerateSettingFile();
         StartTask();
         Ergodic();
         AuthlibInjector.UpdateAuthlibInjector();
-        logger.info("* 程序开始运行");
+        new Thread(() -> {
+            try {
+                JavaHomePath.main(args);
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        }).start();
+        logmaker.info("* 程序开始运行");
         AppMain.main(args);
     }
 
@@ -45,7 +55,7 @@ public class WdtcMain {
         for (int i = 0; i < JavaList.size(); i++) {
             if (PlatformUtils.FileExistenceAndSize(JavaList.getString(i))) {
                 JavaList.remove(i);
-                logger.info("* " + JavaList.getString(i) + " 无效");
+                logmaker.info("* " + JavaList.getString(i) + " 无效");
             }
         }
         PlatformUtils.PutKeyToFile(AboutSetting.GetSettingFile(), SettingObject, "JavaPath", JavaList);

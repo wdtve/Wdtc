@@ -8,11 +8,12 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class ModChooseWin {
-    private static final Logger logmaker = Logger.getLogger(ModChooseWin.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(ModChooseWin.class);
     private final Launcher launcher;
     private final Stage MainStage;
 

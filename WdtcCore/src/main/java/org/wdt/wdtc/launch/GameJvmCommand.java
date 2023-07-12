@@ -1,19 +1,19 @@
 package org.wdt.wdtc.launch;
 
-import org.wdt.platform.GetJavaPath;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.platform.java.JavaHomePath;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class GetJvm {
-    private static final String JAVA_HOME = GetJavaPath.GetRunJavaHome();
-    private static StringBuilder JvmSet;
+public class GameJvmCommand {
+    private static final String JAVA_HOME = JavaHomePath.GetRunJavaHome();
     private static final String xmx = "1024";
+    private static StringBuilder JvmSet;
 
     public static void GetJvmList(Launcher launcher) throws IOException {
-        GetJvm.JvmSet = new StringBuilder();
+        GameJvmCommand.JvmSet = new StringBuilder();
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         Add(JAVA_HOME);
         Add("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());

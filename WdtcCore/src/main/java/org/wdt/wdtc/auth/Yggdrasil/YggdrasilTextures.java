@@ -7,6 +7,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class YggdrasilTextures {
-    private final Logger logmaker = Logger.getLogger(getClass());
+    private static final Logger logmaker = getWdtcLogger.getLogger(YggdrasilTextures.class);
     private final String username;
     private String url;
 

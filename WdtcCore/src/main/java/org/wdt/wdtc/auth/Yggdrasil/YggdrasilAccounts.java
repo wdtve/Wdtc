@@ -10,11 +10,12 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.Utils;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class YggdrasilAccounts {
-    private final Logger logmaker = Logger.getLogger(YggdrasilAccounts.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(YggdrasilAccounts.class);
     private final String url;
     private final String username;
     private String password;

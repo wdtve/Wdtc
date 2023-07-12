@@ -9,6 +9,7 @@ import org.wdt.platform.gson.Utils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,7 +17,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class DownloadGameLibrary extends DownloadTask {
-    private final Logger logmaker = Logger.getLogger(DownloadGameLibrary.class);
+    private final Logger logmaker = getWdtcLogger.getLogger(DownloadGameLibrary.class);
     private final Launcher version;
 
     public DownloadGameLibrary(Launcher launcher) {
