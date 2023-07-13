@@ -1,19 +1,16 @@
 package org.wdt;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
 
 public class list {
     @Test
     public void ep() {
-        String str = "fabric-loader-0.14.21-1.19.4";
-
-        Pattern r = Pattern.compile("(.+)-(.+)-(.+)");
-        Matcher m = r.matcher(str);
-        if (m.find()) {
-            System.out.println(m.group(1));
+        File[] file = new File("D:\\PCL2\\.minecraft\\versions\\1.17.1-Fabric 0.13.2\\logs").listFiles();
+        for (int i = 1; i < file.length; i++) {
+            System.out.println(FileUtils.isFileNewer(file[i], file[i - 1]));
         }
     }
 }

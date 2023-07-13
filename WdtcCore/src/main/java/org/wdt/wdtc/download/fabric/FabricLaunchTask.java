@@ -10,10 +10,6 @@ import java.util.List;
 public class FabricLaunchTask extends FabricFileList {
     private final Launcher launcher;
 
-    public FabricLaunchTask(String FabricVersionNumber, String GameVersionNumber) {
-        super(FabricVersionNumber, GameVersionNumber);
-        this.launcher = new Launcher(GameVersionNumber);
-    }
 
     public FabricLaunchTask(String FabricVersionNumber, Launcher launcher) {
         super(FabricVersionNumber, launcher);

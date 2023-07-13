@@ -1,16 +1,21 @@
 package org.wdt.wdtc.download.fabric;
 
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.Utils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -21,15 +26,13 @@ public class FabricFileList {
     private final String BmclapiFabricFileListUrl = "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/%s/%s";
     private final String FabricVersionNumber;
     private final Launcher launcher;
+    private final Logger logmaker = getWdtcLogger.getLogger(FabricFileList.class);
 
-    public FabricFileList(String FabricVersionNumber, String GameVersionNumber) {
-        this.FabricVersionNumber = FabricVersionNumber;
-        this.launcher = new Launcher(GameVersionNumber);
-    }
 
     public FabricFileList(String FabricVersionNumber, Launcher launcher) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.launcher = launcher;
+        writeCacheVersionJson();
     }
 
     public String getFabricVersionNumber() {
@@ -55,7 +58,7 @@ public class FabricFileList {
 
     public List<String> getFabricFileName() throws IOException {
         List<String> StringFileList = new ArrayList<>();
-        JSONObject FileList = JSONObject.parseObject(PlatformUtils.GetUrlContent(String.format(getFabricFileList(), launcher.getVersion(), FabricVersionNumber)));
+        JSONObject FileList = Utils.getJSONObject(getCacheVersionJson());
         JSONObject loader = FileList.getJSONObject("loader");
         StringFileList.add(loader.getString("maven"));
         JSONObject intermediary = FileList.getJSONObject("intermediary");
@@ -96,11 +99,32 @@ public class FabricFileList {
         return FilenameUtils.separatorsToWindows(FilePath.getWdtcCache() + "/" + FromFabricLoaderFolder() + "/" + FromFabricLoaderFolder() + ".jar");
     }
 
+    public File getCacheVersionJson() {
+        return new File(String.format(FilePath.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersion(), FabricVersionNumber));
+    }
+
+    public void writeCacheVersionJson() {
+        try {
+            FileUtils.writeStringToFile(getCacheVersionJson(), PlatformUtils.GetUrlContent(String.format(getFabricFileList(), launcher.getVersion(), FabricVersionNumber)), "UTF-8");
+        } catch (IOException e) {
+            logmaker.error("Error", e);
+        }
+    }
+
     public FabricDownloadTask getFabricDownloadTask() {
         return new FabricDownloadTask(FabricVersionNumber, launcher);
     }
 
     public FabricLaunchTask getFabricLaunchTask() {
         return new FabricLaunchTask(FabricVersionNumber, launcher);
+    }
+
+    @Override
+    public String toString() {
+        return "FabricFileList{" +
+                "FabricFileListUrl='" + FabricFileListUrl + '\'' +
+                ", BmclapiFabricFileListUrl='" + BmclapiFabricFileListUrl + '\'' +
+                ", FabricVersionNumber='" + FabricVersionNumber + '\'' +
+                '}';
     }
 }

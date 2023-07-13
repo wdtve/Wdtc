@@ -19,14 +19,12 @@ import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadTask {
     private final Logger logmaker = getWdtcLogger.getLogger(getClass());
 
-    public ForgeInstallTask(String mcVersion, String forgeVersion) throws IOException {
-        super(mcVersion, forgeVersion);
-    }
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
@@ -58,6 +56,8 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                 CommandLine.append(ArgsList.getString(i)).append(" ");
             } else {
                 String ArgeStr = ArgsList.getString(i);
+                Matcher Middle = getMiddleBracket(ArgeStr);
+                Matcher Large = getLargeBracket(ArgeStr);
                 if (ArgeStr.equals("{MINECRAFT_JAR}")) {
                     CommandLine.append(launcher.getVersionJar()).append(" ");
                 } else if (ArgeStr.equals("{BINPATCH}")) {
@@ -65,12 +65,12 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                     CommandLine.append(ClientLzmaPath()).append(" ");
                 } else if (ArgeStr.equals("{SIDE}")) {
                     CommandLine.append("client").append(" ");
-                } else if (Pattern.compile("\\{").matcher(ArgeStr).find()) {
+                } else if (Large.find()) {
                     DefaultDependency client = new DefaultDependency(Clean(getInstallPrefileJSONObject().getJSONObject("data")
-                            .getJSONObject(Clean(ArgeStr)).getString("client")));
+                            .getJSONObject(Large.group(1)).getString("client")));
                     CommandLine.append(launcher.GetGameLibraryPath()).append(client.formJar()).append(" ");
-                } else if (Pattern.compile("\\[").matcher(ArgeStr).find()) {
-                    DefaultDependency arge = new DefaultDependency(Clean(ArgeStr));
+                } else if (Middle.find()) {
+                    DefaultDependency arge = new DefaultDependency(Middle.group(1));
                     CommandLine.append(launcher.GetGameLibraryPath()).append(arge.formJar()).append(" ");
                 } else {
                     CommandLine.append(ArgeStr).append(" ");
@@ -114,11 +114,19 @@ public class ForgeInstallTask extends ForgeDownloadTask {
 
     private void StartCommand(int i) throws IOException {
         logmaker.info("* Command Line:" + CommandLine(i));
-        Process process = Runtime.getRuntime().exec("cmd.exe /c" + CommandLine(i));
+        Process process = Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", CommandLine(i)});
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
         while (bufferedReader.readLine() != null) {
             logmaker.info(bufferedReader.readLine());
         }
         process.destroy();
+    }
+
+    public Matcher getMiddleBracket(String args) {
+        return Pattern.compile("\\[(.+)]").matcher(args);
+    }
+
+    public Matcher getLargeBracket(String args) {
+        return Pattern.compile("\\{(.+)}").matcher(args);
     }
 }

@@ -16,6 +16,7 @@ import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.launch.LauncherGame;
 import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.ThreadUtils;
 import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.File;
@@ -54,7 +55,15 @@ public class StartVersionList {
                         logmaker.info("* 开始启动");
                         Launcher launcher = new Launcher(button.getText());
                         ModList.getModTask(launcher);
-                        new Thread(() -> new LauncherGame(launcher).LauncherVersion()).start();
+                        ThreadUtils.StartThread(() -> {
+                            LauncherGame launcherGame = new LauncherGame(launcher);
+                            try {
+                                LauncherErrorWin launcherErrorWin = new LauncherErrorWin(launcherGame.getStart());
+                                launcherErrorWin.startGame();
+                            } catch (IOException e) {
+                                ErrorWin.setErrorWin(e);
+                            }
+                        });
                         textField.setText(FilePath.getStarterBat().getCanonicalPath());
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);

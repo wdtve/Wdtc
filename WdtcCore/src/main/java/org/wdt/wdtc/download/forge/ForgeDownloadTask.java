@@ -14,25 +14,19 @@ import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.IOException;
 
 public class ForgeDownloadTask {
     public static final String INSTALL_JAR = "https://maven.minecraftforge.net/net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
     public static final String BMCLAPI_INSTALL_JAR = "https://download.mcbbs.net/maven/net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
-    public final Logger logmaker = Logger.getLogger(getClass());
-    public final String McVersion;
+    public final Logger logmaker = getWdtcLogger.getLogger(getClass());
     public final String ForgeVersion;
     public final Launcher launcher;
 
-    public ForgeDownloadTask(String mcVersion, String forgeVersion) throws IOException {
-        McVersion = mcVersion;
-        ForgeVersion = forgeVersion;
-        launcher = new Launcher(mcVersion);
-    }
 
     public ForgeDownloadTask(Launcher launcher, String forgeVersion) {
-        McVersion = launcher.getVersion();
         ForgeVersion = forgeVersion;
         this.launcher = launcher;
     }
@@ -41,9 +35,6 @@ public class ForgeDownloadTask {
         return launcher;
     }
 
-    public String getMcVersion() {
-        return McVersion;
-    }
 
     public String getForgeVersion() {
         return ForgeVersion;
@@ -66,7 +57,7 @@ public class ForgeDownloadTask {
     }
 
     public String getForgeInstallJarUrl() {
-        return getInstallJar().replaceAll(":mcversion", McVersion).replaceAll(":forgeversion", ForgeVersion);
+        return getInstallJar().replaceAll(":mcversion", launcher.getVersion()).replaceAll(":forgeversion", ForgeVersion);
     }
 
     public void getInstallProfile() throws IOException {
@@ -75,7 +66,6 @@ public class ForgeDownloadTask {
         }
         ExtractFile.unZipBySpecifyFile(getForgeInstallJarPath(), getInstallProfilePath());
     }
-
 
 
     public String getInstallProfilePath() {

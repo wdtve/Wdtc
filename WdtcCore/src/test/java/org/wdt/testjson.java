@@ -24,7 +24,7 @@ public class testjson {
         QuiltDownloadTask downloadTask = new QuiltDownloadTask(launcher, "0.20.0-beta.3");
         launcher.setQuiltModDownloadTask(downloadTask);
         LauncherGame launcherGame = new LauncherGame(launcher);
-        launcherGame.LauncherVersion();
+
     }
 
 

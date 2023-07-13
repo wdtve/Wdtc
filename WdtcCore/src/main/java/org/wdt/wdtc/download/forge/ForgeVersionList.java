@@ -12,18 +12,15 @@ import java.util.List;
 
 public class ForgeVersionList {
     private static final String BMCALAPI_FORGE_LIST = "https://bmclapi2.bangbang93.com/forge/minecraft/";
-    private final String mcversion;
+    private final Launcher launcher;
 
-    public ForgeVersionList(String mcversion) {
-        this.mcversion = mcversion;
-    }
 
     public ForgeVersionList(Launcher launcher) {
-        this.mcversion = launcher.getVersion();
+        this.launcher = launcher;
     }
 
     public String getForgeListUrl() {
-        return BMCALAPI_FORGE_LIST + mcversion;
+        return BMCALAPI_FORGE_LIST + launcher.getVersion();
     }
 
     public List<String> getForgeVersion() throws IOException {

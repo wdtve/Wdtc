@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.wdtc.download.fabric.FabricVersionJson;
 import org.wdt.wdtc.game.Version;
 import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
@@ -36,9 +35,6 @@ public class test {
 
     @Test
     public void urlio() throws IOException {
-        Version version = new Version("1.19.4");
-        FabricVersionJson fabricVersionJson = new FabricVersionJson("0.14.17", version);
-        fabricVersionJson.modify();
     }
 
     @Test

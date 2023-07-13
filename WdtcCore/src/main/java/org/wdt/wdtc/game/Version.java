@@ -59,4 +59,8 @@ public class Version extends GetGamePath {
         return getGamePath() + "mods\\";
     }
 
+    public String getGameLogDir() {
+        return getVersionPath() + "logs\\";
+    }
+
 }

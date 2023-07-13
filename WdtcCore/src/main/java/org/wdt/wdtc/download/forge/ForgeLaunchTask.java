@@ -15,9 +15,6 @@ import java.util.List;
 
 public class ForgeLaunchTask extends ForgeDownloadTask {
 
-    public ForgeLaunchTask(String mcVersion, String forgeVersion) throws IOException {
-        super(mcVersion, forgeVersion);
-    }
 
     public ForgeLaunchTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);

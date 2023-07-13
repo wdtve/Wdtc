@@ -4,7 +4,6 @@ package org.wdt.wdtc;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
@@ -31,13 +30,7 @@ public class WdtcMain {
         StartTask();
         Ergodic();
         AuthlibInjector.UpdateAuthlibInjector();
-        new Thread(() -> {
-            try {
-                JavaHomePath.main(args);
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
-        }).start();
+        new Thread(() -> JavaHomePath.main(args)).start();
         logmaker.info("* 程序开始运行");
         AppMain.main(args);
     }

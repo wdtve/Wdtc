@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -79,6 +80,19 @@ public class PlatformUtils extends FileUtils {
 
     public static boolean FileExistenceAndSize(String filePath) throws IOException {
         return FileExistenceAndSize(new File(filePath));
+    }
+
+    public static boolean NetworkHasThisFile(String url) throws MalformedURLException {
+        return NetworkHasThisFile(new URL(url));
+    }
+
+    public static boolean NetworkHasThisFile(URL url) {
+        try {
+            IOUtils.toString(url.openStream());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }

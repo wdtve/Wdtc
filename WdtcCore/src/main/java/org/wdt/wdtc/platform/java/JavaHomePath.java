@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,17 +20,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JavaHomePath {
-    private static final Logger logmaker = Logger.getLogger(JavaHomePath.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(JavaHomePath.class);
 
     public static String GetRunJavaHome() {
         return "\"" + System.getProperty("java.home") + "\\bin\\java.exe\"";
     }
 
-    public static void main(String[] args) throws IOException {
-        getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit");
-        getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update");
-        getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps");
-        getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK");
+    public static void main(String[] args) {
+        try {
+            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit");
+            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update");
+            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps");
+            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK");
+        } catch (IOException e) {
+            logmaker.error("Error, ", e);
+        }
     }
 
     public static void getPotentialJava(String key) throws IOException {
