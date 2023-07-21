@@ -7,10 +7,10 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 
@@ -84,7 +84,7 @@ public class YggdrasilAccounts {
 
 
     public JSONObject YggdrasilFileObject() throws IOException {
-        return Utils.getJSONObject(FilePath.getYggdrasilFile());
+        return JSONUtils.getJSONObject(FilePath.getYggdrasilFile());
     }
 
     public void WriteUserJson() throws IOException {

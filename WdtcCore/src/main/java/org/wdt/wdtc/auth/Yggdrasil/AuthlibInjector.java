@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;

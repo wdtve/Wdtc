@@ -19,7 +19,6 @@ public class LauncherGame {
     public LauncherGame(Launcher launcher) {
         this.launcher = launcher;
         try {
-            logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
             launcher.LaunchTask();
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);
@@ -42,6 +41,7 @@ public class LauncherGame {
             } else {
                 logmaker.info("* 开始运行启动脚本,日志:不显示");
             }
+            logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
         } catch (Exception e) {
             logmaker.error("错误:", e);
         }

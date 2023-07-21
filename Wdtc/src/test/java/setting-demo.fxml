@@ -3,25 +3,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      xmlns:fx="http://javafx.com/fxml/1" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
-    <RadioButton fx:id="true_log" layoutX="77.0" layoutY="111.0" mnemonicParsing="false" text="显示"/>
-    <RadioButton fx:id="false_log" layoutX="139.0" layoutY="111.0" mnemonicParsing="false" selected="true"
-                 text="不显示"/>
-    <Label layoutX="77.0" layoutY="89.0"
-           text="启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):"/>
-    <Label layoutX="77.0" layoutY="138.0" text="是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):"/>
-    <RadioButton fx:id="true_BMCLAPI" layoutX="76.0" layoutY="159.0" mnemonicParsing="false" text="启用"/>
-    <RadioButton fx:id="false_BMCLAPI" layoutX="139.0" layoutY="159.0" mnemonicParsing="false" selected="true"
-                 text="不启用"/>
-    <Label layoutX="78.0" layoutY="35.0" text="游戏文件夹位置:"/>
-    <Label layoutX="168.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;" textFill="#0000007c"/>
-    <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..."/>
-    <Label layoutX="76.0" layoutY="185.0" text="是否启用OpenGL软渲染器:"/>
-    <RadioButton layoutX="77.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
-    <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用"/>
-    <Label layoutX="76.0" layoutY="235.0" text="将游戏设置成中文(默认开启):"/>
-    <RadioButton layoutX="77.0" layoutY="254.0" mnemonicParsing="false" text="启用"/>
-    <RadioButton layoutX="139.0" layoutY="254.0" mnemonicParsing="false" text="不启用"/>
+      xmlns:fx="http://javafx.com/fxml/1" prefWidth="600.0" xmlns="http://javafx.com/javafx/17">
+    <ScrollPane layoutX="105.0" layoutY="62.0" prefHeight="338.0" prefWidth="495.0">
+        <Pane prefHeight="334.0" prefWidth="493.0">
+            <Label layoutX="10.0" layoutY="35.0" text="游戏文件夹位置:"/>
+            <Label layoutX="107.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;"
+                   textFill="#0000007c"/>
+            <TextField layoutX="10.0" layoutY="55.0" prefHeight="23.0" prefWidth="297.0"/>
+            <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..."/>
+            <RadioButton layoutX="10.0" layoutY="111.0" mnemonicParsing="false" text="显示"/>
+            <RadioButton layoutX="139.0" layoutY="111.0" mnemonicParsing="false" selected="true" text="不显示"/>
+            <Label layoutX="10.0" layoutY="89.0"
+                   text="启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):"/>
+            <Label layoutX="10.0" layoutY="138.0" text="是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):"/>
+            <RadioButton layoutX="10.0" layoutY="159.0" mnemonicParsing="false" text="启用"/>
+            <RadioButton layoutX="139.0" layoutY="159.0" mnemonicParsing="false" selected="true" text="不启用"/>
+            <Label layoutX="10.0" layoutY="185.0" text="是否启用OpenGL软渲染器:"/>
+            <RadioButton layoutX="10.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
+            <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用"/>
+            <Label layoutX="10.0" layoutY="235.0" text="将游戏设置成中文(默认开启):"/>
+            <RadioButton layoutX="10.0" layoutY="254.0" mnemonicParsing="false" text="启用"/>
+            <RadioButton layoutX="139.0" layoutY="254.0" mnemonicParsing="false" text="不启用"/>
+        </Pane>
+    </ScrollPane>
+    <Button layoutY="371.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
+    <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Button"/>
     <!--    <JFXButton style="-fx-border-color: #000000;" text="返回"/>-->
 
 

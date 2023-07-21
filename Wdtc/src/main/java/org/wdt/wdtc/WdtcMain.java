@@ -7,11 +7,13 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.platform.java.JavaHomePath;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 
@@ -30,15 +32,16 @@ public class WdtcMain {
         StartTask();
         Ergodic();
         AuthlibInjector.UpdateAuthlibInjector();
-        new Thread(() -> JavaHomePath.main(args)).start();
+        GameConfig.writeConfigJsonToAllVersion();
+        ThreadUtils.StartThread(() -> JavaHomePath.main(args)).setName("Found Java");
         logmaker.info("* 程序开始运行");
         AppMain.main(args);
     }
 
     public static void StartTask() throws IOException {
-        String LLBMPIPE_LOADER = "https://ghdl.feizhuqwq.cf/https://github.com/Glavo/llvmpipe-loader/releases/download/v1.0/llvmpipe-loader-1.0.jar";
+        String LlbmpipeLoader = "https://download.fastgit.ixmu.net/Wd-t/llvmpipe-loader/releases/download/v1.0/llvmpipe-loader-1.0.jar";
         if (PlatformUtils.FileExistenceAndSize(FilePath.getLlbmpipeLoader())) {
-            DownloadTask.StartWGetDownloadTask(LLBMPIPE_LOADER, FilePath.getLlbmpipeLoader());
+            DownloadTask.StartWGetDownloadTask(LlbmpipeLoader, FilePath.getLlbmpipeLoader());
         }
     }
 

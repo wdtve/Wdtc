@@ -1,11 +1,10 @@
-package org.wdt.wdtc.platform.java;
+package org.wdt.wdtc.utils;
 
 import com.alibaba.fastjson2.JSONArray;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +22,7 @@ public class JavaHomePath {
     private static final Logger logmaker = getWdtcLogger.getLogger(JavaHomePath.class);
 
     public static String GetRunJavaHome() {
-        return "\"" + System.getProperty("java.home") + "\\bin\\java.exe\"";
+        return FilenameUtils.separatorsToUnix("\"" + System.getProperty("java.home") + "\\bin\\java.exe\"");
     }
 
     public static void main(String[] args) {
@@ -37,7 +36,7 @@ public class JavaHomePath {
         }
     }
 
-    public static void getPotentialJava(String key) throws IOException {
+    private static void getPotentialJava(String key) throws IOException {
         Process process = new ProcessBuilder(new String[]{"reg", "query", key}).start();
         for (String s : IOUtils.readLines(process.getInputStream())) {
             if (s.startsWith(key)) {
@@ -63,7 +62,7 @@ public class JavaHomePath {
     }
 
 
-    public static List<String> getPotentialJavaFolders(String key) throws IOException {
+    private static List<String> getPotentialJavaFolders(String key) throws IOException {
         List<String> List = new ArrayList<>();
         Process process = new ProcessBuilder(new String[]{"reg", "query", key}).start();
         for (String s : IOUtils.readLines(process.getInputStream())) {
@@ -74,7 +73,7 @@ public class JavaHomePath {
         return List;
     }
 
-    public static List<String> getPotentialJavaHome(List<String> list) throws IOException {
+    private static List<String> getPotentialJavaHome(List<String> list) throws IOException {
         List<String> JavaHomeList = new ArrayList<>();
         for (String key : list) {
             Process process = new ProcessBuilder(new String[]{"reg", "query", key, "/v", "JavaHome"}).start();

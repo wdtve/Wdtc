@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 

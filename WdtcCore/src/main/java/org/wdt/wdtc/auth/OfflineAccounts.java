@@ -4,7 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.UUID;

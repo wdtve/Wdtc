@@ -3,12 +3,12 @@ package org.wdt.wdtc.download.game;
 
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
         if (launcher.bmclapi()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), FileUrl.getBmcalapiCom());
@@ -47,7 +47,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadVersionJar() throws IOException {
-        String JarUrl = Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client").getString("url");
+        String JarUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client").getString("url");
         if (launcher.bmclapi()) {
             JarUrl = JarUrl.replaceAll(FileUrl.getPistonDataMojang(), FileUrl.getBmcalapiCom());
         }

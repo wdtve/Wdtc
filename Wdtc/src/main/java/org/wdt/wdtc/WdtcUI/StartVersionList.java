@@ -16,8 +16,8 @@ import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.launch.LauncherGame;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.ThreadUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class StartVersionList {
                             } catch (IOException e) {
                                 ErrorWin.setErrorWin(e);
                             }
-                        });
+                        }).setName("Start Game");
                         textField.setText(FilePath.getStarterBat().getCanonicalPath());
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);

@@ -4,7 +4,7 @@ import javafx.scene.control.TextField;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.Objects;

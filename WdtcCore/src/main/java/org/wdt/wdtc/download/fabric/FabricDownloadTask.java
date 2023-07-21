@@ -5,7 +5,7 @@ import org.wdt.platform.DependencyDownload;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 

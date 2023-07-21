@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.WdtcUI.Consoler;
 import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.auth.OfflineAccounts;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package org.wdt.wdtc.platform;
+package org.wdt.wdtc.utils;
 
 import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;

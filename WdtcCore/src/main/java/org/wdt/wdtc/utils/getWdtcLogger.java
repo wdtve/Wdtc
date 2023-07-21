@@ -1,4 +1,4 @@
-package org.wdt.wdtc.platform.log4j;
+package org.wdt.wdtc.utils;
 
 import org.apache.log4j.*;
 import org.wdt.wdtc.game.FilePath;

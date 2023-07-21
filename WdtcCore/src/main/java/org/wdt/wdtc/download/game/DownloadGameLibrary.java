@@ -5,11 +5,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class DownloadGameLibrary extends DownloadTask {
 
     public void DownloadLibraryFile() throws IOException, RuntimeException {
         Files.createDirectories(Paths.get(version.getVersionNativesPath()));
-        JSONArray LibraryList = Utils.getJSONObject(version.getVersionJson()).getJSONArray("libraries");
+        JSONArray LibraryList = JSONUtils.getJSONObject(version.getVersionJson()).getJSONArray("libraries");
         for (int i = 0; i < LibraryList.size(); i++) {
             JSONObject LibraryJSONObject = LibraryList.getJSONObject(i);
             if (LibraryJSONObject.has("natives")) {

@@ -5,7 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class Utils {
+public class JSONUtils {
     public static JSONObject getJSONObject(File file) throws IOException {
         return new JSONObject(FileUtils.readFileToString(file, "UTF-8"));
     }

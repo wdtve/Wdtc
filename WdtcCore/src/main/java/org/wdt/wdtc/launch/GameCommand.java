@@ -1,9 +1,10 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.config.GameConfig;
 
 import java.io.IOException;
 
@@ -12,17 +13,18 @@ public class GameCommand {
 
     public static void Getgame(Launcher launcher) throws IOException {
         GameSet = new StringBuilder();
+        GameConfig gameConfig = launcher.getGameConfig();
         Accounts accounts = launcher.GetAccounts();
         append("--username");
         append(accounts.getUserName());
         append("--version");
         append(launcher.getVersion());
         append("--gameDir");
-        append(launcher.getGamePath());
+        append(launcher.getVersionPath());
         append("--assetsDir");
         append(launcher.getGameAssetsdir());
         append("--assetIndex");
-        append(Utils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex").getString("id"));
+        append(JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex").getString("id"));
         append("--uuid");
         append(accounts.getUserUUID());
         append("--accessToken");
@@ -31,11 +33,15 @@ public class GameCommand {
         append("${clientid}");
         GameSet.append(AdditionalCommand.AdditionalGame(launcher));
         append("--versionType");
-        GameSet.append("Wdtc-dome");
+        append("Wdtc-dome");
+        append("--height");
+        append(gameConfig.getWindowWidth());
+        append("--width");
+        GameSet.append(gameConfig.getWindowHeight());
         launcher.setGameattribute(GameSet);
     }
 
-    private static void append(String str) {
-        GameSet.append(str).append(" ");
+    private static void append(Object o) {
+        GameSet.append(o).append(" ");
     }
 }

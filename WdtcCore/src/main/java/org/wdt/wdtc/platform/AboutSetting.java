@@ -7,8 +7,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,43 +28,19 @@ public class AboutSetting {
     }
 
     public static boolean GetBmclSwitch() {
-        boolean bmcl = false;
-        try {
-            bmcl = Utils.getJSONObject(GetSettingFile()).getBoolean("bmcl");
-        } catch (IOException e) {
-            logmaker.error("* 错误:", e);
-        }
-        return bmcl;
+        return SettingObject().getBoolean("bmcl");
     }
 
     public static boolean GetLogSwitch() {
-        boolean log = false;
-        try {
-            log = Utils.getJSONObject(GetSettingFile()).getBoolean("log");
-        } catch (IOException e) {
-            logmaker.error("* 错误:", e);
-        }
-        return log;
+        return SettingObject().getBoolean("log");
     }
 
     public static boolean GetLlvmpipeSwitch() {
-        boolean LlvmpipeLoader = false;
-        try {
-            LlvmpipeLoader = Utils.getJSONObject(GetSettingFile()).getBoolean("llvmpipe-loader");
-        } catch (IOException e) {
-            logmaker.error("* 错误:", e);
-        }
-        return LlvmpipeLoader;
+        return SettingObject().getBoolean("llvmpipe-loader");
     }
 
     public static boolean GetZHCNSwitch() {
-        boolean ZHCN = false;
-        try {
-            ZHCN = Utils.getJSONObject(GetSettingFile()).getBoolean("ZH-CN");
-        } catch (IOException e) {
-            logmaker.error("* 错误:", e);
-        }
-        return ZHCN;
+        return SettingObject().getBoolean("ZH-CN");
     }
 
     public static void GenerateSettingFile() throws IOException {
@@ -84,20 +61,26 @@ public class AboutSetting {
     }
 
     public static String GetDefaultGamePath() {
-        String DefaultGamePath = System.getenv("user.dir");
+        return SettingObject().getString("DefaultGamePath");
+    }
+
+    public static double GetWindowsWidth() {
+        return SettingObject().getDouble("WindowsWidth");
+    }
+
+    public static double GetWindowsHeight() {
+        return SettingObject().getDouble("WindowsHeight");
+    }
+
+    public static JSONObject SettingObject() {
         try {
-            DefaultGamePath = Utils.getJSONObject(GetSettingFile()).getString("DefaultGamePath");
+            return JSONUtils.getJSONObject(GetSettingFile());
         } catch (IOException e) {
-            logmaker.error(e);
+            throw new RuntimeException(e);
         }
-        return DefaultGamePath;
     }
 
-    public static JSONObject SettingObject() throws IOException {
-        return Utils.getJSONObject(GetSettingFile());
-    }
-
-    public static JSONArray JavaList() throws IOException {
+    public static JSONArray JavaList() {
         return SettingObject().getJSONArray("JavaPath");
     }
 }

@@ -1,7 +1,7 @@
 package org.wdt.wdtc.game;
 
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
@@ -14,7 +14,7 @@ public class ModList {
 
     public static void getModTask(Launcher launcher) throws IOException {
         Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");
-        Matcher m = r.matcher(Utils.getJSONObject(launcher.getVersionJson()).getString("id"));
+        Matcher m = r.matcher(JSONUtils.getJSONObject(launcher.getVersionJson()).getString("id"));
         if (m.find()) {
             String ModName = m.group(2);
             String ModVersion = m.group(3);
@@ -27,7 +27,7 @@ public class ModList {
     }
 
     public static void putGameId(Launcher launcher) throws IOException {
-        JSONObject VersionJSONObject = Utils.getJSONObject(launcher.getVersionJson());
+        JSONObject VersionJSONObject = JSONUtils.getJSONObject(launcher.getVersionJson());
         if (launcher.getKind() == KindOfMod.FORGE) {
             JSONObject.PutKeyToFile(launcher.getVersionJson(), VersionJSONObject, "id",
                     launcher.getVersion() + "-forge-" + launcher.getForgeDownloadTask().getForgeVersion());

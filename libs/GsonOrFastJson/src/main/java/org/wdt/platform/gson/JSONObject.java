@@ -1,6 +1,6 @@
 package org.wdt.platform.gson;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 
@@ -19,7 +19,7 @@ public class JSONObject extends JSON {
     }
 
     public static String toJSONString(Object o) {
-        return new Gson().toJson(o);
+        return new GsonBuilder().setPrettyPrinting().create().toJson(o);
     }
 
     public static void PutKeyToFile(File file, JSONObject jsonObject, String str, String put) throws IOException {
@@ -101,6 +101,10 @@ public class JSONObject extends JSON {
 
     public com.alibaba.fastjson2.JSONObject getFastJSONObject() {
         return com.alibaba.fastjson2.JSONObject.parseObject(JsonObjects.toString());
+    }
+
+    public double getDouble(String str) {
+        return JsonObjects.get(str).getAsDouble();
     }
 
 }

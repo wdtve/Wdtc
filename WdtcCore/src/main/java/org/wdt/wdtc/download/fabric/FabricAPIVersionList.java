@@ -3,7 +3,7 @@ package org.wdt.wdtc.download.fabric;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

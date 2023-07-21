@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 

@@ -26,12 +26,14 @@ public class ModChoose {
     private final ModList.KindOfMod kind;
 
     private final Stage MainStage;
+    private final WindwosSize size;
     private final Launcher launcher;
 
     public ModChoose(ModList.KindOfMod kind, Stage MainStage, Launcher launcher) {
         this.kind = kind;
         this.MainStage = MainStage;
         this.launcher = launcher;
+        this.size = new WindwosSize(MainStage);
     }
 
     public List<String> ModVersionList() throws IOException {
@@ -61,14 +63,14 @@ public class ModChoose {
             try {
                 for (String s : ModVersionList()) {
                     JFXButton VersionButton = getVersionButton(s, ButtonList);
-                    ButtonList.getChildren().add(VersionButton);
+                    size.windwosSize(ButtonList, VersionButton);
                 }
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
             }
         });
         list.setContent(ButtonList);
-        pane.getChildren().addAll(list, tips, back);
+        size.windwosSize(pane, list, back, tips);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
         back.setOnAction(event -> {

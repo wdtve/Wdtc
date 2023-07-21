@@ -2,7 +2,7 @@ package org.wdt.wdtc.game;
 
 
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.launch.GetGamePath;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class Version extends GetGamePath {
 
 
     public String getVersionPath() {
-        return getGameVersionPath() + version + "\\";
+        return getGameVersionPath() + version + "/";
     }
 
     public String getVersionJson() {
@@ -46,21 +46,21 @@ public class Version extends GetGamePath {
     }
 
     public String getGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = Utils.getJSONObject(getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = JSONUtils.getJSONObject(getVersionJson()).getJSONObject("assetIndex");
         String id = AssetIndexJson.getString("id");
         return getGameAssetsdir() + "indexes\\" + id + ".json";
     }
 
     public String getGameOptionsFile() {
-        return getGamePath() + "options.txt";
+        return getVersionPath() + "options.txt";
     }
 
     public String getGameModsPath() {
-        return getGamePath() + "mods\\";
+        return getVersionPath() + "mods/";
     }
 
     public String getGameLogDir() {
-        return getVersionPath() + "logs\\";
+        return getVersionPath() + "logs/";
     }
 
 }

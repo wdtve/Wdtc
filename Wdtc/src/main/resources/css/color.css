@@ -1,3 +1,15 @@
 .button {
-    -fx-border-color: #000000;
+    -fx-text-fill: #231f20;
+}
+
+.radio-button {
+    -fx-text-fill: #231f20;
+}
+
+.label {
+    -fx-text-fill: #231f20;
+}
+
+.tips {
+    -fx-text-fill: rgba(16, 13, 13, 0.35);
 }

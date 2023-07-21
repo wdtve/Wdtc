@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -35,20 +35,13 @@ public class ErrorWin {
             label.setPrefHeight(stage.getHeight());
             label.setPrefWidth(stage.getWidth());
             VBox vBox = new VBox();
-            vBox.getChildren().add(label);
             stage.setTitle(title);
             stage.getIcons().add(new Image("ico.jpg"));
+            WindwosSize size = new WindwosSize(stage);
+            size.windwosSize(vBox, label);
             stage.setScene(new Scene(vBox));
             stage.show();
             stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
-            stage.widthProperty().addListener((observable, oldValue, newValue) -> {
-                double Value = newValue.doubleValue() / oldValue.doubleValue();
-                label.setPrefWidth(label.getPrefWidth() * Value);
-            });
-            stage.heightProperty().addListener((observable, oldValue, newValue) -> {
-                double Value = newValue.doubleValue() / oldValue.doubleValue();
-                label.setPrefHeight(label.getPrefHeight() * Value);
-            });
         });
     }
 }

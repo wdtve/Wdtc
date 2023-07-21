@@ -12,9 +12,9 @@ import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.java.JavaHomePath;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;

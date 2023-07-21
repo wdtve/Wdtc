@@ -2,8 +2,8 @@ package org.wdt.wdtc.game;
 
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;

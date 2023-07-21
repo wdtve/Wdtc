@@ -17,6 +17,7 @@ public class LauncherWin {
 
     public static void setLauncherWin(Stage MainStage) {
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 启动游戏");
+        WindwosSize size = new WindwosSize(MainStage);
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> HomeWin.setHome(MainStage));
@@ -65,7 +66,7 @@ public class LauncherWin {
             }
         });
         startGame.setStyle("-fx-border-color: #000000");
-        pane.getChildren().addAll(back, deletVersion, warningDelet, completioner, Tips, stater_path, Modify_Account, startGame);
+        size.windwosSize(pane, back, deletVersion, warningDelet, completioner, Tips, stater_path, Modify_Account, startGame);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
     }

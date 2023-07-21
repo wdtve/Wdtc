@@ -1,14 +1,19 @@
 package org.wdt.wdtc;
 
+import com.google.gson.JsonObject;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.wdtc.WdtcUI.Consoler;
 import org.wdt.wdtc.WdtcUI.ErrorWin;
 import org.wdt.wdtc.WdtcUI.HomeWin;
+import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,16 +46,33 @@ public class AppMain extends Application {
                 ErrorWin.setErrorWin(e);
             }
             Platform.runLater(() -> {
-                MainStage.setWidth(616.0);
-                MainStage.setHeight(489.0);
+                MainStage.setMinWidth(Consoler.WindowsWidht);
+                MainStage.setMinHeight(Consoler.WindowsHeight);
+                if (AboutSetting.SettingObject().has("WindowsWidth")) {
+                    MainStage.setWidth(AboutSetting.GetWindowsWidth());
+                } else {
+                    MainStage.setWidth(Consoler.WindowsWidht);
+                }
+                if (AboutSetting.SettingObject().has("WindowsHeight")) {
+                    MainStage.setHeight(AboutSetting.GetWindowsHeight());
+                } else {
+                    MainStage.setHeight(Consoler.WindowsHeight);
+                }
                 MainStage.getIcons().add(new Image("ico.jpg"));
-                MainStage.setResizable(false);
                 HomeWin.setHome(MainStage);
                 MainStage.show();
             });
             MainStage.setOnCloseRequest(windowEvent -> {
-                logmaker.info("===== 程序已退出 =====");
-                System.exit(0);
+                try {
+                    logmaker.info("======= exited ========");
+                    JsonObject object = AboutSetting.SettingObject().getJsonObjects();
+                    object.addProperty("WindowsWidth", MainStage.getWidth());
+                    object.addProperty("WindowsHeight", MainStage.getHeight());
+                    FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), JSONObject.toJSONString(object), "UTF-8");
+                    System.exit(0);
+                } catch (IOException e) {
+                    ErrorWin.setErrorWin(e);
+                }
             });
         } catch (Exception e) {
             ErrorWin.setErrorWin(e);

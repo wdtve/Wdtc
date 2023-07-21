@@ -6,14 +6,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class FabricFileList {
 
     public List<String> getFabricFileName() throws IOException {
         List<String> StringFileList = new ArrayList<>();
-        JSONObject FileList = Utils.getJSONObject(getCacheVersionJson());
+        JSONObject FileList = JSONUtils.getJSONObject(getCacheVersionJson());
         JSONObject loader = FileList.getJSONObject("loader");
         StringFileList.add(loader.getString("maven"));
         JSONObject intermediary = FileList.getJSONObject("intermediary");

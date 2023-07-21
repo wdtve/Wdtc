@@ -2,7 +2,7 @@ package org.wdt.wdtc.WdtcUI;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,8 +30,7 @@ public class LauncherErrorWin {
                 if (info.find() || warn.find()) {
                     System.out.println(line);
                 } else {
-                    showErrorWin();
-                    break;
+                    System.out.println(line);
                 }
             }
             if (error != null) {

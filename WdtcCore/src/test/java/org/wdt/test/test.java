@@ -5,8 +5,9 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.wdt.wdtc.game.DetermineVersionSize;
+import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.Version;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,8 +64,8 @@ public class test {
 
     @Test
     public void log() {
-        Logger logger = getWdtcLogger.getLogger(test.class);
-        logger.info("* asd");
+        Launcher launcher = new Launcher("1.20");
+        System.out.println(DetermineVersionSize.DetermineSize("1.20", launcher));
     }
 
 }

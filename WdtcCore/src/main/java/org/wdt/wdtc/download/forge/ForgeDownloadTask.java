@@ -6,15 +6,15 @@ import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
 
@@ -76,7 +76,7 @@ public class ForgeDownloadTask {
         if (PlatformUtils.FileExistenceAndSize(getInstallProfilePath())) {
             getInstallProfile();
         }
-        return Utils.getJSONObject(getInstallProfilePath());
+        return JSONUtils.getJSONObject(getInstallProfilePath());
     }
 
     public void DownloadInstallPrefileLibarary() throws IOException {
@@ -84,7 +84,7 @@ public class ForgeDownloadTask {
     }
 
     public void DownloadForgeLibraryFile(String FilePath) throws IOException {
-        JSONArray LibraryList = Utils.getJSONObject(FilePath).getJSONArray("libraries");
+        JSONArray LibraryList = JSONUtils.getJSONObject(FilePath).getJSONArray("libraries");
         for (int i = 0; i < LibraryList.size(); i++) {
             JSONObject LibraryObject = LibraryList.getJSONObject(i);
             JSONObject LibraryArtifact = LibraryObject.getJSONObject("downloads").getJSONObject("artifact");

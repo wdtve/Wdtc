@@ -8,9 +8,10 @@ import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
+import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +26,6 @@ public class Launcher extends Version {
     private ModList.KindOfMod kind = ModList.KindOfMod.Original;
     private ForgeDownloadTask ForgeModDownloadTask;
     private QuiltDownloadTask QuiltModDownloadTask;
-
     public Launcher(String version) {
         this(version, AboutSetting.GetDefaultGamePath());
     }
@@ -129,6 +129,10 @@ public class Launcher extends Version {
 
     public DownloadVersionGameFile getDownloadVersionGameFile() {
         return new DownloadVersionGameFile(this);
+    }
+
+    public GameConfig getGameConfig() {
+        return new GameConfig(this);
     }
 
     @Override

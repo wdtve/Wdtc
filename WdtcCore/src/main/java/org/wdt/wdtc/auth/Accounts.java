@@ -1,10 +1,10 @@
 package org.wdt.wdtc.auth;
 
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 
@@ -42,7 +42,7 @@ public class Accounts {
     }
 
     public JSONObject UserSetting() throws IOException {
-        return Utils.getJSONObject(FilePath.getUsersJson());
+        return JSONUtils.getJSONObject(FilePath.getUsersJson());
     }
 
     public String getUserType() throws IOException {

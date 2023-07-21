@@ -4,7 +4,7 @@ package org.wdt.wdtc.download.forge;
 import org.apache.commons.io.FilenameUtils;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.ExtractFile;
@@ -29,7 +29,7 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
     }
 
     public JSONObject getForgeVersionJsonObject() throws IOException {
-        return Utils.getJSONObject(getForgeVersionJsonPath());
+        return JSONUtils.getJSONObject(getForgeVersionJsonPath());
     }
 
     public void DownloadVersionJsonLibarary() throws IOException {

@@ -2,7 +2,7 @@ package org.wdt.wdtc.download.fabric;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.wdt.wdtc.platform.PlatformUtils;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

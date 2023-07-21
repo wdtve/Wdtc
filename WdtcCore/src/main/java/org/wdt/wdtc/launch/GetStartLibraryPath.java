@@ -3,7 +3,7 @@ package org.wdt.wdtc.launch;
 
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.AboutSetting;
@@ -21,7 +21,7 @@ public class GetStartLibraryPath {
         ClassPathBuilder = new StringBuilder();
         GameLibraryPathAndUrl gameLibraryPathAndUrl = new GameLibraryPathAndUrl(launcher);
         Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
-        JSONObject VersionJsonObject = Utils.getJSONObject(launcher.getVersionJson());
+        JSONObject VersionJsonObject = JSONUtils.getJSONObject(launcher.getVersionJson());
         JSONArray LibrariesJsonObject = VersionJsonObject.getJSONArray("libraries");
         for (int i = 0; i < LibrariesJsonObject.size(); i++) {
             JSONObject LibraryObject = LibrariesJsonObject.getJSONObject(i);

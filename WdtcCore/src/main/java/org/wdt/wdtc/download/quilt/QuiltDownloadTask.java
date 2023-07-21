@@ -5,13 +5,13 @@ import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.Utils;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.PlatformUtils;
-import org.wdt.wdtc.platform.log4j.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class QuiltDownloadTask {
     public List<Map<String, String>> LibraryList() throws IOException {
         List<Map<String, String>> List = new ArrayList<>();
         writeQuiltGameVersionJson();
-        JSONObject MetadataObject = Utils.getJSONObject(QuiltGameVersionJson());
+        JSONObject MetadataObject = JSONUtils.getJSONObject(QuiltGameVersionJson());
         JSONArray LibararyArray = MetadataObject.getJSONObject("launcherMeta").getJSONObject("libraries").getJSONArray("common");
         for (int l = 0; l < LibararyArray.size(); l++) {
             JSONObject LibraryObject = LibararyArray.getJSONObject(l);
