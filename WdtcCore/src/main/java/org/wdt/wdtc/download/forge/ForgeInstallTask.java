@@ -11,8 +11,8 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.ExtractFile;
-import org.wdt.wdtc.utils.JavaHomePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
@@ -24,17 +24,19 @@ import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadTask {
     private final Logger logmaker = getWdtcLogger.getLogger(getClass());
+    private final GameConfig config;
 
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
+        this.config = launcher.getGameConfig();
     }
 
 
     public String CommandLine(int index) throws IOException {
         JSONObject JsonObject = getInstallPrefileJSONObject().getJSONArray("processors").getJSONObject(index);
         StringBuilder CommandLine = new StringBuilder();
-        CommandLine.append(JavaHomePath.GetRunJavaHome()).append(" -cp ");
+        CommandLine.append("\"").append(config.getJavaPath()).append("\"").append(" -cp ");
         JSONArray JarList = JsonObject.getJSONArray("classpath");
         for (int i = 0; i < JarList.size(); i++) {
             DefaultDependency Jar = new DefaultDependency(JarList.getString(i));

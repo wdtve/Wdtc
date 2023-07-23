@@ -17,7 +17,7 @@ public class GameJvmCommand {
         GameJvmCommand.JvmSet = new StringBuilder();
         GameConfig gameConfig = launcher.getGameConfig();
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
-        Add(gameConfig.getJavaPath());
+        Add("\"" + gameConfig.getJavaPath() + "\"");
         Add("-Dlog4j.configurationFile=", FilenameUtils.separatorsToWindows(launcher.getVersionLog4j2()));
         Add("-Xmx" + gameConfig.getRunningMemory(), "M");
         Add("-Dminecraft.client.jar=", launcher.getVersionJar());

@@ -12,17 +12,22 @@ import java.util.regex.Pattern;
 
 public class ModList {
 
-    public static void getModTask(Launcher launcher) throws IOException {
-        Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");
-        Matcher m = r.matcher(JSONUtils.getJSONObject(launcher.getVersionJson()).getString("id"));
-        if (m.find()) {
-            String ModName = m.group(2);
-            String ModVersion = m.group(3);
-            switch (ModName) {
-                case "forge" -> launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, ModVersion));
-                case "fabric" -> launcher.setFabricModDownloadTask(new FabricDownloadTask(ModVersion, launcher));
-                case "quilt" -> launcher.setQuiltModDownloadTask(new QuiltDownloadTask(launcher, ModVersion));
+    public static Launcher getModTask(Launcher launcher) {
+        try {
+            Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");
+            Matcher m = r.matcher(JSONUtils.getJSONObject(launcher.getVersionJson()).getString("id"));
+            if (m.find()) {
+                String ModName = m.group(2);
+                String ModVersion = m.group(3);
+                switch (ModName) {
+                    case "forge" -> launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, ModVersion));
+                    case "fabric" -> launcher.setFabricModDownloadTask(new FabricDownloadTask(ModVersion, launcher));
+                    case "quilt" -> launcher.setQuiltModDownloadTask(new QuiltDownloadTask(launcher, ModVersion));
+                }
             }
+            return launcher;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

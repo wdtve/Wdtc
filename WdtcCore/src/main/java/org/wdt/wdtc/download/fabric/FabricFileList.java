@@ -32,7 +32,6 @@ public class FabricFileList {
     public FabricFileList(String FabricVersionNumber, Launcher launcher) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.launcher = launcher;
-        writeCacheVersionJson();
     }
 
     public String getFabricVersionNumber() {
@@ -57,6 +56,7 @@ public class FabricFileList {
     }
 
     public List<String> getFabricFileName() throws IOException {
+        writeCacheVersionJson();
         List<String> StringFileList = new ArrayList<>();
         JSONObject FileList = JSONUtils.getJSONObject(getCacheVersionJson());
         JSONObject loader = FileList.getJSONObject("loader");

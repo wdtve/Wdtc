@@ -83,4 +83,8 @@ public class AboutSetting {
     public static JSONArray JavaList() {
         return SettingObject().getJSONArray("JavaPath");
     }
+
+    public static String getPreferredVersion() {
+        return SettingObject().getString("PreferredVersion");
+    }
 }

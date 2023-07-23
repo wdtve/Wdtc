@@ -6,9 +6,9 @@ import org.wdt.wdtc.game.FilePath;
 import java.io.IOException;
 
 public class getWdtcLogger {
-    private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] : %m%n");
+    private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] %m%n");
 
-    public static Logger getLogger(Class clazz) {
+    public static <T> Logger getLogger(Class<T> clazz) {
         Logger logmaker = Logger.getLogger(clazz);
         try {
             logmaker.addAppender(getFileAppender());

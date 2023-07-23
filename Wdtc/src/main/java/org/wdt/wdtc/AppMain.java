@@ -8,11 +8,13 @@ import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.wdtc.WdtcUI.Consoler;
-import org.wdt.wdtc.WdtcUI.ErrorWin;
-import org.wdt.wdtc.WdtcUI.HomeWin;
+import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.ui.ErrorWin;
+import org.wdt.wdtc.ui.HomeWindow;
+import org.wdt.wdtc.ui.WindwosSize;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class AppMain extends Application {
     @Override
     public void start(Stage MainStage) {
         try {
+            WindwosSize size = new WindwosSize(MainStage);
             try {
                 URL url = new URL("https://www.bilibili.com");
                 try {
@@ -46,29 +49,27 @@ public class AppMain extends Application {
                 ErrorWin.setErrorWin(e);
             }
             Platform.runLater(() -> {
-                MainStage.setMinWidth(Consoler.WindowsWidht);
-                MainStage.setMinHeight(Consoler.WindowsHeight);
-                if (AboutSetting.SettingObject().has("WindowsWidth")) {
-                    MainStage.setWidth(AboutSetting.GetWindowsWidth());
-                } else {
-                    MainStage.setWidth(Consoler.WindowsWidht);
-                }
-                if (AboutSetting.SettingObject().has("WindowsHeight")) {
-                    MainStage.setHeight(AboutSetting.GetWindowsHeight());
-                } else {
-                    MainStage.setHeight(Consoler.WindowsHeight);
-                }
+                MainStage.setMinWidth(WindwosSize.WindowsWidht);
+                MainStage.setMinHeight(WindwosSize.WindowsHeight);
+                size.SettingSize();
                 MainStage.getIcons().add(new Image("ico.jpg"));
-                HomeWin.setHome(MainStage);
+                HomeWindow win;
+                if (AboutSetting.SettingObject().has("PreferredVersion")) {
+                    win = new HomeWindow(ModList.getModTask(new Launcher(AboutSetting.getPreferredVersion())));
+                } else {
+                    win = new HomeWindow(null);
+                }
+                win.setHome(MainStage);
                 MainStage.show();
             });
             MainStage.setOnCloseRequest(windowEvent -> {
                 try {
-                    logmaker.info("======= exited ========");
+                    logmaker.info(size);
                     JsonObject object = AboutSetting.SettingObject().getJsonObjects();
                     object.addProperty("WindowsWidth", MainStage.getWidth());
                     object.addProperty("WindowsHeight", MainStage.getHeight());
                     FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), JSONObject.toJSONString(object), "UTF-8");
+                    logmaker.info("======= exited ========");
                     System.exit(0);
                 } catch (IOException e) {
                     ErrorWin.setErrorWin(e);

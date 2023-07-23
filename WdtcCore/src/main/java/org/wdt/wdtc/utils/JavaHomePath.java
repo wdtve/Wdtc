@@ -6,9 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.platform.AboutSetting;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class JavaHomePath {
     private static final Logger logmaker = getWdtcLogger.getLogger(JavaHomePath.class);
 
     public static String GetRunJavaHome() {
-        return FilenameUtils.separatorsToUnix("\"" + System.getProperty("java.home") + "\\bin\\java.exe\"");
+        return FilenameUtils.separatorsToUnix(System.getProperty("java.home") + "\\bin\\java.exe");
     }
 
     public static void main(String[] args) {
@@ -97,19 +95,28 @@ public class JavaHomePath {
                 if (!PlatformUtils.FileExistenceAndSize(JavaPath)) {
                     Map<String, String> JavaExeAndVersion = new HashMap<>();
                     JavaExeAndVersion.put("JavaPath", JavaPath);
-                    InputStream inputStream = new FileInputStream(path + "release");
-                    for (String s : IOUtils.readLines(inputStream)) {
-                        Pattern pattern = Pattern.compile("JAVA_VERSION=\"(.+)\"");
-                        Matcher m = pattern.matcher(s);
-                        if (m.find()) {
-                            JavaExeAndVersion.put("JavaVersion", m.group(1));
-                        }
-                    }
+                    JavaExeAndVersion.put("JavaVersion", getJavaVersion(JavaPath));
                     JavaList.add(JavaExeAndVersion);
                 }
             }
         }
         return JavaList;
+    }
+
+    public static String getJavaVersion(String JavaPath) {
+        try {
+            Process process = Runtime.getRuntime().exec(new String[]{JavaPath, "-XshowSettings:properties", "-version"});
+            Pattern pattern = Pattern.compile("java\\.version = (.+)");
+            for (String line : IOUtils.readLines(process.getErrorStream())) {
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    return matcher.group(1);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
 

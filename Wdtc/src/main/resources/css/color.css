@@ -1,5 +1,6 @@
-.button {
+.BlackBorder {
     -fx-text-fill: #231f20;
+    -fx-border-color: #231f20;
 }
 
 .radio-button {
@@ -12,4 +13,13 @@
 
 .tips {
     -fx-text-fill: rgba(16, 13, 13, 0.35);
+}
+
+.button {
+    -fx-text-fill: #231f20;
+}
+
+.ModChoosePane {
+    -fx-background-color: #fdfdfd;
+    -fx-border-color: #231f20;
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="489.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17">
+    <ScrollPane layoutX="96.0" layoutY="70.0" prefHeight="420.0" prefWidth="520.0">
+        <VBox prefHeight="416.0" prefWidth="517.0">
+            <Pane prefHeight="40.0" prefWidth="514.0">
+                <RadioButton layoutX="14.0" layoutY="12.0" mnemonicParsing="false" text="1.19.4"/>
+                <Label layoutX="86.0" layoutY="13.0" text="Mod:"/>
+            </Pane>
+        </VBox>
+    </ScrollPane>
+    <Button layoutY="460.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="96.0" text="安装新游戏"/>
+    <Label layoutY="70.0" prefWidth="96.0" text="当前目录"/>
+</Pane>

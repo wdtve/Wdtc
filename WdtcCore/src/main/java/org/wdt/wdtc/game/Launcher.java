@@ -9,6 +9,7 @@ import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
 import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
@@ -26,6 +27,7 @@ public class Launcher extends Version {
     private ModList.KindOfMod kind = ModList.KindOfMod.Original;
     private ForgeDownloadTask ForgeModDownloadTask;
     private QuiltDownloadTask QuiltModDownloadTask;
+
     public Launcher(String version) {
         this(version, AboutSetting.GetDefaultGamePath());
     }
@@ -133,6 +135,10 @@ public class Launcher extends Version {
 
     public GameConfig getGameConfig() {
         return new GameConfig(this);
+    }
+
+    public GetGamePath getGetGamePath() {
+        return new GetGamePath(getHere());
     }
 
     @Override
