@@ -15,10 +15,10 @@ import org.wdt.wdtc.utils.ThreadUtils;
 import java.io.IOException;
 
 
-public class DownloadGameWin {
+public class DownloadGameWindows {
     private final Launcher launcher;
 
-    public DownloadGameWin(Launcher launcher) {
+    public DownloadGameWindows(Launcher launcher) {
         this.launcher = launcher;
     }
 
@@ -36,6 +36,7 @@ public class DownloadGameWin {
         textField.setPromptText("三个阶段");
         textField.setLayoutX(218.0);
         textField.setLayoutY(320.0);
+        textField.setPrefSize(200, 10);
         Label time = new Label("下载时间不会太长");
         Label status_bar = new Label("下面是状态栏");
         time.setLayoutX(241.0);

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class LibraryDependencyDownload extends DefaultDependency {
-    private final Logger logmaker = Logger.getLogger(getClass());
+    private final Logger logmaker = log4j.getLogger(getClass());
     private String path = System.getProperty("user.dir");
     private String DefaultUrl = "https://repo1.maven.org/maven2/";
     private boolean DeletePom = false;

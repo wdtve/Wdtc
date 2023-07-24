@@ -105,7 +105,7 @@ public class ModChooseWin {
         Consoler.setCss("ModChoosePane", FabricPane, ForgePane, FabricAPIPane, QuiltPane);
         Consoler.setCss("BlackBorder", back, confirm, DownloadForge, DownloadFabric, DownloadFabricAPI, DownloadQuilt);
         Consoler.setCss("BlackBorder", CancelForge, CancelFabric, CancelFabricAPI, CancelQuilt);
-        pane.getStylesheets().add(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         MainStage.setScene(new Scene(pane));
 
         DownloadForge.setOnAction(event -> {
@@ -211,8 +211,8 @@ public class ModChooseWin {
 
         back.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
         confirm.setOnAction(event -> {
-            DownloadGameWin downloadGameWin = new DownloadGameWin(launcher);
-            downloadGameWin.setDownGameWin(MainStage);
+            DownloadGameWindows downloadGameWindows = new DownloadGameWindows(launcher);
+            downloadGameWindows.setDownGameWin(MainStage);
         });
     }
 

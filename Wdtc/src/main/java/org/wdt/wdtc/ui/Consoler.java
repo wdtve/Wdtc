@@ -25,4 +25,8 @@ public class Consoler {
             region.getStyleClass().add(id);
         }
     }
+
+    public static void setStylesheets(Pane pane) {
+        pane.getStylesheets().add(getCssFile());
+    }
 }

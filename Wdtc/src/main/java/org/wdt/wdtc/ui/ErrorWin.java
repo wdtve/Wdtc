@@ -14,11 +14,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class ErrorWin {
-    private static final Logger LOGGER = getWdtcLogger.getLogger(ErrorWin.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(ErrorWin.class);
 
 
     public static void setErrorWin(Throwable e) {
-        LOGGER.error("* 发生错误:", e);
+        logmaker.error("* 发生错误:", e);
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         setWin(sw.getBuffer().toString(), "发生错误!");

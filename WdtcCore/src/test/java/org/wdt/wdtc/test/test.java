@@ -5,8 +5,8 @@ import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Version;
-import org.wdt.wdtc.utils.JavaHomePath;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class test {
     private static final Logger logmaker = Logger.getLogger(test.class);
@@ -22,8 +26,7 @@ public class test {
     public static void executeCmdCommand(String cmdCommand) {
         try {
             Process process = Runtime.getRuntime().exec(cmdCommand);
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream(), "GBK"));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 System.err.println(line);
@@ -61,9 +64,34 @@ public class test {
 
     }
 
-    @Test
-    public void log() throws IOException {
-        System.out.println(JavaHomePath.getJavaVersion("java"));
+    public static void main(String[] args) throws InterruptedException {
+        SpeedOfProgress speedOfProgress = new SpeedOfProgress(100.00);
+        Timer timer = new Timer();
+        for (int i = 0; i < 100; i++) {
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    DecimalFormat s = new DecimalFormat("0");
+                    System.out.println(s.format((speedOfProgress.getSpend() / 100) * 100));
+                    try {
+                        TimeUnit.SECONDS.sleep(20);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    speedOfProgress.countDown();
+
+                }
+            };
+            timer.schedule(timerTask, 50, 999);
+        }
+        try {
+            speedOfProgress.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        timer.cancel();
+
+
     }
 
 }

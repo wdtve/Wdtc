@@ -82,7 +82,7 @@ public class VersionChoose {
         tips.setLayoutY(70);
         size.ModifyWindwosSize(ParentPane, SonScrollPane, NewGame, tips, back);
         ParentPane.setBackground(Consoler.getBackground());
-        ParentPane.getStylesheets().add(Consoler.getCssFile());
+        Consoler.setStylesheets(ParentPane);
         Consoler.setCss("BlackBorder", back, NewGame);
         MainStage.setScene(new Scene(ParentPane));
         NewGame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));

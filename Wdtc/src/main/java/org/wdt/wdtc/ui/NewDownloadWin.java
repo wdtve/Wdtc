@@ -51,7 +51,7 @@ public class NewDownloadWin {
         sp.setPrefHeight(WindwosSize.WindowsHeight);
         sp.setPrefWidth(461);
         size.ModifyWindwosSize(pane, sp, back, tips);
-        pane.getStylesheets().addAll(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
         MainStage.setScene(new Scene(pane, 600, 450));

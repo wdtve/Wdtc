@@ -12,6 +12,7 @@ public class getWdtcLogger {
         Logger logmaker = Logger.getLogger(clazz);
         try {
             logmaker.addAppender(getFileAppender());
+            logmaker.addAppender(getConsoleAppender());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,5 +29,15 @@ public class getWdtcLogger {
         FileAppender.setThreshold(Level.INFO);
         FileAppender.activateOptions();
         return FileAppender;
+    }
+
+    private static ConsoleAppender getConsoleAppender() {
+        ConsoleAppender consoleAppender = new ConsoleAppender(layout);
+        consoleAppender.setThreshold(Level.INFO);
+        consoleAppender.setTarget("System.out");
+        consoleAppender.setImmediateFlush(true);
+        consoleAppender.setEncoding("UTF-8");
+        consoleAppender.activateOptions();
+        return consoleAppender;
     }
 }

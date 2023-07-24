@@ -107,7 +107,7 @@ public class VersionSettingWindows extends AboutSetting {
         apply.setPrefSize(150, 50);
 
         size.ModifyWindwosSize(pane, tips, tips2, tips3, tips4, tips5, tips6, Input, JavaPath, InputHeight, InputWidth, choose, apply);
-        pane.getStylesheets().add(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         Consoler.setCss("BlackBorder", choose, apply);
         SonScrollPane.setContent(pane);
         JFXButton completion = new JFXButton("补全游戏文件");
@@ -119,7 +119,7 @@ public class VersionSettingWindows extends AboutSetting {
         size.ModifyWindwosSize(ParentPane, SonScrollPane, completion, delete, back);
         Consoler.setCss("BlackBorder", back, delete, completion);
         ParentPane.setBackground(Consoler.getBackground());
-        ParentPane.getStylesheets().add(Consoler.getCssFile());
+        Consoler.setStylesheets(ParentPane);
         MainStage.setScene(new Scene(ParentPane));
 
         JavaPath.setText(config.getJavaPath());

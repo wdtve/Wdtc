@@ -16,11 +16,11 @@ import java.util.Objects;
 
 public class SelectGameVersion {
     private final Logger logmaker = getWdtcLogger.getLogger(SelectGameVersion.class);
-    private final TextField label;
+    private final TextField textField;
     private final Launcher launcher;
 
-    public SelectGameVersion(Launcher launcher, TextField label) {
-        this.label = label;
+    public SelectGameVersion(Launcher launcher, TextField textField) {
+        this.textField = textField;
         this.launcher = launcher;
     }
 
@@ -43,8 +43,8 @@ public class SelectGameVersion {
             FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(new DefaultGameConfig()), "UTF-8");
         }
         logmaker.info(new DefaultGameConfig());
-        if (Objects.nonNull(label)) {
-            label.setText("下载完成");
+        if (Objects.nonNull(textField)) {
+            textField.setText("下载完成");
         }
     }
 

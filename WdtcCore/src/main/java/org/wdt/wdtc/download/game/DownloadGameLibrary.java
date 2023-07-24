@@ -33,7 +33,7 @@ public class DownloadGameLibrary extends DownloadTask {
             if (LibraryJSONObject.has("natives")) {
                 JSONObject NativesJson = LibraryJSONObject.getJSONObject("natives");
                 if (NativesJson.has("windows")) {
-                    StartDownloadNativesLibTask(LibraryJSONObject).start();
+                    StartDownloadNativesLibTask(LibraryJSONObject);
                 }
             } else {
                 if (LibraryJSONObject.has("rules")) {
@@ -42,12 +42,12 @@ public class DownloadGameLibrary extends DownloadTask {
                     String action = ActionJson.getString("action");
                     String OSName = ActionJson.getJSONObject("os").getString("name");
                     if (Objects.equals(action, "disallow") && Objects.equals(OSName, "osx")) {
-                        StartDownloadLibTask(LibraryJSONObject).start();
+                        StartDownloadLibTask(LibraryJSONObject);
                     } else if (Objects.equals(action, "allow") && Objects.equals(OSName, "windows")) {
-                        StartDownloadLibTask(LibraryJSONObject).start();
+                        StartDownloadLibTask(LibraryJSONObject);
                     }
                 } else {
-                    StartDownloadLibTask(LibraryJSONObject).start();
+                    StartDownloadLibTask(LibraryJSONObject);
                 }
             }
         }

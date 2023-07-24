@@ -8,6 +8,7 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GameLibraryPathAndUrl;
 import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
@@ -104,14 +105,14 @@ public class DownloadTask extends GameLibraryPathAndUrl {
         } else {
             hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
         }
-        return new Thread(() -> {
+        return ThreadUtils.StartThread(() -> {
             StartDownloadTask(hash_url, hash_path);
             downLatch.countDown();
         });
     }
 
     public Thread StartDownloadLibTask(JSONObject lib_j) {
-        return new Thread(() -> {
+        return ThreadUtils.StartThread(() -> {
             try {
                 StartDownloadTask(GetLibUrl(lib_j), GetLibPath(lib_j));
             } catch (MalformedURLException e) {
@@ -122,7 +123,7 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     }
 
     public Thread StartDownloadNativesLibTask(JSONObject lib_j) {
-        return new Thread(() -> {
+        return ThreadUtils.StartThread(() -> {
             try {
                 try {
                     StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));

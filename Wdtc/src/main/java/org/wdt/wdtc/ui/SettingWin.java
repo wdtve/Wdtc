@@ -198,7 +198,7 @@ public class SettingWin extends AboutSetting {
         scrollPane.setLayoutY(62.0);
 
         Pane pane = new Pane();
-        pane.getStylesheets().addAll(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         size.ModifyWindwosSize(pane, scrollPane, back, ExportLog);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));

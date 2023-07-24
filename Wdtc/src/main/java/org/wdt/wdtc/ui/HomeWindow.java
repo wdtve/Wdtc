@@ -43,19 +43,29 @@ public class HomeWindow {
         Menu.setPrefSize(64.0, 450);
         JFXButton home = new JFXButton("首页");
         home.setPrefSize(64.0, 23.0);
+
+        JFXButton User = new JFXButton("修改账户");
+        User.setLayoutY(23.0);
+        User.setPrefSize(64, 23);
+        User.setOnAction(event -> UsersWin.setUserWin(User.getText(), MainStage));
+
         JFXButton downgame = new JFXButton("下载游戏");
-        downgame.setLayoutY(23.0);
+        downgame.setLayoutY(46);
         downgame.setPrefSize(64.0, 23.0);
         downgame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
+
         JFXButton startgame = new JFXButton("选择版本");
-        startgame.setLayoutY(46.0);
+        startgame.setLayoutY(69);
         startgame.setPrefSize(64.0, 23.0);
         startgame.setOnAction(event -> {
             GetGamePath path = new GetGamePath();
             VersionChoose choose = new VersionChoose(path);
             choose.setWindow(MainStage);
         });
+
         JFXButton VersionSetting = new JFXButton("版本设置");
+        VersionSetting.setLayoutY(92);
+        VersionSetting.setPrefSize(64, 23);
         if (launcher != null) {
             VersionSetting.setDisable(false);
             VersionSettingWindows windows = new VersionSettingWindows(launcher);
@@ -63,18 +73,7 @@ public class HomeWindow {
         } else {
             VersionSetting.setDisable(true);
         }
-        VersionSetting.setPrefSize(64, 23);
-        VersionSetting.setLayoutY(69);
-        JFXButton github = new JFXButton("GitHub");
-        github.setLayoutY(425);
-        github.setPrefSize(64.0, 23.0);
-        github.setOnAction(event -> {
-            try {
-                Runtime.getRuntime().exec("cmd.exe /C start https://github.com/Wd-t/Wdtc");
-            } catch (IOException | RuntimeException e) {
-                ErrorWin.setErrorWin(e);
-            }
-        });
+
         JFXButton setting = new JFXButton("设置");
         setting.setLayoutY(402.0);
         setting.setPrefSize(64.0, 23.0);
@@ -94,6 +93,18 @@ public class HomeWindow {
                 }
             }
         });
+
+        JFXButton github = new JFXButton("GitHub");
+        github.setLayoutY(425);
+        github.setPrefSize(64.0, 23.0);
+        github.setOnAction(event -> {
+            try {
+                Runtime.getRuntime().exec("cmd.exe /C start https://github.com/Wd-t/Wdtc");
+            } catch (IOException | RuntimeException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
+
         Label name = new Label("Wdtc\n" + Starter.getLauncherVersion());
         name.setLayoutX(17.0);
         name.setLayoutY(161.0);
@@ -130,11 +141,11 @@ public class HomeWindow {
             }
         });
         WindwosSize windwosSize = new WindwosSize(MainStage);
-        windwosSize.ModifyWindwosSize(Menu, home, downgame, startgame, github, setting, name, VersionSetting);
+        windwosSize.ModifyWindwosSize(Menu, home, downgame, startgame, github, setting, name, VersionSetting, User);
         Menu.getStyleClass().add("BlackBorder");
         Pane pane = new Pane();
         windwosSize.ModifyWindwosSize(pane, readme, Menu, LaunchGameButton);
-        pane.getStylesheets().addAll(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);
         MainStage.setScene(scene);

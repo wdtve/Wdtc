@@ -72,7 +72,7 @@ public class ModChoose {
         list.setContent(ButtonList);
         size.ModifyWindwosSize(pane, list, back, tips);
         pane.setBackground(Consoler.getBackground());
-        pane.getStylesheets().add(Consoler.getCssFile());
+        Consoler.setStylesheets(pane);
         MainStage.setScene(new Scene(pane));
         back.setOnAction(event -> {
             ModChooseWin Choose = new ModChooseWin(launcher, MainStage);

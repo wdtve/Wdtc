@@ -8,6 +8,7 @@ import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.JavaHomePath;
@@ -27,7 +28,7 @@ public class WdtcMain {
         logmaker.info("* Java Home:" + System.getProperty("java.home"));
         logmaker.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
         logmaker.info("* Setting File:" + FilePath.getSettingFile());
-        logmaker.info("* Here:" + System.getProperty("user.dir"));
+        logmaker.info("* Here:" + GetGamePath.getDefaultHere());
         AboutSetting.GenerateSettingFile();
         StartTask();
         Ergodic();
