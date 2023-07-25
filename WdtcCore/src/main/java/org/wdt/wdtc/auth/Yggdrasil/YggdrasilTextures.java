@@ -1,10 +1,10 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
-import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.getWdtcLogger;

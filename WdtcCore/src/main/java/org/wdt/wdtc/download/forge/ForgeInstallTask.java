@@ -7,13 +7,13 @@ import org.wdt.platform.DefaultDependency;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.ExtractFile;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.BufferedReader;
@@ -85,7 +85,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
     public void DownloadClientText() throws IOException {
         DefaultDependency TxtPath = new DefaultDependency(getInstallPrefileJSONObject().getJSONObject("data")
                 .getJSONObject("MOJMAPS").getString("client").replace("[", "").replace("]", ""));
-        String TxtUrl = PlatformUtils.FileToJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
+        String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
         if (launcher.bmclapi()) {
             TxtUrl = TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), FileUrl.getBmcalapiCom());

@@ -3,6 +3,7 @@ package org.wdt.wdtc.ui;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -98,12 +99,15 @@ public class ModChooseWin {
         JFXButton confirm = new JFXButton("安装游戏");
         confirm.setLayoutX(435.0);
         confirm.setLayoutY(337.0);
+        AnchorPane.setRightAnchor(confirm, 30.0);
+        AnchorPane.setBottomAnchor(confirm, 30.0);
+        confirm.getStyleClass().add("BackGroundWriteButton");
         confirm.setPrefSize(107, 57);
 
         pane.setBackground(Consoler.getBackground());
         size.ModifyWindwosSize(pane, back, title, confirm, ForgePane, FabricPane, FabricAPIPane, QuiltPane);
         Consoler.setCss("ModChoosePane", FabricPane, ForgePane, FabricAPIPane, QuiltPane);
-        Consoler.setCss("BlackBorder", back, confirm, DownloadForge, DownloadFabric, DownloadFabricAPI, DownloadQuilt);
+        Consoler.setCss("BlackBorder", back, DownloadForge, DownloadFabric, DownloadFabricAPI, DownloadQuilt);
         Consoler.setCss("BlackBorder", CancelForge, CancelFabric, CancelFabricAPI, CancelQuilt);
         Consoler.setStylesheets(pane);
         MainStage.setScene(new Scene(pane));

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Launcher extends Version {
-    private final Logger logmaker = getWdtcLogger.getLogger(getClass());
+    private static final Logger logmaker = getWdtcLogger.getLogger(Launcher.class);
     private String Gameattribute;
     private String Jvmattribute;
     private String Librartattribute;
@@ -71,25 +71,16 @@ public class Launcher extends Version {
         ForgeModDownloadTask = forgeModDownloadTask;
     }
 
-    public String getGameattribute() {
-        return Gameattribute;
-    }
 
     public void setGameattribute(StringBuilder gameattribute) {
         Gameattribute = new String(gameattribute);
     }
 
-    public String getJvmattribute() {
-        return Jvmattribute;
-    }
 
     public void setJvmattribute(StringBuilder jvmattribute) {
         Jvmattribute = new String(jvmattribute);
     }
 
-    public String getLibrartattribute() {
-        return Librartattribute;
-    }
 
     public void setLibrartattribute(StringBuilder librartattribute) {
         Librartattribute = new String(librartattribute);
@@ -106,15 +97,16 @@ public class Launcher extends Version {
 
     public void writeStartScript() {
         try {
-            logmaker.info(GetStartScript());
-            FileUtils.writeStringToFile(FilePath.getStarterBat(), GetStartScript(), "UTF-8", false);
+            String Script = GetStartScript();
+            logmaker.info(Script);
+            FileUtils.writeStringToFile(FilePath.getStarterBat(), Script, "UTF-8", false);
         } catch (IOException e) {
-            e.printStackTrace();
+            logmaker.error("* Error,", e);
         }
     }
 
     public String GetStartScript() {
-        return getJvmattribute() + getLibrartattribute() + getGameattribute();
+        return Jvmattribute + Librartattribute + Gameattribute;
     }
 
     public Accounts GetAccounts() throws IOException {

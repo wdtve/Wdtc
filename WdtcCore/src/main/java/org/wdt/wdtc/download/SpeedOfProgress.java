@@ -4,10 +4,10 @@ import java.util.concurrent.CountDownLatch;
 
 public class SpeedOfProgress {
     private final CountDownLatch countDown;
-    private double Spend;
+    private int Spend;
 
-    public SpeedOfProgress(Double spend) {
-        this.countDown = new CountDownLatch(spend.intValue());
+    public SpeedOfProgress(int spend) {
+        this.countDown = new CountDownLatch(spend);
         Spend = spend;
     }
 
@@ -16,7 +16,7 @@ public class SpeedOfProgress {
         countDown.countDown();
     }
 
-    public double getSpend() {
+    public int getSpend() {
         return Spend;
     }
 

@@ -1,9 +1,10 @@
 package org.wdt.wdtc.utils;
 
-import com.alibaba.fastjson2.JSONArray;
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONArray;
 import org.wdt.wdtc.platform.AboutSetting;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class JavaHomePath {
             if (s.startsWith(key)) {
                 for (Map<String, String> map : getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
                     String JavaPath = map.get("JavaPath");
-                    JSONArray JavaList = AboutSetting.JavaList().getFastJSONArray();
+                    JSONArray JavaList = AboutSetting.JavaList();
                     boolean AddPath = true;
                     for (int i = 0; i < JavaList.size(); i++) {
                         if (AddPath) {
@@ -50,9 +51,12 @@ public class JavaHomePath {
                         }
                     }
                     if (AddPath) {
+
                         JavaList.add(JavaPath);
                         logmaker.info("* Find Java : " + map.get("JavaPath") + ", Version : " + map.get("JavaVersion"));
-                        PlatformUtils.PutKeyToFile(AboutSetting.GetSettingFile(), AboutSetting.SettingObject().getFastJSONObject(), "JavaPath", JavaList);
+                        JsonObject object = AboutSetting.SettingObject().getJsonObjects();
+                        object.add("JavaPath", JavaList.getJsonArrays());
+                        PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
                     }
                 }
             }

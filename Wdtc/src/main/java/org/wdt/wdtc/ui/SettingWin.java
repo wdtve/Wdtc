@@ -1,18 +1,18 @@
 package org.wdt.wdtc.ui;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
@@ -29,7 +29,7 @@ public class SettingWin extends AboutSetting {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        JSONObject SettingJson = SettingObject().getFastJSONObject();
+        JsonObject SettingJson = SettingObject().getJsonObjects();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
@@ -49,7 +49,7 @@ public class SettingWin extends AboutSetting {
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
                 try {
-                    Runtime.getRuntime().exec("cmd.exe /c " + GetSettingFile());
+                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", GetSettingFile().getCanonicalPath()});
                     logmaker.info("* 设置文件" + GetSettingFile() + "已打开");
                 } catch (IOException e) {
                     ErrorWin.setErrorWin(e);
@@ -61,7 +61,8 @@ public class SettingWin extends AboutSetting {
                     fileChooser.setInitialDirectory(new File(GetDefaultGamePath()));
                     File file = fileChooser.showDialog(MainStage);
                     if (Objects.nonNull(file)) {
-                        PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "DefaultGamePath", file);
+                        SettingJson.addProperty("DefaultGamePath", file.getCanonicalPath());
+                        putKey(SettingJson);
                         GamePath.setText(file.getCanonicalPath());
                         logmaker.info("* 游戏文件夹已更改为:" + file);
                     }
@@ -93,12 +94,14 @@ public class SettingWin extends AboutSetting {
         FalseLog.setOnAction(event -> {
             TrueLog.setSelected(false);
             logmaker.info("* 启动日志器关闭显示");
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "log", false);
+            SettingJson.addProperty("log", false);
+            putKey(SettingJson);
         });
         TrueLog.setOnAction(event -> {
             FalseLog.setSelected(false);
             logmaker.info("* 启动日志器开启显示");
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "log", true);
+            SettingJson.addProperty("log", true);
+            putKey(SettingJson);
         });
 
         Label BMCLAPIMessage = new Label("是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):");
@@ -114,16 +117,20 @@ public class SettingWin extends AboutSetting {
         TrueBmcl.setOnAction(event -> {
             FalseBmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已开启");
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "bmcl", true);
+            SettingJson.addProperty("bmcl", true);
+            putKey(SettingJson);
         });
         FalseBmcl.setOnAction(event -> {
             TrueBmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已关闭");
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "bmcl", false);
+            SettingJson.addProperty("bmcl", false);
+            putKey(SettingJson);
         });
 
         JFXButton ExportLog = new JFXButton("导出日志");
         ExportLog.setLayoutY(420);
+        AnchorPane.setLeftAnchor(ExportLog, 0.0);
+        AnchorPane.setBottomAnchor(ExportLog, 0.0);
         ExportLog.setPrefSize(105, 30);
         ExportLog.setOnAction(event -> {
             try {
@@ -157,13 +164,15 @@ public class SettingWin extends AboutSetting {
         FalseOpenGL.setLayoutY(line4);
         TrueOpenGl.setOnAction(event -> {
             FalseOpenGL.setSelected(false);
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "llvmpipe-loader", true);
+            SettingJson.addProperty("llvmpipe-loader", true);
             logmaker.info("* OpenGL软渲染已开启");
+            putKey(SettingJson);
         });
         FalseOpenGL.setOnAction(event -> {
             TrueOpenGl.setSelected(false);
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "llvmpipe-loader", false);
+            SettingJson.addProperty("llvmpipe-loader", false);
             logmaker.info("* OpenGL软渲染已关闭");
+            putKey(SettingJson);
         });
 
         Label tips4 = new Label("将游戏设置成中文(默认开启):");
@@ -177,29 +186,34 @@ public class SettingWin extends AboutSetting {
         FalseZhcn.setLayoutX(coordinate.layoutX2);
         FalseZhcn.setLayoutY(line5);
         FalseZhcn.setOnAction(event -> {
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "ZH-CN", false);
+            SettingJson.addProperty("ZH-CN", false);
             TrueZhcn.setSelected(false);
             logmaker.info("* 取消将游戏设置为中文");
+            putKey(SettingJson);
         });
         TrueZhcn.setOnAction(event -> {
-            PlatformUtils.PutKeyToFile(GetSettingFile(), SettingJson, "ZH-CN", true);
+            SettingJson.addProperty("ZH-CN", true);
             FalseZhcn.setSelected(false);
             logmaker.info("* 将游戏设置为中文");
+            putKey(SettingJson);
         });
 
-        Pane SonPane = new Pane();
+        AnchorPane SonPane = new AnchorPane();
+        Consoler.setTopGrid(SonPane);
+
         SonPane.setPrefSize(493, 336);
         WindwosSize size = new WindwosSize(MainStage);
         size.ModifyWindwosSize(SonPane, back, TrueBmcl, FalseBmcl, TrueLog, FalseLog, cmd, BMCLAPIMessage, GamePath,
                 tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
         ScrollPane scrollPane = new ScrollPane(SonPane);
-        scrollPane.setPrefSize(511, 427);
-        scrollPane.setLayoutX(105.0);
-        scrollPane.setLayoutY(62.0);
+        AnchorPane.setLeftAnchor(scrollPane, 105.0);
+        AnchorPane.setTopAnchor(scrollPane, 70.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 0.0);
 
-        Pane pane = new Pane();
+        AnchorPane pane = new AnchorPane();
         Consoler.setStylesheets(pane);
-        size.ModifyWindwosSize(pane, scrollPane, back, ExportLog);
+        pane.getChildren().addAll(scrollPane, back, ExportLog);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
         FalseBmcl.setSelected(!GetBmclSwitch());
@@ -210,6 +224,14 @@ public class SettingWin extends AboutSetting {
         TrueLog.setSelected(GetLogSwitch());
         TrueOpenGl.setSelected(GetLlvmpipeSwitch());
         TrueZhcn.setSelected(GetZHCNSwitch());
+    }
+
+    private static void putKey(JsonObject object) {
+        try {
+            FileUtils.writeStringToFile(GetSettingFile(), JSONObject.toJSONString(object), "UTF-8");
+        } catch (IOException e) {
+            logmaker.error("* Put File Error,", e);
+        }
     }
 
     private static class coordinate {

@@ -32,4 +32,16 @@ public class JSONArray extends JSON {
     public com.alibaba.fastjson2.JSONArray getFastJSONArray() {
         return com.alibaba.fastjson2.JSONArray.parseArray(JsonArrays.toString());
     }
+
+    public void remove(int index) {
+        JsonArrays.remove(index);
+    }
+
+    public JsonArray getJsonArrays() {
+        return JsonArrays;
+    }
+
+    public void add(String str) {
+        JsonArrays.add(str);
+    }
 }

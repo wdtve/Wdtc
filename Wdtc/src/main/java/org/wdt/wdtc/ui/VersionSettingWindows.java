@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -41,12 +41,20 @@ public class VersionSettingWindows extends AboutSetting {
     public void setWindow(Stage MainStage) {
         HomeWindow window = new HomeWindow(launcher);
         WindwosSize size = new WindwosSize(MainStage);
-        Pane ParentPane = new Pane();
+        AnchorPane ParentPane = new AnchorPane();
         ScrollPane SonScrollPane = new ScrollPane();
         SonScrollPane.setLayoutX(105);
         SonScrollPane.setLayoutY(52);
-        SonScrollPane.setPrefSize(512, 438);
-        Pane pane = new Pane();
+        AnchorPane.setTopAnchor(SonScrollPane, 50.0);
+        AnchorPane.setLeftAnchor(SonScrollPane, 105.0);
+        AnchorPane.setBottomAnchor(SonScrollPane, 0.0);
+        AnchorPane.setRightAnchor(SonScrollPane, 0.0);
+
+        AnchorPane pane = new AnchorPane();
+        AnchorPane.setBottomAnchor(pane, 0.0);
+        AnchorPane.setRightAnchor(pane, 0.0);
+        AnchorPane.setLeftAnchor(pane, 0.0);
+        AnchorPane.setTopAnchor(pane, 0.0);
 
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
@@ -98,25 +106,30 @@ public class VersionSettingWindows extends AboutSetting {
 
         Label tips6 = new Label();
         tips6.setLayoutX(340);
-        tips6.setLayoutY(330);
+        tips6.setLayoutY(340);
         tips6.setPrefSize(122, 15);
 
         JFXButton apply = new JFXButton("应用");
-        apply.setLayoutX(327);
-        apply.setLayoutY(355);
         apply.setPrefSize(150, 50);
+        AnchorPane.setBottomAnchor(apply, 10.0);
+        AnchorPane.setRightAnchor(apply, 30.0);
 
-        size.ModifyWindwosSize(pane, tips, tips2, tips3, tips4, tips5, tips6, Input, JavaPath, InputHeight, InputWidth, choose, apply);
+        size.ModifyWindwosSize(pane, tips, tips2, tips3, tips4, tips5, tips6, Input, JavaPath, InputHeight, InputWidth, choose);
+        pane.getChildren().add(apply);
         Consoler.setStylesheets(pane);
         Consoler.setCss("BlackBorder", choose, apply);
         SonScrollPane.setContent(pane);
         JFXButton completion = new JFXButton("补全游戏文件");
         completion.setLayoutY(395);
         completion.setPrefSize(105, 30);
+        AnchorPane.setBottomAnchor(completion, 30.0);
+        AnchorPane.setLeftAnchor(completion, 0.0);
         JFXButton delete = new JFXButton("删除该版本");
         delete.setLayoutY(425);
         delete.setPrefSize(105, 30);
-        size.ModifyWindwosSize(ParentPane, SonScrollPane, completion, delete, back);
+        AnchorPane.setBottomAnchor(delete, 0.0);
+        AnchorPane.setLeftAnchor(delete, 0.0);
+        ParentPane.getChildren().addAll(SonScrollPane, completion, delete, back);
         Consoler.setCss("BlackBorder", back, delete, completion);
         ParentPane.setBackground(Consoler.getBackground());
         Consoler.setStylesheets(ParentPane);
@@ -151,7 +164,8 @@ public class VersionSettingWindows extends AboutSetting {
                 try {
                     logmaker.info(gameConfig);
                     FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(gameConfig), "UTF-8");
-                    tips6.setText("\t设置成功");
+                    tips6.setText("设置成功");
+                    tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
                 } catch (IOException e) {
                     ErrorWin.setErrorWin(e);
                 }
@@ -178,11 +192,7 @@ public class VersionSettingWindows extends AboutSetting {
             try {
                 ThreadUtils.StartThread(() -> {
                     SelectGameVersion version = new SelectGameVersion(launcher);
-                    try {
-                        version.DownloadGame();
-                    } catch (IOException | InterruptedException e) {
-                        ErrorWin.setErrorWin(e);
-                    }
+                    version.DownloadGame();
                 }).join();
             } catch (InterruptedException e) {
                 ErrorWin.setErrorWin(e);

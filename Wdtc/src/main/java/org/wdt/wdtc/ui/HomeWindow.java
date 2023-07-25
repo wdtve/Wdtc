@@ -3,7 +3,8 @@ package org.wdt.wdtc.ui;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Users;
@@ -38,25 +39,27 @@ public class HomeWindow {
 
 
     public void setHome(Stage MainStage) {
+        AnchorPane pane = new AnchorPane();
+        WindwosSize windwosSize = new WindwosSize(MainStage);
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());
-        Pane Menu = new Pane();
-        Menu.setPrefSize(64.0, 450);
+        VBox Menu = new VBox();
+        Menu.setPrefSize(128, 450);
         JFXButton home = new JFXButton("首页");
-        home.setPrefSize(64.0, 23.0);
+        home.setPrefSize(128, 46);
 
         JFXButton User = new JFXButton("修改账户");
         User.setLayoutY(23.0);
-        User.setPrefSize(64, 23);
+        User.setPrefSize(128, 46);
         User.setOnAction(event -> UsersWin.setUserWin(User.getText(), MainStage));
 
         JFXButton downgame = new JFXButton("下载游戏");
         downgame.setLayoutY(46);
-        downgame.setPrefSize(64.0, 23.0);
+        downgame.setPrefSize(128, 46);
         downgame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
 
         JFXButton startgame = new JFXButton("选择版本");
         startgame.setLayoutY(69);
-        startgame.setPrefSize(64.0, 23.0);
+        startgame.setPrefSize(128, 46);
         startgame.setOnAction(event -> {
             GetGamePath path = new GetGamePath();
             VersionChoose choose = new VersionChoose(path);
@@ -65,7 +68,7 @@ public class HomeWindow {
 
         JFXButton VersionSetting = new JFXButton("版本设置");
         VersionSetting.setLayoutY(92);
-        VersionSetting.setPrefSize(64, 23);
+        VersionSetting.setPrefSize(128, 46);
         if (launcher != null) {
             VersionSetting.setDisable(false);
             VersionSettingWindows windows = new VersionSettingWindows(launcher);
@@ -76,11 +79,11 @@ public class HomeWindow {
 
         JFXButton setting = new JFXButton("设置");
         setting.setLayoutY(402.0);
-        setting.setPrefSize(64.0, 23.0);
+        setting.setPrefSize(128, 46);
         setting.setOnMousePressed(event -> {
             if (event.isControlDown()) {
                 try {
-                    Runtime.getRuntime().exec("cmd.exe /c start " + FilePath.getWdtcConfig());
+                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FilePath.getWdtcConfig().getCanonicalPath()});
                     logmaker.info("* 配置目录" + FilePath.getWdtcConfig() + "已打开");
                 } catch (IOException e) {
                     ErrorWin.setErrorWin(e);
@@ -96,10 +99,10 @@ public class HomeWindow {
 
         JFXButton github = new JFXButton("GitHub");
         github.setLayoutY(425);
-        github.setPrefSize(64.0, 23.0);
+        github.setPrefSize(128, 46);
         github.setOnAction(event -> {
             try {
-                Runtime.getRuntime().exec("cmd.exe /C start https://github.com/Wd-t/Wdtc");
+                Runtime.getRuntime().exec(new String[]{"cmd", "/C", "start", "https://github.com/Wd-t/Wdtc"});
             } catch (IOException | RuntimeException e) {
                 ErrorWin.setErrorWin(e);
             }
@@ -120,7 +123,9 @@ public class HomeWindow {
         LaunchGameButton.setPrefSize(227, 89);
         LaunchGameButton.setLayoutX(335);
         LaunchGameButton.setLayoutY(316);
-        LaunchGameButton.getStyleClass().add("BlackBorder");
+        LaunchGameButton.getStyleClass().add("BackGroundWriteButton");
+        AnchorPane.setBottomAnchor(LaunchGameButton, 30.0);
+        AnchorPane.setRightAnchor(LaunchGameButton, 30.0);
         LaunchGameButton.setOnAction(event -> {
             if (launcher != null) {
                 if (Users.SetUserJson()) {
@@ -140,11 +145,13 @@ public class HomeWindow {
                 NewDownloadWin.SetWin(MainStage);
             }
         });
-        WindwosSize windwosSize = new WindwosSize(MainStage);
-        windwosSize.ModifyWindwosSize(Menu, home, downgame, startgame, github, setting, name, VersionSetting, User);
+        Menu.getChildren().addAll(home, User, downgame, startgame, VersionSetting, setting, github);
         Menu.getStyleClass().add("BlackBorder");
-        Pane pane = new Pane();
-        windwosSize.ModifyWindwosSize(pane, readme, Menu, LaunchGameButton);
+        AnchorPane.setTopAnchor(Menu, 0.0);
+        AnchorPane.setBottomAnchor(Menu, 0.0);
+        AnchorPane.setLeftAnchor(Menu, 0.0);
+        pane.getChildren().addAll(Menu, LaunchGameButton);
+        windwosSize.ModifyWindwosSize(pane, readme);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);

@@ -17,7 +17,7 @@ public class FilePath {
     }
 
     public static File getMinecraftComSkin() {
-        return new File("C:/Users/yuwen/AppData/Roaming/.minecraft/assets/skins");
+        return new File(System.getProperty("user.home") + "/AppData/Roaming/.minecraft/assets/skins");
     }
 
     public static File getSettingFile() {
@@ -50,10 +50,6 @@ public class FilePath {
 
     public static File getWdtcCache() {
         return new File(WDTC_CONFIG + "/cache");
-    }
-
-    public static File getJavaHomeJarFile() {
-        return new File(getWdtcImplementationPath() + "/WdtcGetJavaHome.jar");
     }
 
     public static File getWdtcImplementationPath() {

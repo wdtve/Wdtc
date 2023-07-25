@@ -59,6 +59,7 @@ public class WindwosSize {
         }
     }
 
+
     @Override
     public String toString() {
         return "WindwosSize{" + "MainStageSize=" + MainStage.getWidth() + "," + MainStage.getHeight() + "}";

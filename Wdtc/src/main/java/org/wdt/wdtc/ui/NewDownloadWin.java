@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.game.GameVersionList;
@@ -19,9 +19,14 @@ public class NewDownloadWin {
 
     public static void SetWin(Stage MainStage) {
         WindwosSize size = new WindwosSize(MainStage);
-        Pane pane = new Pane();
+        AnchorPane pane = new AnchorPane();
         VBox list = new VBox();
+        Consoler.setTopGrid(list);
         ScrollPane sp = new ScrollPane();
+        AnchorPane.setLeftAnchor(sp, 155.0);
+        AnchorPane.setTopAnchor(sp, 0.0);
+        AnchorPane.setBottomAnchor(sp, 0.0);
+        AnchorPane.setRightAnchor(sp, 0.0);
         JFXButton back = new JFXButton("返回");
         back.getStyleClass().add("BlackBorder");
         Label tips = new Label("选择右侧的一个版本");
@@ -50,7 +55,8 @@ public class NewDownloadWin {
         sp.setLayoutX(155.0);
         sp.setPrefHeight(WindwosSize.WindowsHeight);
         sp.setPrefWidth(461);
-        size.ModifyWindwosSize(pane, sp, back, tips);
+//        size.ModifyWindwosSize(pane, sp, back, tips);
+        pane.getChildren().addAll(sp, back, tips);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");

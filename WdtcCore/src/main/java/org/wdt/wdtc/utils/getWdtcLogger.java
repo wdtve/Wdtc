@@ -3,23 +3,17 @@ package org.wdt.wdtc.utils;
 import org.apache.log4j.*;
 import org.wdt.wdtc.game.FilePath;
 
-import java.io.IOException;
-
 public class getWdtcLogger {
     private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] %m%n");
 
     public static <T> Logger getLogger(Class<T> clazz) {
-        Logger logmaker = Logger.getLogger(clazz);
-        try {
-            logmaker.addAppender(getFileAppender());
-            logmaker.addAppender(getConsoleAppender());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Logger logmaker = Logger.getLogger(clazz.getName());
+        logmaker.addAppender(getFileAppender());
+        logmaker.addAppender(getConsoleAppender());
         return logmaker;
     }
 
-    private static RollingFileAppender getFileAppender() throws IOException {
+    private static RollingFileAppender getFileAppender() {
         RollingFileAppender FileAppender = new RollingFileAppender();
         FileAppender.setFile(FilePath.getWdtcConfig() + "/logs/Wdtc.log");
         FileAppender.setAppend(true);

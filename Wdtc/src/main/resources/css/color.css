@@ -1,25 +1,35 @@
 .BlackBorder {
     -fx-text-fill: #231f20;
     -fx-border-color: #231f20;
+    -fx-font-family: "Microsoft YaHei UI";
 }
 
 .radio-button {
     -fx-text-fill: #231f20;
+    -fx-font-family: "Microsoft YaHei UI";
 }
 
 .label {
     -fx-text-fill: #231f20;
+    -fx-font-family: "Microsoft YaHei UI";
 }
 
 .tips {
     -fx-text-fill: rgba(16, 13, 13, 0.35);
+    -fx-font-family: "Microsoft YaHei UI";
 }
 
 .button {
     -fx-text-fill: #231f20;
+    -fx-font-family: "Microsoft YaHei UI";
 }
 
 .ModChoosePane {
     -fx-background-color: #fdfdfd;
     -fx-border-color: #231f20;
+}
+
+.BackGroundWriteButton {
+    -fx-text-fill: #231f20;
+    -fx-background-color: #fdfdfd;
 }

@@ -6,13 +6,14 @@ import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 
 public class LauncherGame {
     private static final File StartBat = FilePath.getStarterBat();
-    private static final Logger logmaker = Logger.getLogger(LauncherGame.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(LauncherGame.class);
     private final Launcher launcher;
 
 
@@ -26,7 +27,7 @@ public class LauncherGame {
                 if (!ModList.GameModIsForge(launcher) && !Starter.getForgeSwitch()) {
                     gameVersion.DownloadGame();
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 logmaker.error("错误:", e);
             }
             logmaker.info("* 文件补全完成");

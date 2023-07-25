@@ -1,6 +1,7 @@
 package org.wdt.wdtc.utils;
 
-import com.alibaba.fastjson2.JSONObject;
+
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -20,37 +21,17 @@ public class PlatformUtils extends FileUtils {
         return GetUrlContent(new URL(StriingUrl));
     }
 
-    public static JSONObject FileToJSONObject(File file) throws IOException {
-        if (FileExistenceAndSize(file)) {
-            throw new IOException(file + " no exists!");
-        } else {
-            return JSONObject.parseObject(readFileToString(file, "UTF-8"));
-        }
-    }
 
-    public static JSONObject FileToJSONObject(String filepath) throws IOException {
-        return FileToJSONObject(new File(filepath));
-    }
-
-    public static void PutKeyToFile(File file, JSONObject jsonObject, String key, Object object) {
-        jsonObject.put(key, object);
-        PutJSONObject(file, jsonObject);
-    }
-
-    public static void PutKeyToFile(String filePath, JSONObject jsonObject, String key, Object object) {
-        PutKeyToFile(new File(filePath), jsonObject, key, object);
-    }
-
-    public static void PutJSONObject(File file, JSONObject jsonObject) {
+    public static void PutJSONObject(File file, JsonObject object) {
         try {
-            writeStringToFile(file, jsonObject.toString(), "UTF-8");
+            writeStringToFile(file, org.wdt.platform.gson.JSONObject.toJSONString(object), "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void PutJSONObject(String filepath, JSONObject jsonObject) {
-        PutJSONObject(new File(filepath), jsonObject);
+    public static void PutJSONObject(String FilePath, JsonObject object) {
+        PutJSONObject(new File(FilePath), object);
     }
 
     public static String StringToBase64(String str) {

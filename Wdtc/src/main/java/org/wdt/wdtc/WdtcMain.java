@@ -1,9 +1,10 @@
 package org.wdt.wdtc;
 
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
@@ -47,14 +48,16 @@ public class WdtcMain {
     }
 
     public static void Ergodic() throws IOException {
-        JSONObject SettingObject = AboutSetting.SettingObject().getFastJSONObject();
+        JSONObject SettingObject = AboutSetting.SettingObject();
         JSONArray JavaList = SettingObject.getJSONArray("JavaPath");
         for (int i = 0; i < JavaList.size(); i++) {
             if (PlatformUtils.FileExistenceAndSize(JavaList.getString(i))) {
-                JavaList.remove(i);
                 logmaker.info("* " + JavaList.getString(i) + " 无效");
+                JavaList.remove(i);
             }
         }
-        PlatformUtils.PutKeyToFile(AboutSetting.GetSettingFile(), SettingObject, "JavaPath", JavaList);
+        JsonObject object = SettingObject.getJsonObjects();
+        object.add("JavaPath", JavaList.getJsonArrays());
+        PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
     }
 }

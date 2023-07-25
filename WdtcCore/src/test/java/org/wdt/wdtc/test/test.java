@@ -2,10 +2,12 @@ package org.wdt.wdtc.test;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.google.gson.JsonElement;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.wdt.wdtc.download.SpeedOfProgress;
+import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.Version;
 
 import java.io.BufferedReader;
@@ -14,10 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 public class test {
     private static final Logger logmaker = Logger.getLogger(test.class);
@@ -64,32 +63,12 @@ public class test {
 
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        SpeedOfProgress speedOfProgress = new SpeedOfProgress(100.00);
-        Timer timer = new Timer();
-        for (int i = 0; i < 100; i++) {
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    DecimalFormat s = new DecimalFormat("0");
-                    System.out.println(s.format((speedOfProgress.getSpend() / 100) * 100));
-                    try {
-                        TimeUnit.SECONDS.sleep(20);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    speedOfProgress.countDown();
-
-                }
-            };
-            timer.schedule(timerTask, 50, 999);
+    @Test
+    public void list() throws IOException {
+        Launcher launcher = new Launcher("1.20.1");
+        Map<String, JsonElement> list = JSONUtils.getJSONObject(launcher.getGameAssetsListJson()).getJSONObject("objects").getJsonObjects().asMap();
+        for (String s : list.keySet()) {
         }
-        try {
-            speedOfProgress.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        timer.cancel();
 
 
     }

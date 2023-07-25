@@ -5,9 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.AboutSetting;
@@ -15,6 +13,7 @@ import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.ui.ErrorWin;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
@@ -63,17 +62,13 @@ public class AppMain extends Application {
                 MainStage.show();
             });
             MainStage.setOnCloseRequest(windowEvent -> {
-                try {
-                    logmaker.info(size);
-                    JsonObject object = AboutSetting.SettingObject().getJsonObjects();
-                    object.addProperty("WindowsWidth", MainStage.getWidth());
-                    object.addProperty("WindowsHeight", MainStage.getHeight());
-                    FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), JSONObject.toJSONString(object), "UTF-8");
-                    logmaker.info("======= exited ========");
-                    System.exit(0);
-                } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
-                }
+                logmaker.info(size);
+                JsonObject object = AboutSetting.SettingObject().getJsonObjects();
+                object.addProperty("WindowsWidth", MainStage.getWidth());
+                object.addProperty("WindowsHeight", MainStage.getHeight());
+                PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
+                logmaker.info("======= exited ========");
+                System.exit(0);
             });
         } catch (Exception e) {
             ErrorWin.setErrorWin(e);

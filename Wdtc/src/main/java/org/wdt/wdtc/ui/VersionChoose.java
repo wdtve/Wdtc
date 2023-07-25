@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,8 +30,11 @@ public class VersionChoose {
 
     public void setWindow(Stage MainStage) {
         WindwosSize size = new WindwosSize(MainStage);
-        Pane ParentPane = new Pane();
+        AnchorPane ParentPane = new AnchorPane();
         ScrollPane SonScrollPane = new ScrollPane();
+        AnchorPane.setLeftAnchor(SonScrollPane, 100.0);
+        Consoler.setTopLowerRight(SonScrollPane);
+        AnchorPane.setTopAnchor(SonScrollPane, 70.0);
         VBox VersionList = new VBox();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
@@ -70,20 +74,18 @@ public class VersionChoose {
             }
         }
         VersionList.setPrefSize(517, 416);
-        SonScrollPane.setPrefSize(520, 420);
-        SonScrollPane.setLayoutX(96);
-        SonScrollPane.setLayoutY(70);
         SonScrollPane.setContent(VersionList);
         JFXButton NewGame = new JFXButton("安装新游戏");
-        NewGame.setPrefSize(96, 30);
-        NewGame.setLayoutY(425);
+        NewGame.setPrefSize(100, 30);
+        NewGame.getStyleClass().add("BackGroundWriteButton");
+        Consoler.setTopLowerLeft(NewGame);
         Label tips = new Label("\t当前目录");
         tips.setPrefWidth(96);
         tips.setLayoutY(70);
-        size.ModifyWindwosSize(ParentPane, SonScrollPane, NewGame, tips, back);
+        ParentPane.getChildren().addAll(NewGame, back, SonScrollPane, tips);
         ParentPane.setBackground(Consoler.getBackground());
         Consoler.setStylesheets(ParentPane);
-        Consoler.setCss("BlackBorder", back, NewGame);
+        Consoler.setCss("BlackBorder", back);
         MainStage.setScene(new Scene(ParentPane));
         NewGame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
     }

@@ -28,23 +28,27 @@ public class SelectGameVersion {
         this(launcher, null);
     }
 
-    public void DownloadGame() throws IOException, InterruptedException {
-        GameConfig config = launcher.getGameConfig();
-        DownloadVersionGameFile DownloadGame = launcher.getDownloadVersionGameFile();
-        DownloadGame.DownloadGameVersionJson();
-        DownloadGame.DownloadGameAssetsListJson();
-        DownloadGame.DownloadVersionJar();
-        ModDonwloadTask.DownloadMod(launcher);
-        DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
-        logmaker.debug("库下载完成");
-        DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
-        logmaker.info("下载完成");
-        if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
-            FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(new DefaultGameConfig()), "UTF-8");
-        }
-        logmaker.info(new DefaultGameConfig());
-        if (Objects.nonNull(textField)) {
-            textField.setText("下载完成");
+    public void DownloadGame() {
+        try {
+            GameConfig config = launcher.getGameConfig();
+            DownloadVersionGameFile DownloadGame = launcher.getDownloadVersionGameFile();
+            DownloadGame.DownloadGameVersionJson();
+            DownloadGame.DownloadGameAssetsListJson();
+            DownloadGame.DownloadVersionJar();
+            ModDonwloadTask.DownloadMod(launcher);
+            DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
+            logmaker.debug("库下载完成");
+            DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
+            logmaker.info("下载完成");
+            if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
+                FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(new DefaultGameConfig()), "UTF-8");
+                logmaker.info(new DefaultGameConfig());
+            }
+            if (Objects.nonNull(textField)) {
+                textField.setText("下载完成");
+            }
+        } catch (IOException | InterruptedException e) {
+            logmaker.error("* Download Game Error,", e);
         }
     }
 
