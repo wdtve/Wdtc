@@ -30,8 +30,9 @@ public class HomeWindow {
     }
 
     public HomeWindow() {
-        if (AboutSetting.SettingObject().has("PreferredVersion")) {
-            this.launcher = ModList.getModTask(new Launcher(AboutSetting.getPreferredVersion()));
+        AboutSetting.Setting setting = AboutSetting.getSetting();
+        if (setting.getPreferredVersion() != null) {
+            this.launcher = ModList.getModTask(new Launcher(setting.getPreferredVersion()));
         } else {
             this.launcher = null;
         }
@@ -90,7 +91,7 @@ public class HomeWindow {
                 }
             } else {
                 try {
-                    SettingWin.setSettingWin(MainStage);
+                    SettingWindow.setSettingWin(MainStage);
                 } catch (IOException e) {
                     ErrorWin.setErrorWin(e);
                 }

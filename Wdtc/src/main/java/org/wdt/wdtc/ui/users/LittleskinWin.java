@@ -53,7 +53,7 @@ public class LittleskinWin {
         pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok, back, LittleskinCom);
         ok.setOnAction(event -> {
             if (Objects.nonNull(inputpowerword.getText()) && Objects.nonNull(Inputusername.getText())
-                    && inputpowerword.getText().equals("") && Inputusername.getText().equals("")) {
+                    && inputpowerword.getText().isEmpty() && Inputusername.getText().isEmpty()) {
                 label.setText("请输入用户名、密码");
                 logmaker.warn("* 用户名、密码为空");
             } else {
@@ -70,6 +70,7 @@ public class LittleskinWin {
                     }
                 } catch (RuntimeException | IOException e) {
                     label.setText("用户名或密码错误");
+                    logmaker.warn("* 用户名或密码错误", e);
                 }
             }
         });

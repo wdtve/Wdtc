@@ -36,7 +36,6 @@ public class WdtcMain {
         AuthlibInjector.UpdateAuthlibInjector();
         GameConfig.writeConfigJsonToAllVersion();
         ThreadUtils.StartThread(() -> JavaHomePath.main(args)).setName("Found Java");
-        logmaker.info("* 程序开始运行");
         AppMain.main(args);
     }
 

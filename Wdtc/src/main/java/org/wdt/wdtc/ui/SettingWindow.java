@@ -22,14 +22,14 @@ import java.util.Calendar;
 import java.util.Objects;
 
 
-public class SettingWin extends AboutSetting {
-    private static final Logger logmaker = getWdtcLogger.getLogger(SettingWin.class);
+public class SettingWindow extends AboutSetting {
+    private static final Logger logmaker = getWdtcLogger.getLogger(SettingWindow.class);
 
-    private SettingWin() {
+    private SettingWindow() {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        JsonObject SettingJson = SettingObject().getJsonObjects();
+        Setting setting = AboutSetting.getSetting();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
@@ -39,7 +39,7 @@ public class SettingWin extends AboutSetting {
 
         double line = 55.0;
         TextField GamePath = new TextField();
-        GamePath.setText(AboutSetting.GetDefaultGamePath());
+        GamePath.setText(AboutSetting.getSetting().getDefaultGamePath());
         GamePath.setLayoutX(coordinate.layoutX);
         GamePath.setLayoutY(line);
         GamePath.setPrefSize(297.0, 23.0);
@@ -58,11 +58,11 @@ public class SettingWin extends AboutSetting {
                 try {
                     DirectoryChooser fileChooser = new DirectoryChooser();
                     fileChooser.setTitle("选择游戏文件夹");
-                    fileChooser.setInitialDirectory(new File(GetDefaultGamePath()));
+                    fileChooser.setInitialDirectory(new File(getSetting().getDefaultGamePath()));
                     File file = fileChooser.showDialog(MainStage);
                     if (Objects.nonNull(file)) {
-                        SettingJson.addProperty("DefaultGamePath", file.getCanonicalPath());
-                        putKey(SettingJson);
+                        setting.setDefaultGamePath(file.getCanonicalPath());
+                        putSettingToFile(setting);
                         GamePath.setText(file.getCanonicalPath());
                         logmaker.info("* 游戏文件夹已更改为:" + file);
                     }
@@ -81,7 +81,7 @@ public class SettingWin extends AboutSetting {
         tips2.setLayoutY(line1);
         tips2.getStyleClass().add("tips");
 
-        Label cmd = new Label("启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):");
+        Label cmd = new Label("启动时是否显示控制台窗口(如果按启动后长时间没反应可以设置显示,默认不显示):");
         cmd.setLayoutX(coordinate.layoutX);
         cmd.setLayoutY(89.0);
         RadioButton TrueLog = new RadioButton("显示");
@@ -94,14 +94,14 @@ public class SettingWin extends AboutSetting {
         FalseLog.setOnAction(event -> {
             TrueLog.setSelected(false);
             logmaker.info("* 启动日志器关闭显示");
-            SettingJson.addProperty("log", false);
-            putKey(SettingJson);
+            setting.setConsole(false);
+            putSettingToFile(setting);
         });
         TrueLog.setOnAction(event -> {
             FalseLog.setSelected(false);
             logmaker.info("* 启动日志器开启显示");
-            SettingJson.addProperty("log", true);
-            putKey(SettingJson);
+            setting.setConsole(true);
+            putSettingToFile(setting);
         });
 
         Label BMCLAPIMessage = new Label("是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):");
@@ -117,14 +117,61 @@ public class SettingWin extends AboutSetting {
         TrueBmcl.setOnAction(event -> {
             FalseBmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已开启");
-            SettingJson.addProperty("bmcl", true);
-            putKey(SettingJson);
+            setting.setBmcl(true);
+            putSettingToFile(setting);
         });
         FalseBmcl.setOnAction(event -> {
             TrueBmcl.setSelected(false);
             logmaker.info("* BMCLAPI下载加速已关闭");
-            SettingJson.addProperty("bmcl", false);
-            putKey(SettingJson);
+            setting.setBmcl(false);
+            putSettingToFile(setting);
+        });
+
+
+        Label tips3 = new Label("是否启用OpenGL软渲染器:");
+        tips3.setLayoutX(coordinate.layoutX);
+        tips3.setLayoutY(185.0);
+        RadioButton TrueOpenGl = new RadioButton("启用");
+        RadioButton FalseOpenGL = new RadioButton("不启用");
+        double line4 = 209.0;
+        TrueOpenGl.setLayoutX(coordinate.layoutX);
+        TrueOpenGl.setLayoutY(line4);
+        FalseOpenGL.setLayoutX(coordinate.layoutX2);
+        FalseOpenGL.setLayoutY(line4);
+        TrueOpenGl.setOnAction(event -> {
+            FalseOpenGL.setSelected(false);
+            setting.setLlvmpipeLoader(true);
+            logmaker.info("* OpenGL软渲染已开启");
+            putSettingToFile(setting);
+        });
+        FalseOpenGL.setOnAction(event -> {
+            TrueOpenGl.setSelected(false);
+            setting.setLlvmpipeLoader(false);
+            logmaker.info("* OpenGL软渲染已关闭");
+            putSettingToFile(setting);
+        });
+
+        Label tips4 = new Label("将游戏设置成中文(默认开启):");
+        tips4.setLayoutX(coordinate.layoutX);
+        tips4.setLayoutY(235.0);
+        RadioButton TrueZhcn = new RadioButton("启用");
+        double line5 = 254.0;
+        TrueZhcn.setLayoutX(coordinate.layoutX);
+        TrueZhcn.setLayoutY(line5);
+        RadioButton FalseZhcn = new RadioButton("不启用");
+        FalseZhcn.setLayoutX(coordinate.layoutX2);
+        FalseZhcn.setLayoutY(line5);
+        FalseZhcn.setOnAction(event -> {
+            setting.setChineseLanguage(false);
+            TrueZhcn.setSelected(false);
+            logmaker.info("* 取消将游戏设置为中文");
+            putSettingToFile(setting);
+        });
+        TrueZhcn.setOnAction(event -> {
+            setting.setChineseLanguage(true);
+            FalseZhcn.setSelected(false);
+            logmaker.info("* 将游戏设置为中文");
+            putSettingToFile(setting);
         });
 
         JFXButton ExportLog = new JFXButton("导出日志");
@@ -151,51 +198,28 @@ public class SettingWin extends AboutSetting {
             }
         });
 
-
-        Label tips3 = new Label("是否启用OpenGL软渲染器:");
-        tips3.setLayoutX(coordinate.layoutX);
-        tips3.setLayoutY(185.0);
-        RadioButton TrueOpenGl = new RadioButton("启用");
-        RadioButton FalseOpenGL = new RadioButton("不启用");
-        double line4 = 209.0;
-        TrueOpenGl.setLayoutX(coordinate.layoutX);
-        TrueOpenGl.setLayoutY(line4);
-        FalseOpenGL.setLayoutX(coordinate.layoutX2);
-        FalseOpenGL.setLayoutY(line4);
-        TrueOpenGl.setOnAction(event -> {
-            FalseOpenGL.setSelected(false);
-            SettingJson.addProperty("llvmpipe-loader", true);
-            logmaker.info("* OpenGL软渲染已开启");
-            putKey(SettingJson);
-        });
-        FalseOpenGL.setOnAction(event -> {
-            TrueOpenGl.setSelected(false);
-            SettingJson.addProperty("llvmpipe-loader", false);
-            logmaker.info("* OpenGL软渲染已关闭");
-            putKey(SettingJson);
-        });
-
-        Label tips4 = new Label("将游戏设置成中文(默认开启):");
-        tips4.setLayoutX(coordinate.layoutX);
-        tips4.setLayoutY(235.0);
-        RadioButton TrueZhcn = new RadioButton("启用");
-        double line5 = 254.0;
-        TrueZhcn.setLayoutX(coordinate.layoutX);
-        TrueZhcn.setLayoutY(line5);
-        RadioButton FalseZhcn = new RadioButton("不启用");
-        FalseZhcn.setLayoutX(coordinate.layoutX2);
-        FalseZhcn.setLayoutY(line5);
-        FalseZhcn.setOnAction(event -> {
-            SettingJson.addProperty("ZH-CN", false);
-            TrueZhcn.setSelected(false);
-            logmaker.info("* 取消将游戏设置为中文");
-            putKey(SettingJson);
-        });
-        TrueZhcn.setOnAction(event -> {
-            SettingJson.addProperty("ZH-CN", true);
-            FalseZhcn.setSelected(false);
-            logmaker.info("* 将游戏设置为中文");
-            putKey(SettingJson);
+        JFXButton CleanCache = new JFXButton();
+        CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FilePath.getWdtcCache()) + "B");
+        CleanCache.setPrefSize(105, 30);
+        AnchorPane.setLeftAnchor(CleanCache, 0.0);
+        AnchorPane.setBottomAnchor(CleanCache, 30.0);
+        CleanCache.setOnMousePressed(event -> {
+            if (event.isControlDown()) {
+                try {
+                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FilePath.getWdtcCache().getCanonicalPath()});
+                    logmaker.info("* 缓存文件夹已打开");
+                } catch (IOException e) {
+                    logmaker.error("* OpenFolder Error,", e);
+                }
+            } else {
+                try {
+                    FileUtils.cleanDirectory(FilePath.getWdtcCache());
+                    logmaker.info("* Cache Folder Cleaned");
+                    CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FilePath.getWdtcCache()) + "B");
+                } catch (IOException e) {
+                    logmaker.error("* Clean Cache Folder Error,", e);
+                }
+            }
         });
 
         AnchorPane SonPane = new AnchorPane();
@@ -212,18 +236,19 @@ public class SettingWin extends AboutSetting {
         AnchorPane.setBottomAnchor(scrollPane, 0.0);
 
         AnchorPane pane = new AnchorPane();
+        Consoler.setCss("BackGroundWriteButton", ExportLog, CleanCache);
         Consoler.setStylesheets(pane);
-        pane.getChildren().addAll(scrollPane, back, ExportLog);
+        pane.getChildren().addAll(scrollPane, back, ExportLog, CleanCache);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
-        FalseBmcl.setSelected(!GetBmclSwitch());
-        FalseLog.setSelected(!GetLogSwitch());
-        FalseOpenGL.setSelected(!GetLlvmpipeSwitch());
-        FalseZhcn.setSelected(!GetZHCNSwitch());
-        TrueBmcl.setSelected(GetBmclSwitch());
-        TrueLog.setSelected(GetLogSwitch());
-        TrueOpenGl.setSelected(GetLlvmpipeSwitch());
-        TrueZhcn.setSelected(GetZHCNSwitch());
+        FalseBmcl.setSelected(!setting.isBmcl());
+        FalseLog.setSelected(!setting.isConsole());
+        FalseOpenGL.setSelected(!setting.isLlvmpipeLoader());
+        FalseZhcn.setSelected(!setting.isChineseLanguage());
+        TrueBmcl.setSelected(setting.isBmcl());
+        TrueLog.setSelected(setting.isConsole());
+        TrueOpenGl.setSelected(setting.isLlvmpipeLoader());
+        TrueZhcn.setSelected(setting.isChineseLanguage());
     }
 
     private static void putKey(JsonObject object) {

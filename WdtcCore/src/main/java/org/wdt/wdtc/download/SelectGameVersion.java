@@ -3,7 +3,6 @@ package org.wdt.wdtc.download;
 import javafx.scene.control.TextField;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SelectGameVersion {
-    private final Logger logmaker = getWdtcLogger.getLogger(SelectGameVersion.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(SelectGameVersion.class);
     private final TextField textField;
     private final Launcher launcher;
 
@@ -30,7 +29,12 @@ public class SelectGameVersion {
 
     public void DownloadGame() {
         try {
+            long startTime = System.currentTimeMillis();
             GameConfig config = launcher.getGameConfig();
+            if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
+                FileUtils.writeStringToFile(config.getVersionConfigFile(), config.getDefaultGameConfig(), "UTF-8");
+                logmaker.info(new DefaultGameConfig());
+            }
             DownloadVersionGameFile DownloadGame = launcher.getDownloadVersionGameFile();
             DownloadGame.DownloadGameVersionJson();
             DownloadGame.DownloadGameAssetsListJson();
@@ -39,15 +43,12 @@ public class SelectGameVersion {
             DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
             logmaker.debug("库下载完成");
             DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
-            logmaker.info("下载完成");
-            if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
-                FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(new DefaultGameConfig()), "UTF-8");
-                logmaker.info(new DefaultGameConfig());
-            }
+            long EndTime = System.currentTimeMillis() - startTime;
+            logmaker.info("下载完成,耗时:" + EndTime + "ms");
             if (Objects.nonNull(textField)) {
-                textField.setText("下载完成");
+                textField.setText("下载完成,耗时:" + EndTime + "ms");
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             logmaker.error("* Download Game Error,", e);
         }
     }

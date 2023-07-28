@@ -12,8 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GameLibraryPathAndUrl {
-    private final String BMCLAPI_Libraries = FileUrl.getBmclapiLibraries();
-    private final String MOJANG_Libraries = FileUrl.getMojangLibraries();
+    private static final String BMCLAPI_Libraries = FileUrl.getBmclapiLibraries();
+    private static final String MOJANG_Libraries = FileUrl.getMojangLibraries();
     private final Launcher launcher;
 
 

@@ -3,19 +3,18 @@ package org.wdt.wdtc.launch;
 import org.apache.commons.io.FilenameUtils;
 import org.wdt.wdtc.game.DetermineVersionSize;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.game.config.DefaultGameConfig;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class GameJvmCommand {
-    private static final String xmx = "1024";
     private static StringBuilder JvmSet;
 
     public static void GetJvmList(Launcher launcher) throws IOException {
         GameJvmCommand.JvmSet = new StringBuilder();
-        GameConfig gameConfig = launcher.getGameConfig();
+        DefaultGameConfig gameConfig = launcher.getGameConfig().getGameConfig();
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         Add("\"" + gameConfig.getJavaPath() + "\"");
         Add("-Dlog4j.configurationFile=", FilenameUtils.separatorsToWindows(launcher.getVersionLog4j2()));

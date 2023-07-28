@@ -27,10 +27,11 @@ public class getWdtcLogger {
 
     private static ConsoleAppender getConsoleAppender() {
         ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-        consoleAppender.setThreshold(Level.INFO);
         consoleAppender.setTarget("System.out");
         consoleAppender.setImmediateFlush(true);
         consoleAppender.setEncoding("UTF-8");
+        consoleAppender.setThreshold(Level.INFO);
+
         consoleAppender.activateOptions();
         return consoleAppender;
     }

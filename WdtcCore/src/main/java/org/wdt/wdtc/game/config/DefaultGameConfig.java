@@ -5,13 +5,13 @@ import org.wdt.wdtc.utils.JavaHomePath;
 
 public class DefaultGameConfig {
     @SerializedName("RunningMemory")
-    private int xmx = 1024;
+    public int xmx = 1024;
     @SerializedName("JavaPath")
-    private String JavaHome = JavaHomePath.GetRunJavaHome();
+    public String JavaHome = JavaHomePath.GetRunJavaHome();
     @SerializedName("WindowWidth")
-    private int width = 855;
+    public int width = 618;
     @SerializedName("WindowHeight")
-    private int hight = 1000;
+    public int hight = 1000;
 
     public void setXmx(int xmx) {
         this.xmx = xmx;
@@ -29,13 +29,24 @@ public class DefaultGameConfig {
         this.hight = hight;
     }
 
+    public int getRunningMemory() {
+        return xmx;
+    }
+
+    public String getJavaPath() {
+        return JavaHome;
+    }
+
+    public int getWindowWidth() {
+        return width;
+    }
+
+    public int getWindowHeight() {
+        return hight;
+    }
+
     @Override
     public String toString() {
-        return "DefaultGameConfig{" +
-                "xmx=" + xmx +
-                ", JavaHome='" + JavaHome + '\'' +
-                ", width=" + width +
-                ", hight=" + hight +
-                '}';
+        return "DefaultGameConfig{" + "xmx=" + xmx + ", JavaHome='" + JavaHome + '\'' + ", width=" + width + ", hight=" + hight + '}';
     }
 }

@@ -12,9 +12,6 @@ public class FilePath {
     private static final String WDTC_CONFIG = Starter.getWdtcConfigFromVM() + "/.wdtc";
     private static final File SETTING_FILE = AboutSetting.GetSettingFile();
 
-    public static File getYggdrasilFile() {
-        return new File(WDTC_CONFIG + "/users/Yggdrasil.json");
-    }
 
     public static File getMinecraftComSkin() {
         return new File(System.getProperty("user.home") + "/AppData/Roaming/.minecraft/assets/skins");

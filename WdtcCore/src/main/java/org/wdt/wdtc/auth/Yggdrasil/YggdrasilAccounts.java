@@ -1,24 +1,26 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class YggdrasilAccounts {
     private static final Logger logmaker = getWdtcLogger.getLogger(YggdrasilAccounts.class);
     private final String url;
     private final String username;
-    private String password;
+    private final String password;
 
     public YggdrasilAccounts(String url, String username, String password) {
         this.password = password;
@@ -26,8 +28,8 @@ public class YggdrasilAccounts {
         this.url = url;
     }
 
-    public void sendPostWithJson() throws IOException {
-        String requestUrl = url + "/api/yggdrasil/authserver/authenticate";
+    public String sendPostWithJson() throws IOException {
+        URL requestUrl = new URL(url + "/api/yggdrasil/authserver/authenticate");
         String jsonStr = "{" +
                 "\"username\":\"" + username + "\"," +
                 "\"password\":\"" + password + "\"," +
@@ -37,20 +39,14 @@ public class YggdrasilAccounts {
                 "\"version\":1" +
                 "}" +
                 "}";
-        HttpClient client = new HttpClient();
-        client.getHttpConnectionManager().getParams().setConnectionTimeout(3 * 1000);
-        client.getHttpConnectionManager().getParams().setSoTimeout(3 * 60 * 1000);
-        client.getParams().setContentCharset("UTF-8");
-        PostMethod postMethod = new PostMethod(requestUrl);
-        postMethod.setRequestHeader("content-type", "application/json");
-        StringRequestEntity requestEntity = new StringRequestEntity(jsonStr, "application/json", "UTF-8");
-        postMethod.setRequestEntity(requestEntity);
-        int status = client.executeMethod(postMethod);
-        if (status == HttpStatus.SC_OK) {
-            FileUtils.writeStringToFile(FilePath.getYggdrasilFile(), postMethod.getResponseBodyAsString(), "UTF-8");
-        } else {
-            throw new RuntimeException("接口连接失败！");
-        }
+        URLConnection conn = requestUrl.openConnection();
+        conn.setRequestProperty("content-type", "application/json");
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        PrintWriter out = new PrintWriter(conn.getOutputStream());
+        out.print(jsonStr);
+        out.flush();
+        return IOUtils.toString(conn.getInputStream());
     }
 
     public String getUrl() {
@@ -58,45 +54,64 @@ public class YggdrasilAccounts {
     }
 
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getUsername() {
+        return username;
     }
 
-    public String GetResponse() throws IOException {
-        return FileUtils.readFileToString(FilePath.getYggdrasilFile(), "UTF-8");
-    }
-
-    public String GetUserUuid() throws IOException {
-        return YggdrasilFileObject().getJSONObject("selectedProfile").getString("id");
-    }
-
-    public String GetUserName() throws IOException {
-        return YggdrasilFileObject().getJSONObject("selectedProfile").getString("name");
-    }
-
-    public String GetClientToken() throws IOException {
-        return YggdrasilFileObject().getString("clientToken");
-    }
-
-    public String GetAccessToken() throws IOException {
-        return YggdrasilFileObject().getString("accessToken");
-    }
-
-
-    public JSONObject YggdrasilFileObject() throws IOException {
-        return JSONUtils.getJSONObject(FilePath.getYggdrasilFile());
-    }
 
     public void WriteUserJson() throws IOException {
-        sendPostWithJson();
+        UserInformation UserInfo = getUserInformation();
         Users users = new Users();
-        users.setType("Yggdrasil");
-        users.setUserName(username);
-        users.setUuid(GetUserUuid());
-        users.setAccessToken(GetAccessToken());
-        users.setClientToken(GetClientToken());
+        users.setType(Accounts.AccountsType.Yggdrasil);
+        JSONObject selectedProfile = new JSONObject(UserInfo.getSelectedProfile());
+        users.setUserName(selectedProfile.getString("name"));
+        users.setUuid(selectedProfile.getString("id"));
+        users.setAccessToken(UserInfo.getAccessToken());
         FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(users), "UTF-8");
         logmaker.info(users);
+    }
+
+    public UserInformation getUserInformation() throws IOException {
+        return JSONObject.getGson().fromJson(sendPostWithJson(), UserInformation.class);
+    }
+
+    public static class UserInformation {
+        public String accessToken;
+        public String clientToken;
+        public JsonArray availableProfiles;
+        public JsonObject user;
+        public JsonObject selectedProfile;
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public String getClientToken() {
+            return clientToken;
+        }
+
+        public JsonArray getAvailableProfiles() {
+            return availableProfiles;
+        }
+
+        public JsonObject getUser() {
+            return user;
+        }
+
+        public JsonObject getSelectedProfile() {
+            return selectedProfile;
+        }
+
+        @Override
+        public String toString() {
+            return "UserInformation{" +
+                    "accessToken='" + accessToken + '\'' +
+                    ", clientToken='" + clientToken + '\'' +
+                    ", availableProfiles=" + availableProfiles +
+                    ", user=" + user +
+                    ", selectedProfile=" + selectedProfile +
+                    '}';
+        }
     }
 
 }

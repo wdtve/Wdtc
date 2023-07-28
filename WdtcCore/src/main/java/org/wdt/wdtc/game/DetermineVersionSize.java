@@ -1,13 +1,9 @@
 package org.wdt.wdtc.game;
 
-import org.apache.log4j.Logger;
-import org.wdt.wdtc.utils.getWdtcLogger;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DetermineVersionSize {
-    private static final Logger logmaker = getWdtcLogger.getLogger(DetermineVersionSize.class);
 
     public static boolean DetermineSize(String OriginalVersionNumber, Launcher launcher) {
         Matcher OriginalVersion = getVersionNumber(OriginalVersionNumber);

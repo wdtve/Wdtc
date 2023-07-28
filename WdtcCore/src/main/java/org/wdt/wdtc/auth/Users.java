@@ -13,16 +13,11 @@ public class Users {
     public String UserName;
     @SerializedName("AccessToken")
     public String AccessToken;
-    @SerializedName("ClientToken")
-    public String ClientToken;
     @SerializedName("Type")
     public String Type;
     @SerializedName("Uuid")
     public String Uuid;
 
-    public void setClientToken(String clientToken) {
-        ClientToken = clientToken;
-    }
 
     public void setUserName(String userName) {
         UserName = userName;
@@ -32,8 +27,8 @@ public class Users {
         AccessToken = accessToken;
     }
 
-    public void setType(String type) {
-        Type = type;
+    public String getUserName() {
+        return UserName;
     }
 
     public void setUuid(String uuid) {
@@ -47,6 +42,22 @@ public class Users {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getAccessToken() {
+        return AccessToken;
+    }
+
+    public Accounts.AccountsType getType() {
+        return Accounts.AccountsType.valueOf(Type);
+    }
+
+    public void setType(Accounts.AccountsType type) {
+        Type = type.toString();
+    }
+
+    public String getUuid() {
+        return Uuid;
     }
 
     @Override

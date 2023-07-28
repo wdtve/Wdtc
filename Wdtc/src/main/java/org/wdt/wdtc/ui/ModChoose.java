@@ -14,13 +14,13 @@ import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.fabric.FabricVersionList;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeVersionList;
+import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
 import org.wdt.wdtc.download.quilt.QuiltVersionList;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ModChoose {
     private final ModList.KindOfMod kind;
@@ -36,15 +36,15 @@ public class ModChoose {
         this.size = new WindwosSize(MainStage);
     }
 
-    public List<String> ModVersionList() throws IOException {
+    public VersionList ModVersionList() throws IOException {
         if (kind == ModList.KindOfMod.FORGE) {
-            return new ForgeVersionList(launcher).getForgeVersion();
+            return new ForgeVersionList(launcher);
         } else if (kind == ModList.KindOfMod.FABRICAPI) {
-            return new FabricAPIVersionList(launcher).getFabricAPIVersionList();
+            return new FabricAPIVersionList(launcher);
         } else if (kind == ModList.KindOfMod.QUILT) {
-            return new QuiltVersionList(launcher).VersionList();
+            return new QuiltVersionList(launcher);
         } else {
-            return FabricVersionList.getList();
+            return new FabricVersionList();
         }
     }
 
@@ -61,7 +61,7 @@ public class ModChoose {
         list.setPrefSize(600, 316);
         Platform.runLater(() -> {
             try {
-                for (String s : ModVersionList()) {
+                for (String s : ModVersionList().getVersionList()) {
                     JFXButton VersionButton = getVersionButton(s, ButtonList);
                     size.ModifyWindwosSize(ButtonList, VersionButton);
                 }
@@ -89,7 +89,7 @@ public class ModChoose {
             if (kind == ModList.KindOfMod.FORGE) {
                 launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, s));
             } else if (kind == ModList.KindOfMod.FABRIC) {
-                launcher.setFabricModDownloadTask(new FabricDownloadTask(s, launcher));
+                launcher.setFabricModDownloadTask(new FabricDownloadTask(launcher, s));
             } else if (kind == ModList.KindOfMod.FABRICAPI) {
                 launcher.getFabricModDownloadTask().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, s));
             } else if (kind == ModList.KindOfMod.QUILT) {

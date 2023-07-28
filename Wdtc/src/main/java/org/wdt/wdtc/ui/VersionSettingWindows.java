@@ -16,7 +16,6 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.JavaHomePath;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -31,11 +30,11 @@ public class VersionSettingWindows extends AboutSetting {
     private static final double layoutX = 10;
     private static final Logger logmaker = getWdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
-    private final GameConfig config;
+    private final DefaultGameConfig config;
 
     public VersionSettingWindows(Launcher launcher) {
         this.launcher = launcher;
-        this.config = launcher.getGameConfig();
+        this.config = launcher.getGameConfig().getGameConfig();
     }
 
     public void setWindow(Stage MainStage) {
@@ -163,7 +162,7 @@ public class VersionSettingWindows extends AboutSetting {
                 gameConfig.setWidth(Integer.parseInt(InputWidth.getText()));
                 try {
                     logmaker.info(gameConfig);
-                    FileUtils.writeStringToFile(config.getVersionConfigFile(), JSONObject.toJSONString(gameConfig), "UTF-8");
+                    FileUtils.writeStringToFile(launcher.getGameConfig().getVersionConfigFile(), JSONObject.toJSONString(gameConfig), "UTF-8");
                     tips6.setText("设置成功");
                     tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
                 } catch (IOException e) {

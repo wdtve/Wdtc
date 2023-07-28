@@ -1,10 +1,10 @@
 package org.wdt.wdtc.utils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONArray;
 import org.wdt.wdtc.platform.AboutSetting;
 
 import java.io.IOException;
@@ -36,26 +36,25 @@ public class JavaHomePath {
     }
 
     private static void getPotentialJava(String key) throws IOException {
-        Process process = new ProcessBuilder(new String[]{"reg", "query", key}).start();
+        Process process = new ProcessBuilder("reg", "query", key).start();
         for (String s : IOUtils.readLines(process.getInputStream())) {
             if (s.startsWith(key)) {
                 for (Map<String, String> map : getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
                     String JavaPath = map.get("JavaPath");
-                    JSONArray JavaList = AboutSetting.JavaList();
+                    JsonArray JavaList = AboutSetting.getSetting().getJavaPath();
                     boolean AddPath = true;
                     for (int i = 0; i < JavaList.size(); i++) {
                         if (AddPath) {
-                            if (JavaPath.equals(JavaList.getString(i))) {
+                            if (JavaPath.equals(JavaList.get(i).getAsString())) {
                                 AddPath = false;
                             }
                         }
                     }
                     if (AddPath) {
-
                         JavaList.add(JavaPath);
                         logmaker.info("* Find Java : " + map.get("JavaPath") + ", Version : " + map.get("JavaVersion"));
                         JsonObject object = AboutSetting.SettingObject().getJsonObjects();
-                        object.add("JavaPath", JavaList.getJsonArrays());
+                        object.add("JavaPath", JavaList);
                         PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
                     }
                 }
@@ -66,7 +65,7 @@ public class JavaHomePath {
 
     private static List<String> getPotentialJavaFolders(String key) throws IOException {
         List<String> List = new ArrayList<>();
-        Process process = new ProcessBuilder(new String[]{"reg", "query", key}).start();
+        Process process = new ProcessBuilder("reg", "query", key).start();
         for (String s : IOUtils.readLines(process.getInputStream())) {
             if (s.startsWith(key)) {
                 List.add(s);
@@ -78,7 +77,7 @@ public class JavaHomePath {
     private static List<String> getPotentialJavaHome(List<String> list) throws IOException {
         List<String> JavaHomeList = new ArrayList<>();
         for (String key : list) {
-            Process process = new ProcessBuilder(new String[]{"reg", "query", key, "/v", "JavaHome"}).start();
+            Process process = new ProcessBuilder("reg", "query", key, "/v", "JavaHome").start();
             for (String s : IOUtils.readLines(process.getInputStream())) {
                 String JavaHomeCleaned = s.replaceAll("\\s", "");
                 if (JavaHomeCleaned.startsWith("JavaHome")) {

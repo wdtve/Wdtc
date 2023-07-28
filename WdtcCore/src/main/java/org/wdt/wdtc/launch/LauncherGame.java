@@ -24,7 +24,7 @@ public class LauncherGame {
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);
             try {
-                if (!ModList.GameModIsForge(launcher) && !Starter.getForgeSwitch()) {
+                if (!ModList.GameModIsForge(launcher) && Starter.getForgeSwitch()) {
                     gameVersion.DownloadGame();
                 }
             } catch (Throwable e) {
@@ -43,6 +43,7 @@ public class LauncherGame {
                 logmaker.info("* 开始运行启动脚本,日志:不显示");
             }
             logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
+            logmaker.info(launcher.getGameConfig().getGameConfig());
         } catch (Exception e) {
             logmaker.error("错误:", e);
         }

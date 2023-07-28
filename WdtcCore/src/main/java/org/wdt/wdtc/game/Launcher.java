@@ -29,7 +29,7 @@ public class Launcher extends Version {
     private QuiltDownloadTask QuiltModDownloadTask;
 
     public Launcher(String version) {
-        this(version, AboutSetting.GetDefaultGamePath());
+        this(version, AboutSetting.getSetting().getDefaultGamePath());
     }
 
     public Launcher(String version, String here) {
@@ -87,11 +87,11 @@ public class Launcher extends Version {
     }
 
     public boolean bmclapi() {
-        return AboutSetting.GetBmclSwitch();
+        return AboutSetting.getSetting().isBmcl();
     }
 
     public boolean log() {
-        return AboutSetting.GetLogSwitch();
+        return AboutSetting.getSetting().isConsole();
     }
 
 
@@ -114,7 +114,7 @@ public class Launcher extends Version {
     }
 
     public void LaunchTask() throws IOException {
-        if (AboutSetting.GetZHCNSwitch() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
+        if (AboutSetting.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
             String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
             File OptionsFile = new File(getGameOptionsFile());
             FileUtils.writeStringToFile(OptionsFile, Options, "UTF-8");
@@ -131,6 +131,10 @@ public class Launcher extends Version {
 
     public GetGamePath getGetGamePath() {
         return new GetGamePath(getHere());
+    }
+
+    public void CleanKind() {
+        kind = ModList.KindOfMod.Original;
     }
 
     @Override

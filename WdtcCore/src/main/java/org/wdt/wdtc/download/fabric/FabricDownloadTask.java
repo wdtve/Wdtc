@@ -17,8 +17,8 @@ public class FabricDownloadTask extends FabricFileList {
     private FabricAPIDownloadTask APIDownloadTask = null;
 
 
-    public FabricDownloadTask(String FabricVersionNumber, Launcher launcher) {
-        super(FabricVersionNumber, launcher);
+    public FabricDownloadTask(Launcher launcher, String FabricVersionNumber) {
+        super(launcher, FabricVersionNumber);
         this.launcher = launcher;
     }
 

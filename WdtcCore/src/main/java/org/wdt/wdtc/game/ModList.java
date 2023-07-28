@@ -2,7 +2,6 @@ package org.wdt.wdtc.game;
 
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
@@ -26,20 +25,18 @@ public class ModList {
                 String ModVersion = m.group(3);
                 switch (ModName) {
                     case "forge" -> launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, ModVersion));
-                    case "fabric" -> launcher.setFabricModDownloadTask(new FabricDownloadTask(ModVersion, launcher));
+                    case "fabric" -> launcher.setFabricModDownloadTask(new FabricDownloadTask(launcher, ModVersion));
                     case "quilt" -> launcher.setQuiltModDownloadTask(new QuiltDownloadTask(launcher, ModVersion));
                 }
             }
             return launcher;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return launcher;
         }
     }
 
-    public static void putGameId(Launcher launcher) throws IOException {
-        JSONObject VersionJSONObject = JSONUtils.getJSONObject(launcher.getVersionJson());
+    public static void putGameId(Launcher launcher) {
         if (launcher.getKind() == KindOfMod.FORGE) {
-
             putGameId(launcher, "forge", launcher.getForgeDownloadTask().getForgeVersion());
         } else if (launcher.getKind() == KindOfMod.FABRIC) {
             putGameId(launcher, "fabric", launcher.getFabricModDownloadTask().getFabricVersionNumber());

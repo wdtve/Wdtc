@@ -6,8 +6,6 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.ui.ErrorWin;
@@ -52,14 +50,10 @@ public class AppMain extends Application {
                 MainStage.setMinHeight(WindwosSize.WindowsHeight);
                 size.SettingSize();
                 MainStage.getIcons().add(new Image("ico.jpg"));
-                HomeWindow win;
-                if (AboutSetting.SettingObject().has("PreferredVersion")) {
-                    win = new HomeWindow(ModList.getModTask(new Launcher(AboutSetting.getPreferredVersion())));
-                } else {
-                    win = new HomeWindow(null);
-                }
+                HomeWindow win = new HomeWindow();
                 win.setHome(MainStage);
                 MainStage.show();
+                logmaker.info("* Window Show");
             });
             MainStage.setOnCloseRequest(windowEvent -> {
                 logmaker.info(size);
@@ -68,7 +62,7 @@ public class AppMain extends Application {
                 object.addProperty("WindowsHeight", MainStage.getHeight());
                 PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
                 logmaker.info("======= exited ========");
-                System.exit(0);
+                Platform.exit();
             });
         } catch (Exception e) {
             ErrorWin.setErrorWin(e);

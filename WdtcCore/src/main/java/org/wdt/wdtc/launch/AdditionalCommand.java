@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AdditionalCommand {
-    public static String AdditionalGame(Launcher launcher) throws IOException {
+    public static String AdditionalGame(Launcher launcher) {
         if (ModList.GameModIsForge(launcher)) {
             return ListToString(launcher.getForgeDownloadTask().getForgeLaunchTask().getForgeLaunchGame(), " ");
         } else {
@@ -16,7 +16,7 @@ public class AdditionalCommand {
         }
     }
 
-    public static String AdditionalJvm(Launcher launcher) throws IOException {
+    public static String AdditionalJvm(Launcher launcher) {
         if (ModList.GameModIsForge(launcher)) {
             return FilenameUtils.separatorsToUnix(ListToString(launcher.getForgeDownloadTask()
                     .getForgeLaunchTask().getForgeLuanchJvm(), " "));
@@ -43,7 +43,7 @@ public class AdditionalCommand {
 
     public static String GameMainClass(Launcher launcher) {
         if (ModList.GameModIsForge(launcher)) {
-            return Space("cpw.mods.bootstraplauncher.BootstrapLauncher");
+            return Space(launcher.getForgeDownloadTask().getForgeLaunchTask().getMainClass());
         } else if (ModList.GameModIsFabric(launcher)) {
             return Space("net.fabricmc.loader.impl.launch.knot.KnotClient");
         } else if (ModList.GameModIsQuilt(launcher)) {

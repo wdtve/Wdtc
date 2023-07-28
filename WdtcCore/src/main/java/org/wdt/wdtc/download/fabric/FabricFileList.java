@@ -29,7 +29,7 @@ public class FabricFileList {
     private final Logger logmaker = getWdtcLogger.getLogger(FabricFileList.class);
 
 
-    public FabricFileList(String FabricVersionNumber, Launcher launcher) {
+    public FabricFileList(Launcher launcher, String FabricVersionNumber) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.launcher = launcher;
     }
@@ -48,7 +48,7 @@ public class FabricFileList {
     }
 
     public String getFabricFileList() {
-        if (AboutSetting.GetBmclSwitch()) {
+        if (AboutSetting.getSetting().isBmcl()) {
             return getBmclapiFabricFileListUrl();
         } else {
             return getFabricFileListUrl();
@@ -112,19 +112,15 @@ public class FabricFileList {
     }
 
     public FabricDownloadTask getFabricDownloadTask() {
-        return new FabricDownloadTask(FabricVersionNumber, launcher);
+        return new FabricDownloadTask(launcher, FabricVersionNumber);
     }
 
     public FabricLaunchTask getFabricLaunchTask() {
-        return new FabricLaunchTask(FabricVersionNumber, launcher);
+        return new FabricLaunchTask(launcher, FabricVersionNumber);
     }
 
     @Override
     public String toString() {
-        return "FabricFileList{" +
-                "FabricFileListUrl='" + FabricFileListUrl + '\'' +
-                ", BmclapiFabricFileListUrl='" + BmclapiFabricFileListUrl + '\'' +
-                ", FabricVersionNumber='" + FabricVersionNumber + '\'' +
-                '}';
+        return "FabricFileList{" + "FabricFileListUrl='" + FabricFileListUrl + '\'' + ", BmclapiFabricFileListUrl='" + BmclapiFabricFileListUrl + '\'' + ", FabricVersionNumber='" + FabricVersionNumber + '\'' + '}';
     }
 }

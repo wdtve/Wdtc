@@ -60,7 +60,7 @@ public class FileUrl {
     }
 
     public static String getVersionManifest() {
-        if (AboutSetting.GetBmclSwitch()) {
+        if (AboutSetting.getSetting().isBmcl()) {
             return getBmclapiVersionManifest();
         } else {
             return getMojangVersionManifest();
@@ -68,7 +68,7 @@ public class FileUrl {
     }
 
     public static String getAssets() {
-        if (AboutSetting.GetBmclSwitch()) {
+        if (AboutSetting.getSetting().isBmcl()) {
             return getBmclapiAssets();
         } else {
             return getMojangAssets();
@@ -76,7 +76,7 @@ public class FileUrl {
     }
 
     public static String getLibrary() {
-        if (AboutSetting.GetBmclSwitch()) {
+        if (AboutSetting.getSetting().isBmcl()) {
             return getBmclapiLibraries();
         } else {
             return getMojangLibraries();

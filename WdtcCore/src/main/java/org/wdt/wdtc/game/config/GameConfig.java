@@ -3,11 +3,9 @@ package org.wdt.wdtc.game.config;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
-import org.wdt.wdtc.utils.JavaHomePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
@@ -42,41 +40,9 @@ public class GameConfig {
         return new File(launcher.getVersionPath() + "/config.json");
     }
 
-    public String getJavaPath() {
-        if (getVersionConfigObject().has("JavaPath")) {
-            return getVersionConfigObject().getString("JavaPath");
-        } else {
-            return JavaHomePath.GetRunJavaHome();
-        }
-    }
-
-    public int getRunningMemory() {
-        if (getVersionConfigObject().has("RunningMemory")) {
-            return getVersionConfigObject().getInt("RunningMemory");
-        } else {
-            return 1024;
-        }
-    }
-
-    public int getWindowWidth() {
-        if (getVersionConfigObject().has("WindowWidth")) {
-            return getVersionConfigObject().getInt("WindowWidth");
-        } else {
-            return 855;
-        }
-    }
-
-    public int getWindowHeight() {
-        if (getVersionConfigObject().has("WindowHeight")) {
-            return getVersionConfigObject().getInt("WindowHeight");
-        } else {
-            return 1000;
-        }
-    }
-
-    public JSONObject getVersionConfigObject() {
+    public DefaultGameConfig getGameConfig() {
         try {
-            return JSONUtils.getJSONObject(getVersionConfigFile());
+            return JSONObject.getGson().fromJson(FileUtils.readFileToString(getVersionConfigFile()), DefaultGameConfig.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +52,9 @@ public class GameConfig {
         DefaultGameConfig defaultconfig = new DefaultGameConfig();
         FileUtils.writeStringToFile(getVersionConfigFile(), JSONObject.toJSONString(defaultconfig), "UTF-8");
         logmaker.info("* " + launcher.getVersion() + " " + defaultconfig);
+    }
 
+    public String getDefaultGameConfig() {
+        return JSONObject.toJSONString(new DefaultGameConfig());
     }
 }

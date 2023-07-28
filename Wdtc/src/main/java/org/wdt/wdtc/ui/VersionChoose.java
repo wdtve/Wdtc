@@ -1,6 +1,5 @@
 package org.wdt.wdtc.ui;
 
-import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,15 +9,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 
-import java.io.IOException;
 import java.util.List;
 
 public class VersionChoose {
@@ -61,15 +57,11 @@ public class VersionChoose {
                 size.ModifyWindwosSize(pane, VersionId, ModKind);
                 size.ModifyWindwosSize(VersionList, pane);
                 VersionId.setOnAction(event -> {
-                    try {
-                        JsonObject SettingObject = AboutSetting.SettingObject().getJsonObjects();
-                        SettingObject.addProperty("PreferredVersion", VersionId.getText());
-                        FileUtils.writeStringToFile(AboutSetting.GetSettingFile(), JSONObject.toJSONString(SettingObject), "UTF-8");
-                        HomeWindow win = new HomeWindow(GameVersion);
-                        win.setHome(MainStage);
-                    } catch (IOException e) {
-                        ErrorWin.setErrorWin(e);
-                    }
+                    AboutSetting.Setting setting = AboutSetting.getSetting();
+                    setting.setPreferredVersion(VersionId.getText());
+                    AboutSetting.putSettingToFile(setting);
+                    HomeWindow win = new HomeWindow(GameVersion);
+                    win.setHome(MainStage);
                 });
             }
         }

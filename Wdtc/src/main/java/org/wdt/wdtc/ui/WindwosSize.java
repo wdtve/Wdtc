@@ -47,16 +47,9 @@ public class WindwosSize {
     }
 
     public void SettingSize() {
-        if (AboutSetting.SettingObject().has("WindowsWidth")) {
-            MainStage.setWidth(AboutSetting.GetWindowsWidth());
-        } else {
-            MainStage.setWidth(WindowsWidht);
-        }
-        if (AboutSetting.SettingObject().has("WindowsHeight")) {
-            MainStage.setHeight(AboutSetting.GetWindowsHeight());
-        } else {
-            MainStage.setHeight(WindowsHeight);
-        }
+        AboutSetting.Setting setting = AboutSetting.getSetting();
+        MainStage.setWidth(setting.getWindowsWidth());
+        MainStage.setHeight(setting.getWindowsHeight());
     }
 
 

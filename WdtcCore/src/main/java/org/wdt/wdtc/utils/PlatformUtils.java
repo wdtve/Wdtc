@@ -4,6 +4,7 @@ package org.wdt.wdtc.utils;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.wdt.platform.gson.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,4 +77,15 @@ public class PlatformUtils extends FileUtils {
         }
     }
 
+    public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) {
+        try {
+            return JSONObject.getGson().fromJson(FileUtils.readFileToString(JsonFile, "UTF-8"), clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) {
+        return JsonFileToClass(new File(JsonFilePath), clazz);
+    }
 }

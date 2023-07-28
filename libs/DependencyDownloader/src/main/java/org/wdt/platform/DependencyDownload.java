@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class DependencyDownload extends DefaultDependency {
-    private final Logger logmaker = log4j.getLogger(getClass());
+    private final Logger logmaker = log4j.getLogger(DependencyDownload.class);
     private String DownloadPath;
     private String DefaultUrl = "https://repo1.maven.org/maven2/";
     private Boolean downloadPom = false;

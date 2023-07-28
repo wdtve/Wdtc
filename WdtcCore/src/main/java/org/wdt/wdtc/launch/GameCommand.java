@@ -2,9 +2,9 @@ package org.wdt.wdtc.launch;
 
 
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.auth.Accounts;
+import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.game.config.DefaultGameConfig;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ public class GameCommand {
 
     public static void Getgame(Launcher launcher) throws IOException {
         GameSet = new StringBuilder();
-        GameConfig gameConfig = launcher.getGameConfig();
-        Accounts accounts = launcher.GetAccounts();
+        DefaultGameConfig gameConfig = launcher.getGameConfig().getGameConfig();
+        Users accounts = launcher.GetAccounts().getUsers();
         append("--username");
         append(accounts.getUserName());
         append("--version");
@@ -26,7 +26,7 @@ public class GameCommand {
         append("--assetIndex");
         append(JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex").getString("id"));
         append("--uuid");
-        append(accounts.getUserUUID());
+        append(accounts.getUuid());
         append("--accessToken");
         append(accounts.getAccessToken());
         append("--clientId");

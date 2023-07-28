@@ -26,12 +26,20 @@ public class DownloadTask extends GameLibraryPathAndUrl {
         this.launcher = launcher;
     }
 
-    public static void StartDownloadTask(String url, String path) throws MalformedURLException {
-        StartDownloadTask(new URL(url), new File(path));
+    public static void StartDownloadTask(String url, String path) {
+        try {
+            StartDownloadTask(new URL(url), new File(path));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void StartDownloadTask(String url, File file) throws MalformedURLException {
-        StartWGetDownloadTask(new URL(url), file);
+    public static void StartDownloadTask(String url, File file) {
+        try {
+            StartWGetDownloadTask(new URL(url), file);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void StartDownloadTask(URL url, File file) {
@@ -96,19 +104,23 @@ public class DownloadTask extends GameLibraryPathAndUrl {
         }
     }
 
-    public Thread StartDownloadHashTask(String hash, SpeedOfProgress downLatch) throws IOException {
-        String hash_t = hash.substring(0, 2);
-        File hash_path = new File(launcher.getGameObjects() + hash_t + "\\" + hash);
-        URL hash_url;
-        if (launcher.bmclapi()) {
-            hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
-        } else {
-            hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
+    public Thread StartDownloadHashTask(String hash, SpeedOfProgress downLatch) {
+        try {
+            String hash_t = hash.substring(0, 2);
+            File hash_path = new File(launcher.getGameObjects() + hash_t + "\\" + hash);
+            URL hash_url;
+            if (launcher.bmclapi()) {
+                hash_url = new URL(FileUrl.getBmclapiAssets() + hash_t + "/" + hash);
+            } else {
+                hash_url = new URL(FileUrl.getMojangAssets() + hash_t + "/" + hash);
+            }
+            return ThreadUtils.StartThread(() -> {
+                StartDownloadTask(hash_url, hash_path);
+                downLatch.countDown();
+            });
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
-        return ThreadUtils.StartThread(() -> {
-            StartDownloadTask(hash_url, hash_path);
-            downLatch.countDown();
-        });
     }
 
     public Thread StartDownloadLibTask(JSONObject lib_j) {
@@ -125,11 +137,8 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     public Thread StartDownloadNativesLibTask(JSONObject lib_j) {
         return ThreadUtils.StartThread(() -> {
             try {
-                try {
-                    StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
-                } catch (MalformedURLException e) {
-                    logmaker.error("* Error:", e);
-                }
+                StartDownloadTask(GetNativesLibUrl(lib_j), GetNativesLibPath(lib_j));
+
             } catch (IOException e) {
                 logmaker.error("* Error:", e);
             }

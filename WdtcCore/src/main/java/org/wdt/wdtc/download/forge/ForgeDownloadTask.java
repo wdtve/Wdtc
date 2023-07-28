@@ -2,6 +2,7 @@ package org.wdt.wdtc.download.forge;
 
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
@@ -11,17 +12,17 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.zip.ZipFile;
 
 public class ForgeDownloadTask {
     public static final String INSTALL_JAR = "https://maven.minecraftforge.net/net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
     public static final String BMCLAPI_INSTALL_JAR = "https://download.mcbbs.net/maven/net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
-    public final Logger logmaker = getWdtcLogger.getLogger(getClass());
+    public static final Logger logmaker = getWdtcLogger.getLogger(ForgeDownloadTask.class);
     public final String ForgeVersion;
     public final Launcher launcher;
 
@@ -44,8 +45,8 @@ public class ForgeDownloadTask {
         DownloadTask.StartWGetDownloadTask(getForgeInstallJarUrl(), getForgeInstallJarPath());
     }
 
-    private String getInstallJar() {
-        if (AboutSetting.GetBmclSwitch()) {
+    private String getInstallJarUrl() {
+        if (AboutSetting.getSetting().isBmcl()) {
             return BMCLAPI_INSTALL_JAR;
         } else {
             return INSTALL_JAR;
@@ -57,19 +58,23 @@ public class ForgeDownloadTask {
     }
 
     public String getForgeInstallJarUrl() {
-        return getInstallJar().replaceAll(":mcversion", launcher.getVersion()).replaceAll(":forgeversion", ForgeVersion);
+        return getInstallJarUrl().replaceAll(":mcversion", launcher.getVersion()).replaceAll(":forgeversion", ForgeVersion);
     }
 
     public void getInstallProfile() throws IOException {
         if (PlatformUtils.FileExistenceAndSize(getInstallProfilePath())) {
             DownloadInstallJar();
         }
-        ExtractFile.unZipBySpecifyFile(getForgeInstallJarPath(), getInstallProfilePath());
+        ZipFile InstallJar = new ZipFile(new File(getForgeInstallJarPath()));
+        InputStream inputStream = InstallJar.getInputStream(InstallJar.getEntry("install_profile.json"));
+        OutputStream outputStream = new FileOutputStream(getInstallProfilePath());
+        IOUtils.copy(inputStream, outputStream);
+
     }
 
 
     public String getInstallProfilePath() {
-        return FilePath.getWdtcCache() + "/install_profile.json";
+        return FilePath.getWdtcCache() + "/install_profile" + "-" + launcher.getVersion() + "-" + ForgeVersion + ".json";
     }
 
     public JSONObject getInstallPrefileJSONObject() throws IOException {
@@ -89,12 +94,12 @@ public class ForgeDownloadTask {
             JSONObject LibraryObject = LibraryList.getJSONObject(i);
             JSONObject LibraryArtifact = LibraryObject.getJSONObject("downloads").getJSONObject("artifact");
             if (launcher.bmclapi()) {
-                try {
-                    DependencyDownload download = new DependencyDownload(LibraryObject.getString("name"));
-                    download.setDefaultUrl(FileUrl.getBmclapiLibraries());
-                    download.setDownloadPath(launcher.GetGameLibraryPath());
-                    download.download();
-                } catch (IOException e) {
+                DependencyDownload download = new DependencyDownload(LibraryObject.getString("name"));
+                download.setDownloadPath(launcher.GetGameLibraryPath());
+                download.setDefaultUrl(FileUrl.getBmclapiLibraries());
+                if (PlatformUtils.NetworkHasThisFile(download.getLibraryUrl())) {
+                    DownloadTask.StartWGetDownloadTask(download.getLibraryUrl(), download.getLibraryFile());
+                } else {
                     String LibraryUrl = LibraryArtifact.getString("url");
                     String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibraryPath() + LibraryArtifact.getString("path"));
                     DownloadTask.StartWGetDownloadTask(LibraryUrl, LibraryPath);

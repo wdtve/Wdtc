@@ -25,34 +25,38 @@ public class DownloadGameLibrary extends DownloadTask {
         this.version = launcher;
     }
 
-    public void DownloadLibraryFile() throws IOException, RuntimeException {
-        Files.createDirectories(Paths.get(version.getVersionNativesPath()));
-        JSONArray LibraryList = JSONUtils.getJSONObject(version.getVersionJson()).getJSONArray("libraries");
-        for (int i = 0; i < LibraryList.size(); i++) {
-            JSONObject LibraryJSONObject = LibraryList.getJSONObject(i);
-            if (LibraryJSONObject.has("natives")) {
-                JSONObject NativesJson = LibraryJSONObject.getJSONObject("natives");
-                if (NativesJson.has("windows")) {
-                    StartDownloadNativesLibTask(LibraryJSONObject);
-                }
-            } else {
-                if (LibraryJSONObject.has("rules")) {
-                    JSONArray rules = LibraryJSONObject.getJSONArray("rules");
-                    JSONObject ActionJson = rules.getJSONObject(rules.size() - 1);
-                    String action = ActionJson.getString("action");
-                    String OSName = ActionJson.getJSONObject("os").getString("name");
-                    if (Objects.equals(action, "disallow") && Objects.equals(OSName, "osx")) {
-                        StartDownloadLibTask(LibraryJSONObject);
-                    } else if (Objects.equals(action, "allow") && Objects.equals(OSName, "windows")) {
-                        StartDownloadLibTask(LibraryJSONObject);
+    public void DownloadLibraryFile() {
+        try {
+            Files.createDirectories(Paths.get(version.getVersionNativesPath()));
+            JSONArray LibraryList = JSONUtils.getJSONObject(version.getVersionJson()).getJSONArray("libraries");
+            for (int i = 0; i < LibraryList.size(); i++) {
+                JSONObject LibraryJSONObject = LibraryList.getJSONObject(i);
+                if (LibraryJSONObject.has("natives")) {
+                    JSONObject NativesJson = LibraryJSONObject.getJSONObject("natives");
+                    if (NativesJson.has("windows")) {
+                        StartDownloadNativesLibTask(LibraryJSONObject);
                     }
                 } else {
-                    StartDownloadLibTask(LibraryJSONObject);
+                    if (LibraryJSONObject.has("rules")) {
+                        JSONArray rules = LibraryJSONObject.getJSONArray("rules");
+                        JSONObject ActionJson = rules.getJSONObject(rules.size() - 1);
+                        String action = ActionJson.getString("action");
+                        String OSName = ActionJson.getJSONObject("os").getString("name");
+                        if (Objects.equals(action, "disallow") && Objects.equals(OSName, "osx")) {
+                            StartDownloadLibTask(LibraryJSONObject);
+                        } else if (Objects.equals(action, "allow") && Objects.equals(OSName, "windows")) {
+                            StartDownloadLibTask(LibraryJSONObject);
+                        }
+                    } else {
+                        StartDownloadLibTask(LibraryJSONObject);
+                    }
                 }
             }
+        } catch (IOException e) {
+            logmaker.error("* Download Library File Error,", e);
         }
-
         try {
+
             InputStream log4j2 = getClass().getResourceAsStream("/log4j2.xml");
             File VersionLog = new File(version.getVersionLog4j2());
             if (PlatformUtils.FileExistenceAndSize(VersionLog)) {

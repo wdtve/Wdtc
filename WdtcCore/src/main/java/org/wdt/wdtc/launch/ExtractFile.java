@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.getWdtcLogger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +19,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ExtractFile {
-    private static final Logger logmaker = Logger.getLogger(ExtractFile.class);
+    private static final Logger logmaker = getWdtcLogger.getLogger(ExtractFile.class);
 
     public static void unzipByFile(File file, String path) {
         try {

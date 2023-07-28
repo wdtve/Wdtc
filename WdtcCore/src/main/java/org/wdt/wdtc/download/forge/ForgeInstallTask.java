@@ -12,7 +12,7 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.launch.ExtractFile;
 import org.wdt.wdtc.utils.getWdtcLogger;
 
@@ -23,13 +23,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadTask {
-    private final Logger logmaker = getWdtcLogger.getLogger(getClass());
-    private final GameConfig config;
+    private static final Logger logmaker = getWdtcLogger.getLogger(ForgeInstallTask.class);
+    private final DefaultGameConfig config;
 
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
-        this.config = launcher.getGameConfig();
+        this.config = launcher.getGameConfig().getGameConfig();
     }
 
 
@@ -47,7 +47,6 @@ public class ForgeInstallTask extends ForgeDownloadTask {
             CommandLine.append(launcher.GetGameLibraryPath()).append(FilenameUtils.separatorsToWindows(Jar.formJar()));
             CommandLine.append(" ").append("net.minecraftforge.fart.Main").append(" ");
         } else {
-
             DefaultDependency MainJar = new DependencyDownload(JsonObject.getString("jar"));
             CommandLine.append(launcher.GetGameLibraryPath()).append(MainJar.formJar()).append(" ").append(MainJar.getGroupId())
                     .append(".").append(MainJar.getArtifactId()).append(".ConsoleTool ");
@@ -84,7 +83,7 @@ public class ForgeInstallTask extends ForgeDownloadTask {
 
     public void DownloadClientText() throws IOException {
         DefaultDependency TxtPath = new DefaultDependency(getInstallPrefileJSONObject().getJSONObject("data")
-                .getJSONObject("MOJMAPS").getString("client").replace("[", "").replace("]", ""));
+                .getJSONObject("MAPPINGS").getString("client").replace("[", "").replace("]", ""));
         String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
         if (launcher.bmclapi()) {
@@ -98,7 +97,11 @@ public class ForgeInstallTask extends ForgeDownloadTask {
         JSONArray objects = getInstallPrefileJSONObject().getJSONArray("processors");
         for (int i = 0; i < objects.size(); i++) {
             JSONObject TaskJson = objects.getJSONObject(i);
-            if (!TaskJson.has("sides") || TaskJson.getJSONArray("sides").getString(0).equals("client")) {
+            if (TaskJson.has("sides")) {
+                if (TaskJson.getJSONArray("sides").getString(0).equals("client")) {
+                    StartCommand(i);
+                }
+            } else {
                 if (!TaskJson.getJSONArray("args").getString(1).equals("DOWNLOAD_MOJMAPS")) {
                     StartCommand(i);
                 }
@@ -115,11 +118,13 @@ public class ForgeInstallTask extends ForgeDownloadTask {
     }
 
     private void StartCommand(int i) throws IOException {
-        logmaker.info("* Command Line:" + CommandLine(i));
-        Process process = Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", CommandLine(i)});
+        String commmand = CommandLine(i);
+        logmaker.info("* Command Line:" + commmand);
+        Process process = Runtime.getRuntime().exec(new String[]{"cmd", "/c", commmand});
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
-        while (bufferedReader.readLine() != null) {
-            logmaker.info(bufferedReader.readLine());
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            logmaker.info(line);
         }
         process.destroy();
     }

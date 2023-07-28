@@ -37,7 +37,7 @@ public class NewDownloadWin {
             win.setHome(MainStage);
         });
         Platform.runLater(() -> {
-            List<String> Versionlist = GameVersionList.getVersionList();
+            List<String> Versionlist = new GameVersionList().getVersionList();
             for (String s : Versionlist) {
                 JFXButton button = new JFXButton(s);
                 button.setPrefWidth(458);

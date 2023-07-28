@@ -1,13 +1,9 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +11,11 @@ import java.net.URL;
 import java.util.Objects;
 
 public class YggdrasilTextures {
-    private static final Logger logmaker = getWdtcLogger.getLogger(YggdrasilTextures.class);
     private final String username;
     private String url;
 
     public YggdrasilTextures(YggdrasilAccounts yggdrasilAccounts) throws IOException {
-        username = yggdrasilAccounts.GetUserName();
+        username = yggdrasilAccounts.getUsername();
         if (Objects.nonNull(yggdrasilAccounts.getUrl())) {
             url = yggdrasilAccounts.getUrl();
         } else {
@@ -41,11 +36,7 @@ public class YggdrasilTextures {
     }
 
     public String GetUserSkinHash() throws IOException {
-        HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod(GetUserJson());
-        client.executeMethod(method);
-        JSONObject object = JSONObject.parseObject(method.getResponseBodyAsString());
-        method.releaseConnection();
+        JSONObject object = JSONObject.parseObject(PlatformUtils.GetUrlContent(GetUserJson()));
         if (Objects.nonNull(object.getJSONObject("skins").getString("default"))) {
             return object.getJSONObject("skins").getString("default");
         } else {

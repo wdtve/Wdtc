@@ -11,8 +11,8 @@ public class FabricLaunchTask extends FabricFileList {
     private final Launcher launcher;
 
 
-    public FabricLaunchTask(String FabricVersionNumber, Launcher launcher) {
-        super(FabricVersionNumber, launcher);
+    public FabricLaunchTask(Launcher launcher, String FabricVersionNumber) {
+        super(launcher, FabricVersionNumber);
         this.launcher = launcher;
     }
 

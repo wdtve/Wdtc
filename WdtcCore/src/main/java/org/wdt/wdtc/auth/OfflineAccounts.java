@@ -22,7 +22,7 @@ public class OfflineAccounts {
     public void WriteUserJson() throws IOException {
         Users users = new Users();
         users.setUserName(username);
-        users.setType("offline");
+        users.setType(Accounts.AccountsType.Offline);
         users.setAccessToken("${auth_access_token}");
         users.setUuid(UserUuid);
         FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(users), "UTF-8");

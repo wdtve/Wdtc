@@ -1,7 +1,5 @@
 package org.wdt.wdtc.auth;
 
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -11,25 +9,20 @@ import java.io.IOException;
 public class Accounts {
     private final AccountsType type;
 
-    public Accounts() throws IOException {
-        if (getUserType().equals("offline")) {
-            type = AccountsType.OFFLINE;
+    public Accounts() {
+        if (getUsers().getType() == AccountsType.Offline) {
+            type = AccountsType.Offline;
         } else {
-            type = AccountsType.YGGDRASIL;
+            type = AccountsType.Yggdrasil;
         }
     }
 
-    public String getUserUUID() throws IOException {
-        return UserSetting().getString("Uuid");
-    }
-
-
-    public String getAccessToken() throws IOException {
-        return UserSetting().getString("AccessToken");
+    public boolean AccountsIsOffline() {
+        return type != AccountsType.Yggdrasil;
     }
 
     public String getJvm() throws IOException {
-        if (type == AccountsType.OFFLINE) {
+        if (AccountsIsOffline()) {
             return "";
         } else {
             return "-javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
@@ -37,22 +30,14 @@ public class Accounts {
         }
     }
 
-    public String getUserName() throws IOException {
-        return UserSetting().getString("UserName");
-    }
-
-    public JSONObject UserSetting() throws IOException {
-        return JSONUtils.getJSONObject(FilePath.getUsersJson());
-    }
-
-    public String getUserType() throws IOException {
-        return UserSetting().getString("Type");
+    public Users getUsers() {
+        return PlatformUtils.JsonFileToClass(FilePath.getUsersJson(), Users.class);
     }
 
 
     public enum AccountsType {
-        OFFLINE,
-        YGGDRASIL
+        Offline,
+        Yggdrasil
     }
 
 }
