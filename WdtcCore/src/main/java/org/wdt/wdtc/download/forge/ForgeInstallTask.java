@@ -10,11 +10,12 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.launch.ExtractFile;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.platform.ExtractFile;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,13 +24,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadTask {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ForgeInstallTask.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ForgeInstallTask.class);
     private final DefaultGameConfig config;
+    private final DownloadSource source;
 
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
         this.config = launcher.getGameConfig().getGameConfig();
+        this.source = Launcher.getDownloadSource();
     }
 
 
@@ -86,8 +89,8 @@ public class ForgeInstallTask extends ForgeDownloadTask {
                 .getJSONObject("MAPPINGS").getString("client").replace("[", "").replace("]", ""));
         String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
-        if (launcher.bmclapi()) {
-            TxtUrl = TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), FileUrl.getBmcalapiCom());
+        if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
+            TxtUrl = TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl());
         }
         DownloadTask.StartWGetDownloadTask(TxtUrl, launcher.GetGameLibraryPath() + TxtPath.formJar());
 

@@ -8,13 +8,13 @@ import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class SelectGameVersion {
-    private static final Logger logmaker = getWdtcLogger.getLogger(SelectGameVersion.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(SelectGameVersion.class);
     private final TextField textField;
     private final Launcher launcher;
 

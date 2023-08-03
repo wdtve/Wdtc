@@ -1,14 +1,15 @@
-package org.wdt.wdtc.launch;
+package org.wdt.wdtc.platform;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,7 +20,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ExtractFile {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ExtractFile.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ExtractFile.class);
 
     public static void unzipByFile(File file, String path) {
         try {
@@ -66,6 +67,17 @@ public class ExtractFile {
             }
             zip.close();
         } catch (Exception e) {
+            logmaker.error("* 压缩包提取发生错误:", e);
+        }
+    }
+
+    public static void unZipToFile(String ZipPath, String unFilePath, String unFileName) {
+        try {
+            ZipFile zipFile = new ZipFile(new File(ZipPath));
+            FileOutputStream outputStream = new FileOutputStream(new File(unFilePath));
+            InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
+            IOUtils.copy(stream, outputStream);
+        } catch (IOException e) {
             logmaker.error("* 压缩包提取发生错误:", e);
         }
     }

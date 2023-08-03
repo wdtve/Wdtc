@@ -7,6 +7,7 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.ExtractFile;
 
 import java.io.File;
 import java.io.IOException;

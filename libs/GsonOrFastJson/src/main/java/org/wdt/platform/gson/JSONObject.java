@@ -58,7 +58,7 @@ public class JSONObject extends JSON {
     }
 
     public com.alibaba.fastjson2.JSONObject getFastJSONObject() {
-        return com.alibaba.fastjson2.JSONObject.parseObject(JsonObjects.toString());
+        return com.alibaba.fastjson2.JSONObject.parseObject(toJSONString(JsonObjects));
     }
 
     public double getDouble(String str) {

@@ -1,20 +1,20 @@
 package org.wdt.wdtc.game.config;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class GameConfig {
-    private static final Logger logmaker = getWdtcLogger.getLogger(getWdtcLogger.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(WdtcLogger.class);
     private final Launcher launcher;
 
     public GameConfig(Launcher launcher) {
@@ -41,16 +41,12 @@ public class GameConfig {
     }
 
     public DefaultGameConfig getGameConfig() {
-        try {
-            return JSONObject.getGson().fromJson(FileUtils.readFileToString(getVersionConfigFile()), DefaultGameConfig.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return JSONUtils.JsonFileToClass(getVersionConfigFile(), DefaultGameConfig.class);
     }
 
     public void writeConfigJson() throws IOException {
         DefaultGameConfig defaultconfig = new DefaultGameConfig();
-        FileUtils.writeStringToFile(getVersionConfigFile(), JSONObject.toJSONString(defaultconfig), "UTF-8");
+        JSONUtils.ObjectToJsonFile(getVersionConfigFile(), defaultconfig);
         logmaker.info("* " + launcher.getVersion() + " " + defaultconfig);
     }
 

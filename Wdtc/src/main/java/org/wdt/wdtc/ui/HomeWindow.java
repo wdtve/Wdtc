@@ -17,12 +17,12 @@ import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.ui.users.UsersWin;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
 public class HomeWindow {
-    private static final Logger logmaker = getWdtcLogger.getLogger(HomeWindow.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(HomeWindow.class);
     private final Launcher launcher;
 
     public HomeWindow(Launcher launcher) {
@@ -56,7 +56,7 @@ public class HomeWindow {
         JFXButton downgame = new JFXButton("下载游戏");
         downgame.setLayoutY(46);
         downgame.setPrefSize(128, 46);
-        downgame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
+        downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
 
         JFXButton startgame = new JFXButton("选择版本");
         startgame.setLayoutY(69);
@@ -143,7 +143,7 @@ public class HomeWindow {
                     UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
                 }
             } else {
-                NewDownloadWin.SetWin(MainStage);
+                NewDownloadWindow.SetWin(MainStage);
             }
         });
         Menu.getChildren().addAll(home, User, downgame, startgame, VersionSetting, setting, github);

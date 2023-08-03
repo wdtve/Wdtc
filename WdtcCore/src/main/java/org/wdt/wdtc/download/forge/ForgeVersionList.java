@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForgeVersionList implements VersionList {
-    private static final String BMCALAPI_FORGE_LIST = "https://bmclapi2.bangbang93.com/forge/minecraft/";
     private final Launcher launcher;
 
 
@@ -21,7 +20,7 @@ public class ForgeVersionList implements VersionList {
     }
 
     public String getForgeListUrl() {
-        return BMCALAPI_FORGE_LIST + launcher.getVersion();
+        return "https://bmclapi2.bangbang93.com/forge/minecraft/" + launcher.getVersion();
     }
 
     @Override

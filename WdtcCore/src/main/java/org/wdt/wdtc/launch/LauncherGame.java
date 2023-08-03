@@ -6,14 +6,14 @@ import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 
 public class LauncherGame {
     private static final File StartBat = FilePath.getStarterBat();
-    private static final Logger logmaker = getWdtcLogger.getLogger(LauncherGame.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(LauncherGame.class);
     private final Launcher launcher;
 
 
@@ -37,7 +37,7 @@ public class LauncherGame {
             GameCommand.Getgame(launcher);
             launcher.writeStartScript();
             logmaker.info("* 启动脚本写入完成");
-            if (launcher.log()) {
+            if (launcher.Console()) {
                 logmaker.info("* 开始运行启动脚本,日志:显示");
             } else {
                 logmaker.info("* 开始运行启动脚本,日志:不显示");
@@ -61,7 +61,7 @@ public class LauncherGame {
     }
 
     public Process getStart() throws IOException {
-        if (launcher.log()) {
+        if (launcher.Console()) {
             return bat();
         } else {
             return executeBatFile();

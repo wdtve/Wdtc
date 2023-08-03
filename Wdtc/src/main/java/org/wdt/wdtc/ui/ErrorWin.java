@@ -8,13 +8,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class ErrorWin {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ErrorWin.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ErrorWin.class);
 
 
     public static void setErrorWin(Throwable e) {

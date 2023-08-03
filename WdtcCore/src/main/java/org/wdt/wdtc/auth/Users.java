@@ -10,13 +10,13 @@ import java.io.IOException;
 public class Users {
 
     @SerializedName("UserName")
-    public String UserName;
+    private String UserName;
     @SerializedName("AccessToken")
-    public String AccessToken;
+    private String AccessToken;
     @SerializedName("Type")
-    public String Type;
+    private Accounts.AccountsType Type;
     @SerializedName("Uuid")
-    public String Uuid;
+    private String Uuid;
 
 
     public void setUserName(String userName) {
@@ -49,11 +49,11 @@ public class Users {
     }
 
     public Accounts.AccountsType getType() {
-        return Accounts.AccountsType.valueOf(Type);
+        return Type;
     }
 
     public void setType(Accounts.AccountsType type) {
-        Type = type.toString();
+        Type = type;
     }
 
     public String getUuid() {

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
@@ -20,7 +21,7 @@ import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.JavaHomePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ import java.io.IOException;
 
 public class VersionSettingWindows extends AboutSetting {
     private static final double layoutX = 10;
-    private static final Logger logmaker = getWdtcLogger.getLogger(VersionSettingWindows.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
     private final DefaultGameConfig config;
 
@@ -56,9 +57,7 @@ public class VersionSettingWindows extends AboutSetting {
         AnchorPane.setTopAnchor(pane, 0.0);
 
         JFXButton back = new JFXButton("返回");
-        back.setOnAction(event -> {
-            window.setHome(MainStage);
-        });
+        back.setOnAction(event -> window.setHome(MainStage));
 
         double line = 35;
         Label tips = new Label("JDK地址:");
@@ -181,22 +180,16 @@ public class VersionSettingWindows extends AboutSetting {
                 homeWindow.setHome(MainStage);
                 JsonObject object = SettingObject().getJsonObjects();
                 object.remove("PreferredVersion");
-                FileUtils.writeStringToFile(GetSettingFile(), object.toString(), "UTF-8");
+                JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
                 logmaker.info("* " + launcher.getVersion() + " Deleted");
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
             }
         });
-        completion.setOnAction(event -> {
-            try {
-                ThreadUtils.StartThread(() -> {
-                    SelectGameVersion version = new SelectGameVersion(launcher);
-                    version.DownloadGame();
-                }).join();
-            } catch (InterruptedException e) {
-                ErrorWin.setErrorWin(e);
-            }
+        completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
+            SelectGameVersion version = new SelectGameVersion(launcher);
+            version.DownloadGame();
             logmaker.info("* " + launcher.getVersion() + " downloaded");
-        });
+        }));
     }
 }

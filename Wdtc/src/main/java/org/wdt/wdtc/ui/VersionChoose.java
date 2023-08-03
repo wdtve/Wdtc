@@ -79,7 +79,7 @@ public class VersionChoose {
         Consoler.setStylesheets(ParentPane);
         Consoler.setCss("BlackBorder", back);
         MainStage.setScene(new Scene(ParentPane));
-        NewGame.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
+        NewGame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
     }
 
 }

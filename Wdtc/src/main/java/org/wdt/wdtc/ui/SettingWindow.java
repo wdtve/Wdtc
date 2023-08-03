@@ -1,6 +1,5 @@
 package org.wdt.wdtc.ui;
 
-import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,11 +8,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.util.Objects;
 
 
 public class SettingWindow extends AboutSetting {
-    private static final Logger logmaker = getWdtcLogger.getLogger(SettingWindow.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(SettingWindow.class);
 
     private SettingWindow() {
     }
@@ -34,6 +33,7 @@ public class SettingWindow extends AboutSetting {
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
             win.setHome(MainStage);
+            logmaker.info(getSetting());
         });
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - Setting");
 
@@ -104,26 +104,38 @@ public class SettingWindow extends AboutSetting {
             putSettingToFile(setting);
         });
 
-        Label BMCLAPIMessage = new Label("是否启用BMCLAPI下载源(启用后下载速度也许会更快,默认不启用):");
-        BMCLAPIMessage.setLayoutX(coordinate.layoutX);
-        BMCLAPIMessage.setLayoutY(138.0);
-        RadioButton TrueBmcl = new RadioButton("启用");
-        RadioButton FalseBmcl = new RadioButton("不启用");
+        Label DownloadSourceTips = new Label("选择下载源(默认选择Official):");
+        DownloadSourceTips.setLayoutX(coordinate.layoutX);
+        DownloadSourceTips.setLayoutY(138.0);
+        RadioButton OfficialDownloadSource = new RadioButton("Official");
+        RadioButton BmclDownloadSource = new RadioButton("Bmcl");
+        RadioButton McbbsDownloadSource = new RadioButton("Mcbbs");
         double line3 = 159.0;
-        TrueBmcl.setLayoutX(coordinate.layoutX);
-        TrueBmcl.setLayoutY(line3);
-        FalseBmcl.setLayoutX(coordinate.layoutX2);
-        FalseBmcl.setLayoutY(line3);
-        TrueBmcl.setOnAction(event -> {
-            FalseBmcl.setSelected(false);
-            logmaker.info("* BMCLAPI下载加速已开启");
-            setting.setBmcl(true);
+        OfficialDownloadSource.setLayoutX(coordinate.layoutX);
+        OfficialDownloadSource.setLayoutY(line3);
+        BmclDownloadSource.setLayoutX(coordinate.layoutX2);
+        BmclDownloadSource.setLayoutY(line3);
+        McbbsDownloadSource.setLayoutX(281);
+        McbbsDownloadSource.setLayoutY(line3);
+        OfficialDownloadSource.setOnAction(event -> {
+            BmclDownloadSource.setSelected(false);
+            McbbsDownloadSource.setSelected(false);
+            logmaker.info("* Switch to Official DownloadSource");
+            setting.setDownloadSource(FileUrl.DownloadSourceList.OFFICIAL);
             putSettingToFile(setting);
         });
-        FalseBmcl.setOnAction(event -> {
-            TrueBmcl.setSelected(false);
-            logmaker.info("* BMCLAPI下载加速已关闭");
-            setting.setBmcl(false);
+        BmclDownloadSource.setOnAction(event -> {
+            OfficialDownloadSource.setSelected(false);
+            McbbsDownloadSource.setSelected(false);
+            logmaker.info("* Switch to Bmcl DownloadSource");
+            setting.setDownloadSource(FileUrl.DownloadSourceList.BMCLAPI);
+            putSettingToFile(setting);
+        });
+        McbbsDownloadSource.setOnAction(event -> {
+            OfficialDownloadSource.setSelected(false);
+            BmclDownloadSource.setSelected(false);
+            logmaker.info("* Switch to Mcbbs DownloadSource");
+            setting.setDownloadSource(FileUrl.DownloadSourceList.MCBBS);
             putSettingToFile(setting);
         });
 
@@ -227,8 +239,7 @@ public class SettingWindow extends AboutSetting {
 
         SonPane.setPrefSize(493, 336);
         WindwosSize size = new WindwosSize(MainStage);
-        size.ModifyWindwosSize(SonPane, back, TrueBmcl, FalseBmcl, TrueLog, FalseLog, cmd, BMCLAPIMessage, GamePath,
-                tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
+        size.ModifyWindwosSize(SonPane, back, OfficialDownloadSource, BmclDownloadSource, McbbsDownloadSource, TrueLog, FalseLog, cmd, DownloadSourceTips, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
         ScrollPane scrollPane = new ScrollPane(SonPane);
         AnchorPane.setLeftAnchor(scrollPane, 105.0);
         AnchorPane.setTopAnchor(scrollPane, 70.0);
@@ -241,22 +252,19 @@ public class SettingWindow extends AboutSetting {
         pane.getChildren().addAll(scrollPane, back, ExportLog, CleanCache);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
-        FalseBmcl.setSelected(!setting.isBmcl());
         FalseLog.setSelected(!setting.isConsole());
         FalseOpenGL.setSelected(!setting.isLlvmpipeLoader());
         FalseZhcn.setSelected(!setting.isChineseLanguage());
-        TrueBmcl.setSelected(setting.isBmcl());
         TrueLog.setSelected(setting.isConsole());
         TrueOpenGl.setSelected(setting.isLlvmpipeLoader());
         TrueZhcn.setSelected(setting.isChineseLanguage());
-    }
 
-    private static void putKey(JsonObject object) {
-        try {
-            FileUtils.writeStringToFile(GetSettingFile(), JSONObject.toJSONString(object), "UTF-8");
-        } catch (IOException e) {
-            logmaker.error("* Put File Error,", e);
+        switch (setting.getDownloadSource()) {
+            case MCBBS -> McbbsDownloadSource.setSelected(true);
+            case BMCLAPI -> BmclDownloadSource.setSelected(true);
+            case OFFICIAL -> OfficialDownloadSource.setSelected(true);
         }
+
     }
 
     private static class coordinate {

@@ -8,30 +8,29 @@ import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
+import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.ExtractFile;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.ExtractFile;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FabricFileList {
-    private final String FabricFileListUrl = "https://meta.fabricmc.net/v2/versions/loader/%s/%s";
-    private final String BmclapiFabricFileListUrl = "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/%s/%s";
     private final String FabricVersionNumber;
     private final Launcher launcher;
-    private final Logger logmaker = getWdtcLogger.getLogger(FabricFileList.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(FabricFileList.class);
+    private final DownloadSource source;
 
 
     public FabricFileList(Launcher launcher, String FabricVersionNumber) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.launcher = launcher;
+        this.source = Launcher.getDownloadSource();
     }
 
     public String getFabricVersionNumber() {
@@ -39,20 +38,8 @@ public class FabricFileList {
     }
 
 
-    public String getFabricFileListUrl() {
-        return FabricFileListUrl;
-    }
-
-    public String getBmclapiFabricFileListUrl() {
-        return BmclapiFabricFileListUrl;
-    }
-
     public String getFabricFileList() {
-        if (AboutSetting.getSetting().isBmcl()) {
-            return getBmclapiFabricFileListUrl();
-        } else {
-            return getFabricFileListUrl();
-        }
+        return source.getFabricMetaUrl() + "v2/versions/loader/%s/%s";
     }
 
     public List<String> getFabricFileName() throws IOException {
@@ -71,7 +58,7 @@ public class FabricFileList {
         return StringFileList;
     }
 
-    public void DownloadProfileZip() throws MalformedURLException {
+    public void DownloadProfileZip() {
         DownloadTask.StartDownloadTask(getProfileZipUrl(), getProfileZipFile());
     }
 
@@ -80,7 +67,7 @@ public class FabricFileList {
     }
 
     public String getProfileZipUrl() {
-        return String.format("https://meta.fabricmc.net/v2/versions/loader/%s/%s/profile/zip", launcher.getVersion(), getFabricVersionNumber());
+        return String.format(source.getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/zip", launcher.getVersion(), getFabricVersionNumber());
     }
 
     public void unJsonAndJarFormZip() {
@@ -117,10 +104,5 @@ public class FabricFileList {
 
     public FabricLaunchTask getFabricLaunchTask() {
         return new FabricLaunchTask(launcher, FabricVersionNumber);
-    }
-
-    @Override
-    public String toString() {
-        return "FabricFileList{" + "FabricFileListUrl='" + FabricFileListUrl + '\'' + ", BmclapiFabricFileListUrl='" + BmclapiFabricFileListUrl + '\'' + ", FabricVersionNumber='" + FabricVersionNumber + '\'' + '}';
     }
 }

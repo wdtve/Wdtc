@@ -12,14 +12,14 @@ import org.wdt.wdtc.auth.Yggdrasil.YggdrasilTextures;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWin;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.Objects;
 
 
 public class LittleskinWin {
-    private static final Logger logmaker = getWdtcLogger.getLogger(LittleskinWin.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(LittleskinWin.class);
 
     public static void setLittleskinWin(Stage UserStage) {
         Pane pane = new Pane();
@@ -52,8 +52,10 @@ public class LittleskinWin {
         back.setOnAction(event -> UserStage.close());
         pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok, back, LittleskinCom);
         ok.setOnAction(event -> {
-            if (Objects.nonNull(inputpowerword.getText()) && Objects.nonNull(Inputusername.getText())
-                    && inputpowerword.getText().isEmpty() && Inputusername.getText().isEmpty()) {
+            String UserName = Inputusername.getText();
+            String PowerWord = inputpowerword.getText();
+            if (Objects.nonNull(UserName) && Objects.nonNull(PowerWord)
+                    && UserName.isEmpty() && PowerWord.isEmpty()) {
                 label.setText("请输入用户名、密码");
                 logmaker.warn("* 用户名、密码为空");
             } else {
@@ -68,7 +70,7 @@ public class LittleskinWin {
                     } catch (IOException e) {
                         ErrorWin.setErrorWin(e);
                     }
-                } catch (RuntimeException | IOException e) {
+                } catch (IOException e) {
                     label.setText("用户名或密码错误");
                     logmaker.warn("* 用户名或密码错误", e);
                 }

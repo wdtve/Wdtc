@@ -1,10 +1,8 @@
 package org.wdt.wdtc;
 
 
-import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
@@ -15,12 +13,12 @@ import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.JavaHomePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
 public class WdtcMain {
-    private static final Logger logmaker = getWdtcLogger.getLogger(WdtcMain.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(WdtcMain.class);
 
     public static void main(String[] args) throws Exception {
         logmaker.info("===== Wdtc - " + Starter.getLauncherVersion() + " =====");
@@ -40,23 +38,22 @@ public class WdtcMain {
     }
 
     public static void StartTask() throws IOException {
-        String LlbmpipeLoader = "https://download.fastgit.ixmu.net/Wd-t/llvmpipe-loader/releases/download/v1.0/llvmpipe-loader-1.0.jar";
+        String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
         if (PlatformUtils.FileExistenceAndSize(FilePath.getLlbmpipeLoader())) {
             DownloadTask.StartWGetDownloadTask(LlbmpipeLoader, FilePath.getLlbmpipeLoader());
         }
     }
 
     public static void Ergodic() throws IOException {
-        JSONObject SettingObject = AboutSetting.SettingObject();
-        JSONArray JavaList = SettingObject.getJSONArray("JavaPath");
+        AboutSetting.Setting setting = AboutSetting.getSetting();
+        JSONArray JavaList = new JSONArray(setting.getJavaPath());
         for (int i = 0; i < JavaList.size(); i++) {
             if (PlatformUtils.FileExistenceAndSize(JavaList.getString(i))) {
                 logmaker.info("* " + JavaList.getString(i) + " 无效");
                 JavaList.remove(i);
             }
         }
-        JsonObject object = SettingObject.getJsonObjects();
-        object.add("JavaPath", JavaList.getJsonArrays());
-        PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
+        setting.setJavaPath(JavaList.getJsonArrays());
+        AboutSetting.putSettingToFile(setting);
     }
 }

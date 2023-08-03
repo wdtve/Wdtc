@@ -24,7 +24,6 @@ public class Version extends GetGamePath {
     }
 
 
-
     public String getVersionPath() {
         return getGameVersionPath() + version + "/";
     }
@@ -48,7 +47,7 @@ public class Version extends GetGamePath {
     public String getGameAssetsListJson() throws IOException {
         JSONObject AssetIndexJson = JSONUtils.getJSONObject(getVersionJson()).getJSONObject("assetIndex");
         String id = AssetIndexJson.getString("id");
-        return getGameAssetsdir() + "indexes\\" + id + ".json";
+        return getGameAssetsdir() + "indexes/" + id + ".json";
     }
 
     public String getGameOptionsFile() {

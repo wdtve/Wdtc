@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 
@@ -28,7 +29,7 @@ public class AboutSetting {
         File writeReadme = new File(FilePath.getWdtcConfig() + "/readme.txt");
         FileUtils.writeStringToFile(writeReadme, readme);
         if (PlatformUtils.FileExistenceAndSize(GetSettingFile())) {
-            FileUtils.writeStringToFile(GetSettingFile(), JSONObject.toJSONString(new Setting()), "UTF-8");
+            JSONUtils.ObjectToJsonFile(GetSettingFile(), new Setting());
         }
     }
 
@@ -41,31 +42,39 @@ public class AboutSetting {
     }
 
     public static Setting getSetting() {
-        return PlatformUtils.JsonFileToClass(GetSettingFile(), Setting.class);
+        return JSONUtils.JsonFileToClass(GetSettingFile(), Setting.class);
     }
 
-    public static String getPreferredVersion() {
-        return SettingObject().getString("PreferredVersion");
-    }
 
     public static void putSettingToFile(Setting setting) {
-        try {
-            FileUtils.writeStringToFile(GetSettingFile(), JSONObject.toJSONString(setting), "UTF-8");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        JSONUtils.ObjectToJsonFile(GetSettingFile(), setting);
     }
 
     public static class Setting {
-        public boolean bmcl = false;
-        public boolean console = false;
-        public boolean LlvmpipeLoader = false;
-        public String DefaultGamePath = System.getProperty("user.dir");
-        public JsonArray JavaPath = new JsonArray();
-        public boolean ChineseLanguage = true;
-        public double WindowsWidth = 616.0;
-        public double WindowsHeight = 489.0;
-        public String PreferredVersion;
+        private FileUrl.DownloadSourceList DownloadSource = FileUrl.DownloadSourceList.OFFICIAL;
+        private boolean console = false;
+        private boolean LlvmpipeLoader = false;
+        private String DefaultGamePath = System.getProperty("user.dir");
+        private JsonArray JavaPath = new JsonArray();
+        private boolean ChineseLanguage = true;
+        private double WindowsWidth = 616.0;
+        private double WindowsHeight = 489.0;
+        private String PreferredVersion;
+
+        @Override
+        public String toString() {
+            return "Setting{" +
+                    "DownloadSource=" + DownloadSource +
+                    ", console=" + console +
+                    ", LlvmpipeLoader=" + LlvmpipeLoader +
+                    ", DefaultGamePath='" + DefaultGamePath + '\'' +
+                    ", JavaPath=" + JavaPath +
+                    ", ChineseLanguage=" + ChineseLanguage +
+                    ", WindowsWidth=" + WindowsWidth +
+                    ", WindowsHeight=" + WindowsHeight +
+                    ", PreferredVersion='" + PreferredVersion + '\'' +
+                    '}';
+        }
 
         public String getPreferredVersion() {
             return PreferredVersion;
@@ -89,14 +98,6 @@ public class AboutSetting {
 
         public void setWindowsHeight(double windowsHeight) {
             WindowsHeight = windowsHeight;
-        }
-
-        public boolean isBmcl() {
-            return bmcl;
-        }
-
-        public void setBmcl(boolean bmcl) {
-            this.bmcl = bmcl;
         }
 
         public boolean isConsole() {
@@ -136,22 +137,17 @@ public class AboutSetting {
         }
 
         public void setChineseLanguage(boolean chineseLanguage) {
+
             ChineseLanguage = chineseLanguage;
         }
 
-        @Override
-        public String toString() {
-            return "Setting{" +
-                    "bmcl=" + bmcl +
-                    ", console=" + console +
-                    ", LlvmpipeLoader=" + LlvmpipeLoader +
-                    ", DefaultGamePath='" + DefaultGamePath + '\'' +
-                    ", JavaPath=" + JavaPath +
-                    ", ChineseLanguage=" + ChineseLanguage +
-                    ", WindowsWidth=" + WindowsWidth +
-                    ", WindowsHeight=" + WindowsHeight +
-                    ", PreferredVersion='" + PreferredVersion + '\'' +
-                    '}';
+        public FileUrl.DownloadSourceList getDownloadSource() {
+            return DownloadSource;
         }
+
+        public void setDownloadSource(FileUrl.DownloadSourceList downloadSource) {
+            DownloadSource = downloadSource;
+        }
+
     }
 }

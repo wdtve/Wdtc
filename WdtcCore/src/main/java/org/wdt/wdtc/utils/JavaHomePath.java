@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JavaHomePath {
-    private static final Logger logmaker = getWdtcLogger.getLogger(JavaHomePath.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(JavaHomePath.class);
 
     public static String GetRunJavaHome() {
         return FilenameUtils.separatorsToUnix(System.getProperty("java.home") + "\\bin\\java.exe");

@@ -3,7 +3,7 @@ package org.wdt.wdtc.ui;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LauncherGameWindow {
-    private static final Logger logmaker = getWdtcLogger.getLogger(LauncherGameWindow.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(LauncherGameWindow.class);
     private final Process process;
 
     public LauncherGameWindow(Process process) {

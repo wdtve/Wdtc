@@ -1,5 +1,6 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
+import com.google.gson.annotations.SerializedName;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
@@ -31,22 +32,46 @@ public class YggdrasilTextures {
         return url + "/csl/" + username + ".json";
     }
 
-    public URL getUserSkinUrl() throws IOException {
-        return new URL(url + "/textures/" + GetUserSkinHash());
-    }
-
     public String GetUserSkinHash() throws IOException {
-        JSONObject object = JSONObject.parseObject(PlatformUtils.GetUrlContent(GetUserJson()));
-        if (Objects.nonNull(object.getJSONObject("skins").getString("default"))) {
-            return object.getJSONObject("skins").getString("default");
-        } else {
-            return object.getJSONObject("skins").getString("slim");
-        }
+        Csl csl = getCsl();
+        Skins skins = csl.getSkins();
+        return skins.getSkinKind();
     }
 
     public void DownloadUserSkin() throws IOException {
+        String UserSkinHash = GetUserSkinHash();
+        URL UserSkinUrl = new URL(url + "/textures/" + UserSkinHash);
         File SkinPath = new File(FilePath.getMinecraftComSkin()
-                + "/" + GetUserSkinHash().substring(0, 2) + "/" + GetUserSkinHash());
-        DownloadTask.StartDownloadTask(getUserSkinUrl(), SkinPath);
+                + "/" + UserSkinHash.substring(0, 2) + "/" + UserSkinHash);
+        DownloadTask.StartDownloadTask(UserSkinUrl, SkinPath);
     }
+
+    public Csl getCsl() throws IOException {
+        return JSONObject.getGson().fromJson(PlatformUtils.GetUrlContent(GetUserJson()), Csl.class);
+    }
+
+    public static class Csl {
+        @SerializedName("username")
+        private String UserName;
+        @SerializedName("skins")
+        private Skins Skins;
+        @SerializedName("cape")
+        private String Cape;
+
+
+        public Skins getSkins() {
+            return Skins;
+        }
+
+    }
+
+    public static class Skins {
+        @SerializedName(value = "default", alternate = {"slim"})
+        private String SkinKind;
+
+        public String getSkinKind() {
+            return SkinKind;
+        }
+    }
+
 }

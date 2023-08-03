@@ -8,10 +8,11 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,21 +23,23 @@ import java.util.Map;
 
 public class QuiltDownloadTask {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s";
-    private static final Logger logmaker = getWdtcLogger.getLogger(QuiltDownloadTask.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(QuiltDownloadTask.class);
     private final Launcher launcher;
     private final String QuiltVersionNumber;
+    private final DownloadSource source;
 
     public QuiltDownloadTask(Launcher launcher, String quiltVersionNumber) {
         this.launcher = launcher;
         QuiltVersionNumber = quiltVersionNumber;
+        this.source = Launcher.getDownloadSource();
     }
 
     public void DownloadQuilt() throws IOException {
         for (Map<String, String> map : LibraryList()) {
             DependencyDownload download = new DependencyDownload(map.get("name"));
             download.setDownloadPath(launcher.GetGameLibraryPath());
-            if (launcher.bmclapi() && !map.get("url").equals("https://maven.quiltmc.org/repository/release/")) {
-                download.setDefaultUrl(FileUrl.getBmclapiLibraries());
+            if (FileUrl.DownloadSourceList.NoOfficialDownloadSource() && !map.get("url").equals("https://maven.quiltmc.org/repository/release/")) {
+                download.setDefaultUrl(source.getLibraryUrl());
             } else {
                 download.setDownloadPath(map.get("url"));
             }

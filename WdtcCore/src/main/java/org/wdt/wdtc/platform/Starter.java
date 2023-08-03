@@ -8,6 +8,11 @@ public class Starter {
     private static final String LAUNCHER_VERSION = System.getProperty("launcher.version", "Demo");
     private static final String LAUNCHER_AUTHOR = "Wdt~";
     private static final String OS = System.getProperty("os.name");
+    private static final String client_id = System.getProperty("wtdc.oauth.clientId", "8c4a5ce9-55b9-442e-9bd0-17cf89689dd0");
+
+    public static String getClient_id() {
+        return client_id;
+    }
 
     public static String getLauncherVersion() {
         return LAUNCHER_VERSION;

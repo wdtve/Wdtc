@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.Launcher;
@@ -25,7 +25,7 @@ public class DownloadGameWindows {
     public void setDownGameWin(Stage MainStage) {
         WindwosSize size = new WindwosSize(MainStage);
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
-        Pane pane = new Pane();
+        AnchorPane pane = new AnchorPane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
@@ -44,7 +44,6 @@ public class DownloadGameWindows {
         status_bar.setLayoutX(253.0);
         status_bar.setLayoutY(305.0);
         Button bmclHome = new Button("BMCLAPI");
-        bmclHome.setLayoutX(531.0);
         bmclHome.setOnAction(event -> {
             try {
                 Runtime.getRuntime().exec("cmd.exe /C start https://bmclapidoc.bangbang93.com/");
@@ -52,14 +51,12 @@ public class DownloadGameWindows {
                 ErrorWin.setErrorWin(exception);
             }
         });
+        AnchorPane.setRightAnchor(bmclHome, 0.0);
+        AnchorPane.setTopAnchor(bmclHome, 0.0);
         Label read_bmcl = new Label("国内快速下载源→");
         read_bmcl.setLayoutX(429.0);
         read_bmcl.setLayoutY(4.0);
-        if (launcher.bmclapi()) {
-            textField.setText("BMCLAPI下载加速已开启");
-        } else {
-            textField.setText(launcher.getVersion() + "开始下载");
-        }
+        textField.setText(launcher.getVersion() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.StartThread(() -> {
             try {
                 new SelectGameVersion(launcher, textField).DownloadGame();

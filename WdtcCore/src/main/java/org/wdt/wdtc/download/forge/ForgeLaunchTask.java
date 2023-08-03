@@ -2,22 +2,21 @@ package org.wdt.wdtc.download.forge;
 
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.platform.ExtractFile;
+import org.wdt.wdtc.utils.WdtcLogger;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 public class ForgeLaunchTask extends ForgeDownloadTask {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ForgeLaunchTask.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ForgeLaunchTask.class);
 
 
     public ForgeLaunchTask(Launcher launcher, String forgeVersion) {
@@ -25,19 +24,11 @@ public class ForgeLaunchTask extends ForgeDownloadTask {
     }
 
     public String getForgeVersionJsonPath() {
-        return FilePath.getWdtcCache() + "/version-" + launcher.getVersion() + "-" + ForgeVersion + ".json";
+        return FilePath.getWdtcCache() + "/version-" + launcher.getVersion() + "-" + ForgeVersionNumber + ".json";
     }
 
     public void getForgeVersionJson() {
-        try {
-            ZipFile Install = new ZipFile(new File(getForgeInstallJarPath()));
-            InputStream inputStream = Install.getInputStream(Install.getEntry("version.json"));
-            OutputStream outputStream = new FileOutputStream(getForgeVersionJsonPath());
-            IOUtils.copy(inputStream, outputStream);
-        } catch (IOException e) {
-            logmaker.error("* Un File Error,", e);
-        }
-
+        ExtractFile.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonPath(), "version.json");
     }
 
     public JSONObject getForgeVersionJsonObject() {

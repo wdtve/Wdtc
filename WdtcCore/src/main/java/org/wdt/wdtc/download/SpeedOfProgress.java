@@ -20,8 +20,12 @@ public class SpeedOfProgress {
         return Spend;
     }
 
-    public void await() throws InterruptedException {
-        countDown.await();
+    public void await() {
+        try {
+            countDown.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean SpendZero() {

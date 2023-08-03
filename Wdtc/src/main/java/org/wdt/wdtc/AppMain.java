@@ -12,7 +12,7 @@ import org.wdt.wdtc.ui.ErrorWin;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AppMain extends Application {
-    private static final Logger logmaker = getWdtcLogger.getLogger(AppMain.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
 
     public static void main(String[] args) {
         if (System.getProperty("wdtc.config.path") == null)

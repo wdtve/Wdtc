@@ -7,13 +7,13 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class DownloadGameAssetsFile extends DownloadTask {
-    private final Logger logmaker = getWdtcLogger.getLogger(DownloadGameAssetsFile.class);
+    private final Logger logmaker = WdtcLogger.getLogger(DownloadGameAssetsFile.class);
     private final Launcher version;
 
     public DownloadGameAssetsFile(Launcher launcher) {
@@ -30,7 +30,7 @@ public class DownloadGameAssetsFile extends DownloadTask {
                 StartDownloadHashTask(hash, countDownLatch).setName(hash);
             }
             countDownLatch.await();
-        } catch (IOException | InterruptedException exception) {
+        } catch (IOException exception) {
             logmaker.error("* Download Assets File Error,", exception);
         }
     }

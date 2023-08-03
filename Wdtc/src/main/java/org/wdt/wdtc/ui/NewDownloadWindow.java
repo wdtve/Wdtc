@@ -14,7 +14,7 @@ import org.wdt.wdtc.platform.Starter;
 
 import java.util.List;
 
-public class NewDownloadWin {
+public class NewDownloadWindow {
 
 
     public static void SetWin(Stage MainStage) {

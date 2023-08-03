@@ -3,43 +3,37 @@ package org.wdt.wdtc.download.fabric;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
 public class FabricDownloadTask extends FabricFileList {
-    private final Logger logger = getWdtcLogger.getLogger(getClass());
-    private final String FabricMavenUrl = "https://maven.fabricmc.net/";
-    private final String BmclMavenUrl = FileUrl.getBmclapiLibraries();
+    private static final Logger logger = WdtcLogger.getLogger(FabricDownloadTask.class);
     private final Launcher launcher;
+    private final DownloadSource source;
     private FabricAPIDownloadTask APIDownloadTask = null;
 
 
     public FabricDownloadTask(Launcher launcher, String FabricVersionNumber) {
         super(launcher, FabricVersionNumber);
         this.launcher = launcher;
+        this.source = Launcher.getDownloadSource();
+
     }
 
-    public String FabricMaven() {
-        if (launcher.bmclapi()) {
-            return BmclMavenUrl;
-        } else {
-            return FabricMavenUrl;
-        }
-    }
 
     public void DownloadFile() throws IOException {
         for (String name : getFabricFileName()) {
             DependencyDownload dependency = new DependencyDownload(name);
-            dependency.setDefaultUrl(FabricMaven());
+            dependency.setDefaultUrl(source.getFabricLibraryUrl());
             dependency.setDownloadPath(launcher.GetGameLibraryPath());
             try {
                 DownloadTask.StartDownloadTask(dependency.getLibraryUrl(), dependency.getLibraryFile());
             } catch (IOException e) {
                 logger.warn(e);
-                dependency.setDefaultUrl(BmclMavenUrl);
+                dependency.setDefaultUrl(Launcher.getOfficialDownloadSource().getFabricLibraryUrl());
                 DownloadTask.StartDownloadTask(dependency.getLibraryUrl(), dependency.getLibraryFile());
             }
         }

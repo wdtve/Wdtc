@@ -2,14 +2,14 @@ package org.wdt.wdtc.auth.Yggdrasil;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class YggdrasilAccounts {
-    private static final Logger logmaker = getWdtcLogger.getLogger(YggdrasilAccounts.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(YggdrasilAccounts.class);
     private final String url;
     private final String username;
     private final String password;
@@ -67,7 +67,7 @@ public class YggdrasilAccounts {
         users.setUserName(selectedProfile.getString("name"));
         users.setUuid(selectedProfile.getString("id"));
         users.setAccessToken(UserInfo.getAccessToken());
-        FileUtils.writeStringToFile(FilePath.getUsersJson(), JSONObject.toJSONString(users), "UTF-8");
+        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), users);
         logmaker.info(users);
     }
 

@@ -4,7 +4,7 @@ package org.wdt.wdtc.utils;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +24,7 @@ public class PlatformUtils extends FileUtils {
 
 
     public static void PutJSONObject(File file, JsonObject object) {
-        try {
-            writeStringToFile(file, org.wdt.platform.gson.JSONObject.toJSONString(object), "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JSONUtils.ObjectToJsonFile(file, object);
     }
 
     public static void PutJSONObject(String FilePath, JsonObject object) {
@@ -45,10 +41,10 @@ public class PlatformUtils extends FileUtils {
 
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {
         if (file.exists()) {
-            if (file.isFile()) {
-                return sizeOf(file) == size;
+            if (size != 0) {
+                return sizeOf(file) != size;
             } else {
-                throw new IOException(file + "is not file!");
+                return false;
             }
         } else {
             return true;
@@ -77,15 +73,5 @@ public class PlatformUtils extends FileUtils {
         }
     }
 
-    public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) {
-        try {
-            return JSONObject.getGson().fromJson(FileUtils.readFileToString(JsonFile, "UTF-8"), clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) {
-        return JsonFileToClass(new File(JsonFilePath), clazz);
-    }
 }

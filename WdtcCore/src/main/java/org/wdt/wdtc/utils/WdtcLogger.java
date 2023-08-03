@@ -3,7 +3,7 @@ package org.wdt.wdtc.utils;
 import org.apache.log4j.*;
 import org.wdt.wdtc.game.FilePath;
 
-public class getWdtcLogger {
+public class WdtcLogger {
     private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] %m%n");
 
     public static <T> Logger getLogger(Class<T> clazz) {
@@ -31,7 +31,6 @@ public class getWdtcLogger {
         consoleAppender.setImmediateFlush(true);
         consoleAppender.setEncoding("UTF-8");
         consoleAppender.setThreshold(Level.INFO);
-
         consoleAppender.activateOptions();
         return consoleAppender;
     }

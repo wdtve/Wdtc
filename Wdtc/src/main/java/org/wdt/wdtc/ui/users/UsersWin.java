@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.OfflineAccounts;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWin;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class UsersWin {
 
 
-    private final static Logger loggmaker = getWdtcLogger.getLogger(UsersWin.class);
+    private final static Logger loggmaker = WdtcLogger.getLogger(UsersWin.class);
 
     public static void setUserWin(String wintitle, Stage MainStage) {
         Stage UserStage = new Stage();

@@ -10,12 +10,12 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
 public class ModChooseWin {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ModChooseWin.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ModChooseWin.class);
     private final Launcher launcher;
     private final Stage MainStage;
     private final WindwosSize size;
@@ -186,7 +186,7 @@ public class ModChooseWin {
         });
 
         if (ModList.GameModIsForge(launcher)) {
-            Forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersion());
+            Forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersionNumber());
             Fabric.setText("Fabric : 与Forge不兼容");
             DownloadFabricAPI.setDisable(true);
             DownloadFabric.setDisable(true);
@@ -215,7 +215,7 @@ public class ModChooseWin {
             DownloadForge.setDisable(true);
         }
 
-        back.setOnAction(event -> NewDownloadWin.SetWin(MainStage));
+        back.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
         confirm.setOnAction(event -> {
             DownloadGameWindows downloadGameWindows = new DownloadGameWindows(launcher);
             downloadGameWindows.setDownGameWin(MainStage);

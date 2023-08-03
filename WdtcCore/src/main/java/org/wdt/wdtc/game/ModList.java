@@ -7,14 +7,14 @@ import org.wdt.wdtc.download.fabric.FabricDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
 import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.getWdtcLogger;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModList {
-    private static final Logger logmaker = getWdtcLogger.getLogger(ModList.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(ModList.class);
 
     public static Launcher getModTask(Launcher launcher) {
         try {
@@ -31,13 +31,14 @@ public class ModList {
             }
             return launcher;
         } catch (IOException e) {
+            logmaker.warn("", e);
             return launcher;
         }
     }
 
     public static void putGameId(Launcher launcher) {
         if (launcher.getKind() == KindOfMod.FORGE) {
-            putGameId(launcher, "forge", launcher.getForgeDownloadTask().getForgeVersion());
+            putGameId(launcher, "forge", launcher.getForgeDownloadTask().getForgeVersionNumber());
         } else if (launcher.getKind() == KindOfMod.FABRIC) {
             putGameId(launcher, "fabric", launcher.getFabricModDownloadTask().getFabricVersionNumber());
         } else if (launcher.getKind() == KindOfMod.QUILT) {
