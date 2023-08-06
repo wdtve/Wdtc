@@ -42,7 +42,11 @@ public class AboutSetting {
     }
 
     public static Setting getSetting() {
-        return JSONUtils.JsonFileToClass(GetSettingFile(), Setting.class);
+        try {
+            return JSONUtils.JsonFileToClass(GetSettingFile(), Setting.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

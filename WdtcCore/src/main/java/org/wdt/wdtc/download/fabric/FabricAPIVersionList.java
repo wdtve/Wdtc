@@ -21,7 +21,7 @@ public class FabricAPIVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> VersionList = new ArrayList<>();
-        JSONArray VersionListArray = JSONArray.parseWdtArray(PlatformUtils.GetUrlContent(VersionListUrl));
+        JSONArray VersionListArray = JSONArray.parseJSONArray(PlatformUtils.GetUrlContent(VersionListUrl));
         for (int i = 0; i < VersionListArray.size(); i++) {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             JSONArray GameVersionsList = VersionObject.getJSONArray("game_versions");

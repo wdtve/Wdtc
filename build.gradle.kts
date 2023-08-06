@@ -7,8 +7,5 @@ subprojects {
     apply {
         plugin("idea")
         plugin("java")
-
     }
 }
-
-version = "0.1-demo"

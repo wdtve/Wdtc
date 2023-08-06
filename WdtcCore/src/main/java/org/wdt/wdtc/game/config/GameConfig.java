@@ -41,7 +41,11 @@ public class GameConfig {
     }
 
     public DefaultGameConfig getGameConfig() {
-        return JSONUtils.JsonFileToClass(getVersionConfigFile(), DefaultGameConfig.class);
+        try {
+            return JSONUtils.JsonFileToClass(getVersionConfigFile(), DefaultGameConfig.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void writeConfigJson() throws IOException {

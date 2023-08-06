@@ -3,6 +3,7 @@ package org.wdt.wdtc.download.game;
 
 import com.google.gson.JsonElement;
 import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
@@ -26,8 +27,10 @@ public class DownloadGameAssetsFile extends DownloadTask {
             Map<String, JsonElement> list = JSONUtils.getJSONObject(version.getGameAssetsListJson()).getJSONObject("objects").getJsonObjects().asMap();
             SpeedOfProgress countDownLatch = new SpeedOfProgress(list.size());
             for (String str : list.keySet()) {
-                String hash = list.get(str).getAsJsonObject().get("hash").getAsString();
-                StartDownloadHashTask(hash, countDownLatch).setName(hash);
+                JSONObject object = new JSONObject(list.get(str).getAsJsonObject());
+                String hash = object.getString("hash");
+                int FileSize = object.getInt("size");
+                StartDownloadHashTask(hash, FileSize, countDownLatch).setName(hash);
             }
             countDownLatch.await();
         } catch (IOException exception) {

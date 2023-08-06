@@ -31,9 +31,6 @@ public class AdditionalCommand {
     public static String AdditionalLibrary(Launcher launcher) throws IOException {
         if (ModList.GameModIsForge(launcher)) {
             return ListToString(launcher.getForgeDownloadTask().getForgeLaunchTask().getForgeLaunchLibrary(), ";");
-        } else if (ModList.GameModIsFabric(launcher)) {
-            return ListToString(launcher.getFabricModDownloadTask().getFabricLaunchTask().getFabricLibraryList(), ";");
-
         } else if (ModList.GameModIsQuilt(launcher)) {
             return ListToString(launcher.getQuiltModDownloadTask().getQuiltLaunchTask().LibraryList(), ";");
         } else {

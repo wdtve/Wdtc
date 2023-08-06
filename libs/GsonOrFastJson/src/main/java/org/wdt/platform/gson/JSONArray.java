@@ -10,7 +10,7 @@ public class JSONArray extends JSON {
     }
 
     public JSONArray(String json) {
-        this.JsonArrays = parseGsonArray(json);
+        this.JsonArrays = parseJsonArray(json);
     }
 
     public JSONObject getJSONObject(int index) {

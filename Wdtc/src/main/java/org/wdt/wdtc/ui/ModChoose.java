@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.fabric.FabricAPIDownloadTask;
 import org.wdt.wdtc.download.fabric.FabricAPIVersionList;
-import org.wdt.wdtc.download.fabric.FabricDownloadTask;
+import org.wdt.wdtc.download.fabric.FabricInstallTask;
 import org.wdt.wdtc.download.fabric.FabricVersionList;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeVersionList;
@@ -89,7 +89,7 @@ public class ModChoose {
             if (kind == ModList.KindOfMod.FORGE) {
                 launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, s));
             } else if (kind == ModList.KindOfMod.FABRIC) {
-                launcher.setFabricModDownloadTask(new FabricDownloadTask(launcher, s));
+                launcher.setFabricModDownloadTask(new FabricInstallTask(launcher, s));
             } else if (kind == ModList.KindOfMod.FABRICAPI) {
                 launcher.getFabricModDownloadTask().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, s));
             } else if (kind == ModList.KindOfMod.QUILT) {

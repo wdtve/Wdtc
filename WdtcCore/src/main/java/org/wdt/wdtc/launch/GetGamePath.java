@@ -1,10 +1,11 @@
 package org.wdt.wdtc.launch;
 
 import org.apache.commons.io.FilenameUtils;
+import org.wdt.wdtc.platform.AboutSetting;
 
 public class GetGamePath {
     //此必须在编辑运行配置里把工作目录改成"$ProjectFileDir$"不然游戏文件夹地址会出错
-    private String here = FilenameUtils.separatorsToUnix(System.getProperty("user.dir"));
+    private String here = FilenameUtils.separatorsToUnix(AboutSetting.getSetting().getDefaultGamePath());
 
     public GetGamePath() {
     }

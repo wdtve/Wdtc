@@ -1,7 +1,6 @@
 package org.wdt.wdtc.download.fabric;
 
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
@@ -12,7 +11,6 @@ import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.ExtractFile;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -91,15 +89,11 @@ public class FabricFileList {
     }
 
     public void writeCacheVersionJson() {
-        try {
-            FileUtils.writeStringToFile(getCacheVersionJson(), PlatformUtils.GetUrlContent(String.format(getFabricFileList(), launcher.getVersion(), FabricVersionNumber)), "UTF-8");
-        } catch (IOException e) {
-            logmaker.error("Error", e);
-        }
+        DownloadTask.StartDownloadTask(String.format(getFabricFileList(), launcher.getVersion(), FabricVersionNumber), getCacheVersionJson());
     }
 
-    public FabricDownloadTask getFabricDownloadTask() {
-        return new FabricDownloadTask(launcher, FabricVersionNumber);
+    public FabricInstallTask getFabricDownloadTask() {
+        return new FabricInstallTask(launcher, FabricVersionNumber);
     }
 
     public FabricLaunchTask getFabricLaunchTask() {

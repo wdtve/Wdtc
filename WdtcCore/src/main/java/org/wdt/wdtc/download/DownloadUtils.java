@@ -1,5 +1,6 @@
 package org.wdt.wdtc.download;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -15,6 +16,7 @@ public class DownloadUtils {
 
     public static void DownloadFile(File DownloadFile, URL SrcousFileUrl) throws IOException {
         HttpsURLConnection connection = (HttpsURLConnection) SrcousFileUrl.openConnection();
+        FileUtils.touch(DownloadFile);
         FileOutputStream DownloadFileOutput = new FileOutputStream(DownloadFile);
         InputStream UrlFileInput = connection.getInputStream();
         connection.setConnectTimeout(5000);

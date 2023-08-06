@@ -26,7 +26,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameVersionJson() throws IOException {
-        JSONArray VersionList = JSONObject.parseWdtObject(PlatformUtils.GetUrlContent(source.getVersionManifestUrl())).getJSONArray("versions");
+        JSONArray VersionList = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(source.getVersionManifestUrl())).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
             if (Objects.equals(launcher.getVersion(), version_name)) {

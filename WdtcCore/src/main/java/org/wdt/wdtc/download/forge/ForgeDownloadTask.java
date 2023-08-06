@@ -89,11 +89,11 @@ public class ForgeDownloadTask {
             download.setDownloadPath(launcher.GetGameLibraryPath());
             download.setDefaultUrl(source.getFabricLibraryUrl());
             if (PlatformUtils.NetworkHasThisFile(download.getLibraryUrl())) {
-                DownloadTask.StartWGetDownloadTask(download.getLibraryUrl(), download.getLibraryFile());
+                DownloadTask.StartDownloadTask(download.getLibraryUrl(), download.getLibraryFile());
             } else {
                 String LibraryUrl = LibraryArtifact.getString("url");
                 String LibraryPath = FilenameUtils.separatorsToSystem(launcher.GetGameLibraryPath() + LibraryArtifact.getString("path"));
-                DownloadTask.StartWGetDownloadTask(LibraryUrl, LibraryPath);
+                DownloadTask.StartDownloadTask(LibraryUrl, LibraryPath);
             }
 
         }

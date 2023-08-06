@@ -19,7 +19,7 @@ public class FabricAPIDownloadTask {
     }
 
     public void DownloadFabricAPI() throws IOException {
-        JSONArray VersionListArray = JSONArray.parseWdtArray(PlatformUtils.GetUrlContent(VersionListUrl));
+        JSONArray VersionListArray = JSONArray.parseJSONArray(PlatformUtils.GetUrlContent(VersionListUrl));
         for (int i = 0; i < VersionListArray.size(); i++) {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             if (VersionObject.getString("version_number").equals(FabricAPIVersionNumber)) {

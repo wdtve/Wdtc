@@ -8,19 +8,11 @@ javafx {
     version = "19.0.2.1"
     modules("javafx.controls", "javafx.fxml")
 }
-sourceSets {
-    main {
-        java {
-            srcDir("src/main/java")
-        }
-        resources {
-            srcDir("src/main/resources")
-        }
-    }
-}
+
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 dependencies {
     implementation(project(":DependencyDownloader"))
     implementation(project(":GsonOrFastJson"))
@@ -35,5 +27,7 @@ dependencies {
 
 }
 tasks.test {
+    workingDir = rootDir
+    jvmArgs = listOf("-Dwdtc.config.path=.")
     useJUnitPlatform()
 }

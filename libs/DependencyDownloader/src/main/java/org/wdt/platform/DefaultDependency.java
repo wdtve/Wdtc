@@ -5,20 +5,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DefaultDependency {
-    private final String Library;
+    private final String LibraryName;
     private String groupId;
     private String artifactId;
     private String version;
     private String spaec;
 
 
-    public DefaultDependency(String Library) throws IllegalArgumentException {
+    public DefaultDependency(String LibraryName) throws IllegalArgumentException {
         Pattern p = Pattern.compile("([^: ]+):([^: ]+)(:([^: ]*)(:([^: ]+))?)?:([^: ]+)");
-        Matcher m = p.matcher(Objects.requireNonNull(Library));
+        Matcher m = p.matcher(Objects.requireNonNull(LibraryName));
         if (!m.matches()) {
-            throw new IllegalArgumentException("Bad artifact coordinates " + Library + ", expected format is <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>");
+            throw new IllegalArgumentException("Bad artifact coordinates " + LibraryName + ", expected format is <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>");
         }
-        this.Library = Library;
+        this.LibraryName = LibraryName;
         groupId = Clean(m.group(1));
         artifactId = Clean(m.group(2));
         if (Objects.nonNull(m.group(3))) {
@@ -34,8 +34,8 @@ public class DefaultDependency {
         this(groupId + ":" + artifactId + ":" + version);
     }
 
-    public String getLibrary() {
-        return Library;
+    public String getLibraryName() {
+        return LibraryName;
     }
 
     public String getGroupId() {
@@ -101,11 +101,11 @@ public class DefaultDependency {
     }
 
     public DependencyDownload GetDependencyDownload() {
-        return new DependencyDownload(Library);
+        return new DependencyDownload(LibraryName);
     }
 
     public LibraryDependencyDownload GetLibraryDependencyDownload() {
-        return new LibraryDependencyDownload(Library);
+        return new LibraryDependencyDownload(LibraryName);
     }
 
     public String Clean(String str) {

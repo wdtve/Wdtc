@@ -1,7 +1,6 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
@@ -24,13 +23,11 @@ public class GameCommand {
         append("--assetsDir");
         append(launcher.getGameAssetsdir());
         append("--assetIndex");
-        append(JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex").getString("id"));
+        append(launcher.getGameVersionJsonObject().getAssets());
         append("--uuid");
         append(accounts.getUuid());
         append("--accessToken");
         append(accounts.getAccessToken());
-        append("--clientId");
-        append("${clientid}");
         GameSet.append(AdditionalCommand.AdditionalGame(launcher));
         append("--versionType");
         append("Wdtc-dome");

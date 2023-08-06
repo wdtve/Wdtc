@@ -4,31 +4,28 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.0.14"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
+
 javafx {
     version = "19.0.2.1"
     modules("javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 }
-sourceSets {
-    main {
-        java {
-            srcDir("src/main/java")
-        }
-        resources {
-            srcDir("src/main/resources")
-        }
-    }
-}
+
 tasks.jar {
+    enabled = false
     dependsOn(tasks["shadowJar"])
 }
+
+
 tasks.withType<ShadowJar> {
     manifest.attributes.apply {
         put("Main-Class", "org.wdt.wdtc.WdtcMain")
     }
 }
+
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 dependencies {
     implementation(project(":WdtcCore"))
     implementation(project(":GsonOrFastJson"))
@@ -41,4 +38,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
 }
-defaultTasks("jar")
+
+tasks.create<JavaExec>("run") {
+    dependsOn(tasks.jar)
+    group = "application"
+    mainClass.set("org.wdt.wdtc.WdtcMain")
+    jvmArgs = listOf("-Dwdtc.config.path=.", "-Ddownload.forge.true", "-Dlauncher.version=0.0.1")
+    classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
+    workingDir = rootProject.rootDir
+}
+
+

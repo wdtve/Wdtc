@@ -10,9 +10,9 @@ public class FileUrl {
     public static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";
     public static final String MOJANG_ASSETS = "https://resources.download.minecraft.net/";
     public static final String MOJANG_LIBRARIES = "https://libraries.minecraft.net/";
-    public static final String PISTON_META_MOJANG = "https://piston-meta.mojang.com";
+    public static final String PISTON_META_MOJANG = "https://piston-meta.mojang.com/";
     public static final String BMCALAPI_COM = "https://download.mcbbs.net/";
-    public static final String PISTON_DATA_MOJANG = "https://piston-data.mojang.com";
+    public static final String PISTON_DATA_MOJANG = "https://piston-data.mojang.com/";
 
     public static final String LITTLESKIN_URL = "https://littleskin.cn";
     public static final String ALIYUN_MAVEN = "https://maven.aliyun.com/repository/public/";

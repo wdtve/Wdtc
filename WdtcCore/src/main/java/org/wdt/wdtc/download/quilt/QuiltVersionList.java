@@ -21,7 +21,7 @@ public class QuiltVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> List = new ArrayList<>();
-        JSONArray VersionArray = JSONArray.parseWdtArray(PlatformUtils.GetUrlContent(String.format(QuiltVersionListUrl, launcher.getVersion())));
+        JSONArray VersionArray = JSONArray.parseJSONArray(PlatformUtils.GetUrlContent(String.format(QuiltVersionListUrl, launcher.getVersion())));
         for (int i = 0; i < VersionArray.size(); i++) {
             JSONObject VersionObject = VersionArray.getJSONObject(i);
             List.add(VersionObject.getJSONObject("loader").getString("version"));

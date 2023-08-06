@@ -32,7 +32,11 @@ public class Accounts {
     }
 
     public Users getUsers() {
-        return JSONUtils.JsonFileToClass(FilePath.getUsersJson(), Users.class);
+        try {
+            return JSONUtils.JsonFileToClass(FilePath.getUsersJson(), Users.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

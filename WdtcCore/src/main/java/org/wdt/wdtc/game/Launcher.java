@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
-import org.wdt.wdtc.download.fabric.FabricDownloadTask;
+import org.wdt.wdtc.download.fabric.FabricInstallTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.infterface.DownloadSource;
@@ -26,7 +26,7 @@ public class Launcher extends Version {
     private String Gameattribute;
     private String Jvmattribute;
     private String Librartattribute;
-    private FabricDownloadTask FabricModDownloadTask;
+    private FabricInstallTask FabricModDownloadTask;
     private ModList.KindOfMod kind = ModList.KindOfMod.Original;
     private ForgeDownloadTask ForgeModDownloadTask;
     private QuiltDownloadTask QuiltModDownloadTask;
@@ -48,11 +48,11 @@ public class Launcher extends Version {
         QuiltModDownloadTask = quiltModDownloadTask;
     }
 
-    public FabricDownloadTask getFabricModDownloadTask() {
+    public FabricInstallTask getFabricModDownloadTask() {
         return FabricModDownloadTask;
     }
 
-    public void setFabricModDownloadTask(FabricDownloadTask fabricModDownloadTask) {
+    public void setFabricModDownloadTask(FabricInstallTask fabricModDownloadTask) {
         kind = ModList.KindOfMod.FABRIC;
         this.FabricModDownloadTask = fabricModDownloadTask;
     }

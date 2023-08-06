@@ -1,8 +1,8 @@
 package org.wdt.platform.gson;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import org.hildan.fxgson.FxGsonBuilder;
 
 public class JSONObject extends JSON {
     private final JsonObject JsonObjects;
@@ -12,7 +12,7 @@ public class JSONObject extends JSON {
     }
 
     public JSONObject(String json) {
-        this.JsonObjects = parseGsonObject(json);
+        this.JsonObjects = parseJsonObject(json);
     }
 
     public static String toJSONString(Object o) {
@@ -21,7 +21,7 @@ public class JSONObject extends JSON {
 
 
     public static JSONObject parseObject(String json) {
-        return parseWdtObject(json);
+        return parseJSONObject(json);
     }
 
     public String getString(String str) {
@@ -66,7 +66,11 @@ public class JSONObject extends JSON {
     }
 
     public static Gson getGson() {
-        return new FxGsonBuilder().builder().setPrettyPrinting().create();
+        return new GsonBuilder().setPrettyPrinting().create();
+    }
+
+    public static <T> T parseObject(String json, Class<T> clazz) {
+        return getGson().fromJson(json, clazz);
     }
 
 }

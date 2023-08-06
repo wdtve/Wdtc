@@ -15,6 +15,7 @@ import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.platform.ExtractFile;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.BufferedReader;
@@ -85,14 +86,27 @@ public class ForgeInstallTask extends ForgeDownloadTask {
     }
 
     public void DownloadClientText() throws IOException {
-        DefaultDependency TxtPath = new DefaultDependency(getInstallPrefileJSONObject().getJSONObject("data")
-                .getJSONObject("MAPPINGS").getString("client").replace("[", "").replace("]", ""));
+        DefaultDependency TxtPath = null;
+        JSONObject DataObject = getInstallPrefileJSONObject().getJSONObject("data");
+        if (DataObject.has("MOJMAPS")) {
+            Matcher matcher = getMiddleBracket(DataObject.getJSONObject("MOJMAPS").getString("client"));
+            if (matcher.find()) {
+                TxtPath = new DefaultDependency(matcher.group(1));
+            }
+        } else {
+            Matcher matcher = getMiddleBracket(DataObject.getJSONObject("MAPPINGS").getString("client"));
+            if (matcher.find()) {
+                TxtPath = new DefaultDependency(matcher.group(1));
+            }
+        }
         String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
         if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-            TxtUrl = TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl());
+            TxtUrl = PlatformUtils.getRedirectUrl(TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl()));
         }
-        DownloadTask.StartWGetDownloadTask(TxtUrl, launcher.GetGameLibraryPath() + TxtPath.formJar());
+        if (TxtPath != null) {
+            DownloadTask.StartDownloadTask(TxtUrl, launcher.GetGameLibraryPath() + TxtPath.formJar());
+        }
 
     }
 

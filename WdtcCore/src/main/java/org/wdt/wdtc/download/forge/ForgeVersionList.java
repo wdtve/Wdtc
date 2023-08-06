@@ -26,7 +26,7 @@ public class ForgeVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> VersionName = new ArrayList<>();
-        JSONArray VersionList = JSONArray.parseWdtArray(PlatformUtils.GetUrlContent(getForgeListUrl()));
+        JSONArray VersionList = JSONArray.parseJSONArray(PlatformUtils.GetUrlContent(getForgeListUrl()));
         for (int i = 0; i < VersionList.size(); i++) {
             JSONObject VersionObject = VersionList.getJSONObject(i);
             VersionName.add(VersionObject.getString("version"));

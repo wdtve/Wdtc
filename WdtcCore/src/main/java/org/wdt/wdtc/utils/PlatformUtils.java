@@ -8,9 +8,15 @@ import org.wdt.platform.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class PlatformUtils extends FileUtils {
@@ -66,12 +72,41 @@ public class PlatformUtils extends FileUtils {
 
     public static boolean NetworkHasThisFile(URL url) {
         try {
-            IOUtils.toString(url.openStream());
+            URLConnection uc = url.openConnection();
+            uc.setConnectTimeout(12000);
+            uc.connect();
             return true;
         } catch (IOException e) {
             return false;
         }
     }
 
+    public static String getRedirectUrl(String path) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) new URL(path).openConnection();
+        conn.setInstanceFollowRedirects(false);
+        conn.setConnectTimeout(5000);
+        return conn.getHeaderField("Location");
+    }
+
+    public static String getFileSha1(InputStream in) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            byte[] buffer = new byte[1024 * 1024 * 10];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                digest.update(buffer, 0, len);
+            }
+            String sha1 = new BigInteger(1, digest.digest()).toString(16);
+            int length = 40 - sha1.length();
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+                    sha1 = "0" + sha1;
+                }
+            }
+            return sha1;
+        } catch (IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

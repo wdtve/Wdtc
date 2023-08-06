@@ -41,12 +41,16 @@ public class SelectGameVersion {
             DownloadGame.DownloadVersionJar();
             ModDonwloadTask.DownloadMod(launcher);
             DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
-            logmaker.debug("库下载完成");
-            DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
-            long EndTime = System.currentTimeMillis() - startTime;
-            logmaker.info("下载完成,耗时:" + EndTime + "ms");
+            String LibraryFinishTime = "游戏所需类库下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
+            logmaker.debug(LibraryFinishTime);
             if (Objects.nonNull(textField)) {
-                textField.setText("下载完成,耗时:" + EndTime + "ms");
+                textField.setText(LibraryFinishTime);
+            }
+            DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
+            String EndTime = "下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
+            logmaker.info(EndTime);
+            if (Objects.nonNull(textField)) {
+                textField.setText(EndTime);
             }
         } catch (IOException e) {
             logmaker.error("* Download Game Error,", e);

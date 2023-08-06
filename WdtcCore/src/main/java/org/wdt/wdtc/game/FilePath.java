@@ -32,7 +32,7 @@ public class FilePath {
 
     public static File getAuthlibInjector() throws IOException {
         String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
-        String authlib_injector_url = JSONObject.parseWdtObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR + "/artifact/latest.json")).getString("download_url");
+        String authlib_injector_url = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR + "/artifact/latest.json")).getString("download_url");
         return new File(getWdtcImplementationPath() + "/" + authlib_injector_url.substring(authlib_injector_url.lastIndexOf("/") + 1));
     }
 

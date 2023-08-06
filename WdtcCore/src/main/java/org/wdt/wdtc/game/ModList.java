@@ -1,12 +1,10 @@
 package org.wdt.wdtc.game;
 
-import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.download.fabric.FabricDownloadTask;
+import org.wdt.wdtc.download.fabric.FabricInstallTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -19,20 +17,20 @@ public class ModList {
     public static Launcher getModTask(Launcher launcher) {
         try {
             Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");
-            Matcher m = r.matcher(JSONUtils.getJSONObject(launcher.getVersionJson()).getString("id"));
+            Matcher m = r.matcher(launcher.getGameVersionJsonObject().getId());
             if (m.find()) {
                 String ModName = m.group(2);
                 String ModVersion = m.group(3);
                 switch (ModName) {
                     case "forge" -> launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, ModVersion));
-                    case "fabric" -> launcher.setFabricModDownloadTask(new FabricDownloadTask(launcher, ModVersion));
+                    case "fabric" -> launcher.setFabricModDownloadTask(new FabricInstallTask(launcher, ModVersion));
                     case "quilt" -> launcher.setQuiltModDownloadTask(new QuiltDownloadTask(launcher, ModVersion));
                 }
             }
             return launcher;
         } catch (IOException e) {
             logmaker.warn("", e);
-            return launcher;
+            return null;
         }
     }
 
@@ -48,9 +46,9 @@ public class ModList {
 
     public static void putGameId(Launcher launcher, String kind, String ModVersionNumber) {
         try {
-            JsonObject object = JSONUtils.getJSONObject(launcher.getVersionJson()).getJsonObjects();
-            object.addProperty("id", launcher.getVersion() + "-" + kind + "-" + ModVersionNumber);
-            PlatformUtils.PutJSONObject(launcher.getVersionJson(), object);
+            GameVersionJsonObject gameVersionJsonObject = launcher.getGameVersionJsonObject();
+            gameVersionJsonObject.setId(launcher.getVersion() + "-" + kind + "-" + ModVersionNumber);
+            JSONUtils.ObjectToJsonFile(launcher.getVersionJson(), gameVersionJsonObject);
         } catch (IOException e) {
             logmaker.error("* Put Mod Kind Error,", e);
         }

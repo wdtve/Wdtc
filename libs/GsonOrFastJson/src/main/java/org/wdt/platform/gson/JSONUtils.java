@@ -1,11 +1,12 @@
 package org.wdt.platform.gson;
 
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
-public class JSONUtils {
+public class JSONUtils extends JSON {
     public static JSONObject getJSONObject(File file) throws IOException {
         return new JSONObject(FileUtils.readFileToString(file, "UTF-8"));
     }
@@ -14,15 +15,19 @@ public class JSONUtils {
         return getJSONObject(new File(filepath));
     }
 
-    public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) {
-        try {
-            return JSONObject.getGson().fromJson(FileUtils.readFileToString(JsonFile, "UTF-8"), clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static JsonObject getJsonObject(File JsonFile) throws IOException {
+        return parseJsonObject(FileUtils.readFileToString(JsonFile, "UTF-8"));
     }
 
-    public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) {
+    public static JsonObject getJsonObject(String JsonFilePath) throws IOException {
+        return getJsonObject(new File(JsonFilePath));
+    }
+
+    public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) throws IOException {
+        return JSONObject.parseObject(FileUtils.readFileToString(JsonFile, "UTF-8"), clazz);
+    }
+
+    public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) throws IOException {
         return JsonFileToClass(new File(JsonFilePath), clazz);
     }
 
@@ -32,5 +37,9 @@ public class JSONUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void ObjectToJsonFile(String JsonFilePath, Object object) {
+        ObjectToJsonFile(new File(JsonFilePath), object);
     }
 }

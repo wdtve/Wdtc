@@ -1,6 +1,6 @@
 package org.wdt.wdtc.download;
 
-import org.wdt.wdtc.download.fabric.FabricDownloadTask;
+import org.wdt.wdtc.download.fabric.FabricInstallTask;
 import org.wdt.wdtc.download.forge.ForgeDownloadTask;
 import org.wdt.wdtc.download.forge.ForgeInstallTask;
 import org.wdt.wdtc.download.forge.ForgeLaunchTask;
@@ -25,10 +25,11 @@ public class ModDonwloadTask extends ModList {
     }
 
     private static void DownloadFabric(Launcher launcher) throws IOException {
-        FabricDownloadTask fabricDownloadTask = launcher.getFabricModDownloadTask();
-        fabricDownloadTask.DownloadFile();
-        if (fabricDownloadTask.getAPIDownloadTaskNoNull()) {
-            fabricDownloadTask.getAPIDownloadTask().DownloadFabricAPI();
+        FabricInstallTask fabricInstallTask = launcher.getFabricModDownloadTask();
+        fabricInstallTask.setPatches();
+        fabricInstallTask.execute();
+        if (fabricInstallTask.getAPIDownloadTaskNoNull()) {
+            fabricInstallTask.getAPIDownloadTask().DownloadFabricAPI();
         }
     }
 

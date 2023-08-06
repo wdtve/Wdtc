@@ -1,12 +1,11 @@
 package org.wdt.wdtc.launch;
 
 
-import org.apache.commons.io.FilenameUtils;
 import org.wdt.platform.DependencyDownload;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.LibraryObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class GameLibraryPathAndUrl {
-    private static final String MOJANG_Libraries = FileUrl.getMojangLibraries();
     private final Launcher launcher;
     private final DownloadSource source;
 
@@ -24,40 +22,41 @@ public class GameLibraryPathAndUrl {
         this.source = Launcher.getDownloadSource();
     }
 
-    public File GetNativesLibPath(JSONObject lib_j) {
+    public File GetNativesLibraryFile(LibraryObject.NativesOs nativesOs) {
         String game_lib_path = launcher.GetGameLibraryPath();
-        JSONObject classifiers_j = lib_j.getJSONObject("downloads").getJSONObject("classifiers");
-        String natives_name = lib_j.getJSONObject("natives").getString("windows");
-        JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
-        String natives_lib_path = game_lib_path + natives_os.getString("path");
-        return new File(FilenameUtils.separatorsToWindows(natives_lib_path));
+        return new File(game_lib_path + nativesOs.getPath());
     }
 
-    public URL GetNativesLibUrl(JSONObject lib_j) throws IOException {
-        JSONObject downloads_j = lib_j.getJSONObject("downloads");
-        JSONObject natives_j = lib_j.getJSONObject("natives");
-        JSONObject classifiers_j = downloads_j.getJSONObject("classifiers");
-        String natives_name = natives_j.getString("windows");
-        JSONObject natives_os = classifiers_j.getJSONObject(natives_name);
-        String natives_lib_url = natives_os.getString("url");
+    public URL GetNativesLibraryUrl(LibraryObject libraryObject) throws IOException {
+        LibraryObject.NativesOs Nativesindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
         if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-            natives_lib_url = natives_lib_url.replaceAll(MOJANG_Libraries, source.getLibraryUrl());
+            return new URL(source.getLibraryUrl() + Nativesindows.getPath());
+        } else {
+
+            return Nativesindows.getUrl();
         }
-        return new URL(natives_lib_url);
     }
 
-    public File GetLibPath(JSONObject lib_j) {
+    public File GetLibraryFile(LibraryObject object) {
         String game_lib_path = launcher.GetGameLibraryPath();
-        DependencyDownload dependency = new DependencyDownload(lib_j.getString("name"));
+        DependencyDownload dependency = new DependencyDownload(object.getLibraryName());
         dependency.setDownloadPath(game_lib_path);
         return dependency.getLibraryFile();
 
     }
 
-    public URL GetLibUrl(JSONObject lib_j) throws MalformedURLException {
-        DependencyDownload dependency = new DependencyDownload(lib_j.getString("name"));
-        dependency.setDefaultUrl(source.getLibraryUrl());
-        return dependency.getLibraryUrl();
+    public URL GetLibraryUrl(LibraryObject libraryObject) throws MalformedURLException {
+        if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
+            DependencyDownload dependency = new DependencyDownload(libraryObject.getLibraryName());
+            dependency.setDefaultUrl(source.getLibraryUrl());
+            return dependency.getLibraryUrl();
+        } else {
+            return GetOfficialLibraryUrl(libraryObject);
+        }
+    }
+
+    public URL GetOfficialLibraryUrl(LibraryObject object) {
+        return object.getDownloads().getArtifact().getUrl();
     }
 
 }
