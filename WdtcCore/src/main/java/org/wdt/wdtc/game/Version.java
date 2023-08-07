@@ -59,7 +59,7 @@ public class Version extends GetGamePath {
         return getVersionPath() + "logs/";
     }
 
-    public void PutToVersionJson(Object o) {
+    public void PutToVersionJson(GameVersionJsonObject o) {
         JSONUtils.ObjectToJsonFile(getVersionJson(), o);
     }
 

@@ -5,7 +5,6 @@ import org.wdt.platform.DependencyDownload;
 import org.wdt.wdtc.game.LibraryObject;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class test {
     @Test
@@ -27,7 +26,6 @@ public class test {
 
     @Test
     public void StringToClss() throws IOException {
-        URL url = new URL("https://maven.fabricmc.net/net/fabricmc/fabric-loader/0.14.22/fabric-loader-0.14.22.jar");
-        System.out.println(url.openConnection().getContentLengthLong());
+
     }
 }

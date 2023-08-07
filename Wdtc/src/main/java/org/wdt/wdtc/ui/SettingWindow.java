@@ -35,6 +35,7 @@ public class SettingWindow extends AboutSetting {
             win.setHome(MainStage);
             logmaker.info(getSetting());
         });
+        back.getStyleClass().add("BlackBorder");
         MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - Setting");
 
         double line = 55.0;
@@ -239,7 +240,8 @@ public class SettingWindow extends AboutSetting {
 
         SonPane.setPrefSize(493, 336);
         WindwosSize size = new WindwosSize(MainStage);
-        size.ModifyWindwosSize(SonPane, back, OfficialDownloadSource, BmclDownloadSource, McbbsDownloadSource, TrueLog, FalseLog, cmd, DownloadSourceTips, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
+        size.ModifyWindwosSize(SonPane, back, OfficialDownloadSource, BmclDownloadSource, McbbsDownloadSource, TrueLog,
+                FalseLog, cmd, DownloadSourceTips, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
         ScrollPane scrollPane = new ScrollPane(SonPane);
         AnchorPane.setLeftAnchor(scrollPane, 105.0);
         AnchorPane.setTopAnchor(scrollPane, 70.0);

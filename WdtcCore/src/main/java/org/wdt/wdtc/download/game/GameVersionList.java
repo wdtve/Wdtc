@@ -29,7 +29,9 @@ public class GameVersionList implements VersionList {
             JSONArray version_list = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(source.getVersionManifestUrl())).getJSONArray("versions");
             for (int i = 0; i < version_list.size(); i++) {
                 JSONObject VersionObject = version_list.getJSONObject(i);
-                VersionList.add(VersionObject.getString("id"));
+                if (VersionObject.getString("type").equals("release")) {
+                    VersionList.add(VersionObject.getString("id"));
+                }
             }
         } catch (IOException e) {
             logmaker.error("* 出现错误,可能是网络错误", e);

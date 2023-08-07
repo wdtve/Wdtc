@@ -20,7 +20,6 @@ dependencies {
     implementation("commons-io:commons-io:2.13.0")
     implementation("org.hildan.fxgson:fx-gson:5.0.0")
     implementation("log4j:log4j:1.2.17")
-    implementation("com.github.axet:wget:1.7.0")
     implementation("com.google.code.gson:gson:2.10.1")
     testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")

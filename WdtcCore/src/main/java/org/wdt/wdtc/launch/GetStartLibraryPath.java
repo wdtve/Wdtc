@@ -1,6 +1,7 @@
 package org.wdt.wdtc.launch;
 
 
+import org.apache.commons.io.FilenameUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
@@ -13,45 +14,55 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class GetStartLibraryPath {
-    private static StringBuilder ClassPathBuilder;
+    private final StringBuilder ClassPathBuilder;
+    private final Launcher launcher;
 
-    public static void getLibraryPath(Launcher launcher) throws IOException {
+    public GetStartLibraryPath(Launcher launcher) {
         ClassPathBuilder = new StringBuilder();
-        GameLibraryPathAndUrl gameLibraryPathAndUrl = new GameLibraryPathAndUrl(launcher);
-        Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
-        GetGameNeedLibraryFile FileList = new GetGameNeedLibraryFile(launcher);
-        for (GetGameNeedLibraryFile.LibraryFile LibraryFile : FileList.getFileList()) {
-            if (LibraryFile.isNativesLibrary()) {
-                ExtractFile.unzipByFile(gameLibraryPathAndUrl.GetNativesLibraryFile(LibraryFile.getLibraryObject().getDownloads().getClassifiers().getNativesindows()), launcher.getVersionNativesPath());
-            } else {
-                Space(gameLibraryPathAndUrl.GetLibraryFile(LibraryFile.getLibraryObject()));
+        this.launcher = launcher;
+    }
+
+    public StringBuilder getLibraryPath() {
+        try {
+            GameLibraryPathAndUrl gameLibraryPathAndUrl = new GameLibraryPathAndUrl(launcher);
+            Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
+            GetGameNeedLibraryFile FileList = new GetGameNeedLibraryFile(launcher);
+            for (GetGameNeedLibraryFile.LibraryFile LibraryFile : FileList.getFileList()) {
+                if (LibraryFile.isNativesLibrary()) {
+                    ExtractFile.unzipByFile(gameLibraryPathAndUrl.GetNativesLibraryFile(LibraryFile.getLibraryObject().getDownloads().getClassifiers().getNativesindows()), launcher.getVersionNativesPath());
+                } else {
+                    InsertclasspathSeparator(gameLibraryPathAndUrl.GetLibraryFile(LibraryFile.getLibraryObject()));
+                }
             }
+            ClassPathBuilder.append(FilenameUtils.separatorsToWindows(launcher.getVersionJar()));
+            String Accounts = launcher.GetAccounts().getJvm();
+            if (!Accounts.isEmpty()) {
+                ClassPathBuilder.append(launcher.GetAccounts().getJvm());
+            }
+            if (AboutSetting.getSetting().isLlvmpipeLoader()) {
+                ClassPathBuilder.append(LlbmpipeLoader());
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        ClassPathBuilder.append(AdditionalCommand.AdditionalLibrary(launcher));
-        Add(launcher.getVersionJar());
-        ClassPathBuilder.append(AdditionalCommand.AdditionalJvm(launcher));
-        Add(launcher.GetAccounts().getJvm());
-        if (AboutSetting.getSetting().isLlvmpipeLoader()) {
-            Add(LlbmpipeLoader());
-        }
-        ClassPathBuilder.append(AdditionalCommand.GameMainClass(launcher));
-        launcher.setLibrartattribute(ClassPathBuilder);
+        return ClassPathBuilder;
     }
 
 
-    private static String LlbmpipeLoader() {
-        return "-javaagent:" + FilePath.getLlbmpipeLoader();
+    private String LlbmpipeLoader() {
+        return " -javaagent:" + FilePath.getLlbmpipeLoader();
     }
 
-    private static void Space(String str) {
+    private void InsertclasspathSeparator(String str) {
         ClassPathBuilder.append(str).append(";");
     }
 
-    private static void Space(File file) {
-        Space(file.getAbsolutePath());
+    private void InsertclasspathSeparator(File file) {
+        InsertclasspathSeparator(file.getAbsolutePath());
     }
 
-    private static void Add(String str) {
+    private void InsertSpace(String str) {
         ClassPathBuilder.append(str).append(" ");
     }
 }

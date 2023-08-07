@@ -40,7 +40,7 @@ public class WdtcMain {
     public static void StartTask() throws IOException {
         String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
         if (PlatformUtils.FileExistenceAndSize(FilePath.getLlbmpipeLoader())) {
-            DownloadTask.StartWGetDownloadTask(LlbmpipeLoader, FilePath.getLlbmpipeLoader());
+            DownloadTask.StartDownloadTask(LlbmpipeLoader, FilePath.getLlbmpipeLoader());
         }
     }
 

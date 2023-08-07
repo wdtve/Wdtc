@@ -1,7 +1,6 @@
 package org.wdt.platform;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class LibraryDependencyDownload extends DefaultDependency {
-    private final Logger logmaker = log4j.getLogger(LibraryDependencyDownload.class);
     private String path = System.getProperty("user.dir");
     private String DefaultUrl = "https://repo1.maven.org/maven2/";
     private boolean DeletePom = false;
@@ -67,19 +65,6 @@ public class LibraryDependencyDownload extends DefaultDependency {
         this.path = aboutPath(path) + "/";
     }
 
-    public void downloadPom() {
-        try {
-            logmaker.info("* " + getPomUrl() + " 开始下载");
-            FileUtils.copyURLToFile(getPomUrl(), PomFile());
-            logmaker.info("* " + PomFile() + " 下载完成");
-        } catch (IOException e) {
-            try {
-                System.out.println(getPomUrl() + "找不到文件");
-            } catch (MalformedURLException ex) {
-                logmaker.error("* 错误:", ex);
-            }
-        }
-    }
 
     public URL getPomUrl() throws MalformedURLException {
         return new URL(DefaultUrl + formPom().replaceAll("\\+", "%2B"));

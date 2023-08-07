@@ -12,7 +12,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.Launcher;
@@ -128,10 +127,11 @@ public class VersionSettingWindows extends AboutSetting {
         AnchorPane.setBottomAnchor(delete, 0.0);
         AnchorPane.setLeftAnchor(delete, 0.0);
         ParentPane.getChildren().addAll(SonScrollPane, completion, delete, back);
-        Consoler.setCss("BlackBorder", back, delete, completion);
+        Consoler.setCss("BlackBorder", back);
         ParentPane.setBackground(Consoler.getBackground());
         Consoler.setStylesheets(ParentPane);
         MainStage.setScene(new Scene(ParentPane));
+        Consoler.setCss("BackGroundWriteButton", delete, completion);
 
         JavaPath.setText(config.getJavaPath());
         InputWidth.setText(String.valueOf(config.getWindowWidth()));
@@ -159,14 +159,10 @@ public class VersionSettingWindows extends AboutSetting {
                 gameConfig.setXmx(Integer.parseInt(Input.getText()));
                 gameConfig.setHight(Integer.parseInt(InputHeight.getText()));
                 gameConfig.setWidth(Integer.parseInt(InputWidth.getText()));
-                try {
-                    logmaker.info(gameConfig);
-                    FileUtils.writeStringToFile(launcher.getGameConfig().getVersionConfigFile(), JSONObject.toJSONString(gameConfig), "UTF-8");
-                    tips6.setText("设置成功");
-                    tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
-                } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
-                }
+                logmaker.info(gameConfig);
+                JSONUtils.ObjectToJsonFile(launcher.getGameConfig().getVersionConfigFile(), gameConfig);
+                tips6.setText("设置成功");
+                tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
             } catch (NumberFormatException e) {
                 tips6.setTextFill(Color.RED);
                 tips6.setText("请输入正确配置");
@@ -187,7 +183,7 @@ public class VersionSettingWindows extends AboutSetting {
             }
         });
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
-            SelectGameVersion version = new SelectGameVersion(launcher);
+            SelectGameVersion version = new SelectGameVersion(launcher, true);
             version.DownloadGame();
             logmaker.info("* " + launcher.getVersion() + " downloaded");
         }));

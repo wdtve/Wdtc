@@ -128,6 +128,10 @@ public class GameVersionJsonObject {
             return JvmList;
         }
 
+        public void setGameList(JsonArray gameList) {
+            GameList = gameList;
+        }
+
         public void setJvmList(JsonArray jvmList) {
             JvmList = jvmList;
         }

@@ -1,0 +1,94 @@
+package org.wdt.wdtc.download.forge;
+
+
+import org.apache.log4j.Logger;
+import org.wdt.platform.gson.JSONObject;
+import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.download.DownloadTask;
+import org.wdt.wdtc.download.infterface.DownloadSource;
+import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.platform.ExtractFile;
+import org.wdt.wdtc.utils.WdtcLogger;
+
+import java.io.IOException;
+
+public class ForgeDownloadInfo {
+    public static final Logger logmaker = WdtcLogger.getLogger(ForgeDownloadInfo.class);
+    public final String ForgeVersionNumber;
+    public final Launcher launcher;
+
+    public final DownloadSource source;
+
+
+    public ForgeDownloadInfo(Launcher launcher, String forgeVersionNumber) {
+        ForgeVersionNumber = forgeVersionNumber;
+        this.launcher = launcher;
+        this.source = Launcher.getDownloadSource();
+    }
+
+    public Launcher getLauncher() {
+        return launcher;
+    }
+
+
+    public String getForgeVersionNumber() {
+        return ForgeVersionNumber;
+    }
+
+    public void DownloadInstallJar() {
+        DownloadTask.StartDownloadTask(getForgeInstallJarUrl(), getForgeInstallJarPath());
+    }
+
+    private String getInstallJarUrl() {
+        return source.getForgeLibraryMavenUrl() + "net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
+    }
+
+    public String getForgeInstallJarPath() {
+        return FilePath.getWdtcCache() + "/" + ForgeVersionNumber + "-installer.jar";
+    }
+
+    public String getForgeInstallJarUrl() {
+        return getInstallJarUrl().replaceAll(":mcversion", launcher.getVersion()).replaceAll(":forgeversion", ForgeVersionNumber);
+    }
+
+    public void getInstallProfile() {
+        ExtractFile.unZipToFile(getForgeInstallJarPath(), getInstallProfilePath(), "install_profile.json");
+
+    }
+
+
+    public String getInstallProfilePath() {
+        return FilePath.getWdtcCache() + "/install_profile" + "-" + launcher.getVersion() + "-" + ForgeVersionNumber + ".json";
+    }
+
+    public JSONObject getInstallPrefileJSONObject() throws IOException {
+        return JSONUtils.getJSONObject(getInstallProfilePath());
+    }
+
+
+    public String getForgeVersionJsonPath() {
+        return FilePath.getWdtcCache() + "/version-" + launcher.getVersion() + "-" + ForgeVersionNumber + ".json";
+    }
+
+    public void getForgeVersionJson() {
+        ExtractFile.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonPath(), "version.json");
+    }
+
+    public JSONObject getForgeVersionJsonObject() {
+        try {
+            return JSONUtils.getJSONObject(getForgeVersionJsonPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+    public ForgeInstallTask getForgeInstallTask() {
+        return new ForgeInstallTask(launcher, ForgeVersionNumber);
+    }
+
+
+}

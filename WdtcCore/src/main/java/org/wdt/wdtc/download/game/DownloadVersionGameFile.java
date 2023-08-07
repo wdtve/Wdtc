@@ -8,7 +8,6 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
@@ -18,11 +17,13 @@ import java.util.Objects;
 public class DownloadVersionGameFile extends DownloadTask {
     public final Launcher launcher;
     public final DownloadSource source;
+    public final boolean Install;
 
-    public DownloadVersionGameFile(Launcher launcher) {
+    public DownloadVersionGameFile(Launcher launcher, boolean Install) {
         super(launcher);
         this.launcher = launcher;
         this.source = Launcher.getDownloadSource();
+        this.Install = Install;
     }
 
     public void DownloadGameVersionJson() throws IOException {
@@ -34,8 +35,11 @@ public class DownloadVersionGameFile extends DownloadTask {
                 if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
                 }
-                StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
-                ModList.putGameId(launcher);
+                if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+                    if (Install) {
+                        StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
+                    }
+                }
             }
         }
     }
@@ -46,16 +50,21 @@ public class DownloadVersionGameFile extends DownloadTask {
         if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
         }
-        StartDownloadTask(GameAssetsListJsonUrl, launcher.getGameAssetsListJson());
+        if (PlatformUtils.FileExistenceAndSize(launcher.getGameAssetsListJson(), AssetIndexJson.getInt("size"))) {
+            StartDownloadTask(GameAssetsListJsonUrl, launcher.getGameAssetsListJson());
+        }
     }
 
     public void DownloadVersionJar() throws IOException {
-        String JarUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client").getString("url");
+        JSONObject ClientObject = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client");
+        String JarUrl = ClientObject.getString("url");
         if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
             JarUrl = JarUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl());
         }
         File VersionJar = new File(launcher.getVersionJar());
-        StartDownloadTask(JarUrl, VersionJar);
+        if (PlatformUtils.FileExistenceAndSize(VersionJar, ClientObject.getInt("size"))) {
+            StartDownloadTask(JarUrl, VersionJar);
+        }
     }
 
     public DownloadGameLibrary DownloadGameLibFileTask() {

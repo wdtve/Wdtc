@@ -1,8 +1,5 @@
 package org.wdt.platform;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,10 +7,8 @@ import java.net.URL;
 import java.util.Objects;
 
 public class DependencyDownload extends DefaultDependency {
-    private final Logger logmaker = log4j.getLogger(DependencyDownload.class);
     private String DownloadPath;
     private String DefaultUrl = "https://repo1.maven.org/maven2/";
-    private Boolean downloadPom = false;
 
     public DependencyDownload(String lib) {
         super(lib);
@@ -23,9 +18,6 @@ public class DependencyDownload extends DefaultDependency {
         super(groupId, artifactId, version);
     }
 
-    public void setDownloadPom(Boolean downloadPom) {
-        this.downloadPom = downloadPom;
-    }
 
     private String aboutPath(String path) {
         if (Objects.isNull(path)) return "";
@@ -57,16 +49,6 @@ public class DependencyDownload extends DefaultDependency {
         this.DownloadPath = aboutPath(path) + "/";
     }
 
-
-    public void download() throws IOException {
-        logmaker.info("* " + getLibraryUrl() + " 开始下载");
-        FileUtils.copyURLToFile(getLibraryUrl(), getLibraryFile());
-        logmaker.info("* " + getLibraryFile() + " 下载完成");
-        if (downloadPom) {
-            getLibraryDependencyDownload().downloadPom();
-        }
-
-    }
 
     public URL getLibraryUrl() throws MalformedURLException {
         return new URL(DefaultUrl + formJar());

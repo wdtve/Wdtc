@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuiltVersionList implements VersionList {
-    private static final String QuiltVersionListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s";
+    private static final String QuiltVersionListUrl = "https://meta.quiltmc.org//v3/versions/loader/%s";
     private final Launcher launcher;
 
     public QuiltVersionList(Launcher launcher) {

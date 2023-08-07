@@ -66,7 +66,7 @@ public class JSONObject extends JSON {
     }
 
     public static Gson getGson() {
-        return new GsonBuilder().setPrettyPrinting().create();
+        return new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
     }
 
     public static <T> T parseObject(String json, Class<T> clazz) {

@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.SelectGameVersion;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
-import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -24,17 +22,14 @@ public class LauncherGame {
             logmaker.info("* 开始文件补全");
             SelectGameVersion gameVersion = new SelectGameVersion(launcher);
             try {
-                if (!ModList.GameModIsForge(launcher) && Starter.getForgeSwitch()) {
-                    gameVersion.DownloadGame();
-                }
+                gameVersion.DownloadGame();
             } catch (Throwable e) {
                 logmaker.error("错误:", e);
             }
             logmaker.info("* 文件补全完成");
             logmaker.info("* 开始写入启动脚本");
-            GameJvmCommand.GetJvmList(launcher);
-            GetStartLibraryPath.getLibraryPath(launcher);
-            GameCommand.Getgame(launcher);
+            launcher.setJvmattribute(new GameJvmCommand(launcher).GetJvmList());
+            launcher.setGameattribute(new GameCommand(launcher).Getgame());
             launcher.writeStartScript();
             logmaker.info("* 启动脚本写入完成");
             if (launcher.Console()) {
@@ -49,7 +44,7 @@ public class LauncherGame {
         }
     }
 
-    private Process bat() throws IOException {
+    private Process RunBatFile() throws IOException {
         return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", StartBat.getCanonicalPath()});
     }
 
@@ -62,7 +57,7 @@ public class LauncherGame {
 
     public Process getStart() throws IOException {
         if (launcher.Console()) {
-            return bat();
+            return RunBatFile();
         } else {
             return executeBatFile();
         }

@@ -24,7 +24,7 @@ public class LibraryObject {
     @SerializedName("natives")
     private JsonObject natives;
 
-    public static LibraryObject getLibraryObject(DependencyDownload dependency) {
+    public static LibraryObject getLibraryObject(DependencyDownload dependency, String DefaultUrl) {
 
         try {
             LibraryObject.Artifact artifact = new LibraryObject.Artifact();
@@ -32,7 +32,7 @@ public class LibraryObject {
             artifact.setSha1(PlatformUtils.getFileSha1(url.openStream()));
             artifact.setPath(dependency.formJar());
             artifact.setSize(url.openConnection().getContentLengthLong());
-            dependency.setDefaultUrl(Launcher.getOfficialDownloadSource().getFabricLibraryUrl());
+            dependency.setDefaultUrl(DefaultUrl);
             artifact.setUrl(dependency.getLibraryUrl());
             LibraryObject.Downloads downloads = new LibraryObject.Downloads();
             downloads.setArtifact(artifact);
@@ -44,6 +44,14 @@ public class LibraryObject {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static LibraryObject getLibraryObject(JSONObject object) {
+        return JSONObject.getGson().fromJson(object.getJsonObjects(), LibraryObject.class);
+    }
+
+    public static LibraryObject getLibraryObject(String object) {
+        return JSONObject.parseObject(object, LibraryObject.class);
     }
 
     public JsonObject getNatives() {
@@ -160,10 +168,6 @@ public class LibraryObject {
         private String sha1;
         private int size;
         private URL url;
-
-        public static NativesOs getNativesOs(JSONObject object) {
-            return JSONObject.getGson().fromJson(object.getJsonObjects(), NativesOs.class);
-        }
 
         public String getPath() {
             return path;

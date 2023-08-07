@@ -6,11 +6,11 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
-import org.wdt.wdtc.download.fabric.FabricInstallTask;
-import org.wdt.wdtc.download.forge.ForgeDownloadTask;
-import org.wdt.wdtc.download.game.DownloadVersionGameFile;
+import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
+import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
+import org.wdt.wdtc.download.quilt.QuiltDownloadInfo;
+import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
@@ -25,11 +25,11 @@ public class Launcher extends Version {
     private static final Logger logmaker = WdtcLogger.getLogger(Launcher.class);
     private String Gameattribute;
     private String Jvmattribute;
-    private String Librartattribute;
-    private FabricInstallTask FabricModDownloadTask;
+    private FabricDonwloadInfo FabricModInstallInfo;
     private ModList.KindOfMod kind = ModList.KindOfMod.Original;
-    private ForgeDownloadTask ForgeModDownloadTask;
-    private QuiltDownloadTask QuiltModDownloadTask;
+    private ForgeDownloadInfo ForgeModDownloadInfo;
+    private QuiltDownloadInfo QuiltModDownloadInfo;
+
 
     public Launcher(String version) {
         this(version, AboutSetting.getSetting().getDefaultGamePath());
@@ -39,22 +39,22 @@ public class Launcher extends Version {
         super(version, here);
     }
 
-    public QuiltDownloadTask getQuiltModDownloadTask() {
-        return QuiltModDownloadTask;
+    public QuiltDownloadInfo getQuiltModDownloadInfo() {
+        return QuiltModDownloadInfo;
     }
 
-    public void setQuiltModDownloadTask(QuiltDownloadTask quiltModDownloadTask) {
+    public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
         kind = ModList.KindOfMod.QUILT;
-        QuiltModDownloadTask = quiltModDownloadTask;
+        QuiltModDownloadInfo = quiltModDownloadInfo;
     }
 
-    public FabricInstallTask getFabricModDownloadTask() {
-        return FabricModDownloadTask;
+    public FabricDonwloadInfo getFabricModInstallInfo() {
+        return FabricModInstallInfo;
     }
 
-    public void setFabricModDownloadTask(FabricInstallTask fabricModDownloadTask) {
+    public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
         kind = ModList.KindOfMod.FABRIC;
-        this.FabricModDownloadTask = fabricModDownloadTask;
+        this.FabricModInstallInfo = fabricModInstallInfo;
     }
 
     public ModList.KindOfMod getKind() {
@@ -65,13 +65,13 @@ public class Launcher extends Version {
         this.kind = kind;
     }
 
-    public ForgeDownloadTask getForgeDownloadTask() {
-        return ForgeModDownloadTask;
+    public ForgeDownloadInfo getForgeDownloadInfo() {
+        return ForgeModDownloadInfo;
     }
 
-    public void setForgeModDownloadTask(ForgeDownloadTask forgeModDownloadTask) {
+    public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
         kind = ModList.KindOfMod.FORGE;
-        ForgeModDownloadTask = forgeModDownloadTask;
+        ForgeModDownloadInfo = forgeModDownloadInfo;
     }
 
 
@@ -84,10 +84,6 @@ public class Launcher extends Version {
         Jvmattribute = new String(jvmattribute);
     }
 
-
-    public void setLibrartattribute(StringBuilder librartattribute) {
-        Librartattribute = new String(librartattribute);
-    }
 
     public static DownloadSource getDownloadSource() {
         return FileUrl.DownloadSourceList.getDownloadSource();
@@ -105,7 +101,7 @@ public class Launcher extends Version {
     }
 
     public String GetStartScript() {
-        return Jvmattribute + Librartattribute + Gameattribute;
+        return Jvmattribute + Gameattribute;
     }
 
     public static DownloadSource getOfficialDownloadSource() {
@@ -118,10 +114,6 @@ public class Launcher extends Version {
             File OptionsFile = new File(getGameOptionsFile());
             FileUtils.writeStringToFile(OptionsFile, Options, "UTF-8");
         }
-    }
-
-    public DownloadVersionGameFile getDownloadVersionGameFile() {
-        return new DownloadVersionGameFile(this);
     }
 
     public GameConfig getGameConfig() {

@@ -20,6 +20,7 @@ import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class HomeWindow {
     private static final Logger logmaker = WdtcLogger.getLogger(HomeWindow.class);
@@ -39,47 +40,8 @@ public class HomeWindow {
     }
 
 
-    public void setHome(Stage MainStage) {
-        AnchorPane pane = new AnchorPane();
-        WindwosSize windwosSize = new WindwosSize(MainStage);
-        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());
-        VBox Menu = new VBox();
-        Menu.setPrefSize(128, 450);
-        JFXButton home = new JFXButton("首页");
-        home.setPrefSize(128, 46);
-
-        JFXButton User = new JFXButton("修改账户");
-        User.setLayoutY(23.0);
-        User.setPrefSize(128, 46);
-        User.setOnAction(event -> UsersWin.setUserWin(User.getText(), MainStage));
-
-        JFXButton downgame = new JFXButton("下载游戏");
-        downgame.setLayoutY(46);
-        downgame.setPrefSize(128, 46);
-        downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
-
-        JFXButton startgame = new JFXButton("选择版本");
-        startgame.setLayoutY(69);
-        startgame.setPrefSize(128, 46);
-        startgame.setOnAction(event -> {
-            GetGamePath path = new GetGamePath();
-            VersionChoose choose = new VersionChoose(path);
-            choose.setWindow(MainStage);
-        });
-
-        JFXButton VersionSetting = new JFXButton("版本设置");
-        VersionSetting.setLayoutY(92);
-        VersionSetting.setPrefSize(128, 46);
-        if (launcher != null) {
-            VersionSetting.setDisable(false);
-            VersionSettingWindows windows = new VersionSettingWindows(launcher);
-            VersionSetting.setOnAction(event -> windows.setWindow(MainStage));
-        } else {
-            VersionSetting.setDisable(true);
-        }
-
+    private static JFXButton getSettingButton(Stage MainStage) {
         JFXButton setting = new JFXButton("设置");
-        setting.setLayoutY(402.0);
         setting.setPrefSize(128, 46);
         setting.setOnMousePressed(event -> {
             if (event.isControlDown()) {
@@ -97,9 +59,47 @@ public class HomeWindow {
                 }
             }
         });
+        return setting;
+    }
+
+    public void setHome(Stage MainStage) {
+        AnchorPane pane = new AnchorPane();
+        WindwosSize windwosSize = new WindwosSize(MainStage);
+        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());
+        VBox Menu = new VBox();
+        Menu.setPrefSize(128, 450);
+        JFXButton home = new JFXButton("首页");
+        home.setPrefSize(128, 46);
+
+        JFXButton User = new JFXButton("修改账户");
+        User.setPrefSize(128, 46);
+        User.setOnAction(event -> UsersWin.setUserWin(User.getText(), MainStage));
+
+        JFXButton downgame = new JFXButton("下载游戏");
+        downgame.setPrefSize(128, 46);
+        downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
+
+        JFXButton startgame = new JFXButton("选择版本");
+        startgame.setLayoutY(69);
+        startgame.setPrefSize(128, 46);
+        startgame.setOnAction(event -> {
+            VersionChoose choose = new VersionChoose(Objects.requireNonNullElseGet(launcher, GetGamePath::new));
+            choose.setWindow(MainStage);
+        });
+
+        JFXButton VersionSetting = new JFXButton("版本设置");
+        VersionSetting.setPrefSize(128, 46);
+        if (launcher != null) {
+            VersionSetting.setDisable(false);
+            VersionSettingWindows windows = new VersionSettingWindows(launcher);
+            VersionSetting.setOnAction(event -> windows.setWindow(MainStage));
+        } else {
+            VersionSetting.setDisable(true);
+        }
+
+        JFXButton setting = getSettingButton(MainStage);
 
         JFXButton github = new JFXButton("GitHub");
-        github.setLayoutY(425);
         github.setPrefSize(128, 46);
         github.setOnAction(event -> {
             try {

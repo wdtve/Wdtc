@@ -1,20 +1,17 @@
 package org.wdt.wdtc.game;
 
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 public class FilePath {
-    private static final String WDTC_CONFIG = Starter.getWdtcConfigFromVM() + "/.wdtc";
+    private static final String WDTC_CONFIG = Starter.getWdtcConfigFromVM() + "/.wdtc/";
     private static final File SETTING_FILE = AboutSetting.GetSettingFile();
 
 
     public static File getMinecraftComSkin() {
-        return new File(System.getProperty("user.home") + "/AppData/Roaming/.minecraft/assets/skins");
+        return new File(System.getProperty("user.home") + "/AppData/Roaming/.minecraft/assets/skins/");
     }
 
     public static File getSettingFile() {
@@ -30,10 +27,8 @@ public class FilePath {
         return new File(getWdtcCache() + "/WdtcGameLauncherScript.bat");
     }
 
-    public static File getAuthlibInjector() throws IOException {
-        String BMCL_AUTHLIB_INJECTOR = "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/";
-        String authlib_injector_url = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR + "/artifact/latest.json")).getString("download_url");
-        return new File(getWdtcImplementationPath() + "/" + authlib_injector_url.substring(authlib_injector_url.lastIndexOf("/") + 1));
+    public static File getAuthlibInjector() {
+        return new File(getWdtcImplementationPath() + "/authlib-injector.jar");
     }
 
     public static File getUsersJson() {
@@ -46,11 +41,11 @@ public class FilePath {
     }
 
     public static File getWdtcCache() {
-        return new File(WDTC_CONFIG + "/cache");
+        return new File(WDTC_CONFIG + "/cache/");
     }
 
     public static File getWdtcImplementationPath() {
-        return new File(WDTC_CONFIG + "/implementation");
+        return new File(WDTC_CONFIG + "/implementation/");
     }
 
 }

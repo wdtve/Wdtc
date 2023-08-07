@@ -4,7 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
+import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
@@ -16,65 +19,68 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricInstallTask extends FabricFileList implements InstallTask {
+public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask {
     private static final Logger logger = WdtcLogger.getLogger(FabricInstallTask.class);
-    private final Launcher launcher;
     private final DownloadSource source;
-    private FabricAPIDownloadTask APIDownloadTask = null;
+
 
 
     public FabricInstallTask(Launcher launcher, String FabricVersionNumber) {
         super(launcher, FabricVersionNumber);
-        this.launcher = launcher;
         this.source = Launcher.getDownloadSource();
 
     }
 
-    public FabricAPIDownloadTask getAPIDownloadTask() {
-        return APIDownloadTask;
-    }
 
-    public void setAPIDownloadTask(FabricAPIDownloadTask APIDownloadTask) {
-        this.APIDownloadTask = APIDownloadTask;
-    }
-
-    public boolean getAPIDownloadTaskNoNull() {
-        return APIDownloadTask != null;
-    }
 
     @Override
     public void execute() throws IOException {
-        GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
-        List<LibraryObject> libraryObjectList = Object.getLibraries();
-        for (String name : getFabricFileName()) {
-            DependencyDownload dependency = new DependencyDownload(name);
+        GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
+        List<LibraryObject> libraryObjectList = VersionJsonObject.getLibraries();
+        JSONObject FabricVersionJsonObject = getFabricVersionJsonObject();
+        JSONArray FabricLibraryList = FabricVersionJsonObject.getJSONArray("libraries");
+        for (int i = 0; i < FabricLibraryList.size(); i++) {
+            JSONObject object = FabricLibraryList.getJSONObject(i);
+            DependencyDownload dependency = new DependencyDownload(object.getString("name"));
             dependency.setDefaultUrl(source.getFabricLibraryUrl());
             dependency.setDownloadPath(launcher.GetGameLibraryPath());
-            libraryObjectList.add(LibraryObject.getLibraryObject(dependency));
+            libraryObjectList.add(LibraryObject.getLibraryObject(dependency, object.getString("url")));
         }
-        Object.setLibraries(libraryObjectList);
-        Object.setMainClass("net.fabricmc.loader.impl.launch.knot.KnotClient");
-        GameVersionJsonObject.Arguments arguments = Object.getArguments();
+        VersionJsonObject.setLibraries(libraryObjectList);
+        VersionJsonObject.setMainClass(FabricVersionJsonObject.getString("mainClass"));
+        GameVersionJsonObject.Arguments arguments = VersionJsonObject.getArguments();
+        JSONObject Arguments = FabricVersionJsonObject.getJSONObject("arguments");
         JsonArray JvmList = arguments.getJvmList();
-        JvmList.add("-DFabricMcEmu=net.minecraft.client.main.Main");
+        JvmList.addAll(Arguments.getJSONArray("jvm").getJsonArrays());
         arguments.setJvmList(JvmList);
-        Object.setArguments(arguments);
-        launcher.PutToVersionJson(Object);
+        JsonArray GameList = arguments.getGameList();
+        GameList.addAll(Arguments.getJSONArray("game").getJsonArrays());
+        arguments.setGameList(GameList);
+        VersionJsonObject.setArguments(arguments);
+        VersionJsonObject.setId(launcher.getVersion() + "-fabric-" + FabricVersionNumber);
+        launcher.PutToVersionJson(VersionJsonObject);
     }
+
 
     @Override
     public void setPatches() throws IOException {
-        writeCacheVersionJson();
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
         ObjectList.add(JSONUtils.getJsonObject(launcher.getVersionJson()));
-        ObjectList.add(JSONUtils.getJsonObject(getCacheVersionJson()));
+        ObjectList.add(JSONUtils.getJsonObject(getFabricVersionJson()));
         Object.setJsonObject(ObjectList);
         launcher.PutToVersionJson(Object);
     }
 
     @Override
-    public void AfterDownloadTask() {
+    public void AfterDownloadTask() throws IOException {
+        if (getAPIDownloadTaskNoNull()) {
+            getAPIDownloadTask().DownloadFabricAPI();
+        }
+    }
 
+    @Override
+    public void BeforInstallTask() {
+        DownloadTask.StartDownloadTask(String.format(getFabricVersionFileUrl(), launcher.getVersion(), FabricVersionNumber), getFabricVersionJson());
     }
 }

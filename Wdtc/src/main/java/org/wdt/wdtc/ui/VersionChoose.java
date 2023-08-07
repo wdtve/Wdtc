@@ -34,8 +34,10 @@ public class VersionChoose {
         VBox VersionList = new VBox();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
-            HomeWindow window = new HomeWindow(null);
-            window.setHome(MainStage);
+            if (path instanceof Launcher launcher) {
+                HomeWindow window = new HomeWindow(launcher);
+                window.setHome(MainStage);
+            }
         });
         List<Launcher> GameVersionList = DownloadedGameVersion.getGameVersionList(path);
         if (GameVersionList != null) {

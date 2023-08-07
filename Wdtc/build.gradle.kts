@@ -21,6 +21,16 @@ tasks.withType<ShadowJar> {
         put("Main-Class", "org.wdt.wdtc.WdtcMain")
     }
 }
+val Version = "0.0.1.2"
+tasks.create<JavaExec>("run") {
+    dependsOn(tasks.jar)
+    group = "application"
+    version = Version
+    mainClass.set("org.wdt.wdtc.WdtcMain")
+    jvmArgs = listOf("-Dwdtc.config.path=.", "-Ddownload.forge.true", "-Dlauncher.version=$Version")
+    classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
+    workingDir = rootProject.rootDir
+}
 
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -31,21 +41,15 @@ dependencies {
     implementation(project(":GsonOrFastJson"))
     implementation("commons-io:commons-io:2.13.0")
     implementation("log4j:log4j:1.2.17")
-    implementation("com.github.axet:wget:1.7.0")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.atlassian.commonmark:commonmark:0.17.0")
     implementation("com.jfoenix:jfoenix:9.0.10")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
 }
 
-tasks.create<JavaExec>("run") {
-    dependsOn(tasks.jar)
-    group = "application"
-    mainClass.set("org.wdt.wdtc.WdtcMain")
-    jvmArgs = listOf("-Dwdtc.config.path=.", "-Ddownload.forge.true", "-Dlauncher.version=0.0.1")
-    classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
-    workingDir = rootProject.rootDir
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 

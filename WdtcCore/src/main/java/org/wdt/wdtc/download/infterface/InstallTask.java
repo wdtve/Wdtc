@@ -7,5 +7,7 @@ public interface InstallTask {
 
     void setPatches() throws IOException;
 
-    void AfterDownloadTask();
+    void AfterDownloadTask() throws IOException;
+
+    void BeforInstallTask() throws IOException;
 }

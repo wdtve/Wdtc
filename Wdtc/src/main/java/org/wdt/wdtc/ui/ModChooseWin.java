@@ -141,7 +141,7 @@ public class ModChooseWin {
         CancelFabric.setOnAction(event -> {
             try {
                 launcher.setKind(ModList.KindOfMod.Original);
-                launcher.getFabricModDownloadTask().setAPIDownloadTask(null);
+                launcher.getFabricModInstallInfo().setAPIDownloadTask(null);
                 DownloadForge.setDisable(false);
                 DownloadFabricAPI.setDisable(true);
                 Forge.setText(Tips.ForgeNo);
@@ -162,7 +162,7 @@ public class ModChooseWin {
         });
         CancelFabricAPI.setOnAction(event -> {
             try {
-                launcher.getFabricModDownloadTask().setAPIDownloadTask(null);
+                launcher.getFabricModInstallInfo().setAPIDownloadTask(null);
                 FabricAPI.setText(Tips.FabricAPINo);
             } catch (NullPointerException e) {
                 logmaker.warn("warn:", e);
@@ -186,7 +186,7 @@ public class ModChooseWin {
         });
 
         if (ModList.GameModIsForge(launcher)) {
-            Forge.setText("Froge : " + launcher.getForgeDownloadTask().getForgeVersionNumber());
+            Forge.setText("Froge : " + launcher.getForgeDownloadInfo().getForgeVersionNumber());
             Fabric.setText("Fabric : 与Forge不兼容");
             DownloadFabricAPI.setDisable(true);
             DownloadFabric.setDisable(true);
@@ -195,12 +195,12 @@ public class ModChooseWin {
         }
 
         if (ModList.GameModIsFabric(launcher)) {
-            Fabric.setText("Fabric : " + launcher.getFabricModDownloadTask().getFabricVersionNumber());
+            Fabric.setText("Fabric : " + launcher.getFabricModInstallInfo().getFabricVersionNumber());
             Forge.setText("Forge : 与Fabric不兼容");
             DownloadFabricAPI.setDisable(false);
             DownloadForge.setDisable(true);
-            if (launcher.getFabricModDownloadTask().getAPIDownloadTaskNoNull()) {
-                FabricAPI.setText(launcher.getFabricModDownloadTask().getAPIDownloadTask().getFabricAPIVersionNumber());
+            if (launcher.getFabricModInstallInfo().getAPIDownloadTaskNoNull()) {
+                FabricAPI.setText(launcher.getFabricModInstallInfo().getAPIDownloadTask().getFabricAPIVersionNumber());
             }
         } else {
             Fabric.setText(Tips.FabricNo);
@@ -208,7 +208,7 @@ public class ModChooseWin {
         }
 
         if (ModList.GameModIsQuilt(launcher)) {
-            Quilt.setText("Quilt : " + launcher.getQuiltModDownloadTask().getQuiltVersionNumber());
+            Quilt.setText("Quilt : " + launcher.getQuiltModDownloadInfo().getQuiltVersionNumber());
             Forge.setText("Forge : 与Quilt不兼容");
             Fabric.setText("Fabric :  与Quilt不兼容");
             DownloadFabric.setDisable(true);

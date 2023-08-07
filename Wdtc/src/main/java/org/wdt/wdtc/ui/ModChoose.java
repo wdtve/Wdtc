@@ -10,12 +10,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.fabric.FabricAPIDownloadTask;
 import org.wdt.wdtc.download.fabric.FabricAPIVersionList;
-import org.wdt.wdtc.download.fabric.FabricInstallTask;
+import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.download.fabric.FabricVersionList;
-import org.wdt.wdtc.download.forge.ForgeDownloadTask;
+import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.forge.ForgeVersionList;
 import org.wdt.wdtc.download.infterface.VersionList;
-import org.wdt.wdtc.download.quilt.QuiltDownloadTask;
+import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.download.quilt.QuiltVersionList;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModList;
@@ -81,19 +81,17 @@ public class ModChoose {
 
     }
 
-    private JFXButton getVersionButton(String s, VBox ButtonList) {
-        JFXButton VersionButton = new JFXButton(s);
+    private JFXButton getVersionButton(String ModVersion, VBox ButtonList) {
+        JFXButton VersionButton = new JFXButton(ModVersion);
         VersionButton.setStyle("-fx-border-color: #000000");
         VersionButton.setPrefWidth(600.0);
         VersionButton.setOnAction(event -> {
-            if (kind == ModList.KindOfMod.FORGE) {
-                launcher.setForgeModDownloadTask(new ForgeDownloadTask(launcher, s));
-            } else if (kind == ModList.KindOfMod.FABRIC) {
-                launcher.setFabricModDownloadTask(new FabricInstallTask(launcher, s));
-            } else if (kind == ModList.KindOfMod.FABRICAPI) {
-                launcher.getFabricModDownloadTask().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, s));
-            } else if (kind == ModList.KindOfMod.QUILT) {
-                launcher.setQuiltModDownloadTask(new QuiltDownloadTask(launcher, s));
+            switch (kind) {
+                case FORGE -> launcher.setForgeModDownloadInfo(new ForgeDownloadInfo(launcher, ModVersion));
+                case FABRIC -> launcher.setFabricModInstallInfo(new FabricDonwloadInfo(launcher, ModVersion));
+                case QUILT -> launcher.setQuiltModDownloadInfo(new QuiltInstallTask(launcher, ModVersion));
+                case FABRICAPI ->
+                        launcher.getFabricModInstallInfo().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, ModVersion));
             }
             ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
             Choose.setChooseWin();

@@ -1,7 +1,6 @@
 package org.wdt.wdtc.download;
 
 
-import com.github.axet.wget.WGet;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
@@ -38,7 +37,7 @@ public class DownloadTask extends GameLibraryPathAndUrl {
 
     public static void StartDownloadTask(String url, File file) {
         try {
-            StartWGetDownloadTask(new URL(url), file);
+            StartDownloadTask(new URL(url), file);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -65,44 +64,6 @@ public class DownloadTask extends GameLibraryPathAndUrl {
         }
     }
 
-    public static void StartWGetDownloadTask(URL url, File file) {
-        WGet wGet = new WGet(url, file);
-        try {
-            logmaker.info("* Task Start: " + url);
-            if (PlatformUtils.FileExistenceAndSize(file)) {
-                wGet.download();
-            }
-            logmaker.info("* Task Finish: " + file);
-        } catch (RuntimeException | IOException exception) {
-            logmaker.warn("* Task: " + url, exception);
-            try {
-                TimeUnit.SECONDS.sleep(5);
-                logmaker.info("* Task: " + url + " Start retry");
-                wGet.download();
-                logmaker.info("* Task: " + file + " Successfully retried");
-            } catch (InterruptedException | RuntimeException e) {
-                if (file.delete()) {
-                    logmaker.error("* Task: " + url + " Error", e);
-                }
-            }
-        }
-    }
-
-    public static void StartWGetDownloadTask(String url, File file) {
-        try {
-            StartDownloadTask(new URL(url), file);
-        } catch (MalformedURLException e) {
-            logmaker.error("* Error:", e);
-        }
-    }
-
-    public static void StartWGetDownloadTask(String url, String file) {
-        try {
-            StartDownloadTask(new URL(url), new File(file));
-        } catch (MalformedURLException e) {
-            logmaker.error("* Error:", e);
-        }
-    }
 
     public Thread StartDownloadHashTask(String hash, int Filesize, SpeedOfProgress downLatch) {
         try {
