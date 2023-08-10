@@ -10,17 +10,15 @@ import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.JavaHomePath;
-import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.*;
 
 import java.io.IOException;
 
-public class WdtcMain {
+public class WdtcMain extends JavaFxUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(WdtcMain.class);
 
     public static void main(String[] args) throws Exception {
+        CkeckJavaFX();
         logmaker.info("===== Wdtc - " + Starter.getLauncherVersion() + " =====");
         logmaker.info("* Java Version:" + System.getProperty("java.version"));
         logmaker.info("* Java VM Version:" + System.getProperty("java.vm.name"));

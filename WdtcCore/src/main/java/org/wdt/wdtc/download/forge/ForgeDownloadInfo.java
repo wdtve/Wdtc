@@ -5,7 +5,9 @@ import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
+import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
+import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.ExtractFile;
@@ -13,7 +15,7 @@ import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
-public class ForgeDownloadInfo {
+public class ForgeDownloadInfo implements DownloadInfo {
     public static final Logger logmaker = WdtcLogger.getLogger(ForgeDownloadInfo.class);
     public final String ForgeVersionNumber;
     public final Launcher launcher;
@@ -84,11 +86,13 @@ public class ForgeDownloadInfo {
     }
 
 
-
-
-    public ForgeInstallTask getForgeInstallTask() {
-        return new ForgeInstallTask(launcher, ForgeVersionNumber);
+    @Override
+    public String getModVersion() {
+        return ForgeVersionNumber;
     }
 
-
+    @Override
+    public InstallTask getModInstallTask() {
+        return new ForgeInstallTask(launcher, ForgeVersionNumber);
+    }
 }

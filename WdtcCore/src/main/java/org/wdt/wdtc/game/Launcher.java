@@ -26,7 +26,7 @@ public class Launcher extends Version {
     private String Gameattribute;
     private String Jvmattribute;
     private FabricDonwloadInfo FabricModInstallInfo;
-    private ModList.KindOfMod kind = ModList.KindOfMod.Original;
+    private ModUtils.KindOfMod kind = ModUtils.KindOfMod.Original;
     private ForgeDownloadInfo ForgeModDownloadInfo;
     private QuiltDownloadInfo QuiltModDownloadInfo;
 
@@ -44,7 +44,7 @@ public class Launcher extends Version {
     }
 
     public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
-        kind = ModList.KindOfMod.QUILT;
+        kind = ModUtils.KindOfMod.QUILT;
         QuiltModDownloadInfo = quiltModDownloadInfo;
     }
 
@@ -53,15 +53,15 @@ public class Launcher extends Version {
     }
 
     public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
-        kind = ModList.KindOfMod.FABRIC;
+        kind = ModUtils.KindOfMod.FABRIC;
         this.FabricModInstallInfo = fabricModInstallInfo;
     }
 
-    public ModList.KindOfMod getKind() {
+    public ModUtils.KindOfMod getKind() {
         return kind;
     }
 
-    public void setKind(ModList.KindOfMod kind) {
+    public void setKind(ModUtils.KindOfMod kind) {
         this.kind = kind;
     }
 
@@ -70,7 +70,7 @@ public class Launcher extends Version {
     }
 
     public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
-        kind = ModList.KindOfMod.FORGE;
+        kind = ModUtils.KindOfMod.FORGE;
         ForgeModDownloadInfo = forgeModDownloadInfo;
     }
 
@@ -125,7 +125,7 @@ public class Launcher extends Version {
     }
 
     public void CleanKind() {
-        kind = ModList.KindOfMod.Original;
+        kind = ModUtils.KindOfMod.Original;
     }
 
     public boolean Console() {

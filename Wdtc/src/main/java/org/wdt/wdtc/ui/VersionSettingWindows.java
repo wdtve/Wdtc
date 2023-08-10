@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -14,7 +16,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.SelectGameVersion;
+import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.JavaHomePath;
@@ -25,21 +29,28 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.File;
 import java.io.IOException;
 
+import static java.util.Objects.requireNonNull;
+
 
 public class VersionSettingWindows extends AboutSetting {
     private static final double layoutX = 10;
     private static final Logger logmaker = WdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
     private final DefaultGameConfig config;
+    private final WindwosSize size;
+    private final Stage MainStage;
 
-    public VersionSettingWindows(Launcher launcher) {
+    public VersionSettingWindows(Launcher launcher, Stage MainStage) {
         this.launcher = launcher;
         this.config = launcher.getGameConfig().getGameConfig();
+        this.size = new WindwosSize(MainStage);
+        this.MainStage = MainStage;
     }
 
-    public void setWindow(Stage MainStage) {
+    public void setWindow() {
         HomeWindow window = new HomeWindow(launcher);
-        WindwosSize size = new WindwosSize(MainStage);
+
+
         AnchorPane ParentPane = new AnchorPane();
         ScrollPane SonScrollPane = new ScrollPane();
         SonScrollPane.setLayoutX(105);
@@ -58,6 +69,66 @@ public class VersionSettingWindows extends AboutSetting {
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> window.setHome(MainStage));
 
+        JFXButton GameSetting = new JFXButton("游戏设置");
+        GameSetting.setPrefSize(105, 30);
+        AnchorPane.setTopAnchor(GameSetting, 50.0);
+        AnchorPane.setLeftAnchor(GameSetting, 0.0);
+        JFXButton AutoDownload = new JFXButton("自动下载");
+        AutoDownload.setPrefSize(105, 30);
+        AnchorPane.setTopAnchor(AutoDownload, 80.0);
+        AnchorPane.setLeftAnchor(AutoDownload, 0.0);
+        GameSetting.setDisable(true);
+        setVersionSettingPane(SonScrollPane);
+        GameSetting.setOnAction(event -> {
+            AutoDownload.setDisable(false);
+            GameSetting.setDisable(true);
+            setVersionSettingPane(SonScrollPane);
+        });
+        AutoDownload.setOnAction(event -> {
+            GameSetting.setDisable(false);
+            AutoDownload.setDisable(true);
+            setAutoDownload(SonScrollPane);
+        });
+        JFXButton completion = new JFXButton("补全游戏文件");
+        completion.setLayoutY(395);
+        completion.setPrefSize(105, 30);
+        AnchorPane.setBottomAnchor(completion, 30.0);
+        AnchorPane.setLeftAnchor(completion, 0.0);
+        JFXButton delete = new JFXButton("删除该版本");
+        delete.setLayoutY(425);
+        delete.setPrefSize(105, 30);
+        AnchorPane.setBottomAnchor(delete, 0.0);
+        AnchorPane.setLeftAnchor(delete, 0.0);
+        ParentPane.getChildren().addAll(SonScrollPane, completion, delete, back, GameSetting, AutoDownload);
+        Consoler.setCss("BlackBorder", back);
+        ParentPane.setBackground(Consoler.getBackground());
+        Consoler.setStylesheets(ParentPane);
+        MainStage.setScene(new Scene(ParentPane));
+        Consoler.setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload);
+
+
+        delete.setOnAction(event -> {
+            try {
+                FileUtils.deleteDirectory(new File(launcher.getVersionPath()));
+                HomeWindow homeWindow = new HomeWindow(null);
+                homeWindow.setHome(MainStage);
+                JsonObject object = SettingObject().getJsonObjects();
+                object.remove("PreferredVersion");
+                JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
+                logmaker.info("* " + launcher.getVersion() + " Deleted");
+            } catch (IOException e) {
+                ErrorWin.setErrorWin(e);
+            }
+        });
+        completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
+            SelectGameVersion version = new SelectGameVersion(launcher, true);
+            version.DownloadGame();
+            logmaker.info("* " + launcher.getVersion() + " downloaded");
+        }));
+    }
+
+    private void setVersionSettingPane(ScrollPane scrollPane) {
+        AnchorPane pane = new AnchorPane();
         double line = 35;
         Label tips = new Label("JDK地址:");
         tips.setLayoutX(layoutX);
@@ -115,24 +186,7 @@ public class VersionSettingWindows extends AboutSetting {
         pane.getChildren().add(apply);
         Consoler.setStylesheets(pane);
         Consoler.setCss("BlackBorder", choose, apply);
-        SonScrollPane.setContent(pane);
-        JFXButton completion = new JFXButton("补全游戏文件");
-        completion.setLayoutY(395);
-        completion.setPrefSize(105, 30);
-        AnchorPane.setBottomAnchor(completion, 30.0);
-        AnchorPane.setLeftAnchor(completion, 0.0);
-        JFXButton delete = new JFXButton("删除该版本");
-        delete.setLayoutY(425);
-        delete.setPrefSize(105, 30);
-        AnchorPane.setBottomAnchor(delete, 0.0);
-        AnchorPane.setLeftAnchor(delete, 0.0);
-        ParentPane.getChildren().addAll(SonScrollPane, completion, delete, back);
-        Consoler.setCss("BlackBorder", back);
-        ParentPane.setBackground(Consoler.getBackground());
-        Consoler.setStylesheets(ParentPane);
-        MainStage.setScene(new Scene(ParentPane));
-        Consoler.setCss("BackGroundWriteButton", delete, completion);
-
+        scrollPane.setContent(pane);
         JavaPath.setText(config.getJavaPath());
         InputWidth.setText(String.valueOf(config.getWindowWidth()));
         InputHeight.setText(String.valueOf(config.getWindowHeight()));
@@ -166,26 +220,60 @@ public class VersionSettingWindows extends AboutSetting {
             } catch (NumberFormatException e) {
                 tips6.setTextFill(Color.RED);
                 tips6.setText("请输入正确配置");
-                logmaker.warn("* 配置无效");
+                logmaker.warn("* 配置无效", e);
             }
         });
-        delete.setOnAction(event -> {
-            try {
-                FileUtils.deleteDirectory(new File(launcher.getVersionPath()));
-                HomeWindow homeWindow = new HomeWindow(null);
-                homeWindow.setHome(MainStage);
-                JsonObject object = SettingObject().getJsonObjects();
-                object.remove("PreferredVersion");
-                JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
-                logmaker.info("* " + launcher.getVersion() + " Deleted");
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+    }
+
+    private void setAutoDownload(ScrollPane scrollPane) {
+        AnchorPane ModList = new AnchorPane();
+        double i = 0;
+        for (ModUtils.KindOfMod kind : ModUtils.KindOfMod.values()) {
+            AnchorPane ModPane = new AnchorPane();
+            AnchorPane.setTopAnchor(ModPane, 44 * i);
+            ModPane.setPrefHeight(44);
+            ModPane.setPrefWidth(510);
+            setModPane(kind, ModPane);
+            size.ModifyWindwosSize(ModList, ModPane);
+            i++;
+        }
+        Consoler.setStylesheets(ModList);
+        scrollPane.setContent(ModList);
+    }
+
+    private void setModPane(ModUtils.KindOfMod kind, AnchorPane ModPane) {
+        ImageView ModIcon = new ImageView();
+        switch (kind) {
+            case FORGE ->
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindows.class.getResourceAsStream("/forge.png"))));
+            case FABRIC ->
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindows.class.getResourceAsStream("/fabric.png"))));
+            case QUILT ->
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindows.class.getResourceAsStream("/quilt.png"))));
+            case Original ->
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindows.class.getResourceAsStream("/ico.jpg"))));
+        }
+        AnchorPane.setTopAnchor(ModIcon, 4.0);
+        AnchorPane.setLeftAnchor(ModIcon, 10.0);
+        AnchorPane.setBottomAnchor(ModIcon, 4.0);
+        Label ModVersion = new Label();
+        if (launcher.getKind() == kind) {
+            DownloadInfo info = ModUtils.getVersionModInstall(launcher, kind);
+            if (info != null) {
+                ModVersion.setText(kind + " : " + info.getModVersion());
+            } else {
+                ModVersion.setText(kind + " : 不安装");
             }
-        });
-        completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
-            SelectGameVersion version = new SelectGameVersion(launcher, true);
-            version.DownloadGame();
-            logmaker.info("* " + launcher.getVersion() + " downloaded");
-        }));
+        } else {
+            ModVersion.setText(kind + " : 不安装");
+        }
+        AnchorPane.setBottomAnchor(ModVersion, 15.0);
+        AnchorPane.setLeftAnchor(ModVersion, 60.0);
+        AnchorPane.setTopAnchor(ModVersion, 15.0);
+        JFXButton Download = new JFXButton("-->");
+        AnchorPane.setTopAnchor(Download, 11.0);
+        AnchorPane.setRightAnchor(Download, 20.0);
+        AnchorPane.setBottomAnchor(Download, 11.0);
+        ModPane.getChildren().addAll(ModIcon, ModVersion, Download);
     }
 }

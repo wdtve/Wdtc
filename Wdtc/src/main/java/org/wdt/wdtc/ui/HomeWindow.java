@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.launch.LauncherGame;
 import org.wdt.wdtc.platform.AboutSetting;
@@ -33,7 +33,7 @@ public class HomeWindow {
     public HomeWindow() {
         AboutSetting.Setting setting = AboutSetting.getSetting();
         if (setting.getPreferredVersion() != null) {
-            this.launcher = ModList.getModTask(new Launcher(setting.getPreferredVersion()));
+            this.launcher = ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
         } else {
             this.launcher = null;
         }
@@ -91,8 +91,8 @@ public class HomeWindow {
         VersionSetting.setPrefSize(128, 46);
         if (launcher != null) {
             VersionSetting.setDisable(false);
-            VersionSettingWindows windows = new VersionSettingWindows(launcher);
-            VersionSetting.setOnAction(event -> windows.setWindow(MainStage));
+            VersionSettingWindows windows = new VersionSettingWindows(launcher, MainStage);
+            VersionSetting.setOnAction(event -> windows.setWindow());
         } else {
             VersionSetting.setDisable(true);
         }
@@ -113,8 +113,8 @@ public class HomeWindow {
         name.setLayoutX(17.0);
         name.setLayoutY(161.0);
         Label readme = new Label("一个简单到不能再简单的我的世界Java版启动器");
-        readme.setLayoutX(172.0);
-        readme.setLayoutY(166.0);
+        readme.setLayoutX(180.0);
+        readme.setLayoutY(180.0);
         JFXButton LaunchGameButton = new JFXButton();
         if (launcher != null) {
             LaunchGameButton.setText("启动游戏\n" + launcher.getVersion());

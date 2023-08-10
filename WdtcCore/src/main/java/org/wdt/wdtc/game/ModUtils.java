@@ -3,6 +3,8 @@ package org.wdt.wdtc.game;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
+import org.wdt.wdtc.download.infterface.DownloadInfo;
+import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -10,8 +12,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ModList {
-    private static final Logger logmaker = WdtcLogger.getLogger(ModList.class);
+public class ModUtils {
+    private static final Logger logmaker = WdtcLogger.getLogger(ModUtils.class);
 
     public static Launcher getModTask(Launcher launcher) {
         try {
@@ -34,7 +36,6 @@ public class ModList {
     }
 
 
-
     public static boolean GameModIsForge(Launcher launcher) {
         return launcher.getKind() == KindOfMod.FORGE;
     }
@@ -47,12 +48,41 @@ public class ModList {
         return launcher.getKind() == KindOfMod.QUILT;
     }
 
+    public static DownloadInfo getModDownloadInfo(Launcher launcher) {
+        if (GameModIsFabric(launcher)) {
+            return launcher.getFabricModInstallInfo();
+        } else if (GameModIsForge(launcher)) {
+            return launcher.getForgeDownloadInfo();
+        } else if (GameModIsQuilt(launcher)) {
+            return launcher.getQuiltModDownloadInfo();
+        } else {
+            return null;
+        }
+    }
+
+    public static DownloadInfo getVersionModInstall(Launcher launcher, KindOfMod kind) {
+        if (kind == KindOfMod.QUILT) {
+            return launcher.getQuiltModDownloadInfo();
+        } else if (kind == KindOfMod.FORGE) {
+            return launcher.getForgeDownloadInfo();
+        } else if (kind == KindOfMod.FABRIC) {
+            return launcher.getFabricModInstallInfo();
+        } else {
+            return null;
+        }
+    }
+
+    public InstallTask getModInstallTask(Launcher launcher) {
+        DownloadInfo info = getModDownloadInfo(launcher);
+        if (info != null) {
+            return info.getModInstallTask();
+        } else {
+            return null;
+        }
+    }
+
     public enum KindOfMod {
-        Original,
-        FABRIC,
-        FABRICAPI,
-        FORGE,
-        QUILT
+        Original, FABRIC, FABRICAPI, FORGE, QUILT
     }
 
 }

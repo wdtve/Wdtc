@@ -5,7 +5,8 @@ plugins {
 
 
 javafx {
-    version = "19.0.2.1"
+    version = "17.0.6"
+    setPlatform("windows")
     modules("javafx.controls", "javafx.fxml")
 }
 

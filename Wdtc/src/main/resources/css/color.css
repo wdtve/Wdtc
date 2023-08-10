@@ -2,6 +2,8 @@
     -fx-text-fill: #231f20;
     -fx-border-color: #231f20;
     -fx-font-family: "Microsoft YaHei UI";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
 
 .radio-button {

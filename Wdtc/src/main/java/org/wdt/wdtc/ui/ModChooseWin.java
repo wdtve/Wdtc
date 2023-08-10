@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -116,14 +116,14 @@ public class ModChooseWin {
 
         DownloadForge.setOnAction(event -> {
             try {
-                ModChoose Choose = new ModChoose(ModList.KindOfMod.FORGE, MainStage, launcher);
+                ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FORGE, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
             }
         });
         CancelForge.setOnAction(event -> {
-            launcher.setKind(ModList.KindOfMod.Original);
+            launcher.setKind(ModUtils.KindOfMod.Original);
             DownloadFabricAPI.setDisable(false);
             DownloadFabric.setDisable(false);
             Forge.setText(Tips.ForgeNo);
@@ -132,7 +132,7 @@ public class ModChooseWin {
 
         DownloadFabric.setOnAction(event -> {
             try {
-                ModChoose Choose = new ModChoose(ModList.KindOfMod.FABRIC, MainStage, launcher);
+                ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FABRIC, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -140,7 +140,7 @@ public class ModChooseWin {
         });
         CancelFabric.setOnAction(event -> {
             try {
-                launcher.setKind(ModList.KindOfMod.Original);
+                launcher.setKind(ModUtils.KindOfMod.Original);
                 launcher.getFabricModInstallInfo().setAPIDownloadTask(null);
                 DownloadForge.setDisable(false);
                 DownloadFabricAPI.setDisable(true);
@@ -154,7 +154,7 @@ public class ModChooseWin {
 
         DownloadFabricAPI.setOnAction(event -> {
             try {
-                ModChoose Choose = new ModChoose(ModList.KindOfMod.FABRICAPI, MainStage, launcher);
+                ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FABRICAPI, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -171,7 +171,7 @@ public class ModChooseWin {
 
         DownloadQuilt.setOnAction(event -> {
             try {
-                ModChoose Choose = new ModChoose(ModList.KindOfMod.QUILT, MainStage, launcher);
+                ModChoose Choose = new ModChoose(ModUtils.KindOfMod.QUILT, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
                 ErrorWin.setErrorWin(e);
@@ -185,7 +185,7 @@ public class ModChooseWin {
             DownloadFabric.setDisable(false);
         });
 
-        if (ModList.GameModIsForge(launcher)) {
+        if (ModUtils.GameModIsForge(launcher)) {
             Forge.setText("Froge : " + launcher.getForgeDownloadInfo().getForgeVersionNumber());
             Fabric.setText("Fabric : 与Forge不兼容");
             DownloadFabricAPI.setDisable(true);
@@ -194,7 +194,7 @@ public class ModChooseWin {
             Forge.setText(Tips.ForgeNo);
         }
 
-        if (ModList.GameModIsFabric(launcher)) {
+        if (ModUtils.GameModIsFabric(launcher)) {
             Fabric.setText("Fabric : " + launcher.getFabricModInstallInfo().getFabricVersionNumber());
             Forge.setText("Forge : 与Fabric不兼容");
             DownloadFabricAPI.setDisable(false);
@@ -207,7 +207,7 @@ public class ModChooseWin {
             DownloadFabricAPI.setDisable(true);
         }
 
-        if (ModList.GameModIsQuilt(launcher)) {
+        if (ModUtils.GameModIsQuilt(launcher)) {
             Quilt.setText("Quilt : " + launcher.getQuiltModDownloadInfo().getQuiltVersionNumber());
             Forge.setText("Forge : 与Quilt不兼容");
             Fabric.setText("Fabric :  与Quilt不兼容");

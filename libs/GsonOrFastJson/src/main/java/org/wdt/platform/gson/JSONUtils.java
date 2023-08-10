@@ -1,5 +1,6 @@
 package org.wdt.platform.gson;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 
@@ -42,4 +43,21 @@ public class JSONUtils extends JSON {
     public static void ObjectToJsonFile(String JsonFilePath, Object object) {
         ObjectToJsonFile(new File(JsonFilePath), object);
     }
+
+    public static JsonArray getJsonArray(File JsonFile) throws IOException {
+        return parseJsonArray(FileUtils.readFileToString(JsonFile, "UTF-8"));
+    }
+
+    public static JsonArray getJsonArray(String JsonFilePath) throws IOException {
+        return getJsonArray(new File(JsonFilePath));
+    }
+
+    public static JSONArray getJSONArray(File JsonFile) throws IOException {
+        return new JSONArray(getJsonArray(JsonFile));
+    }
+
+    public static JSONArray getJSONArray(String JsonFilePath) throws IOException {
+        return new JSONArray(getJsonArray(JsonFilePath));
+    }
+
 }

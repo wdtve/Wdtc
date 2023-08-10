@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 
@@ -47,9 +47,9 @@ public class VersionChoose {
                 RadioButton VersionId = new RadioButton(GameVersion.getVersion());
                 VersionId.setLayoutX(14);
                 VersionId.setLayoutY(12);
-                ModList.getModTask(GameVersion);
+                ModUtils.getModTask(GameVersion);
                 Label ModKind = new Label();
-                if (GameVersion.getKind() != ModList.KindOfMod.Original) {
+                if (GameVersion.getKind() != ModUtils.KindOfMod.Original) {
                     ModKind.setText("Mod : " + GameVersion.getKind().toString());
                 } else {
                     ModKind.setText("Mod : 无");

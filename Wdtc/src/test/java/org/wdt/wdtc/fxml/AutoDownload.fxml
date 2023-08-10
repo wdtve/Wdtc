@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="489.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17">
+    <ScrollPane layoutX="105.0" layoutY="52.0" prefHeight="438.0" prefWidth="512.0">
+        <VBox prefHeight="435.0" prefWidth="510.0">
+            <AnchorPane prefHeight="44.0" prefWidth="510.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                        AnchorPane.topAnchor="0.0">
+                <ImageView fitHeight="36.0" fitWidth="40.0" layoutX="14.0" layoutY="4.0" pickOnBounds="true"
+                           preserveRatio="true" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="10.0"
+                           AnchorPane.topAnchor="4.0">
+                    <Image url="@../../../../../../main/resources/forge.png"/>
+                </ImageView>
+                <Label layoutX="57.0" layoutY="15.0" text="Forge : " AnchorPane.bottomAnchor="15.0"
+                       AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="15.0"/>
+                <Button layoutX="434.0" layoutY="11.0" mnemonicParsing="false" text="Button"
+                        AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="11.0"/>
+            </AnchorPane>
+        </VBox>
+    </ScrollPane>
+    <Button mnemonicParsing="false" text="返回"/>
+    <Button layoutY="460.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="删除该版本"/>
+    <Button layoutY="430.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="补全游戏文件"/>
+    <Button layoutY="55.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
+    <Button layoutY="85.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
+</Pane>

@@ -2,13 +2,15 @@ package org.wdt.wdtc.download.quilt;
 
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.wdtc.download.infterface.DownloadInfo;
+import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 
 import java.io.File;
 import java.io.IOException;
 
-public class QuiltDownloadInfo {
+public class QuiltDownloadInfo implements DownloadInfo {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json";
 
     public final Launcher launcher;
@@ -35,7 +37,13 @@ public class QuiltDownloadInfo {
         return JSONUtils.getJSONObject(getQuiltVersionJson());
     }
 
-    public QuiltInstallTask getQuiltInstallTask() {
+    @Override
+    public String getModVersion() {
+        return QuiltVersionNumber;
+    }
+
+    @Override
+    public InstallTask getModInstallTask() {
         return new QuiltInstallTask(launcher, QuiltVersionNumber);
     }
 }

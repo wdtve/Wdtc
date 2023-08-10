@@ -18,18 +18,18 @@ import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.download.quilt.QuiltVersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.game.ModUtils;
 
 import java.io.IOException;
 
 public class ModChoose {
-    private final ModList.KindOfMod kind;
+    private final ModUtils.KindOfMod kind;
 
     private final Stage MainStage;
     private final WindwosSize size;
     private final Launcher launcher;
 
-    public ModChoose(ModList.KindOfMod kind, Stage MainStage, Launcher launcher) {
+    public ModChoose(ModUtils.KindOfMod kind, Stage MainStage, Launcher launcher) {
         this.kind = kind;
         this.MainStage = MainStage;
         this.launcher = launcher;
@@ -37,11 +37,11 @@ public class ModChoose {
     }
 
     public VersionList ModVersionList() throws IOException {
-        if (kind == ModList.KindOfMod.FORGE) {
+        if (kind == ModUtils.KindOfMod.FORGE) {
             return new ForgeVersionList(launcher);
-        } else if (kind == ModList.KindOfMod.FABRICAPI) {
+        } else if (kind == ModUtils.KindOfMod.FABRICAPI) {
             return new FabricAPIVersionList(launcher);
-        } else if (kind == ModList.KindOfMod.QUILT) {
+        } else if (kind == ModUtils.KindOfMod.QUILT) {
             return new QuiltVersionList(launcher);
         } else {
             return new FabricVersionList();

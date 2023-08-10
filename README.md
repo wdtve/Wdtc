@@ -4,15 +4,15 @@
 
 ---
 
-## JDK:
-
-### [`Zulu-20`](https://www.azul.com/downloads/)`JDK FX`或[`Liberica-20`](https://bell-sw.com/pages/downloads/)`Full JDK`
-
 ## IDE:
 
 ### IntelliJ IDEA
 
 - `Gradle`
+
+### JDK:
+
+#### `JDK 17`
 
 ---
 
@@ -31,9 +31,3 @@
 
 ### `GPL-2.0`
 
----
-
-### 其他:
-
-#### JavaFx警报:
-- 无伤大雅不用管它

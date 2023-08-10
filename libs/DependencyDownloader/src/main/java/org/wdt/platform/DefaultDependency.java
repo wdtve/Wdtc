@@ -70,24 +70,24 @@ public class DefaultDependency {
         Pattern p = Pattern.compile("@");
         Matcher m = p.matcher(getVersion());
         //net.minecraft:client:1.19.4-20230314.122934:slim net\minecraft\client\1.19.4-20230314.122934\client-1.19.4-20230314.122934-srg.jar
+        String Artifactid = getArtifactId().replaceAll("\\.", "-");
         if (Objects.isNull(spaec)) {
             if (m.find()) {
                 return getGroupId().replaceAll("\\.", "/") + "/" +
-                        getArtifactId() + "/" + getVersion().substring(0, getVersion().indexOf("@"))
-                        + "/" + getArtifactId() + "-" + getVersion().replaceAll("@", ".");
+                        Artifactid + "/" + getVersion().substring(0, getVersion().indexOf("@"))
+                        + "/" + Artifactid + "-" + getVersion().replaceAll("@", ".");
             } else {
-
                 return getGroupId().replaceAll("\\.", "/") + "/"
-                        + getArtifactId() + "/" + getVersion() + "/" + getArtifactId() + "-" + getVersion() + ".jar";
+                        + Artifactid + "/" + getVersion() + "/" + Artifactid + "-" + getVersion() + ".jar";
             }
         } else {
             if (m.find()) {
                 return getGroupId().replaceAll("\\.", "/") + "/" + getArtifactId()
-                        + "/" + getSpaec() + "/" + getArtifactId() + "-" + getSpaec() + "-" + getVersion().replaceAll("@", ".");
+                        + "/" + getSpaec() + "/" + Artifactid + "-" + getSpaec() + "-" + getVersion().replaceAll("@", ".");
             } else {
 
-                return getGroupId().replaceAll("\\.", "/") + "/" + getArtifactId()
-                        + "/" + getSpaec() + "/" + getArtifactId() + "-" + getSpaec() + "-" + getVersion() + ".jar";
+                return getGroupId().replaceAll("\\.", "/") + "/" + Artifactid
+                        + "/" + getSpaec() + "/" + Artifactid + "-" + getSpaec() + "-" + getVersion() + ".jar";
             }
         }
     }

@@ -22,7 +22,8 @@
         </Pane>
     </ScrollPane>
     <Button mnemonicParsing="false" text="返回"/>
-    <Label layoutX="40.0" layoutY="85.0" text="通用:"/>
     <Button layoutY="460.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="删除该版本"/>
     <Button layoutY="430.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="补全游戏文件"/>
+    <Button layoutY="55.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
+    <Button layoutY="85.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
 </Pane>

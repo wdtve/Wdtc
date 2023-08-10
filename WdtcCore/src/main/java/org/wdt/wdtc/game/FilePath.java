@@ -45,7 +45,11 @@ public class FilePath {
     }
 
     public static File getWdtcImplementationPath() {
-        return new File(WDTC_CONFIG + "/implementation/");
+        return new File(WDTC_CONFIG + "/dependencies/");
+    }
+
+    public static File getWtdcOpenJFXPath() {
+        return new File(getWdtcImplementationPath() + "/openjfx/");
     }
 
 }

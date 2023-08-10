@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModList;
+import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -15,7 +15,7 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SelectGameVersion extends ModList {
+public class SelectGameVersion extends ModUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(SelectGameVersion.class);
     private final TextField textField;
     private final Launcher launcher;
@@ -43,7 +43,7 @@ public class SelectGameVersion extends ModList {
         try {
             long startTime = System.currentTimeMillis();
             GameConfig config = launcher.getGameConfig();
-            InstallTask task = getModInstallTask();
+            InstallTask task = getModInstallTask(launcher);
             if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
                 FileUtils.writeStringToFile(config.getVersionConfigFile(), config.getDefaultGameConfig(), "UTF-8");
                 logmaker.info(new DefaultGameConfig());
@@ -52,7 +52,7 @@ public class SelectGameVersion extends ModList {
             DownloadGame.DownloadGameVersionJson();
             DownloadGame.DownloadGameAssetsListJson();
             DownloadGame.DownloadVersionJar();
-            if (Install) {
+            if (Install && task != null) {
                 task.BeforInstallTask();
                 task.setPatches();
                 task.execute();
@@ -64,7 +64,7 @@ public class SelectGameVersion extends ModList {
                 textField.setText(LibraryFinishTime);
             }
             DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
-            if (Install) {
+            if (Install && task != null) {
                 task.AfterDownloadTask();
             }
             String EndTime = "下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
@@ -77,15 +77,7 @@ public class SelectGameVersion extends ModList {
         }
     }
 
-    private InstallTask getModInstallTask() {
-        if (GameModIsForge(launcher)) {
-            return launcher.getForgeDownloadInfo().getForgeInstallTask();
-        } else if (GameModIsFabric(launcher)) {
-            return launcher.getFabricModInstallInfo().getFabricInstallTask();
-        } else {
-            return launcher.getQuiltModDownloadInfo().getQuiltInstallTask();
-        }
-    }
+
 }
 
 

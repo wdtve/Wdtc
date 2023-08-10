@@ -39,7 +39,6 @@ public class LibraryObject {
             LibraryObject object = new LibraryObject();
             object.setLibraryName(dependency.getLibraryName());
             object.setDownloads(downloads);
-            logger.info(object);
             return object;
         } catch (IOException e) {
             throw new RuntimeException(e);
