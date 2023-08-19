@@ -39,8 +39,8 @@ public class VersionChoose {
                 window.setHome(MainStage);
             }
         });
-        List<Launcher> GameVersionList = DownloadedGameVersion.getGameVersionList(path);
-        if (GameVersionList != null) {
+        if (DownloadedGameVersion.isDownloadedGame(path)) {
+            List<Launcher> GameVersionList = DownloadedGameVersion.getGameVersionList(path);
             for (Launcher GameVersion : GameVersionList) {
                 Pane pane = new Pane();
                 pane.setPrefSize(514, 40);

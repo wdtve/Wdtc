@@ -1,11 +1,11 @@
 package org.wdt.wdtc.game;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
+import org.wdt.platform.gson.JSON;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -39,6 +39,7 @@ public class LibraryObject {
             LibraryObject object = new LibraryObject();
             object.setLibraryName(dependency.getLibraryName());
             object.setDownloads(downloads);
+            logger.info(object);
             return object;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,7 +47,7 @@ public class LibraryObject {
     }
 
     public static LibraryObject getLibraryObject(JSONObject object) {
-        return JSONObject.getGson().fromJson(object.getJsonObjects(), LibraryObject.class);
+        return JSONObject.parseObject(object, LibraryObject.class);
     }
 
     public static LibraryObject getLibraryObject(String object) {
@@ -59,7 +60,7 @@ public class LibraryObject {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return JSON.GSON.toJson(this);
     }
 
     public JsonArray getRules() {

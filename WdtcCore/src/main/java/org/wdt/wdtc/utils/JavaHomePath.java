@@ -21,7 +21,7 @@ public class JavaHomePath {
     private static final Logger logmaker = WdtcLogger.getLogger(JavaHomePath.class);
 
     public static String GetRunJavaHome() {
-        return FilenameUtils.separatorsToUnix(System.getProperty("java.home") + "\\bin\\java.exe");
+        return FilenameUtils.separatorsToUnix(getJavaExePath(System.getProperty("java.home")));
     }
 
     public static void main(String[] args) {
@@ -91,7 +91,7 @@ public class JavaHomePath {
     public static List<Map<String, String>> getJavaExeAndVersion(List<String> list) throws IOException {
         List<Map<String, String>> JavaList = new ArrayList<>();
         for (String path : list) {
-            String JavaPath = path + "bin\\java.exe";
+            String JavaPath = getJavaExePath(path);
             if (!Files.exists(Paths.get(path))) {
                 logmaker.warn("warn : ", new IOException(path + " isn't exists"));
             } else {
@@ -122,6 +122,14 @@ public class JavaHomePath {
         return null;
     }
 
+    public static String getJavaExePath(String JavaHome) {
+        if (Pattern.compile("\\s").matcher(JavaHome).find()) {
+            return JavaHome + "\\bin\\java.exe";
+        } else {
+            return "\"" + JavaHome + "\\bin\\java.exe\"";
+        }
+
+    }
 
 }
 

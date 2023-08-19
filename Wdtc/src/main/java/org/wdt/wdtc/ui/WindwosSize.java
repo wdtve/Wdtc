@@ -20,15 +20,9 @@ public class WindwosSize {
         for (Region region : node) {
             double widthratio = MainStage.getWidth() / WindowsWidht;
             region.setLayoutX(region.getLayoutX() * widthratio);
-            double heigthratio = MainStage.getHeight() / WindowsHeight;
             if (region.getPrefWidth() != -1) {
                 region.setPrefWidth(region.getPrefWidth() * widthratio);
             }
-            region.setLayoutY(region.getLayoutY() * heigthratio);
-            if (region.getPrefHeight() != -1) {
-                region.setPrefHeight(region.getPrefHeight() * heigthratio);
-            }
-            region.setPrefHeight(region.getPrefHeight() * heigthratio);
             MainStage.widthProperty().addListener((observable, oldValue, newValue) -> {
                 double ratio = newValue.doubleValue() / oldValue.doubleValue();
                 region.setLayoutX(region.getLayoutX() * ratio);
@@ -36,13 +30,19 @@ public class WindwosSize {
                     region.setPrefWidth(region.getPrefWidth() * ratio);
                 }
             });
-            MainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-                double ratio = newValue.doubleValue() / oldValue.doubleValue();
-                region.setLayoutY(region.getLayoutY() * ratio);
-                if (region.getPrefHeight() != -1) {
-                    region.setPrefHeight(region.getPrefHeight() * ratio);
-                }
-            });
+//            double heigthratio = MainStage.getHeight() / WindowsHeight;
+//            region.setLayoutY(region.getLayoutY() * heigthratio);
+//            if (region.getPrefHeight() != -1) {
+//                region.setPrefHeight(region.getPrefHeight() * heigthratio);
+//            }
+
+//            MainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+//                double ratio = newValue.doubleValue() / oldValue.doubleValue();
+//                region.setLayoutY(region.getLayoutY() * ratio);
+//                if (region.getPrefHeight() != -1) {
+//                    region.setPrefHeight(region.getPrefHeight() * ratio);
+//                }
+//            });
         }
     }
 

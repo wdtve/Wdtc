@@ -42,7 +42,7 @@ public class PlatformUtils extends FileUtils {
     }
 
     public static boolean FileExistenceAndSize(File file) throws IOException {
-        return FileExistenceAndSize(file, 0);
+        return !file.exists();
     }
 
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {

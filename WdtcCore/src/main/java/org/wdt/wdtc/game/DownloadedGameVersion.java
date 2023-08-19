@@ -1,8 +1,10 @@
 package org.wdt.wdtc.game;
 
 import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +15,26 @@ public class DownloadedGameVersion {
         File[] VersionList = new File(path.getGameVersionPath()).listFiles();
         if (VersionList != null && VersionList.length != 0) {
             for (File VersionFolder : VersionList) {
-                GameVersionList.add(new Launcher(VersionFolder.getName()));
+                Launcher launcher = new Launcher(VersionFolder.getName());
+                try {
+                    if (!PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+                        GameVersionList.add(ModUtils.getModTask(launcher));
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             return GameVersionList;
         } else {
             return null;
         }
+    }
+
+    public static boolean isDownloadedGame(GetGamePath path) {
+        List<Launcher> list = getGameVersionList(path);
+        if (list != null) {
+            return !list.isEmpty();
+        }
+        return false;
     }
 }

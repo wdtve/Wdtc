@@ -47,7 +47,7 @@ public class YggdrasilTextures {
     }
 
     public Csl getCsl() throws IOException {
-        return JSONObject.getGson().fromJson(PlatformUtils.GetUrlContent(GetUserJson()), Csl.class);
+        return JSONObject.parseObject(PlatformUtils.GetUrlContent(GetUserJson()), Csl.class);
     }
 
     public static class Csl {

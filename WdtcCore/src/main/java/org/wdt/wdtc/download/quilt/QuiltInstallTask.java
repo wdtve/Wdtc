@@ -75,12 +75,12 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTask {
     }
 
     @Override
-    public void AfterDownloadTask() throws IOException {
+    public void AfterDownloadTask() {
 
     }
 
     @Override
-    public void BeforInstallTask() throws IOException {
+    public void BeforInstallTask() {
         DownloadQuiltGameVersionJson();
     }
 }

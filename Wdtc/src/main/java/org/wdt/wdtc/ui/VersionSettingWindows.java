@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.download.SelectGameVersion;
+import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
@@ -36,20 +36,19 @@ public class VersionSettingWindows extends AboutSetting {
     private static final double layoutX = 10;
     private static final Logger logmaker = WdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
-    private final DefaultGameConfig config;
+    private final DefaultGameConfig.Config config;
     private final WindwosSize size;
     private final Stage MainStage;
 
     public VersionSettingWindows(Launcher launcher, Stage MainStage) {
         this.launcher = launcher;
-        this.config = launcher.getGameConfig().getGameConfig();
+        this.config = launcher.getGameConfig().getConfig();
         this.size = new WindwosSize(MainStage);
         this.MainStage = MainStage;
     }
 
     public void setWindow() {
         HomeWindow window = new HomeWindow(launcher);
-
 
         AnchorPane ParentPane = new AnchorPane();
         ScrollPane SonScrollPane = new ScrollPane();
@@ -121,7 +120,7 @@ public class VersionSettingWindows extends AboutSetting {
             }
         });
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
-            SelectGameVersion version = new SelectGameVersion(launcher, true);
+            InstallGameVersion version = new InstallGameVersion(launcher, true);
             version.DownloadGame();
             logmaker.info("* " + launcher.getVersion() + " downloaded");
         }));
@@ -203,18 +202,20 @@ public class VersionSettingWindows extends AboutSetting {
         });
         apply.setOnAction(event -> {
             try {
-                DefaultGameConfig gameConfig = new DefaultGameConfig();
+                DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config();
                 try {
                     if (!PlatformUtils.FileExistenceAndSize(JavaPath.getText()))
-                        gameConfig.setJavaHome(JavaPath.getText());
+                        NewConfig.setJavaHome(JavaPath.getText());
                 } catch (IOException e) {
                     throw new NumberFormatException();
                 }
-                gameConfig.setXmx(Integer.parseInt(Input.getText()));
-                gameConfig.setHight(Integer.parseInt(InputHeight.getText()));
-                gameConfig.setWidth(Integer.parseInt(InputWidth.getText()));
+                NewConfig.setXmx(Integer.parseInt(Input.getText()));
+                NewConfig.setHight(Integer.parseInt(InputHeight.getText()));
+                NewConfig.setWidth(Integer.parseInt(InputWidth.getText()));
+                DefaultGameConfig gameConfig = launcher.getGameConfig().getDefaultGameConfig();
+                gameConfig.setConfig(NewConfig);
                 logmaker.info(gameConfig);
-                JSONUtils.ObjectToJsonFile(launcher.getGameConfig().getVersionConfigFile(), gameConfig);
+                launcher.getGameConfig().PutConfigToFile(gameConfig);
                 tips6.setText("设置成功");
                 tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
             } catch (NumberFormatException e) {

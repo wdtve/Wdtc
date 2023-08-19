@@ -1,7 +1,5 @@
 package org.wdt.platform.gson;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 public class JSONObject extends JSON {
@@ -16,7 +14,7 @@ public class JSONObject extends JSON {
     }
 
     public static String toJSONString(Object o) {
-        return getGson().toJson(o);
+        return GSON.toJson(o);
     }
 
 
@@ -57,20 +55,13 @@ public class JSONObject extends JSON {
         return JsonObjects.has(str);
     }
 
-    public com.alibaba.fastjson2.JSONObject getFastJSONObject() {
-        return com.alibaba.fastjson2.JSONObject.parseObject(toJSONString(JsonObjects));
-    }
 
     public double getDouble(String str) {
         return JsonObjects.get(str).getAsDouble();
     }
 
-    public static Gson getGson() {
-        return new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-    }
-
-    public static <T> T parseObject(String json, Class<T> clazz) {
-        return getGson().fromJson(json, clazz);
+    public com.alibaba.fastjson2.JSONObject getFastJSONObject() {
+        return com.alibaba.fastjson2.JSONObject.parseObject(toJSONString(JsonObjects));
     }
 
 }

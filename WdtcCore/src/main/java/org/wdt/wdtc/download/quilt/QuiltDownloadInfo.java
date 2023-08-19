@@ -13,8 +13,8 @@ import java.io.IOException;
 public class QuiltDownloadInfo implements DownloadInfo {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json";
 
-    public final Launcher launcher;
-    public final String QuiltVersionNumber;
+    protected final Launcher launcher;
+    protected final String QuiltVersionNumber;
 
     public QuiltDownloadInfo(Launcher launcher, String quiltVersionNumber) {
         this.launcher = launcher;

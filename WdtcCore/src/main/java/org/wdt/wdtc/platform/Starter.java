@@ -19,7 +19,7 @@ public class Starter {
     }
 
     public static boolean getForgeSwitch() {
-        return System.getProperty("download.forge.true") != null;
+        return Boolean.getBoolean("download.forge");
     }
 
     public static String getWdtcConfigFromVM() {

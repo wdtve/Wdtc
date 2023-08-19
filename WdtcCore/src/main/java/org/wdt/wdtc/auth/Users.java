@@ -17,7 +17,26 @@ public class Users {
     private Accounts.AccountsType Type;
     @SerializedName("Uuid")
     private String Uuid;
+    @SerializedName("MetaAPI")
+    private String API;
+    @SerializedName("MetaAPIBase64")
+    private String APIBase64;
 
+    public String getAPIBase64() {
+        return APIBase64;
+    }
+
+    public void setAPIBase64(String APIBase64) {
+        this.APIBase64 = APIBase64;
+    }
+
+    public String getAPI() {
+        return API;
+    }
+
+    public void setAPI(String API) {
+        this.API = API;
+    }
 
     public void setUserName(String userName) {
         UserName = userName;
@@ -33,6 +52,18 @@ public class Users {
 
     public void setUuid(String uuid) {
         Uuid = uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "UserName='" + UserName + '\'' +
+                ", AccessToken='" + AccessToken + '\'' +
+                ", Type=" + Type +
+                ", Uuid='" + Uuid + '\'' +
+                ", API='" + API + '\'' +
+                ", APIBase64='" + APIBase64 + '\'' +
+                '}';
     }
 
     public static boolean SetUserJson() {
@@ -60,13 +91,4 @@ public class Users {
         return Uuid;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "UserName='" + UserName + '\'' +
-                ", AccessToken='" + AccessToken + '\'' +
-                ", Type='" + Type + '\'' +
-                ", Uuid='" + Uuid + '\'' +
-                '}';
-    }
 }

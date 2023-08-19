@@ -6,7 +6,7 @@ import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.ExtractFile;
+import org.wdt.wdtc.utils.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class GetStartLibraryPath {
             GetGameNeedLibraryFile FileList = new GetGameNeedLibraryFile(launcher);
             for (GetGameNeedLibraryFile.LibraryFile LibraryFile : FileList.getFileList()) {
                 if (LibraryFile.isNativesLibrary()) {
-                    ExtractFile.unzipByFile(gameLibraryPathAndUrl.GetNativesLibraryFile(LibraryFile.getLibraryObject().getDownloads().getClassifiers().getNativesindows()), launcher.getVersionNativesPath());
+                    ZipUtils.unzipByFile(gameLibraryPathAndUrl.GetNativesLibraryFile(LibraryFile.getLibraryObject().getDownloads().getClassifiers().getNativesindows()), launcher.getVersionNativesPath());
                 } else {
                     InsertclasspathSeparator(gameLibraryPathAndUrl.GetLibraryFile(LibraryFile.getLibraryObject()));
                 }

@@ -2,8 +2,6 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.0.14"
 }
 
-
-
 javafx {
     version = "17.0.6"
     setPlatform("windows")

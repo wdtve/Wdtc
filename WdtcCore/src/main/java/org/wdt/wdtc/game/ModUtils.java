@@ -6,6 +6,7 @@ import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -17,6 +18,9 @@ public class ModUtils {
 
     public static Launcher getModTask(Launcher launcher) {
         try {
+            if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+                return null;
+            }
             Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");
             Matcher m = r.matcher(launcher.getGameVersionJsonObject().getId());
             if (m.find()) {

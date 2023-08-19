@@ -1,11 +1,9 @@
-package org.wdt.wdtc.platform;
+package org.wdt.wdtc.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,8 +17,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ExtractFile {
-    private static final Logger logmaker = WdtcLogger.getLogger(ExtractFile.class);
+public class ZipUtils {
+    private static final Logger logmaker = WdtcLogger.getLogger(ZipUtils.class);
 
     public static void unzipByFile(File file, String path) {
         try {

@@ -23,8 +23,6 @@ public class AppMain extends Application {
     private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
 
     public static void main(String[] args) {
-        if (System.getProperty("wdtc.config.path") == null)
-            System.setProperty("wdtc.config.path", System.getProperty("user.home"));
         launch(args);
     }
 

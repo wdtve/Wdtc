@@ -45,7 +45,7 @@ public class NewDownloadWindow {
                 button.getStyleClass().add("BlackBorder");
                 button.setOnAction(event -> {
                     Launcher launcher = new Launcher(button.getText());
-                    ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
+                    ModChooseWindows Choose = new ModChooseWindows(launcher, MainStage);
                     Choose.setChooseWin();
                 });
             }

@@ -75,7 +75,7 @@ public class ModChoose {
         Consoler.setStylesheets(pane);
         MainStage.setScene(new Scene(pane));
         back.setOnAction(event -> {
-            ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
+            ModChooseWindows Choose = new ModChooseWindows(launcher, MainStage);
             Choose.setChooseWin();
         });
 
@@ -93,7 +93,7 @@ public class ModChoose {
                 case FABRICAPI ->
                         launcher.getFabricModInstallInfo().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, ModVersion));
             }
-            ModChooseWin Choose = new ModChooseWin(launcher, MainStage);
+            ModChooseWindows Choose = new ModChooseWindows(launcher, MainStage);
             Choose.setChooseWin();
             ButtonList.getChildren().clear();
         });

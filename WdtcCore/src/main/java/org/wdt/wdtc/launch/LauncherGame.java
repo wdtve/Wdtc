@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.download.SelectGameVersion;
+import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -19,26 +19,26 @@ public class LauncherGame {
         this.launcher = launcher;
         try {
             launcher.LaunchTask();
-            logmaker.info("* 开始文件补全");
-            SelectGameVersion gameVersion = new SelectGameVersion(launcher);
+            logmaker.info("* Start Download");
+            InstallGameVersion gameVersion = new InstallGameVersion(launcher, false);
             try {
                 gameVersion.DownloadGame();
             } catch (Throwable e) {
                 logmaker.error("错误:", e);
             }
-            logmaker.info("* 文件补全完成");
-            logmaker.info("* 开始写入启动脚本");
+            logmaker.info("* Downloaded Finish");
+            logmaker.info("* Write Start Script");
             launcher.setJvmattribute(new GameJvmCommand(launcher).GetJvmList());
             launcher.setGameattribute(new GameCommand(launcher).Getgame());
             launcher.writeStartScript();
-            logmaker.info("* 启动脚本写入完成");
+            logmaker.info("* Write Start Script Finish");
             if (launcher.Console()) {
-                logmaker.info("* 开始运行启动脚本,日志:显示");
+                logmaker.info("* Start Run Start Script,Console: true");
             } else {
-                logmaker.info("* 开始运行启动脚本,日志:不显示");
+                logmaker.info("* Start Run Start Script,Console: false");
             }
             logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
-            logmaker.info(launcher.getGameConfig().getGameConfig());
+            logmaker.info(launcher.getGameConfig().getConfig());
         } catch (Exception e) {
             logmaker.error("错误:", e);
         }

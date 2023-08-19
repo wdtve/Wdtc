@@ -20,6 +20,7 @@ tasks.shadowJar {
         for (Module in ModuleList) {
             exclude(dependency("org.openjfx:" + Module + ":" + javafx.version))
         }
+        exclude(dependency("com.alibaba.fastjson2:fastjson2:2.0.34"))
     }
     manifest {
         attributes(
@@ -29,13 +30,16 @@ tasks.shadowJar {
     }
 }
 
-val Version = "0.0.1.3"
+val Number: String = "0.0.1.3"
 tasks.create<JavaExec>("run") {
     dependsOn(tasks.jar)
     group = "application"
-    version = Version
+    version = Number
     classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
-    jvmArgs = listOf("-Dwdtc.config.path=.", "-Ddownload.forge.true", "-Dlauncher.version=$Version")
+    jvmArgs = listOf(
+        "-Dwdtc.config.path=.", "-Ddownload.forge=true",
+        "-Dlauncher.version=$Number"
+    )
     workingDir = rootProject.rootDir
 }
 

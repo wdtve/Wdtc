@@ -14,13 +14,13 @@ import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
-public class ModChooseWin {
-    private static final Logger logmaker = WdtcLogger.getLogger(ModChooseWin.class);
+public class ModChooseWindows {
+    private static final Logger logmaker = WdtcLogger.getLogger(ModChooseWindows.class);
     private final Launcher launcher;
     private final Stage MainStage;
     private final WindwosSize size;
 
-    public ModChooseWin(Launcher launcher, Stage MainStage) {
+    public ModChooseWindows(Launcher launcher, Stage MainStage) {
         this.launcher = launcher;
         this.MainStage = MainStage;
         this.size = new WindwosSize(MainStage);
@@ -40,7 +40,7 @@ public class ModChooseWin {
         Pane ForgePane = new Pane();
         ForgePane.setLayoutX(60.0);
         ForgePane.setLayoutY(96.0);
-        ForgePane.setPrefSize(160, 87);
+        ForgePane.setPrefSize(160, 90);
         Forge.setLayoutX(36.0);
         Forge.setLayoutY(27.0);
         JFXButton DownloadForge = new JFXButton("->");

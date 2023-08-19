@@ -1,10 +1,11 @@
 package org.wdt.platform.gson;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 public class JSON {
+    public static Gson FILE_GSON = getBuilder().setPrettyPrinting().create();
+    public static Gson GSON = getBuilder().create();
+    public static GsonBuilder GSONBUILDER = getBuilder();
     public static JsonObject parseJsonObject(String json) {
         return JsonParser.parseString(json).getAsJsonObject();
     }
@@ -19,5 +20,21 @@ public class JSON {
 
     public static JSONArray parseJSONArray(String json) {
         return new JSONArray(parseJsonArray(json));
+    }
+
+    public static <T> T parseObject(String json, Class<T> clazz) {
+        return GSON.fromJson(json, clazz);
+    }
+
+    public static <T> T parseObject(JSONObject json, Class<T> clazz) {
+        return parseObject(json.getJsonObjects(), clazz);
+    }
+
+    public static <T> T parseObject(JsonElement json, Class<T> clazz) {
+        return GSON.fromJson(json, clazz);
+    }
+
+    public static GsonBuilder getBuilder() {
+        return new GsonBuilder().disableHtmlEscaping();
     }
 }

@@ -27,7 +27,7 @@ public class AboutSetting {
     public static void GenerateSettingFile() throws IOException {
         String readme = IOUtils.toString(requireNonNull(AboutSetting.class.getResourceAsStream("/readme.txt")), StandardCharsets.UTF_8);
         File writeReadme = new File(FilePath.getWdtcConfig() + "/readme.txt");
-        FileUtils.writeStringToFile(writeReadme, readme);
+        FileUtils.writeStringToFile(writeReadme, readme, "UTF-8");
         if (PlatformUtils.FileExistenceAndSize(GetSettingFile())) {
             JSONUtils.ObjectToJsonFile(GetSettingFile(), new Setting());
         }
@@ -141,7 +141,6 @@ public class AboutSetting {
         }
 
         public void setChineseLanguage(boolean chineseLanguage) {
-
             ChineseLanguage = chineseLanguage;
         }
 

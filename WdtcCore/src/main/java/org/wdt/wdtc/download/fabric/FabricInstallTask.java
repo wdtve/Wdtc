@@ -2,7 +2,6 @@ package org.wdt.wdtc.download.fabric;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
@@ -13,14 +12,12 @@ import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
-import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask {
-    private static final Logger logger = WdtcLogger.getLogger(FabricInstallTask.class);
     private final DownloadSource source;
 
 

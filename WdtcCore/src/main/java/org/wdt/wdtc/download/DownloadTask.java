@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 public class DownloadTask extends GameLibraryPathAndUrl {
     private static final Logger logmaker = WdtcLogger.getLogger(DownloadTask.class);
@@ -44,19 +43,18 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     }
 
     public static void StartDownloadTask(URL url, File file) {
+        long Now = System.currentTimeMillis();
         try {
-            Thread.sleep(20);
             logmaker.info("* Task Start: " + url);
             DownloadUtils.ManyTimesToTryDownload(file, url, 5);
-            logmaker.info("* Task Finish: " + file);
-        } catch (InterruptedException e) {
+            logmaker.info("* Task Finish: " + file + ", Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
+        } catch (Exception e) {
             logmaker.warn("* Task: " + url, e);
             try {
-                TimeUnit.SECONDS.sleep(5);
                 logmaker.info("* Task: " + url + " Start retry");
                 DownloadUtils.ManyTimesToTryDownload(file, url, 5);
-                logmaker.info("* Task: " + file + " Successfully retried");
-            } catch (InterruptedException exception) {
+                logmaker.info("* Task: " + file + " Successfully retried, Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
+            } catch (Exception exception) {
                 if (file.delete()) {
                     logmaker.error("* Task: " + url + " Error", exception);
                 }

@@ -35,10 +35,9 @@ public class DownloadVersionGameFile extends DownloadTask {
                 if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
                 }
-                if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
-                    if (Install) {
+                if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson()) || Install) {
                         StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
-                    }
+
                 }
             }
         }

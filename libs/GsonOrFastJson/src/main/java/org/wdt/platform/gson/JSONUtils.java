@@ -34,7 +34,7 @@ public class JSONUtils extends JSON {
 
     public static void ObjectToJsonFile(File JsonFile, Object object) {
         try {
-            FileUtils.writeStringToFile(JsonFile, JSONObject.toJSONString(object), "UTF-8");
+            FileUtils.writeStringToFile(JsonFile, FILE_GSON.toJson(object), "UTF-8");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,5 +59,4 @@ public class JSONUtils extends JSON {
     public static JSONArray getJSONArray(String JsonFilePath) throws IOException {
         return new JSONArray(getJsonArray(JsonFilePath));
     }
-
 }

@@ -8,7 +8,9 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.Users;
+import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -67,12 +69,14 @@ public class YggdrasilAccounts {
         users.setUserName(selectedProfile.getString("name"));
         users.setUuid(selectedProfile.getString("id"));
         users.setAccessToken(UserInfo.getAccessToken());
+        users.setAPI(PlatformUtils.GetUrlContent(FileUrl.getLittleskinApi()));
+        users.setAPIBase64(PlatformUtils.StringToBase64(users.getAPI()));
         JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), users);
         logmaker.info(users);
     }
 
     public UserInformation getUserInformation() throws IOException {
-        return JSONObject.getGson().fromJson(sendPostWithJson(), UserInformation.class);
+        return JSONObject.parseObject(sendPostWithJson(), UserInformation.class);
     }
 
     public static class UserInformation {

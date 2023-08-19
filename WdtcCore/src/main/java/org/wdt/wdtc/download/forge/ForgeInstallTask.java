@@ -20,9 +20,9 @@ import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.ExtractFile;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.ZipUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -36,13 +36,13 @@ import java.util.regex.Pattern;
 
 public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     private static final Logger logmaker = WdtcLogger.getLogger(ForgeInstallTask.class);
-    private final DefaultGameConfig config;
+    private final DefaultGameConfig.Config config;
     private final DownloadSource source;
 
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
-        this.config = launcher.getGameConfig().getGameConfig();
+        this.config = launcher.getGameConfig().getConfig();
         this.source = Launcher.getDownloadSource();
     }
 
@@ -50,7 +50,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     public String CommandLine(int index) throws IOException {
         JSONObject JsonObject = getInstallPrefileJSONObject().getJSONArray("processors").getJSONObject(index);
         StringBuilder CommandLine = new StringBuilder();
-        CommandLine.append("\"").append(config.getJavaPath()).append("\"").append(" -cp ");
+        CommandLine.append(config.getJavaPath()).append(" -cp ");
         JSONArray JarList = JsonObject.getJSONArray("classpath");
         for (int i = 0; i < JarList.size(); i++) {
             DependencyDownload Jar = new DependencyDownload(JarList.getString(i));
@@ -72,7 +72,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
                 if (ArgeStr.equals("{MINECRAFT_JAR}")) {
                     CommandLine.append(launcher.getVersionJar()).append(" ");
                 } else if (ArgeStr.equals("{BINPATCH}")) {
-                    ExtractFile.unZipBySpecifyFile(getForgeInstallJarPath(), ClientLzmaPath());
+                    ZipUtils.unZipBySpecifyFile(getForgeInstallJarPath(), ClientLzmaPath());
                     CommandLine.append(ClientLzmaPath()).append(" ");
                 } else if (ArgeStr.equals("{SIDE}")) {
                     CommandLine.append("client").append(" ");
@@ -173,11 +173,13 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
         GameList.addAll(Arguments.getJSONArray("game").getJsonArrays());
         arguments.setGameList(GameList);
         JsonArray JvmList = arguments.getJvmList();
-        JvmList.addAll(Arguments.getJSONArray("jvm").getJsonArrays());
+        if (Arguments.has("jvm")) {
+            JvmList.addAll(Arguments.getJSONArray("jvm").getJsonArrays());
+        }
         arguments.setJvmList(JvmList);
         VersionJsonObject.setArguments(arguments);
         for (int i = 0; i < LibraryArray.size(); i++) {
-            LibraryObject libraryObject = JSONObject.getGson().fromJson(LibraryArray.getJSONObject(i).getJsonObjects(), LibraryObject.class);
+            LibraryObject libraryObject = JSONObject.parseObject(LibraryArray.getJSONObject(i).getJsonObjects(), LibraryObject.class);
             VersionJsonObject.getLibraries().add(libraryObject);
         }
         VersionJsonObject.setMainClass(ForgeVersionJsonObject.getString("mainClass"));
@@ -203,7 +205,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     }
 
     @Override
-    public void BeforInstallTask() throws IOException {
+    public void BeforInstallTask() {
         DownloadInstallJar();
         getInstallProfile();
         getForgeVersionJson();

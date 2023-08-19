@@ -1,7 +1,6 @@
 package org.wdt.wdtc.download;
 
 import javafx.scene.control.TextField;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.infterface.InstallTask;
@@ -15,27 +14,27 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SelectGameVersion extends ModUtils {
-    private static final Logger logmaker = WdtcLogger.getLogger(SelectGameVersion.class);
+public class InstallGameVersion extends ModUtils {
+    private static final Logger logmaker = WdtcLogger.getLogger(InstallGameVersion.class);
     private final TextField textField;
     private final Launcher launcher;
     private final boolean Install;
 
-    private SelectGameVersion(Launcher launcher, TextField textField, boolean Install) {
+    private InstallGameVersion(Launcher launcher, TextField textField, boolean Install) {
         this.textField = textField;
         this.launcher = launcher;
         this.Install = Install;
     }
 
-    public SelectGameVersion(Launcher launcher) {
+    public InstallGameVersion(Launcher launcher) {
         this(launcher, null, false);
     }
 
-    public SelectGameVersion(Launcher launcher, TextField textField) {
+    public InstallGameVersion(Launcher launcher, TextField textField) {
         this(launcher, textField, true);
     }
 
-    public SelectGameVersion(Launcher launcher, boolean Install) {
+    public InstallGameVersion(Launcher launcher, boolean Install) {
         this(launcher, null, Install);
     }
 
@@ -43,11 +42,11 @@ public class SelectGameVersion extends ModUtils {
         try {
             long startTime = System.currentTimeMillis();
             GameConfig config = launcher.getGameConfig();
-            InstallTask task = getModInstallTask(launcher);
             if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
-                FileUtils.writeStringToFile(config.getVersionConfigFile(), config.getDefaultGameConfig(), "UTF-8");
+                GameConfig.writeConfigJson(launcher);
                 logmaker.info(new DefaultGameConfig());
             }
+            InstallTask task = getModInstallTask(launcher);
             DownloadVersionGameFile DownloadGame = new DownloadVersionGameFile(launcher, Install);
             DownloadGame.DownloadGameVersionJson();
             DownloadGame.DownloadGameAssetsListJson();

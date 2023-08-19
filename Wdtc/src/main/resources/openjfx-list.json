@@ -1,0 +1,68 @@
+[
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-base/17.0.6/javafx-base-17.0.6-win.jar",
+        "sha1": "78ccb38688b70acc6b59718daca8bdb91f99db57",
+        "size": 746022,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-base/17.0.6/javafx-base-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.base:win:17.0.6"
+  },
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-controls/17.0.6/javafx-controls-17.0.6-win.jar",
+        "sha1": "c95b460be3bc372060ff32d0c666c1233c3e8400",
+        "size": 2548777,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-controls/17.0.6/javafx-controls-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.controls:win:17.0.6"
+  },
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-fxml/17.0.6/javafx-fxml-17.0.6-win.jar",
+        "sha1": "5724aedc415683e62eeab3a3875550aa814c84fd",
+        "size": 130063,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-fxml/17.0.6/javafx-fxml-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.fxml:win:17.0.6"
+  },
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-web/17.0.6/javafx-web-17.0.6-win.jar",
+        "sha1": "f4117256e602d41f484f2b9e5a74eeadc0a272eb",
+        "size": 28938765,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-web/17.0.6/javafx-web-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.web:win:17.0.6"
+  },
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-graphics/17.0.6/javafx-graphics-17.0.6-win.jar",
+        "sha1": "14326bf575b927d3c31a775f74bcf754ced35353",
+        "size": 5863162,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-graphics/17.0.6/javafx-graphics-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.graphics:win:17.0.6"
+  },
+  {
+    "downloads": {
+      "artifact": {
+        "path": "org/openjfx/javafx-media/17.0.6/javafx-media-17.0.6-win.jar",
+        "sha1": "cc7e03817252ace41ece37ab29f193ba3fd0153e",
+        "size": 1097877,
+        "url": "https://maven.aliyun.com/repository/public/org/openjfx/javafx-media/17.0.6/javafx-media-17.0.6-win.jar"
+      }
+    },
+    "name": "org.openjfx:javafx.media:win:17.0.6"
+  }
+]

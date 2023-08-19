@@ -10,6 +10,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 }
+
 dependencies {
     implementation("commons-io:commons-io:2.13.0")
     implementation("org.hildan.fxgson:fx-gson:5.0.0")

@@ -16,8 +16,8 @@ import java.io.IOException;
 
 public class FabricDonwloadInfo implements DownloadInfo {
     private static final Logger logmaker = WdtcLogger.getLogger(FabricDonwloadInfo.class);
-    public final String FabricVersionNumber;
-    public final Launcher launcher;
+    protected final String FabricVersionNumber;
+    protected final Launcher launcher;
     private FabricAPIDownloadTask APIDownloadTask;
 
 

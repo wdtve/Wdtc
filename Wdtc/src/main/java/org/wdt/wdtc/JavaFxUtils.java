@@ -1,7 +1,8 @@
-package org.wdt.wdtc.utils;
+package org.wdt.wdtc;
 
 import com.google.gson.JsonArray;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
@@ -11,6 +12,9 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +25,16 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class JavaFxUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(JavaFxUtils.class);
-    private static final File OpenJfxListFile = new File(FilePath.getWdtcImplementationPath() + "/openjfx-list.json");
+
 
     public static void setJavaFXListJson() {
         try {
+            File OpenJfxListFile = new File(FilePath.getWdtcImplementationPath() + "/openjfx-list.json");
             if (PlatformUtils.FileExistenceAndSize(OpenJfxListFile, 2393)) {
                 List<String> MoudleList = List.of("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics", "javafx.media");
                 JsonArray array = new JsonArray();
@@ -45,7 +51,7 @@ public class JavaFxUtils {
                     LibraryObject libraryObject = new LibraryObject();
                     libraryObject.setDownloads(downloads);
                     libraryObject.setLibraryName("org.openjfx:" + s + ":win:17.0.6");
-                    array.add(JSONObject.getGson().toJsonTree(libraryObject, LibraryObject.class));
+                    array.add(JSONObject.GSON.toJsonTree(libraryObject, LibraryObject.class));
                 }
                 JSONUtils.ObjectToJsonFile(OpenJfxListFile, array);
             }
@@ -55,7 +61,7 @@ public class JavaFxUtils {
     }
 
     public static void DownloadDependencies() throws IOException {
-        JSONArray array = JSONUtils.getJSONArray(OpenJfxListFile);
+        JSONArray array = getArrayObject();
         SpeedOfProgress speed = new SpeedOfProgress(array.size());
         for (int i = 0; i < array.size(); i++) {
             LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
@@ -75,13 +81,17 @@ public class JavaFxUtils {
         speed.await();
     }
 
+    private static JSONArray getArrayObject() throws IOException {
+        return JSONArray.parseJSONArray(IOUtils.toString(Objects.requireNonNull(JavaFxUtils.class.getResourceAsStream("/openjfx-list.json"))));
+    }
+
     public static void loadJavaFXPatch() {
         try {
             Class.forName("javafx.application.Application");
         } catch (ClassNotFoundException e) {
             try {
                 logmaker.info("* Load JavaFX Dependencies");
-                JSONArray array = JSONUtils.getJSONArray(OpenJfxListFile);
+                JSONArray array = getArrayObject();
                 Set<Path> jarPaths = new HashSet<>();
                 Set<String> modules = new HashSet<>();
                 for (int i = 0; i < array.size(); i++) {
@@ -106,7 +116,6 @@ public class JavaFxUtils {
     }
 
     public static void CkeckJavaFX() throws IOException {
-        setJavaFXListJson();
         DownloadDependencies();
         loadJavaFXPatch();
     }

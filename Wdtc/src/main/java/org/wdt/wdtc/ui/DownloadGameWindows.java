@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.wdt.wdtc.download.SelectGameVersion;
+import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.ThreadUtils;
@@ -59,7 +59,7 @@ public class DownloadGameWindows {
         textField.setText(launcher.getVersion() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.StartThread(() -> {
             try {
-                new SelectGameVersion(launcher, textField).DownloadGame();
+                new InstallGameVersion(launcher, textField).DownloadGame();
 
             } catch (Exception e) {
                 ErrorWin.setErrorWin(e);

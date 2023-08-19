@@ -115,6 +115,7 @@ public class HomeWindow {
         Label readme = new Label("一个简单到不能再简单的我的世界Java版启动器");
         readme.setLayoutX(180.0);
         readme.setLayoutY(180.0);
+        readme.getStyleClass().add("readme");
         JFXButton LaunchGameButton = new JFXButton();
         if (launcher != null) {
             LaunchGameButton.setText("启动游戏\n" + launcher.getVersion());

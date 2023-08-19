@@ -12,6 +12,7 @@ import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.quilt.QuiltDownloadInfo;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.game.config.VersionInfo;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -140,6 +141,9 @@ public class Launcher extends Version {
         return AboutSetting.getSetting().getDownloadSource();
     }
 
+    public VersionInfo getVersionInfo() {
+        return new VersionInfo(this);
+    }
 
     @Override
     public String toString() {
@@ -148,4 +152,6 @@ public class Launcher extends Version {
                 ",kind=" + kind +
                 '}';
     }
+
+
 }

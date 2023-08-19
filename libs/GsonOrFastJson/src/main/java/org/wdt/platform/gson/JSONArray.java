@@ -1,8 +1,12 @@
 package org.wdt.platform.gson;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import org.jetbrains.annotations.NotNull;
 
-public class JSONArray extends JSON {
+import java.util.Iterator;
+
+public class JSONArray extends JSON implements Iterable<JsonElement> {
     private final JsonArray JsonArrays;
 
     public JSONArray(JsonArray JsonArrays) {
@@ -43,5 +47,15 @@ public class JSONArray extends JSON {
 
     public void add(String str) {
         JsonArrays.add(str);
+    }
+
+    public void addAll(JSONArray jsonArray) {
+        JsonArrays.addAll(jsonArray.getJsonArrays());
+    }
+
+    @NotNull
+    @Override
+    public Iterator<JsonElement> iterator() {
+        return JsonArrays.iterator();
     }
 }

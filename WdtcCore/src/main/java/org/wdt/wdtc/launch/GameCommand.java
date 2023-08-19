@@ -21,7 +21,7 @@ public class GameCommand {
     }
 
     public StringBuilder Getgame() throws IOException {
-        DefaultGameConfig gameConfig = launcher.getGameConfig().getGameConfig();
+        DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         NonBreakingSpace(VersionJsonObject.getMainClass());
         for (JsonElement Element : VersionJsonObject.getArguments().getGameList()) {

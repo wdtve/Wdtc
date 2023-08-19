@@ -18,7 +18,7 @@ public class WdtcLogger {
         FileAppender.setFile(FilePath.getWdtcConfig() + "/logs/Wdtc.log");
         FileAppender.setAppend(true);
         FileAppender.setLayout(layout);
-        FileAppender.setMaxFileSize("10mb");
+        FileAppender.setMaxFileSize("10MB");
         FileAppender.setMaxBackupIndex(10);
         FileAppender.setThreshold(Level.INFO);
         FileAppender.activateOptions();

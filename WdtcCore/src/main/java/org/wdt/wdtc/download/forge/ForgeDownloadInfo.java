@@ -10,15 +10,15 @@ import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.ExtractFile;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.ZipUtils;
 
 import java.io.IOException;
 
 public class ForgeDownloadInfo implements DownloadInfo {
-    public static final Logger logmaker = WdtcLogger.getLogger(ForgeDownloadInfo.class);
-    public final String ForgeVersionNumber;
-    public final Launcher launcher;
+    private static final Logger logmaker = WdtcLogger.getLogger(ForgeDownloadInfo.class);
+    protected final String ForgeVersionNumber;
+    protected final Launcher launcher;
 
     public final DownloadSource source;
 
@@ -55,7 +55,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
     }
 
     public void getInstallProfile() {
-        ExtractFile.unZipToFile(getForgeInstallJarPath(), getInstallProfilePath(), "install_profile.json");
+        ZipUtils.unZipToFile(getForgeInstallJarPath(), getInstallProfilePath(), "install_profile.json");
 
     }
 
@@ -74,7 +74,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
     }
 
     public void getForgeVersionJson() {
-        ExtractFile.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonPath(), "version.json");
+        ZipUtils.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonPath(), "version.json");
     }
 
     public JSONObject getForgeVersionJsonObject() {

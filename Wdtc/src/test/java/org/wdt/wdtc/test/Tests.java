@@ -1,9 +1,9 @@
 package org.wdt.wdtc.test;
 
 import org.junit.jupiter.api.Test;
+import org.wdt.wdtc.JavaFxUtils;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
-import org.wdt.wdtc.utils.JavaFxUtils;
 
 import java.io.IOException;
 

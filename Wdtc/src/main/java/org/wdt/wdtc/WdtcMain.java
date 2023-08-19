@@ -6,11 +6,15 @@ import org.wdt.platform.gson.JSONArray;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.*;
+import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 
@@ -29,6 +33,7 @@ public class WdtcMain extends JavaFxUtils {
         AboutSetting.GenerateSettingFile();
         StartTask();
         Ergodic();
+        RemovePreferredVersion();
         AuthlibInjector.UpdateAuthlibInjector();
         GameConfig.writeConfigJsonToAllVersion();
         ThreadUtils.StartThread(() -> JavaHomePath.main(args)).setName("Found Java");
@@ -53,5 +58,14 @@ public class WdtcMain extends JavaFxUtils {
         }
         setting.setJavaPath(JavaList.getJsonArrays());
         AboutSetting.putSettingToFile(setting);
+    }
+
+    public static void RemovePreferredVersion() throws IOException {
+        AboutSetting.Setting setting = AboutSetting.getSetting();
+        Launcher launcher = new Launcher(setting.getPreferredVersion());
+        if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+            setting.setPreferredVersion(null);
+            AboutSetting.putSettingToFile(setting);
+        }
     }
 }

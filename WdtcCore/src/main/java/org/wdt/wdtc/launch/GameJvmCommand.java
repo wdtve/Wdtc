@@ -22,7 +22,7 @@ public class GameJvmCommand {
     }
 
     public StringBuilder GetJvmList() throws IOException {
-        DefaultGameConfig gameConfig = launcher.getGameConfig().getGameConfig();
+        DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         NonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
