@@ -7,6 +7,7 @@ import java.io.IOException;
 public class test {
     @Test
     public void getPath() throws IOException {
+        System.getProperties().list(System.out);
     }
 }
 

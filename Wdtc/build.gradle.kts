@@ -20,7 +20,8 @@ tasks.shadowJar {
         for (Module in ModuleList) {
             exclude(dependency("org.openjfx:" + Module + ":" + javafx.version))
         }
-        exclude(dependency("com.alibaba.fastjson2:fastjson2:2.0.34"))
+        exclude(dependency("com.alibaba.fastjson2:.*:.*"))
+        exclude(dependency("commons-io:commons-io:.*"))
     }
     manifest {
         attributes(
@@ -30,7 +31,7 @@ tasks.shadowJar {
     }
 }
 
-val Number: String = "0.0.1.3"
+val Number: String = "0.0.1.4"
 tasks.create<JavaExec>("run") {
     dependsOn(tasks.jar)
     group = "application"
@@ -54,7 +55,7 @@ dependencies {
     implementation(project(":WdtcCore"))
     implementation(project(":GsonOrFastJson"))
     implementation(project(":DependencyDownloader"))
-    implementation("commons-io:commons-io:2.13.0")
+    implementation(project(":FileUtils"))
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")

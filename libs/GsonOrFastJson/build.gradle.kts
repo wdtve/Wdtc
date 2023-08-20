@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("commons-io:commons-io:2.13.0")
+    implementation(project(":FileUtils"))
     implementation("org.hildan.fxgson:fx-gson:5.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.alibaba.fastjson2:fastjson2:2.0.34")

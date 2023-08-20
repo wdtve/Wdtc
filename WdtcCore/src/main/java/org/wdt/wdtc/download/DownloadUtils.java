@@ -1,7 +1,7 @@
 package org.wdt.wdtc.download;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import javax.net.ssl.HttpsURLConnection;

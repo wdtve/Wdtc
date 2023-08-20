@@ -6,8 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
@@ -201,7 +201,7 @@ public class SettingWindow extends AboutSetting {
                 if (Objects.nonNull(logDirectory)) {
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                    File srcFile = new File(System.getProperty("user.home") + "/.wdtc/logs/Wdtc.log");
+                    File srcFile = new File(FilePath.getWdtcCache() + "/logs/Wdtc.log");
                     File logFile = new File(logDirectory.getAbsolutePath() + "/Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
                     FileUtils.copyFile(srcFile, logFile);
                     logmaker.info("* 日志已导出:" + logFile);

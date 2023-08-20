@@ -1,9 +1,10 @@
 package org.wdt.wdtc.utils;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
+import org.wdt.utils.FilenameUtils;
+import org.wdt.utils.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,9 +34,7 @@ public class ZipUtils {
                         Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream fos = new FileOutputStream(unfile);
-                        IOUtils.copy(in, fos);
-                        fos.close();
-                        in.close();
+                        IOUtils.copyLarge(in, fos);
                     }
                 }
             }
@@ -58,9 +57,7 @@ public class ZipUtils {
                     FileUtils.touch(unZipPath);
                     InputStream in = zip.getInputStream(entry);
                     FileOutputStream fos = new FileOutputStream(unfile);
-                    IOUtils.copy(in, fos);
-                    fos.close();
-                    in.close();
+                    IOUtils.copyLarge(in, fos);
                 }
             }
             zip.close();
@@ -72,9 +69,9 @@ public class ZipUtils {
     public static void unZipToFile(String ZipPath, String unFilePath, String unFileName) {
         try {
             ZipFile zipFile = new ZipFile(new File(ZipPath));
-            FileOutputStream outputStream = new FileOutputStream(new File(unFilePath));
+            FileOutputStream outputStream = new FileOutputStream(unFilePath);
             InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
-            IOUtils.copy(stream, outputStream);
+            IOUtils.copyLarge(stream, outputStream);
         } catch (IOException e) {
             logmaker.error("* 压缩包提取发生错误:", e);
         }

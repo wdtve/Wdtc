@@ -27,7 +27,7 @@ public class WdtcLogger {
 
     private static ConsoleAppender getConsoleAppender() {
         ConsoleAppender consoleAppender = new ConsoleAppender(layout);
-        consoleAppender.setTarget("System.out");
+        consoleAppender.setTarget("System.err");
         consoleAppender.setImmediateFlush(true);
         consoleAppender.setEncoding("UTF-8");
         consoleAppender.setThreshold(Level.INFO);

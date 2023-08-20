@@ -2,14 +2,14 @@ package org.wdt.platform.gson;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.FileUtils;
+import org.wdt.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 public class JSONUtils extends JSON {
     public static JSONObject getJSONObject(File file) throws IOException {
-        return new JSONObject(FileUtils.readFileToString(file, "UTF-8"));
+        return new JSONObject(FileUtils.readFileToString(file));
     }
 
     public static JSONObject getJSONObject(String filepath) throws IOException {
@@ -17,7 +17,7 @@ public class JSONUtils extends JSON {
     }
 
     public static JsonObject getJsonObject(File JsonFile) throws IOException {
-        return parseJsonObject(FileUtils.readFileToString(JsonFile, "UTF-8"));
+        return parseJsonObject(FileUtils.readFileToString(JsonFile));
     }
 
     public static JsonObject getJsonObject(String JsonFilePath) throws IOException {
@@ -25,7 +25,7 @@ public class JSONUtils extends JSON {
     }
 
     public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) throws IOException {
-        return JSONObject.parseObject(FileUtils.readFileToString(JsonFile, "UTF-8"), clazz);
+        return JSONObject.parseObject(FileUtils.readFileToString(JsonFile), clazz);
     }
 
     public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) throws IOException {
@@ -34,7 +34,7 @@ public class JSONUtils extends JSON {
 
     public static void ObjectToJsonFile(File JsonFile, Object object) {
         try {
-            FileUtils.writeStringToFile(JsonFile, FILE_GSON.toJson(object), "UTF-8");
+            FileUtils.writeStringToFile(JsonFile, FILE_GSON.toJson(object));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +45,7 @@ public class JSONUtils extends JSON {
     }
 
     public static JsonArray getJsonArray(File JsonFile) throws IOException {
-        return parseJsonArray(FileUtils.readFileToString(JsonFile, "UTF-8"));
+        return parseJsonArray(FileUtils.readFileToString(JsonFile));
     }
 
     public static JsonArray getJsonArray(String JsonFilePath) throws IOException {

@@ -1,6 +1,7 @@
 package org.wdt.wdtc.launch;
 
-import org.apache.commons.io.FilenameUtils;
+
+import org.wdt.utils.FilenameUtils;
 import org.wdt.wdtc.platform.AboutSetting;
 
 public class GetGamePath {

@@ -1,7 +1,8 @@
 package org.wdt.wdtc.ui;
 
-import org.apache.commons.io.IOUtils;
+
 import org.apache.log4j.Logger;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 

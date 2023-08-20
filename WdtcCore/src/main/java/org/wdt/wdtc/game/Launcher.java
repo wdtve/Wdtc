@@ -1,8 +1,9 @@
 package org.wdt.wdtc.game;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
@@ -93,16 +94,12 @@ public class Launcher extends Version {
 
     public void writeStartScript() {
         try {
-            String Script = GetStartScript();
+            String Script = Jvmattribute + Gameattribute;
             logmaker.info(Script);
-            FileUtils.writeStringToFile(FilePath.getStarterBat(), Script, "UTF-8", false);
+            FileUtils.writeStringToFile(FilePath.getStarterBat(), Script);
         } catch (IOException e) {
             logmaker.error("* Error,", e);
         }
-    }
-
-    public String GetStartScript() {
-        return Jvmattribute + Gameattribute;
     }
 
     public static DownloadSource getOfficialDownloadSource() {
@@ -113,7 +110,7 @@ public class Launcher extends Version {
         if (AboutSetting.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
             String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
             File OptionsFile = new File(getGameOptionsFile());
-            FileUtils.writeStringToFile(OptionsFile, Options, "UTF-8");
+            FileUtils.writeStringToFile(OptionsFile, Options);
         }
     }
 
@@ -151,7 +148,7 @@ public class Launcher extends Version {
                 "version=" + getVersion() +
                 ",kind=" + kind +
                 '}';
+
+
     }
-
-
 }

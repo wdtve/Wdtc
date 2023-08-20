@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 import com.google.gson.JsonElement;
-import org.apache.commons.io.FilenameUtils;
+import org.wdt.utils.FilenameUtils;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;

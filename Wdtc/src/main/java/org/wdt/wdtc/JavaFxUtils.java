@@ -1,13 +1,13 @@
 package org.wdt.wdtc;
 
 import com.google.gson.JsonArray;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.DependencyDownload;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.FilenameUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.FilePath;

@@ -1,9 +1,9 @@
 package org.wdt.wdtc.game.config;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSON;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GetGamePath;
@@ -52,7 +52,7 @@ public class GameConfig {
             DefaultGameConfig config = new DefaultGameConfig();
             config.setConfig(new DefaultGameConfig.Config());
             config.setInfo(launcher.getVersionInfo());
-            FileUtils.writeStringToFile(gameConfig.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config), "UTF-8");
+            FileUtils.writeStringToFile(gameConfig.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
             logmaker.info("* " + launcher.getVersion() + " " + config);
         } catch (IOException e) {
             logmaker.error("", e);

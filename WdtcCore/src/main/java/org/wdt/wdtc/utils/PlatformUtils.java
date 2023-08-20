@@ -2,9 +2,9 @@ package org.wdt.wdtc.utils;
 
 
 import com.google.gson.JsonObject;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.FileUtils;
+import org.wdt.utils.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +19,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-public class PlatformUtils extends FileUtils {
+
+public class PlatformUtils {
     public static String GetUrlContent(URL url) throws IOException {
-        return IOUtils.toString(url, StandardCharsets.UTF_8);
+        return IOUtils.toString(url);
     }
 
     public static String GetUrlContent(String StriingUrl) throws IOException {
@@ -48,7 +49,7 @@ public class PlatformUtils extends FileUtils {
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {
         if (file.exists()) {
             if (size != 0) {
-                return sizeOf(file) != size;
+                return FileUtils.sizeOf(file.toPath()) != size;
             } else {
                 return false;
             }

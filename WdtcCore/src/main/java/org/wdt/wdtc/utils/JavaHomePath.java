@@ -2,9 +2,9 @@ package org.wdt.wdtc.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.wdt.utils.FilenameUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.platform.AboutSetting;
 
 import java.io.IOException;
@@ -124,9 +124,9 @@ public class JavaHomePath {
 
     public static String getJavaExePath(String JavaHome) {
         if (Pattern.compile("\\s").matcher(JavaHome).find()) {
-            return JavaHome + "\\bin\\java.exe";
-        } else {
             return "\"" + JavaHome + "\\bin\\java.exe\"";
+        } else {
+            return JavaHome + "\\bin\\java.exe";
         }
 
     }

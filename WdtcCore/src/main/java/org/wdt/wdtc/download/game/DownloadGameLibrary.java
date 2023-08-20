@@ -1,20 +1,20 @@
 package org.wdt.wdtc.download.game;
 
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 
 public class DownloadGameLibrary extends DownloadTask {
     private final Logger logmaker = WdtcLogger.getLogger(DownloadGameLibrary.class);
@@ -42,12 +42,9 @@ public class DownloadGameLibrary extends DownloadTask {
             logmaker.error("* Download Library File Error,", e);
         }
         try {
-            InputStream log4j2 = getClass().getResourceAsStream("/log4j2.xml");
             File VersionLog = new File(launcher.getVersionLog4j2());
-            if (PlatformUtils.FileExistenceAndSize(VersionLog)) {
-                OutputStream vlog = new FileOutputStream(VersionLog);
-                IOUtils.copy(Objects.requireNonNull(log4j2), vlog);
-            }
+            FileUtils.writeStringToFile(VersionLog, IOUtils.toString(getClass().getResourceAsStream("/log4j2.xml")));
+
         } catch (IOException e) {
             logmaker.error("* logej.xml不存在或路径错误!", e);
         }

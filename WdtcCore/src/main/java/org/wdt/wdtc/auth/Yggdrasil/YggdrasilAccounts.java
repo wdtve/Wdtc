@@ -2,10 +2,10 @@ package org.wdt.wdtc.auth.Yggdrasil;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.Users;
 import org.wdt.wdtc.download.FileUrl;

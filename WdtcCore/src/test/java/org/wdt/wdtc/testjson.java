@@ -1,18 +1,21 @@
 package org.wdt.wdtc;
 
-import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.LauncherGame;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 
 public class testjson {
     @Test
-    public void test() throws IOException, InterruptedException {
-        System.out.println(JsonParser.parseReader(new FileReader("WdtcCore/src/test/java/org/wdt/wdtc/list.json")));
+    public void test() throws IOException {
+        File file = new File("WdtcCore/src/test/java/org/wdt/wdtc/");
+        for (File s : FileUtils.FileList(file)) {
+            System.out.println(s);
+        }
 
     }
 
