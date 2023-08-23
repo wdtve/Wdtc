@@ -2,6 +2,7 @@ package org.wdt.wdtc.auth.Yggdrasil;
 
 import com.google.gson.annotations.SerializedName;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.wdtc.auth.skin.SkinUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -15,7 +16,7 @@ public class YggdrasilTextures {
     private final String username;
     private String url;
 
-    public YggdrasilTextures(YggdrasilAccounts yggdrasilAccounts) throws IOException {
+    public YggdrasilTextures(YggdrasilAccounts yggdrasilAccounts) {
         username = yggdrasilAccounts.getUsername();
         if (Objects.nonNull(yggdrasilAccounts.getUrl())) {
             url = yggdrasilAccounts.getUrl();
@@ -38,17 +39,29 @@ public class YggdrasilTextures {
         return skins.getSkinKind();
     }
 
+    public File getUserSkinFile() {
+        return new SkinUtils(username).getSkinFile();
+    }
     public void DownloadUserSkin() throws IOException {
         String UserSkinHash = GetUserSkinHash();
-        URL UserSkinUrl = new URL(url + "/textures/" + UserSkinHash);
-        File SkinPath = new File(FilePath.getMinecraftComSkin()
-                + "/" + UserSkinHash.substring(0, 2) + "/" + UserSkinHash);
-        DownloadTask.StartDownloadTask(UserSkinUrl, SkinPath);
+        File SkinPath = new File(FilePath.getMinecraftComSkin(), UserSkinHash.substring(0, 2) + "/" + UserSkinHash);
+        DownloadTask.StartDownloadTask(getSkinUrl(), SkinPath);
+    }
+
+    public URL getSkinUrl() throws IOException {
+        return new URL(url + "/textures/" + GetUserSkinHash());
     }
 
     public Csl getCsl() throws IOException {
         return JSONObject.parseObject(PlatformUtils.GetUrlContent(GetUserJson()), Csl.class);
     }
+
+    public SkinUtils getUtils() throws IOException {
+        SkinUtils utils = new SkinUtils(getUserSkinFile());
+        utils.setUserSkinInput(getSkinUrl().openStream());
+        return utils;
+    }
+
 
     public static class Csl {
         @SerializedName("username")

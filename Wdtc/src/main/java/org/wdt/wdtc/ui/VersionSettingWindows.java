@@ -116,7 +116,7 @@ public class VersionSettingWindows extends AboutSetting {
                 JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
                 logmaker.info("* " + launcher.getVersion() + " Deleted");
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {

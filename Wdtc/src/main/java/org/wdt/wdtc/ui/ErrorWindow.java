@@ -13,8 +13,8 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class ErrorWin {
-    private static final Logger logmaker = WdtcLogger.getLogger(ErrorWin.class);
+public class ErrorWindow {
+    private static final Logger logmaker = WdtcLogger.getLogger(ErrorWindow.class);
 
 
     public static void setErrorWin(Throwable e) {

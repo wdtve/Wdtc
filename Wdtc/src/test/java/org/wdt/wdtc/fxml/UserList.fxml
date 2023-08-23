@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17">
+    <ScrollPane layoutX="306.0" layoutY="100.0" prefHeight="400.0" prefWidth="608.0" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox prefHeight="383.0" prefWidth="595.0">
+            <AnchorPane prefHeight="62.0" prefWidth="595.0">
+                <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="51.0" layoutY="15.0" pickOnBounds="true"
+                           preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="50.0"
+                           AnchorPane.topAnchor="15.0"/>
+                <RadioButton layoutX="14.0" layoutY="15.0" mnemonicParsing="false" AnchorPane.bottomAnchor="15.0"
+                             AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="568.0" AnchorPane.topAnchor="15.0"/>
+                <Label layoutX="96.0" layoutY="8.0" text="用户名" AnchorPane.bottomAnchor="34.0"
+                       AnchorPane.topAnchor="12.0"/>
+                <Label layoutX="96.0" layoutY="31.0" text="离线账户" AnchorPane.bottomAnchor="12.0"
+                       AnchorPane.topAnchor="30.0"/>
+                <Button layoutX="530.0" layoutY="17.0" mnemonicParsing="false" text="Button"
+                        AnchorPane.bottomAnchor="17.0" AnchorPane.topAnchor="17.0"/>
+            </AnchorPane>
+            <AnchorPane prefHeight="60.0" prefWidth="598.0"/>
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

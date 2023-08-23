@@ -3,6 +3,7 @@ package org.wdt.wdtc;
 
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONArray;
+import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
@@ -34,6 +35,7 @@ public class WdtcMain extends JavaFxUtils {
         StartTask();
         Ergodic();
         RemovePreferredVersion();
+        UserList.printUserList();
         AuthlibInjector.UpdateAuthlibInjector();
         GameConfig.writeConfigJsonToAllVersion();
         ThreadUtils.StartThread(() -> JavaHomePath.main(args)).setName("Found Java");

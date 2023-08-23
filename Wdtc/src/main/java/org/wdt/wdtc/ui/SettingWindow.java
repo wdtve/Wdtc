@@ -12,6 +12,7 @@ import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -49,12 +50,8 @@ public class SettingWindow extends AboutSetting {
         button.setLayoutY(line);
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                try {
-                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", GetSettingFile().getCanonicalPath()});
-                    logmaker.info("* 设置文件" + GetSettingFile() + "已打开");
-                } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
-                }
+                PlatformUtils.StartPath(GetSettingFile());
+                logmaker.info("* 设置文件" + GetSettingFile() + "已打开");
             } else {
                 try {
                     DirectoryChooser fileChooser = new DirectoryChooser();
@@ -68,7 +65,7 @@ public class SettingWindow extends AboutSetting {
                         logmaker.info("* 游戏文件夹已更改为:" + file);
                     }
                 } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
+                    ErrorWindow.setErrorWin(e);
                 }
             }
         });
@@ -207,7 +204,7 @@ public class SettingWindow extends AboutSetting {
                     logmaker.info("* 日志已导出:" + logFile);
                 }
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
 
@@ -218,12 +215,8 @@ public class SettingWindow extends AboutSetting {
         AnchorPane.setBottomAnchor(CleanCache, 30.0);
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                try {
-                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FilePath.getWdtcCache().getCanonicalPath()});
-                    logmaker.info("* 缓存文件夹已打开");
-                } catch (IOException e) {
-                    logmaker.error("* OpenFolder Error,", e);
-                }
+                PlatformUtils.StartPath(FilePath.getWdtcCache());
+                logmaker.info("* 缓存文件夹已打开");
             } else {
                 try {
                     FileUtils.cleanDirectory(FilePath.getWdtcCache());

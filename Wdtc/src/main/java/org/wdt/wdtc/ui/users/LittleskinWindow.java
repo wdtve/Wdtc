@@ -1,28 +1,24 @@
 package org.wdt.wdtc.ui.users;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilTextures;
 import org.wdt.wdtc.download.FileUrl;
-import org.wdt.wdtc.ui.Consoler;
-import org.wdt.wdtc.ui.ErrorWin;
+import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
-import java.util.Objects;
 
 
-public class LittleskinWin {
-    private static final Logger logmaker = WdtcLogger.getLogger(LittleskinWin.class);
+public class LittleskinWindow {
+    private static final Logger logmaker = WdtcLogger.getLogger(LittleskinWindow.class);
 
-    public static void setLittleskinWin(Stage UserStage) {
-        Pane pane = new Pane();
+    public static void setLittleskinWin(Pane pane) {
         Label littleskinTitle = new Label("Littleskin外置登录");
         littleskinTitle.setLayoutX(250.0);
         littleskinTitle.setLayoutY(69.0);
@@ -46,29 +42,24 @@ public class LittleskinWin {
         Button ok = new Button("登录");
         ok.setLayoutX(267.0);
         ok.setLayoutY(219.0);
-        Button back = new Button("返回");
-        Button LittleskinCom = new Button("Littleskin官网");
-        LittleskinCom.setLayoutY(23.0);
-        back.setOnAction(event -> UserStage.close());
-        pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok, back, LittleskinCom);
+        pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok);
         ok.setOnAction(event -> {
             String UserName = Inputusername.getText();
             String PowerWord = inputpowerword.getText();
-            if (Objects.nonNull(UserName) && Objects.nonNull(PowerWord)
-                    && UserName.isEmpty() && PowerWord.isEmpty()) {
+            if (UserName.isEmpty() && PowerWord.isEmpty()) {
                 label.setText("请输入用户名、密码");
                 logmaker.warn("* 用户名、密码为空");
             } else {
                 try {
                     YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(FileUrl.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
-                    yggdrasilAccounts.WriteUserJson();
+                    UserList.addUser(yggdrasilAccounts.getUser());
                     try {
-                        YggdrasilTextures yggdrasilTextures = new YggdrasilTextures(yggdrasilAccounts);
+                        YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();
                         yggdrasilTextures.DownloadUserSkin();
                         logmaker.info("* Littleskin用户:" + Inputusername.getText() + "登陆成功!");
-                        UserStage.close();
+                        UserListPane.setUserList(pane);
                     } catch (IOException e) {
-                        ErrorWin.setErrorWin(e);
+                        ErrorWindow.setErrorWin(e);
                     }
                 } catch (IOException e) {
                     label.setText("用户名或密码错误");
@@ -76,14 +67,6 @@ public class LittleskinWin {
                 }
             }
         });
-        LittleskinCom.setOnAction(event -> {
-            try {
-                Runtime.getRuntime().exec("cmd.exe /C start " + FileUrl.getLittleskinUrl());
-            } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
-            }
-        });
-        pane.setBackground(Consoler.getBackground());
-        UserStage.setScene(new Scene(pane, 600, 400));
+
     }
 }

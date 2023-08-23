@@ -2,6 +2,7 @@ package org.wdt.wdtc.platform;
 
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
@@ -20,13 +21,16 @@ public class AboutSetting {
     private static final Logger logmaker = Logger.getLogger(AboutSetting.class);
 
     public static File GetSettingFile() {
-        return new File(FilePath.getWdtcConfig() + "/setting/setting.json");
+        return new File(FilePath.getWdtcConfig(), "setting/setting.json");
     }
 
     public static void GenerateSettingFile() throws IOException {
         String readme = IOUtils.toString(requireNonNull(AboutSetting.class.getResourceAsStream("/readme.txt")));
-        File writeReadme = new File(FilePath.getWdtcConfig() + "/readme.txt");
+        File writeReadme = new File(FilePath.getWdtcConfig(), "readme.txt");
         FileUtils.writeStringToFile(writeReadme, readme);
+        if (PlatformUtils.FileExistenceAndSize(FilePath.getUserListFile())) {
+            JSONUtils.ObjectToJsonFile(FilePath.getUserListFile(), new JsonObject());
+        }
         if (PlatformUtils.FileExistenceAndSize(GetSettingFile())) {
             JSONUtils.ObjectToJsonFile(GetSettingFile(), new Setting());
         }

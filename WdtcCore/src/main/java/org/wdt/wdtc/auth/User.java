@@ -1,13 +1,15 @@
 package org.wdt.wdtc.auth;
 
 import com.google.gson.annotations.SerializedName;
+import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
-public class Users {
+public class User {
 
     @SerializedName("UserName")
     private String UserName;
@@ -21,6 +23,20 @@ public class Users {
     private String API;
     @SerializedName("MetaAPIBase64")
     private String APIBase64;
+    @SerializedName("HeadPhotoPath")
+    private String HeadFile;
+
+    public static void setUserToJson(User user) {
+        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), user);
+    }
+
+    public static User getUsers() {
+        try {
+            return JSONUtils.JsonFileToClass(FilePath.getUsersJson(), User.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public String getAPIBase64() {
         return APIBase64;
@@ -54,17 +70,6 @@ public class Users {
         Uuid = uuid;
     }
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "UserName='" + UserName + '\'' +
-                ", AccessToken='" + AccessToken + '\'' +
-                ", Type=" + Type +
-                ", Uuid='" + Uuid + '\'' +
-                ", API='" + API + '\'' +
-                ", APIBase64='" + APIBase64 + '\'' +
-                '}';
-    }
 
     public static boolean SetUserJson() {
         try {
@@ -73,6 +78,21 @@ public class Users {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public File getHeadFile() {
+        return new File(HeadFile);
+    }
+
+    public void setHeadFile(File headFile) throws IOException {
+        HeadFile = headFile.getCanonicalPath();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(UserName, user.UserName);
     }
 
     public String getAccessToken() {
@@ -91,4 +111,12 @@ public class Users {
         return Uuid;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "UserName='" + UserName + '\'' +
+                ", Type=" + Type +
+                ", HeadFile='" + HeadFile + '\'' +
+                '}';
+    }
 }

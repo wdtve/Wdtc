@@ -2,6 +2,7 @@ package org.wdt.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -119,5 +120,9 @@ public class FileUtils {
 
     public static List<File> FileList(File file) {
         return Arrays.stream(file.listFiles()).toList();
+    }
+
+    public static InputStream newInputStream(File file) throws IOException {
+        return Files.newInputStream(file.toPath());
     }
 }

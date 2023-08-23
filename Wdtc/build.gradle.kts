@@ -31,7 +31,7 @@ tasks.shadowJar {
     }
 }
 
-val Number: String = "0.0.1.4"
+val Number: String = "0.0.1.5"
 tasks.create<JavaExec>("run") {
     dependsOn(tasks.jar)
     group = "application"

@@ -7,7 +7,9 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
-import org.wdt.wdtc.auth.Users;
+import org.wdt.wdtc.auth.AccountsInterface;
+import org.wdt.wdtc.auth.User;
+import org.wdt.wdtc.auth.skin.SkinUtils;
 import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -18,7 +20,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class YggdrasilAccounts {
+public class YggdrasilAccounts implements AccountsInterface {
     private static final Logger logmaker = WdtcLogger.getLogger(YggdrasilAccounts.class);
     private final String url;
     private final String username;
@@ -60,23 +62,31 @@ public class YggdrasilAccounts {
         return username;
     }
 
-
-    public void WriteUserJson() throws IOException {
-        UserInformation UserInfo = getUserInformation();
-        Users users = new Users();
-        users.setType(Accounts.AccountsType.Yggdrasil);
-        JSONObject selectedProfile = new JSONObject(UserInfo.getSelectedProfile());
-        users.setUserName(selectedProfile.getString("name"));
-        users.setUuid(selectedProfile.getString("id"));
-        users.setAccessToken(UserInfo.getAccessToken());
-        users.setAPI(PlatformUtils.GetUrlContent(FileUrl.getLittleskinApi()));
-        users.setAPIBase64(PlatformUtils.StringToBase64(users.getAPI()));
-        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), users);
-        logmaker.info(users);
-    }
-
     public UserInformation getUserInformation() throws IOException {
         return JSONObject.parseObject(sendPostWithJson(), UserInformation.class);
+    }
+
+    public YggdrasilTextures getYggdrasilTextures() {
+        return new YggdrasilTextures(this);
+    }
+
+    @Override
+    public User getUser() throws IOException {
+        UserInformation UserInfo = getUserInformation();
+        YggdrasilTextures textures = getYggdrasilTextures();
+        User user = new User();
+        user.setType(Accounts.AccountsType.Yggdrasil);
+        JSONObject selectedProfile = new JSONObject(UserInfo.getSelectedProfile());
+        user.setUserName(selectedProfile.getString("name"));
+        user.setUuid(selectedProfile.getString("id"));
+        user.setAccessToken(UserInfo.getAccessToken());
+        user.setAPI(PlatformUtils.GetUrlContent(FileUrl.getLittleskinApi()));
+        user.setAPIBase64(PlatformUtils.StringToBase64(user.getAPI()));
+        SkinUtils utils = textures.getUtils();
+        user.setHeadFile(utils.writeSkinHead());
+        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), user);
+        logmaker.info(user);
+        return user;
     }
 
     public static class UserInformation {
@@ -105,6 +115,7 @@ public class YggdrasilAccounts {
         public JsonObject getSelectedProfile() {
             return selectedProfile;
         }
+
 
         @Override
         public String toString() {

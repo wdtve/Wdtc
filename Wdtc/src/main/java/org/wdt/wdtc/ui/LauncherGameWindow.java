@@ -57,6 +57,6 @@ public class LauncherGameWindow {
     }
 
     private void showErrorWin() throws IOException {
-        ErrorWin.setWin("启动失败:\n" + IOUtils.toString(process.getErrorStream()) + IOUtils.toString(process.getInputStream()), "启动失败");
+        ErrorWindow.setWin("启动失败:\n" + IOUtils.toString(process.getErrorStream()) + IOUtils.toString(process.getInputStream()), "启动失败");
     }
 }

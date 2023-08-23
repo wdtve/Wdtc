@@ -6,7 +6,6 @@ import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
-import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -44,7 +43,6 @@ public class InstallGameVersion extends ModUtils {
             GameConfig config = launcher.getGameConfig();
             if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
                 GameConfig.writeConfigJson(launcher);
-                logmaker.info(new DefaultGameConfig());
             }
             InstallTask task = getModInstallTask(launcher);
             DownloadVersionGameFile DownloadGame = new DownloadVersionGameFile(launcher, Install);

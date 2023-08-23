@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.ui.ErrorWin;
+import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -44,7 +44,7 @@ public class AppMain extends Application {
                     logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
                 }
             } catch (MalformedURLException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
             Platform.runLater(() -> {
                 MainStage.setMinWidth(WindwosSize.WindowsWidht);
@@ -66,7 +66,7 @@ public class AppMain extends Application {
                 Platform.exit();
             });
         } catch (Exception e) {
-            ErrorWin.setErrorWin(e);
+            ErrorWindow.setErrorWin(e);
         }
     }
 }

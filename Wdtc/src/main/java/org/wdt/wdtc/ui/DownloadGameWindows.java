@@ -48,7 +48,7 @@ public class DownloadGameWindows {
             try {
                 Runtime.getRuntime().exec("cmd.exe /C start https://bmclapidoc.bangbang93.com/");
             } catch (IOException | RuntimeException exception) {
-                ErrorWin.setErrorWin(exception);
+                ErrorWindow.setErrorWin(exception);
             }
         });
         AnchorPane.setRightAnchor(bmclHome, 0.0);
@@ -62,7 +62,7 @@ public class DownloadGameWindows {
                 new InstallGameVersion(launcher, textField).DownloadGame();
 
             } catch (Exception e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         }).setName("Download Game");
         pane.setBackground(Consoler.getBackground());

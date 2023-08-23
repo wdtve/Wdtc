@@ -110,4 +110,12 @@ public class PlatformUtils {
         }
     }
 
+    public static void StartPath(Object o) {
+        try {
+            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", o.toString()});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

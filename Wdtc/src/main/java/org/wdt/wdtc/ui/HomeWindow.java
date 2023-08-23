@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.auth.Users;
+import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
@@ -15,7 +15,7 @@ import org.wdt.wdtc.launch.GetGamePath;
 import org.wdt.wdtc.launch.LauncherGame;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.ui.users.UsersWin;
+import org.wdt.wdtc.ui.users.NewUserWindows;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -49,13 +49,13 @@ public class HomeWindow {
                     Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FilePath.getWdtcConfig().getCanonicalPath()});
                     logmaker.info("* 配置目录" + FilePath.getWdtcConfig() + "已打开");
                 } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
+                    ErrorWindow.setErrorWin(e);
                 }
             } else {
                 try {
                     SettingWindow.setSettingWin(MainStage);
                 } catch (IOException e) {
-                    ErrorWin.setErrorWin(e);
+                    ErrorWindow.setErrorWin(e);
                 }
             }
         });
@@ -73,7 +73,12 @@ public class HomeWindow {
 
         JFXButton User = new JFXButton("修改账户");
         User.setPrefSize(128, 46);
-        User.setOnAction(event -> UsersWin.setUserWin(User.getText(), MainStage));
+        User.setOnAction(event -> {
+            NewUserWindows windows = new NewUserWindows(MainStage);
+            windows.setType(Accounts.AccountsType.Offline);
+            windows.setTitle("注册账户");
+            windows.show();
+        });
 
         JFXButton downgame = new JFXButton("下载游戏");
         downgame.setPrefSize(128, 46);
@@ -105,7 +110,7 @@ public class HomeWindow {
             try {
                 Runtime.getRuntime().exec(new String[]{"cmd", "/C", "start", "https://github.com/Wd-t/Wdtc"});
             } catch (IOException | RuntimeException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
 
@@ -130,18 +135,18 @@ public class HomeWindow {
         AnchorPane.setRightAnchor(LaunchGameButton, 30.0);
         LaunchGameButton.setOnAction(event -> {
             if (launcher != null) {
-                if (Users.SetUserJson()) {
+                if (org.wdt.wdtc.auth.User.SetUserJson()) {
                     ThreadUtils.StartThread(() -> {
                         try {
                             LauncherGame launch = new LauncherGame(launcher);
                             LauncherGameWindow launcherGameWindow = new LauncherGameWindow(launch.getStart());
                             launcherGameWindow.startGame();
                         } catch (IOException e) {
-                            ErrorWin.setErrorWin(e);
+                            ErrorWindow.setErrorWin(e);
                         }
                     }).setName("Launch Game");
                 } else {
-                    UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
+//                    UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
                 }
             } else {
                 NewDownloadWindow.SetWin(MainStage);
@@ -158,8 +163,8 @@ public class HomeWindow {
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);
         MainStage.setScene(scene);
-        if (!Users.SetUserJson()) {
-            UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
+        if (!org.wdt.wdtc.auth.User.SetUserJson()) {
+//            UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
         }
     }
 }

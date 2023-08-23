@@ -119,7 +119,7 @@ public class ModChooseWindows {
                 ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FORGE, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         CancelForge.setOnAction(event -> {
@@ -135,7 +135,7 @@ public class ModChooseWindows {
                 ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FABRIC, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         CancelFabric.setOnAction(event -> {
@@ -157,7 +157,7 @@ public class ModChooseWindows {
                 ModChoose Choose = new ModChoose(ModUtils.KindOfMod.FABRICAPI, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         CancelFabricAPI.setOnAction(event -> {
@@ -174,7 +174,7 @@ public class ModChooseWindows {
                 ModChoose Choose = new ModChoose(ModUtils.KindOfMod.QUILT, MainStage, launcher);
                 Choose.setModChooser();
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         CancelQuilt.setOnAction(event -> {

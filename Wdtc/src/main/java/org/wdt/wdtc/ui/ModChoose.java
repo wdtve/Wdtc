@@ -66,7 +66,7 @@ public class ModChoose {
                     size.ModifyWindwosSize(ButtonList, VersionButton);
                 }
             } catch (IOException e) {
-                ErrorWin.setErrorWin(e);
+                ErrorWindow.setErrorWin(e);
             }
         });
         list.setContent(ButtonList);
