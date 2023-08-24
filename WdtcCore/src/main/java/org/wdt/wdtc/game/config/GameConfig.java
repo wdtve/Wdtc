@@ -6,11 +6,10 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,12 +22,12 @@ public class GameConfig {
     }
 
     public static void writeConfigJsonToAllVersion() throws IOException {
-        GetGamePath getGamePath = new GetGamePath();
-        if (DownloadedGameVersion.isDownloadedGame(getGamePath)) {
-            List<Launcher> list = DownloadedGameVersion.getGameVersionList(getGamePath);
+        GamePath gamePath = new GamePath();
+        if (DownloadedGameVersion.isDownloadedGame(gamePath)) {
+            List<Launcher> list = DownloadedGameVersion.getGameVersionList(gamePath);
             for (Launcher child : list) {
                 GameConfig config = child.getGameConfig();
-                if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
+                if (PlatformUtils.FileExistenceAndSize(child.getVersionConfigFile())) {
                     writeConfigJson(child);
                 } else {
                     DefaultGameConfig GameConfig = config.getDefaultGameConfig();
@@ -42,18 +41,15 @@ public class GameConfig {
         }
     }
 
-    public File getVersionConfigFile() {
-        return new File(launcher.getVersionPath() + "/config.json");
-    }
+
 
     public static void writeConfigJson(Launcher launcher) {
         try {
-            GameConfig gameConfig = launcher.getGameConfig();
             DefaultGameConfig config = new DefaultGameConfig();
             config.setConfig(new DefaultGameConfig.Config());
             config.setInfo(launcher.getVersionInfo());
-            FileUtils.writeStringToFile(gameConfig.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
-            logmaker.info("* " + launcher.getVersion() + " " + config);
+            FileUtils.writeStringToFile(launcher.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
+            logmaker.info("* " + launcher.getVersionNumber() + " " + config);
         } catch (IOException e) {
             logmaker.error("", e);
         }
@@ -65,7 +61,7 @@ public class GameConfig {
 
     public DefaultGameConfig getDefaultGameConfig() {
         try {
-            return JSONUtils.JsonFileToClass(getVersionConfigFile(), DefaultGameConfig.class);
+            return JSONUtils.JsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -73,14 +69,14 @@ public class GameConfig {
 
     public VersionInfo getVersionInfo() {
         try {
-            return JSONUtils.JsonFileToClass(getVersionConfigFile(), DefaultGameConfig.class).getInfo();
+            return JSONUtils.JsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class).getInfo();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void PutConfigToFile(DefaultGameConfig config) {
-        JSONUtils.ObjectToJsonFile(getVersionConfigFile(), config);
+        JSONUtils.ObjectToJsonFile(launcher.getVersionConfigFile(), config);
     }
 
 }

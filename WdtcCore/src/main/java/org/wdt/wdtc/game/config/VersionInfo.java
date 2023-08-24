@@ -17,7 +17,7 @@ public class VersionInfo {
     private String ModVersion;
 
     public VersionInfo(Launcher launcher) {
-        this.VersionNumber = launcher.getVersion();
+        this.VersionNumber = launcher.getVersionNumber();
         this.kind = launcher.getKind();
         DownloadInfo info = ModUtils.getModDownloadInfo(launcher);
         if (info != null) {

@@ -3,6 +3,7 @@ package org.wdt.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -124,5 +125,25 @@ public class FileUtils {
 
     public static InputStream newInputStream(File file) throws IOException {
         return Files.newInputStream(file.toPath());
+    }
+
+    public static OutputStream newOutputStream(File file) throws IOException {
+        return Files.newOutputStream(file.toPath());
+    }
+
+    public static void createDirectories(File file) {
+        try {
+            Files.createDirectories(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getCanonicalPath(File file) {
+        try {
+            return file.getCanonicalPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

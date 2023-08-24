@@ -29,7 +29,7 @@ public class ModChooseWindows {
     public void setChooseWin() {
         Pane pane = new Pane();
         JFXButton back = new JFXButton("返回");
-        Label title = new Label(launcher.getVersion());
+        Label title = new Label(launcher.getVersionNumber());
         title.setLayoutX(283.0);
         title.setLayoutY(69.0);
         Label Forge = new Label(Tips.ForgeNo);

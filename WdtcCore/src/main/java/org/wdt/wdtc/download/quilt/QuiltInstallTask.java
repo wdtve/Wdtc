@@ -60,7 +60,7 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTask {
             LibraryList.add(LibraryObject.getLibraryObject(download, LibraryDefaultUrl));
         }
         VersionJsonObject.setLibraries(LibraryList);
-        VersionJsonObject.setId(launcher.getVersion() + "-quilt-" + QuiltVersionNumber);
+        VersionJsonObject.setId(launcher.getVersionNumber() + "-quilt-" + QuiltVersionNumber);
         launcher.PutToVersionJson(VersionJsonObject);
     }
 

@@ -7,7 +7,7 @@ public class DetermineVersionSize {
 
     public static boolean DetermineSize(String OriginalVersionNumber, Launcher launcher) {
         Matcher OriginalVersion = getVersionNumber(OriginalVersionNumber);
-        Matcher Version = getVersionNumber(launcher.getVersion());
+        Matcher Version = getVersionNumber(launcher.getVersionNumber());
         if (OriginalVersion.find() && Version.find()) {
             int Original = Integer.parseInt(OriginalVersion.group(1));
             int target = Integer.parseInt(Version.group(1));

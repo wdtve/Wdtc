@@ -19,6 +19,7 @@ public class LittleskinWindow {
     private static final Logger logmaker = WdtcLogger.getLogger(LittleskinWindow.class);
 
     public static void setLittleskinWin(Pane pane) {
+        pane.getChildren().clear();
         Label littleskinTitle = new Label("Littleskin外置登录");
         littleskinTitle.setLayoutX(250.0);
         littleskinTitle.setLayoutY(69.0);

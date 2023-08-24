@@ -14,7 +14,7 @@ import org.wdt.wdtc.utils.PlatformUtils;
 
 public class NewUserWindows {
     private final Stage MainStage;
-    private Accounts.AccountsType type = Accounts.AccountsType.Offline;
+    private Accounts.AccountsType type = null;
     private String title;
 
     public NewUserWindows(Stage mainStage) {
@@ -36,7 +36,14 @@ public class NewUserWindows {
         AnchorPane ParentPane = new AnchorPane();
         UserStage.getIcons().add(new Image("/ico.jpg"));
         Pane SonPane = new Pane();
-        UserListPane.setUserList(SonPane);
+        if (type == null) {
+            UserListPane.setUserList(SonPane);
+        } else {
+            switch (type) {
+                case Yggdrasil -> LittleskinWindow.setLittleskinWin(SonPane);
+                case Offline -> UsersWindow.setUserWin(SonPane);
+            }
+        }
         UserStage.initOwner(MainStage);
         UserStage.setTitle(title);
         SonPane.setPrefSize(600, 400);
@@ -44,19 +51,13 @@ public class NewUserWindows {
         ButtonLine.setPrefWidth(125);
 
         JFXButton UserListButton = new JFXButton("账户列表");
-        UserListButton.setOnAction(event -> {
-            clean(SonPane);
-            UserListPane.setUserList(SonPane);
-        });
+        UserListButton.setOnAction(event -> UserListPane.setUserList(SonPane));
         UserListButton.setPrefSize(125, 30);
 
         JFXButton OfflineButton = new JFXButton("离线账户");
         AnchorPane.setTopAnchor(OfflineButton, 30.0);
         OfflineButton.setPrefSize(125, 30);
-        OfflineButton.setOnAction(event -> {
-            clean(SonPane);
-            UsersWindow.setUserWin(SonPane);
-        });
+        OfflineButton.setOnAction(event -> UsersWindow.setUserWin(SonPane));
         JFXButton LittleskinCom = new JFXButton("Littleskin官网");
         LittleskinCom.setPrefSize(125, 30);
         AnchorPane.setBottomAnchor(LittleskinCom, 30.0);
@@ -65,10 +66,7 @@ public class NewUserWindows {
         AnchorPane.setBottomAnchor(buygame, 0.0);
         JFXButton YggdrasilButton = new JFXButton("Yggdrasil账户");
         YggdrasilButton.setPrefSize(125, 30);
-        YggdrasilButton.setOnAction(event -> {
-            clean(SonPane);
-            LittleskinWindow.setLittleskinWin(SonPane);
-        });
+        YggdrasilButton.setOnAction(event -> LittleskinWindow.setLittleskinWin(SonPane));
         AnchorPane.setTopAnchor(YggdrasilButton, 60.0);
         Consoler.setTopLowerRight(SonPane);
         AnchorPane.setBottomAnchor(SonPane, 0.0);
@@ -89,7 +87,4 @@ public class NewUserWindows {
     }
 
 
-    private void clean(Pane pane) {
-        pane.getChildren().clear();
-    }
 }

@@ -26,11 +26,11 @@ public class QuiltDownloadInfo implements DownloadInfo {
     }
 
     public File getQuiltVersionJson() {
-        return new File(FilePath.getWdtcCache() + "/" + launcher.getVersion() + "-quilt-" + QuiltVersionNumber + ".json");
+        return new File(FilePath.getWdtcCache() + "/" + launcher.getVersionNumber() + "-quilt-" + QuiltVersionNumber + ".json");
     }
 
     public String getQuiltVersionJsonUrl() {
-        return String.format(LibraryListUrl, launcher.getVersion(), QuiltVersionNumber);
+        return String.format(LibraryListUrl, launcher.getVersionNumber(), QuiltVersionNumber);
     }
 
     public JSONObject getQuiltGameVersionJsonObject() throws IOException {

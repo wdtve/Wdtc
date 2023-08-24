@@ -2,61 +2,62 @@ package org.wdt.wdtc.game;
 
 
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 
+import java.io.File;
 import java.io.IOException;
 
-public class Version extends GetGamePath {
-    private final String version;
+public class Version extends GamePath {
+    protected final String VersionNumber;
 
-    public Version(String version) {
-        this.version = version;
+    public Version(String VersionNumber) {
+        this.VersionNumber = VersionNumber;
     }
 
-    public Version(String version, String here) {
+    public Version(String VersionNumber, File here) {
         super(here);
-        this.version = version;
+        this.VersionNumber = VersionNumber;
     }
 
-    public String getVersion() {
-        return version;
+    public String getVersionNumber() {
+        return VersionNumber;
     }
 
 
-    public String getVersionPath() {
-        return getGameVersionPath() + version + "/";
+    public File getVersionPath() {
+        return new File(getGameVersionsPath(), VersionNumber);
     }
 
-    public String getVersionJson() {
-        return getVersionPath() + version + ".json";
+    public File getVersionJson() {
+        return new File(getVersionPath(), VersionNumber + ".json");
     }
 
-    public String getVersionJar() {
-        return getVersionPath() + version + ".jar";
+    public File getVersionJar() {
+        return new File(getVersionPath(), VersionNumber + ".jar");
     }
 
-    public String getVersionLog4j2() {
-        return getVersionPath() + "log4j2.xml";
+    public File getVersionLog4j2() {
+        return new File(getVersionPath(), "log4j2.xml");
     }
 
-    public String getVersionNativesPath() {
-        return getVersionPath() + "natives-windows-x86_64";
+    public File getVersionNativesPath() {
+        return new File(getVersionPath(), "natives-windows-x86_64");
     }
 
-    public String getGameAssetsListJson() throws IOException {
-        return getGameAssetsdir() + "/indexes/" + getGameVersionJsonObject().getAssets() + ".json";
+    public File getGameAssetsListJson() throws IOException {
+        return new File(getGameAssetsdir(), "indexes/" + getGameVersionJsonObject().getAssets() + ".json");
     }
 
-    public String getGameOptionsFile() {
-        return getVersionPath() + "options.txt";
+    public File getGameOptionsFile() {
+        return new File(getVersionPath(), "options.txt");
     }
 
-    public String getGameModsPath() {
-        return getVersionPath() + "mods/";
+    public File getGameModsPath() {
+        return new File(getVersionPath(), "mods");
     }
 
-    public String getGameLogDir() {
-        return getVersionPath() + "logs/";
+    public File getGameLogDir() {
+        return new File(getVersionPath(), "logs");
     }
 
     public void PutToVersionJson(GameVersionJsonObject o) {
@@ -65,5 +66,9 @@ public class Version extends GetGamePath {
 
     public GameVersionJsonObject getGameVersionJsonObject() throws IOException {
         return JSONUtils.JsonFileToClass(getVersionJson(), GameVersionJsonObject.class);
+    }
+
+    public File getVersionConfigFile() {
+        return new File(getVersionPath(), "config.json");
     }
 }

@@ -41,7 +41,7 @@ public class SettingWindow extends AboutSetting {
 
         double line = 55.0;
         TextField GamePath = new TextField();
-        GamePath.setText(AboutSetting.getSetting().getDefaultGamePath());
+        GamePath.setText(FileUtils.getCanonicalPath(AboutSetting.getSetting().getDefaultGamePath()));
         GamePath.setLayoutX(coordinate.layoutX);
         GamePath.setLayoutY(line);
         GamePath.setPrefSize(297.0, 23.0);
@@ -56,10 +56,10 @@ public class SettingWindow extends AboutSetting {
                 try {
                     DirectoryChooser fileChooser = new DirectoryChooser();
                     fileChooser.setTitle("选择游戏文件夹");
-                    fileChooser.setInitialDirectory(new File(getSetting().getDefaultGamePath()));
+                    fileChooser.setInitialDirectory(getSetting().getDefaultGamePath());
                     File file = fileChooser.showDialog(MainStage);
                     if (Objects.nonNull(file)) {
-                        setting.setDefaultGamePath(file.getCanonicalPath());
+                        setting.setDefaultGamePath(file);
                         putSettingToFile(setting);
                         GamePath.setText(file.getCanonicalPath());
                         logmaker.info("* 游戏文件夹已更改为:" + file);

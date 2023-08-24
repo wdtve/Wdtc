@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
 
 public class DependencyDownload extends DefaultDependency {
-    private String DownloadPath;
+    private File DownloadPath;
     private String DefaultUrl = "https://repo1.maven.org/maven2/";
 
     public DependencyDownload(String lib) {
@@ -18,18 +17,12 @@ public class DependencyDownload extends DefaultDependency {
         super(groupId, artifactId, version);
     }
 
-
-    private String aboutPath(String path) {
-        if (Objects.isNull(path)) return "";
-        else return path;
-    }
-
     public String getLibraryFilePath() throws IOException {
         return getLibraryFile().getCanonicalPath();
     }
 
     public File getLibraryFile() {
-        return new File(aboutPath(DownloadPath) + formJar());
+        return new File(DownloadPath, formJar());
     }
 
 
@@ -41,12 +34,12 @@ public class DependencyDownload extends DefaultDependency {
         DefaultUrl = defaultUrl;
     }
 
-    public String getDownloadPath() {
+    public File getDownloadPath() {
         return DownloadPath;
     }
 
-    public void setDownloadPath(String path) {
-        this.DownloadPath = aboutPath(path) + "/";
+    public void setDownloadPath(File path) {
+        this.DownloadPath = path;
     }
 
 

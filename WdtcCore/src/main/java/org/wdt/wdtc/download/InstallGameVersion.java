@@ -40,8 +40,7 @@ public class InstallGameVersion extends ModUtils {
     public void DownloadGame() {
         try {
             long startTime = System.currentTimeMillis();
-            GameConfig config = launcher.getGameConfig();
-            if (PlatformUtils.FileExistenceAndSize(config.getVersionConfigFile())) {
+            if (PlatformUtils.FileExistenceAndSize(launcher.getVersionConfigFile())) {
                 GameConfig.writeConfigJson(launcher);
             }
             InstallTask task = getModInstallTask(launcher);

@@ -40,7 +40,7 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
             JSONObject object = FabricLibraryList.getJSONObject(i);
             DependencyDownload dependency = new DependencyDownload(object.getString("name"));
             dependency.setDefaultUrl(source.getFabricLibraryUrl());
-            dependency.setDownloadPath(launcher.GetGameLibraryPath());
+            dependency.setDownloadPath(launcher.getGameLibraryPath());
             libraryObjectList.add(LibraryObject.getLibraryObject(dependency, object.getString("url")));
         }
         VersionJsonObject.setLibraries(libraryObjectList);
@@ -54,7 +54,7 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
         GameList.addAll(Arguments.getJSONArray("game").getJsonArrays());
         arguments.setGameList(GameList);
         VersionJsonObject.setArguments(arguments);
-        VersionJsonObject.setId(launcher.getVersion() + "-fabric-" + FabricVersionNumber);
+        VersionJsonObject.setId(launcher.getVersionNumber() + "-fabric-" + FabricVersionNumber);
         launcher.PutToVersionJson(VersionJsonObject);
     }
 
@@ -78,6 +78,6 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
 
     @Override
     public void BeforInstallTask() {
-        DownloadTask.StartDownloadTask(String.format(getFabricVersionFileUrl(), launcher.getVersion(), FabricVersionNumber), getFabricVersionJson());
+        DownloadTask.StartDownloadTask(String.format(getFabricVersionFileUrl(), launcher.getVersionNumber(), FabricVersionNumber), getFabricVersionJson());
     }
 }

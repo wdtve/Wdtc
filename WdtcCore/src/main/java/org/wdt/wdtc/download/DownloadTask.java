@@ -66,7 +66,7 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     public Thread StartDownloadHashTask(String hash, int Filesize, SpeedOfProgress downLatch) {
         try {
             String hash_t = hash.substring(0, 2);
-            File hash_path = new File(launcher.getGameObjects() + hash_t + "\\" + hash);
+            File hash_path = new File(launcher.getGameObjects(), hash_t + "/" + hash);
             URL hash_url = new URL(source.getAssetsUrl() + hash_t + "/" + hash);
             return ThreadUtils.StartThread(() -> {
                 try {

@@ -34,7 +34,7 @@ public class ExecuteUtils {
             JSONObject object = FabricLibraryList.getJSONObject(i);
             DependencyDownload dependency = new DependencyDownload(object.getString("name"));
             dependency.setDefaultUrl(source.getFabricLibraryUrl());
-            dependency.setDownloadPath(launcher.GetGameLibraryPath());
+            dependency.setDownloadPath(launcher.getGameLibraryPath());
             LibraryObjectList.add(LibraryObject.getLibraryObject(dependency, object.getString("url")));
         }
         VersionJsonObject.setLibraries(LibraryObjectList);
@@ -49,7 +49,7 @@ public class ExecuteUtils {
         arguments.setGameList(GameList);
         VersionJsonObject.setArguments(arguments);
         if (info != null) {
-            VersionJsonObject.setId(launcher.getVersion() + kind.toString().toLowerCase() + info.getModVersion());
+            VersionJsonObject.setId(launcher.getVersionNumber() + kind.toString().toLowerCase() + info.getModVersion());
         }
 
         launcher.PutToVersionJson(VersionJsonObject);

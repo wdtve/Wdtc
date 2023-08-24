@@ -68,21 +68,6 @@ public class AboutSetting {
         private double WindowsHeight = 489.0;
         private String PreferredVersion;
 
-        @Override
-        public String toString() {
-            return "Setting{" +
-                    "DownloadSource=" + DownloadSource +
-                    ", console=" + console +
-                    ", LlvmpipeLoader=" + LlvmpipeLoader +
-                    ", DefaultGamePath='" + DefaultGamePath + '\'' +
-                    ", JavaPath=" + JavaPath +
-                    ", ChineseLanguage=" + ChineseLanguage +
-                    ", WindowsWidth=" + WindowsWidth +
-                    ", WindowsHeight=" + WindowsHeight +
-                    ", PreferredVersion='" + PreferredVersion + '\'' +
-                    '}';
-        }
-
         public String getPreferredVersion() {
             return PreferredVersion;
         }
@@ -123,12 +108,12 @@ public class AboutSetting {
             LlvmpipeLoader = llvmpipeLoader;
         }
 
-        public String getDefaultGamePath() {
-            return DefaultGamePath;
+        public File getDefaultGamePath() {
+            return new File(DefaultGamePath);
         }
 
-        public void setDefaultGamePath(String defaultGamePath) {
-            DefaultGamePath = defaultGamePath;
+        public void setDefaultGamePath(File defaultGamePath) {
+            DefaultGamePath = FileUtils.getCanonicalPath(defaultGamePath);
         }
 
         public JsonArray getJavaPath() {
@@ -155,5 +140,19 @@ public class AboutSetting {
             DownloadSource = downloadSource;
         }
 
+        @Override
+        public String toString() {
+            return "Setting{" +
+                    "DownloadSource=" + DownloadSource +
+                    ", console=" + console +
+                    ", LlvmpipeLoader=" + LlvmpipeLoader +
+                    ", DefaultGamePath='" + DefaultGamePath + '\'' +
+                    ", JavaPath=" + JavaPath +
+                    ", ChineseLanguage=" + ChineseLanguage +
+                    ", WindowsWidth=" + WindowsWidth +
+                    ", WindowsHeight=" + WindowsHeight +
+                    ", PreferredVersion='" + PreferredVersion + '\'' +
+                    '}';
+        }
     }
 }

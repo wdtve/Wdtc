@@ -23,8 +23,7 @@ public class GameLibraryPathAndUrl {
     }
 
     public File GetNativesLibraryFile(LibraryObject.NativesOs nativesOs) {
-        String game_lib_path = launcher.GetGameLibraryPath();
-        return new File(game_lib_path + nativesOs.getPath());
+        return new File(launcher.getGameLibraryPath(), nativesOs.getPath());
     }
 
     public URL GetNativesLibraryUrl(LibraryObject libraryObject) throws IOException {
@@ -38,9 +37,9 @@ public class GameLibraryPathAndUrl {
     }
 
     public File GetLibraryFile(LibraryObject object) {
-        String game_lib_path = launcher.GetGameLibraryPath();
+        File LibraryPath = launcher.getGameLibraryPath();
         DependencyDownload dependency = new DependencyDownload(object.getLibraryName());
-        dependency.setDownloadPath(game_lib_path);
+        dependency.setDownloadPath(LibraryPath);
         return dependency.getLibraryFile();
 
     }

@@ -19,6 +19,7 @@ public class UsersWindow {
     private final static Logger loggmaker = WdtcLogger.getLogger(UsersWindow.class);
 
     public static void setUserWin(Pane pane) {
+        pane.getChildren().clear();
         pane.setPrefSize(600, 400);
         TextField Registerusername = new TextField();
         Registerusername.setLayoutX(224.0);

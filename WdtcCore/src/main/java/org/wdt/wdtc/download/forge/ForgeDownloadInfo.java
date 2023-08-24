@@ -51,7 +51,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
     }
 
     public String getForgeInstallJarUrl() {
-        return getInstallJarUrl().replaceAll(":mcversion", launcher.getVersion()).replaceAll(":forgeversion", ForgeVersionNumber);
+        return getInstallJarUrl().replaceAll(":mcversion", launcher.getVersionNumber()).replaceAll(":forgeversion", ForgeVersionNumber);
     }
 
     public void getInstallProfile() {
@@ -61,7 +61,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
 
     public String getInstallProfilePath() {
-        return FilePath.getWdtcCache() + "/install_profile" + "-" + launcher.getVersion() + "-" + ForgeVersionNumber + ".json";
+        return FilePath.getWdtcCache() + "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
     }
 
     public JSONObject getInstallPrefileJSONObject() throws IOException {
@@ -70,7 +70,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
 
     public String getForgeVersionJsonPath() {
-        return FilePath.getWdtcCache() + "/version-" + launcher.getVersion() + "-" + ForgeVersionNumber + ".json";
+        return FilePath.getWdtcCache() + "/version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
     }
 
     public void getForgeVersionJson() {

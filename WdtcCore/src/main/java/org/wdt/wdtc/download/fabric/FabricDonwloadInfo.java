@@ -41,15 +41,15 @@ public class FabricDonwloadInfo implements DownloadInfo {
     }
 
     public String getProfileZipFile() {
-        return String.format(FilePath.getWdtcCache() + "/%s-%s-frofile-zip.zip", launcher.getVersion(), getFabricVersionNumber());
+        return String.format(FilePath.getWdtcCache() + "/%s-%s-frofile-zip.zip", launcher.getVersionNumber(), getFabricVersionNumber());
     }
 
     public String getProfileZipUrl() {
-        return String.format(Launcher.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/zip", launcher.getVersion(), getFabricVersionNumber());
+        return String.format(Launcher.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/zip", launcher.getVersionNumber(), getFabricVersionNumber());
     }
 
     public String FromFabricLoaderFolder() {
-        return String.format("fabric-loader-%s-%s", getFabricVersionNumber(), launcher.getVersion());
+        return String.format("fabric-loader-%s-%s", getFabricVersionNumber(), launcher.getVersionNumber());
     }
 
     public File getFabricJar() {
@@ -57,7 +57,7 @@ public class FabricDonwloadInfo implements DownloadInfo {
     }
 
     public File getFabricVersionJson() {
-        return new File(String.format(FilePath.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersion(), FabricVersionNumber));
+        return new File(String.format(FilePath.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersionNumber(), FabricVersionNumber));
     }
 
     public JSONObject getFabricVersionJsonObject() throws IOException {

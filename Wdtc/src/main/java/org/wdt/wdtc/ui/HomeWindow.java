@@ -8,12 +8,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Accounts;
+import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.launch.LauncherGame;
-import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.ui.users.NewUserWindows;
 import org.wdt.wdtc.utils.ThreadUtils;
@@ -24,19 +23,13 @@ import java.util.Objects;
 
 public class HomeWindow {
     private static final Logger logmaker = WdtcLogger.getLogger(HomeWindow.class);
-    private final Launcher launcher;
+    private Launcher launcher = Launcher.getPreferredLauncher();
 
     public HomeWindow(Launcher launcher) {
         this.launcher = launcher;
     }
 
     public HomeWindow() {
-        AboutSetting.Setting setting = AboutSetting.getSetting();
-        if (setting.getPreferredVersion() != null) {
-            this.launcher = ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
-        } else {
-            this.launcher = null;
-        }
     }
 
 
@@ -62,6 +55,13 @@ public class HomeWindow {
         return setting;
     }
 
+    private static void NoUser(Stage MainStage) {
+        NewUserWindows windows = new NewUserWindows(MainStage);
+        windows.setTitle("您还没有账户呢!");
+        windows.setType(Accounts.AccountsType.Offline);
+        windows.show();
+    }
+
     public void setHome(Stage MainStage) {
         AnchorPane pane = new AnchorPane();
         WindwosSize windwosSize = new WindwosSize(MainStage);
@@ -71,11 +71,10 @@ public class HomeWindow {
         JFXButton home = new JFXButton("首页");
         home.setPrefSize(128, 46);
 
-        JFXButton User = new JFXButton("修改账户");
-        User.setPrefSize(128, 46);
-        User.setOnAction(event -> {
+        JFXButton UserWindow = new JFXButton("修改账户");
+        UserWindow.setPrefSize(128, 46);
+        UserWindow.setOnAction(event -> {
             NewUserWindows windows = new NewUserWindows(MainStage);
-            windows.setType(Accounts.AccountsType.Offline);
             windows.setTitle("注册账户");
             windows.show();
         });
@@ -88,7 +87,7 @@ public class HomeWindow {
         startgame.setLayoutY(69);
         startgame.setPrefSize(128, 46);
         startgame.setOnAction(event -> {
-            VersionChoose choose = new VersionChoose(Objects.requireNonNullElseGet(launcher, GetGamePath::new));
+            VersionChoose choose = new VersionChoose(Objects.requireNonNullElseGet(launcher, GamePath::new));
             choose.setWindow(MainStage);
         });
 
@@ -123,7 +122,7 @@ public class HomeWindow {
         readme.getStyleClass().add("readme");
         JFXButton LaunchGameButton = new JFXButton();
         if (launcher != null) {
-            LaunchGameButton.setText("启动游戏\n" + launcher.getVersion());
+            LaunchGameButton.setText("启动游戏\n" + launcher.getVersionNumber());
         } else {
             LaunchGameButton.setText("当前无游戏版本");
         }
@@ -135,7 +134,7 @@ public class HomeWindow {
         AnchorPane.setRightAnchor(LaunchGameButton, 30.0);
         LaunchGameButton.setOnAction(event -> {
             if (launcher != null) {
-                if (org.wdt.wdtc.auth.User.SetUserJson()) {
+                if (User.SetUserJson()) {
                     ThreadUtils.StartThread(() -> {
                         try {
                             LauncherGame launch = new LauncherGame(launcher);
@@ -146,13 +145,13 @@ public class HomeWindow {
                         }
                     }).setName("Launch Game");
                 } else {
-//                    UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
+                    NoUser(MainStage);
                 }
             } else {
                 NewDownloadWindow.SetWin(MainStage);
             }
         });
-        Menu.getChildren().addAll(home, User, downgame, startgame, VersionSetting, setting, github);
+        Menu.getChildren().addAll(home, UserWindow, downgame, startgame, VersionSetting, setting, github);
         Menu.getStyleClass().add("BlackBorder");
         AnchorPane.setTopAnchor(Menu, 0.0);
         AnchorPane.setBottomAnchor(Menu, 0.0);
@@ -163,8 +162,8 @@ public class HomeWindow {
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);
         MainStage.setScene(scene);
-        if (!org.wdt.wdtc.auth.User.SetUserJson()) {
-//            UsersWin.setUserWin("您当前还没有账户呢!", MainStage);
+        if (!User.SetUserJson()) {
+            NoUser(MainStage);
         }
     }
 }

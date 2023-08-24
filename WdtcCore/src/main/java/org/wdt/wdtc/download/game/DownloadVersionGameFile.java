@@ -30,13 +30,13 @@ public class DownloadVersionGameFile extends DownloadTask {
         JSONArray VersionList = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(source.getVersionManifestUrl())).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
-            if (Objects.equals(launcher.getVersion(), version_name)) {
+            if (Objects.equals(launcher.getVersionNumber(), version_name)) {
                 String VersionJsonUrl = VersionList.getJSONObject(i).getString("url");
                 if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
                 }
                 if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson()) || Install) {
-                        StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
+                    StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
 
                 }
             }
@@ -60,7 +60,7 @@ public class DownloadVersionGameFile extends DownloadTask {
         if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
             JarUrl = JarUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl());
         }
-        File VersionJar = new File(launcher.getVersionJar());
+        File VersionJar = launcher.getVersionJar();
         if (PlatformUtils.FileExistenceAndSize(VersionJar, ClientObject.getInt("size"))) {
             StartDownloadTask(JarUrl, VersionJar);
         }

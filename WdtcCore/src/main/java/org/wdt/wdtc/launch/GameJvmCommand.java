@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 import com.google.gson.JsonElement;
-import org.wdt.utils.FilenameUtils;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
@@ -9,7 +9,6 @@ import org.wdt.wdtc.platform.Starter;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class GameJvmCommand {
@@ -26,12 +25,12 @@ public class GameJvmCommand {
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         NonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
-        NonBreakingSpace("-Dlog4j.configurationFile=", FilenameUtils.separatorsToWindows(launcher.getVersionLog4j2()));
+        NonBreakingSpace("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());
         NonBreakingSpace("-Xmx" + gameConfig.getRunningMemory(), "M");
         NonBreakingSpace("-Dminecraft.client.jar=", launcher.getVersionJar());
         NonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m");
         NonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
-        Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
+        Files.createDirectories(launcher.getVersionNativesPath().toPath());
         for (JsonElement Element : VersionJsonObject.getArguments().getJvmList()) {
             if (!Element.isJsonObject()) {
                 NonBreakingSpace(ReplaceData(Element.getAsString()));
@@ -41,9 +40,9 @@ public class GameJvmCommand {
     }
 
     private Map<String, String> getDataMap() {
-        return Map.of("${natives_directory}", launcher.getVersionNativesPath(), "${launcher_name}", "Wdtc",
-                "${launcher_version}", Starter.getLauncherVersion(), "${library_directory}", launcher.GetGameLibraryPath(),
-                "${classpath_separator}", ";", "${version_name}", launcher.getVersion(),
+        return Map.of("${natives_directory}", FileUtils.getCanonicalPath(launcher.getVersionNativesPath()), "${launcher_name}", "Wdtc",
+                "${launcher_version}", Starter.getLauncherVersion(), "${library_directory}", FileUtils.getCanonicalPath(launcher.getGameLibraryPath()),
+                "${classpath_separator}", ";", "${version_name}", launcher.getVersionNumber(),
                 "${classpath}", new GetStartLibraryPath(launcher).getLibraryPath().toString());
     }
 
@@ -51,7 +50,7 @@ public class GameJvmCommand {
         JvmSet.append(str).append(" ");
     }
 
-    private void NonBreakingSpace(String str, String string) {
+    private void NonBreakingSpace(String str, Object string) {
         NonBreakingSpace(str + string);
     }
 

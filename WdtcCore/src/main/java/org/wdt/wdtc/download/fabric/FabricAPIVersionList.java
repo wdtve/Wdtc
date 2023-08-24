@@ -26,7 +26,7 @@ public class FabricAPIVersionList implements VersionList {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             JSONArray GameVersionsList = VersionObject.getJSONArray("game_versions");
             for (int j = 0; j < GameVersionsList.size(); j++) {
-                if (launcher.getVersion().equals(GameVersionsList.getString(j))) {
+                if (launcher.getVersionNumber().equals(GameVersionsList.getString(j))) {
                     VersionList.add(VersionObject.getString("version_number"));
                 }
             }

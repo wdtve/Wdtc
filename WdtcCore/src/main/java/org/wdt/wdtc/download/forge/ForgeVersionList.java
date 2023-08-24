@@ -20,7 +20,7 @@ public class ForgeVersionList implements VersionList {
     }
 
     public String getForgeListUrl() {
-        return "https://bmclapi2.bangbang93.com/forge/minecraft/" + launcher.getVersion();
+        return "https://bmclapi2.bangbang93.com/forge/minecraft/" + launcher.getVersionNumber();
     }
 
     @Override

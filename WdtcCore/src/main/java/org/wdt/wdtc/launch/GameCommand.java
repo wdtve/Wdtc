@@ -2,6 +2,7 @@ package org.wdt.wdtc.launch;
 
 
 import com.google.gson.JsonElement;
+import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
@@ -38,8 +39,8 @@ public class GameCommand {
 
     private Map<String, String> getDataMap() throws IOException {
         User user = User.getUsers();
-        return Map.of("${auth_player_name}", user.getUserName(), "${version_name}", launcher.getVersion(),
-                "${game_directory}", launcher.getVersionPath(), "${assets_root}", launcher.getGameAssetsdir(),
+        return Map.of("${auth_player_name}", user.getUserName(), "${version_name}", launcher.getVersionNumber(),
+                "${game_directory}", FileUtils.getCanonicalPath(launcher.getVersionPath()), "${assets_root}", FileUtils.getCanonicalPath(launcher.getGameAssetsdir()),
                 "${assets_index_name}", launcher.getGameVersionJsonObject().getAssets(), "${auth_uuid}", user.getUuid(),
                 "${auth_access_token}", user.getAccessToken(), "${user_type}", user.getType().toString(),
                 "${version_type}", "Wdtc-" + Starter.getLauncherVersion());

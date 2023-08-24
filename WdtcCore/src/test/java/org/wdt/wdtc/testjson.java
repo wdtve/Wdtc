@@ -1,21 +1,17 @@
 package org.wdt.wdtc;
 
 import org.junit.jupiter.api.Test;
-import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.LauncherGame;
 
-import java.io.File;
 import java.io.IOException;
 
 public class testjson {
     @Test
     public void test() throws IOException {
-        File file = new File("WdtcCore/src/test/java/org/wdt/wdtc/");
-        for (File s : FileUtils.FileList(file)) {
-            System.out.println(s);
-        }
+        Launcher launcher = new Launcher("1.19.4");
+        System.out.println(launcher.equals(new Launcher("1.19.4")));
 
     }
 

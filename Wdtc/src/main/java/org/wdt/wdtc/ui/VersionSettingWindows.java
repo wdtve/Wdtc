@@ -108,13 +108,13 @@ public class VersionSettingWindows extends AboutSetting {
 
         delete.setOnAction(event -> {
             try {
-                FileUtils.deleteDirectory(new File(launcher.getVersionPath()));
+                FileUtils.deleteDirectory(launcher.getVersionPath());
                 HomeWindow homeWindow = new HomeWindow(null);
                 homeWindow.setHome(MainStage);
                 JsonObject object = SettingObject().getJsonObjects();
                 object.remove("PreferredVersion");
                 JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
-                logmaker.info("* " + launcher.getVersion() + " Deleted");
+                logmaker.info("* " + launcher.getVersionNumber() + " Deleted");
             } catch (IOException e) {
                 ErrorWindow.setErrorWin(e);
             }
@@ -122,7 +122,7 @@ public class VersionSettingWindows extends AboutSetting {
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
             InstallGameVersion version = new InstallGameVersion(launcher, true);
             version.DownloadGame();
-            logmaker.info("* " + launcher.getVersion() + " downloaded");
+            logmaker.info("* " + launcher.getVersionNumber() + " downloaded");
         }));
     }
 

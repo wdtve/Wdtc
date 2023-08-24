@@ -13,7 +13,6 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class DownloadGameLibrary extends DownloadTask {
@@ -27,7 +26,7 @@ public class DownloadGameLibrary extends DownloadTask {
 
     public void DownloadLibraryFile() {
         try {
-            Files.createDirectories(Paths.get(launcher.getVersionNativesPath()));
+            Files.createDirectories(launcher.getVersionNativesPath().toPath());
             List<GetGameNeedLibraryFile.LibraryFile> FileList = new GetGameNeedLibraryFile(launcher).getFileList();
             SpeedOfProgress speed = new SpeedOfProgress(FileList.size());
             for (GetGameNeedLibraryFile.LibraryFile libraryFile : FileList) {
@@ -42,7 +41,7 @@ public class DownloadGameLibrary extends DownloadTask {
             logmaker.error("* Download Library File Error,", e);
         }
         try {
-            File VersionLog = new File(launcher.getVersionLog4j2());
+            File VersionLog = launcher.getVersionLog4j2();
             FileUtils.writeStringToFile(VersionLog, IOUtils.toString(getClass().getResourceAsStream("/log4j2.xml")));
 
         } catch (IOException e) {

@@ -56,7 +56,7 @@ public class DownloadGameWindows {
         Label read_bmcl = new Label("国内快速下载源→");
         read_bmcl.setLayoutX(429.0);
         read_bmcl.setLayoutY(4.0);
-        textField.setText(launcher.getVersion() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
+        textField.setText(launcher.getVersionNumber() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.StartThread(() -> {
             try {
                 new InstallGameVersion(launcher, textField).DownloadGame();

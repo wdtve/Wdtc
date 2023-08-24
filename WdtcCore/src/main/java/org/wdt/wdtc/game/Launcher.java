@@ -14,7 +14,7 @@ import org.wdt.wdtc.download.quilt.QuiltDownloadInfo;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.game.config.VersionInfo;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -37,7 +37,7 @@ public class Launcher extends Version {
         this(version, AboutSetting.getSetting().getDefaultGamePath());
     }
 
-    public Launcher(String version, String here) {
+    public Launcher(String version, File here) {
         super(version, here);
     }
 
@@ -106,11 +106,12 @@ public class Launcher extends Version {
         return new OfficialDownloadSource();
     }
 
-    public void LaunchTask() throws IOException {
-        if (AboutSetting.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
-            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
-            File OptionsFile = new File(getGameOptionsFile());
-            FileUtils.writeStringToFile(OptionsFile, Options);
+    public static Launcher getPreferredLauncher() {
+        AboutSetting.Setting setting = AboutSetting.getSetting();
+        if (setting.getPreferredVersion() != null) {
+            return ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
+        } else {
+            return null;
         }
     }
 
@@ -118,8 +119,12 @@ public class Launcher extends Version {
         return new GameConfig(this);
     }
 
-    public GetGamePath getGetGamePath() {
-        return new GetGamePath(getHere());
+    public void LaunchTask() throws IOException {
+        if (AboutSetting.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
+            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
+            File OptionsFile = getGameOptionsFile();
+            FileUtils.writeStringToFile(OptionsFile, Options);
+        }
     }
 
     public void CleanKind() {
@@ -142,10 +147,24 @@ public class Launcher extends Version {
         return new VersionInfo(this);
     }
 
+    public GamePath getGetGamePath() {
+        return new GamePath(getHere());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Launcher launcher)) return false;
+        if (launcher.getVersionNumber().equals(VersionNumber)) {
+            return launcher.getKind() == kind;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Launcher{" +
-                "version=" + getVersion() +
+                "version=" + getVersionNumber() +
                 ",kind=" + kind +
                 '}';
 

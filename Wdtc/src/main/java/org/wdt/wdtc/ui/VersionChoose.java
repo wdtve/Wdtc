@@ -12,15 +12,15 @@ import javafx.stage.Stage;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 
 import java.util.List;
 
 public class VersionChoose {
-    private final GetGamePath path;
+    private final GamePath path;
 
-    public VersionChoose(GetGamePath path) {
+    public VersionChoose(GamePath path) {
         this.path = path;
     }
 
@@ -34,17 +34,23 @@ public class VersionChoose {
         VBox VersionList = new VBox();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
+            HomeWindow window;
             if (path instanceof Launcher launcher) {
-                HomeWindow window = new HomeWindow(launcher);
-                window.setHome(MainStage);
+                window = new HomeWindow(launcher);
+            } else {
+                window = new HomeWindow();
             }
+            window.setHome(MainStage);
         });
         if (DownloadedGameVersion.isDownloadedGame(path)) {
             List<Launcher> GameVersionList = DownloadedGameVersion.getGameVersionList(path);
             for (Launcher GameVersion : GameVersionList) {
                 Pane pane = new Pane();
                 pane.setPrefSize(514, 40);
-                RadioButton VersionId = new RadioButton(GameVersion.getVersion());
+                RadioButton VersionId = new RadioButton(GameVersion.getVersionNumber());
+                if (Launcher.getPreferredLauncher() != null && Launcher.getPreferredLauncher().equals(GameVersion)) {
+                    VersionId.setSelected(true);
+                }
                 VersionId.setLayoutX(14);
                 VersionId.setLayoutY(12);
                 ModUtils.getModTask(GameVersion);

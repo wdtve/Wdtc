@@ -9,7 +9,7 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.FilePath;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
-import org.wdt.wdtc.launch.GetGamePath;
+import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.platform.AboutSetting;
 import org.wdt.wdtc.platform.Starter;
 import org.wdt.wdtc.utils.JavaHomePath;
@@ -30,7 +30,7 @@ public class WdtcMain extends JavaFxUtils {
         logmaker.info("* Java Home:" + System.getProperty("java.home"));
         logmaker.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
         logmaker.info("* Setting File:" + FilePath.getSettingFile());
-        logmaker.info("* Here:" + GetGamePath.getDefaultHere());
+        logmaker.info("* Here:" + GamePath.getDefaultHere());
         AboutSetting.GenerateSettingFile();
         StartTask();
         Ergodic();
@@ -64,10 +64,12 @@ public class WdtcMain extends JavaFxUtils {
 
     public static void RemovePreferredVersion() throws IOException {
         AboutSetting.Setting setting = AboutSetting.getSetting();
-        Launcher launcher = new Launcher(setting.getPreferredVersion());
-        if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
-            setting.setPreferredVersion(null);
-            AboutSetting.putSettingToFile(setting);
+        if (setting.getPreferredVersion() != null) {
+            Launcher launcher = new Launcher(setting.getPreferredVersion());
+            if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+                setting.setPreferredVersion(null);
+                AboutSetting.putSettingToFile(setting);
+            }
         }
     }
 }

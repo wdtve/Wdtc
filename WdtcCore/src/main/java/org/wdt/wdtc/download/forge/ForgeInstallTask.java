@@ -54,11 +54,11 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
         JSONArray JarList = JsonObject.getJSONArray("classpath");
         for (int i = 0; i < JarList.size(); i++) {
             DependencyDownload Jar = new DependencyDownload(JarList.getString(i));
-            Jar.setDownloadPath(launcher.GetGameLibraryPath());
+            Jar.setDownloadPath(launcher.getGameLibraryPath());
             CommandLine.append(FilenameUtils.separatorsToWindows(Jar.getLibraryFilePath())).append(";");
         }
         DependencyDownload MainJar = new DependencyDownload(JsonObject.getString("jar"));
-        MainJar.setDownloadPath(launcher.GetGameLibraryPath());
+        MainJar.setDownloadPath(launcher.getGameLibraryPath());
         String MainClass = new JarInputStream(new FileInputStream(MainJar.getLibraryFile())).getManifest().getMainAttributes().getValue("Main-Class");
         CommandLine.append(MainJar.getLibraryFilePath()).append(" ").append(MainClass).append(" ");
         JSONArray ArgsList = JsonObject.getJSONArray("args");
@@ -79,11 +79,11 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
                 } else if (Large.find()) {
                     DependencyDownload client = new DependencyDownload(Clean(getInstallPrefileJSONObject().getJSONObject("data")
                             .getJSONObject(Large.group(1)).getString("client")));
-                    client.setDownloadPath(launcher.GetGameLibraryPath());
+                    client.setDownloadPath(launcher.getGameLibraryPath());
                     CommandLine.append(client.getLibraryFilePath()).append(" ");
                 } else if (Middle.find()) {
                     DependencyDownload arge = new DependencyDownload(Middle.group(1));
-                    arge.setDownloadPath(launcher.GetGameLibraryPath());
+                    arge.setDownloadPath(launcher.getGameLibraryPath());
                     CommandLine.append(arge.getLibraryFilePath()).append(" ");
                 } else {
                     CommandLine.append(ArgeStr).append(" ");
@@ -113,7 +113,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
             TxtUrl = PlatformUtils.getRedirectUrl(TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl()));
         }
         if (TxtPath != null) {
-            DownloadTask.StartDownloadTask(TxtUrl, launcher.GetGameLibraryPath() + TxtPath.formJar());
+            DownloadTask.StartDownloadTask(TxtUrl, launcher.getGameLibraryPath() + TxtPath.formJar());
         }
 
     }
@@ -183,7 +183,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
             VersionJsonObject.getLibraries().add(libraryObject);
         }
         VersionJsonObject.setMainClass(ForgeVersionJsonObject.getString("mainClass"));
-        VersionJsonObject.setId(launcher.getVersion() + "-forge-" + ForgeVersionNumber);
+        VersionJsonObject.setId(launcher.getVersionNumber() + "-forge-" + ForgeVersionNumber);
         launcher.PutToVersionJson(VersionJsonObject);
     }
 

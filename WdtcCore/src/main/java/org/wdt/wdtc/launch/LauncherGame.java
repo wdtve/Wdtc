@@ -37,7 +37,7 @@ public class LauncherGame {
             } else {
                 logmaker.info("* Start Run Start Script,Console: false");
             }
-            logmaker.info("Launch Version: " + launcher.getVersion() + "-" + launcher.getKind());
+            logmaker.info("Launch Version: " + launcher.getVersionNumber() + "-" + launcher.getKind());
             logmaker.info(launcher.getGameConfig().getConfig());
         } catch (Exception e) {
             logmaker.error("错误:", e);
@@ -50,7 +50,7 @@ public class LauncherGame {
 
     private Process executeBatFile() throws IOException {
         ProcessBuilder pb = new ProcessBuilder(StartBat.getCanonicalPath());
-        pb.directory(new File(launcher.getVersionPath()));
+        pb.directory(launcher.getVersionPath());
         return pb.start();
 
     }
