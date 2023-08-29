@@ -13,7 +13,7 @@ import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 
 import java.util.List;
 
@@ -65,9 +65,9 @@ public class VersionChoose {
                 size.ModifyWindwosSize(pane, VersionId, ModKind);
                 size.ModifyWindwosSize(VersionList, pane);
                 VersionId.setOnAction(event -> {
-                    AboutSetting.Setting setting = AboutSetting.getSetting();
+                    SettingManger.Setting setting = SettingManger.getSetting();
                     setting.setPreferredVersion(VersionId.getText());
-                    AboutSetting.putSettingToFile(setting);
+                    SettingManger.putSettingToFile(setting);
                     HomeWindow win = new HomeWindow(GameVersion);
                     win.setHome(MainStage);
                 });

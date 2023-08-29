@@ -2,10 +2,10 @@ package org.wdt.wdtc.launch;
 
 
 import org.wdt.utils.FileUtils;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 import org.wdt.wdtc.utils.ZipUtils;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class GetStartLibraryPath {
             if (!Accounts.isEmpty()) {
                 ClassPathBuilder.append(launcher.GetAccounts().getJvm());
             }
-            if (AboutSetting.getSetting().isLlvmpipeLoader()) {
+            if (SettingManger.getSetting().isLlvmpipeLoader()) {
                 ClassPathBuilder.append(LlbmpipeLoader());
             }
 
@@ -49,7 +49,7 @@ public class GetStartLibraryPath {
 
 
     private String LlbmpipeLoader() {
-        return " -javaagent:" + FilePath.getLlbmpipeLoader();
+        return " -javaagent:" + FileManger.getLlbmpipeLoader();
     }
 
     private void InsertclasspathSeparator(String str) {

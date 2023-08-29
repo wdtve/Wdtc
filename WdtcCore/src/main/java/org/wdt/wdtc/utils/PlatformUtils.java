@@ -1,10 +1,7 @@
 package org.wdt.wdtc.utils;
 
 
-import com.google.gson.JsonObject;
-import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
-import org.wdt.utils.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,22 +18,7 @@ import java.util.Base64;
 
 
 public class PlatformUtils {
-    public static String GetUrlContent(URL url) throws IOException {
-        return IOUtils.toString(url);
-    }
 
-    public static String GetUrlContent(String StriingUrl) throws IOException {
-        return GetUrlContent(new URL(StriingUrl));
-    }
-
-
-    public static void PutJSONObject(File file, JsonObject object) {
-        JSONUtils.ObjectToJsonFile(file, object);
-    }
-
-    public static void PutJSONObject(String FilePath, JsonObject object) {
-        PutJSONObject(new File(FilePath), object);
-    }
 
     public static String StringToBase64(String str) {
         return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
@@ -48,11 +30,7 @@ public class PlatformUtils {
 
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {
         if (file.exists()) {
-            if (size != 0) {
-                return FileUtils.sizeOf(file.toPath()) != size;
-            } else {
-                return false;
-            }
+            return FileUtils.sizeOf(file.toPath()) != size;
         } else {
             return true;
         }

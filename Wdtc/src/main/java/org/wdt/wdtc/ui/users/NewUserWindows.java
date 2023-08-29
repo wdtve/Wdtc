@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.wdt.wdtc.auth.Accounts;
-import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.utils.PlatformUtils;
 
@@ -82,7 +82,7 @@ public class NewUserWindows {
         UserStage.initModality(Modality.APPLICATION_MODAL);
         UserStage.setResizable(false);
         UserStage.show();
-        LittleskinCom.setOnAction(event -> PlatformUtils.StartPath(FileUrl.getLittleskinUrl()));
+        LittleskinCom.setOnAction(event -> PlatformUtils.StartPath(UrlManger.getLittleskinUrl()));
         buygame.setOnAction(event -> PlatformUtils.StartPath("https://www.minecraft.net/zh-hans"));
     }
 

@@ -6,6 +6,7 @@ import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.launch.GameLibraryPathAndUrl;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -63,55 +64,60 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     }
 
 
-    public Thread StartDownloadHashTask(String hash, int Filesize, SpeedOfProgress downLatch) {
+    public void StartDownloadHashTask(String hash, int Filesize, SpeedOfProgress downLatch, ThreadGroup group) {
         try {
-            String hash_t = hash.substring(0, 2);
-            File hash_path = new File(launcher.getGameObjects(), hash_t + "/" + hash);
-            URL hash_url = new URL(source.getAssetsUrl() + hash_t + "/" + hash);
-            return ThreadUtils.StartThread(() -> {
-                try {
-                    if (PlatformUtils.FileExistenceAndSize(hash_path, Filesize)) {
-                        StartDownloadTask(hash_url, hash_path);
-                    }
-                } catch (IOException e) {
-                    logmaker.error("", e);
-                }
-                downLatch.countDown();
-            });
-        } catch (MalformedURLException e) {
+            String HashHead = hash.substring(0, 2);
+            File HashFile = new File(launcher.getGameObjects(), HashHead + "/" + hash);
+            URL HashUrl = new URL(source.getAssetsUrl() + HashHead + "/" + hash);
+            if (PlatformUtils.FileExistenceAndSize(HashFile, Filesize)) {
+                Thread thread = new Thread(group, () -> {
+                    StartDownloadTask(HashUrl, HashFile);
+                    downLatch.countDown();
+                });
+                ThreadUtils.StartThread(thread).setName(hash);
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Thread StartDownloadLibraryTask(LibraryObject libraryObject, SpeedOfProgress speed) {
-        return ThreadUtils.StartThread(() -> {
-            try {
-                File LibraryFile = GetLibraryFile(libraryObject);
-                if (PlatformUtils.FileExistenceAndSize(LibraryFile, libraryObject.getDownloads().getArtifact().getSize())) {
-                    StartDownloadTask(GetLibraryUrl(libraryObject), LibraryFile);
-                }
-                speed.countDown();
-            } catch (IOException e) {
-                logmaker.error("* Error:", e);
+    public void StartDownloadLibraryTask(LibraryObject libraryObject, SpeedOfProgress speed) {
+        File LibraryFile = GetLibraryFile(libraryObject);
+        try {
+            if (PlatformUtils.FileExistenceAndSize(LibraryFile, libraryObject.getDownloads().getArtifact().getSize())) {
+                ThreadUtils.StartThread(() -> {
+                    try {
+                        StartDownloadTask(GetLibraryUrl(libraryObject), LibraryFile);
+                        speed.countDown();
+                    } catch (IOException e) {
+                        logmaker.error("* Error:", e);
+                    }
+                });
             }
+        } catch (IOException e) {
+            logmaker.error("* Error:", e);
+        }
 
-        });
     }
 
-    public Thread StartDownloadNativesLibTask(LibraryObject libraryObject, SpeedOfProgress speed) {
-        return ThreadUtils.StartThread(() -> {
-            try {
-                LibraryObject.NativesOs NativesWindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
-                File NativesLibrary = GetNativesLibraryFile(NativesWindows);
-                if (PlatformUtils.FileExistenceAndSize(NativesLibrary, NativesWindows.getSize())) {
-                    StartDownloadTask(GetNativesLibraryUrl(libraryObject), NativesLibrary);
-                }
-                speed.countDown();
-            } catch (IOException e) {
-                logmaker.error("* Error:", e);
-            }
+    public void StartDownloadNativesLibTask(LibraryObject libraryObject, SpeedOfProgress speed) {
+        LibraryObject.NativesOs NativesWindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
+        File NativesLibrary = GetNativesLibraryFile(NativesWindows);
+        try {
+            if (PlatformUtils.FileExistenceAndSize(NativesLibrary, NativesWindows.getSize())) {
+                ThreadUtils.StartThread(() -> {
+                    try {
+                        StartDownloadTask(GetNativesLibraryUrl(libraryObject), NativesLibrary);
+                        speed.countDown();
+                    } catch (IOException e) {
+                        logmaker.error("* Error:", e);
+                    }
 
-        });
+                });
+            }
+        } catch (IOException e) {
+            logmaker.error("* Error:", e);
+        }
     }
 
 }

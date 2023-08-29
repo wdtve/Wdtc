@@ -4,8 +4,9 @@ package org.wdt.wdtc.download.game;
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -27,13 +28,13 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameVersionJson() throws IOException {
-        JSONArray VersionList = JSONObject.parseJSONObject(PlatformUtils.GetUrlContent(source.getVersionManifestUrl())).getJSONArray("versions");
+        JSONArray VersionList = JSONObject.parseJSONObject(IOUtils.toString(source.getVersionManifestUrl())).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
             if (Objects.equals(launcher.getVersionNumber(), version_name)) {
                 String VersionJsonUrl = VersionList.getJSONObject(i).getString("url");
-                if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-                    VersionJsonUrl = VersionJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
+                if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
+                    VersionJsonUrl = VersionJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
                 }
                 if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson()) || Install) {
                     StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
@@ -46,8 +47,8 @@ public class DownloadVersionGameFile extends DownloadTask {
     public void DownloadGameAssetsListJson() throws IOException {
         JSONObject AssetIndexJson = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
-        if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-            GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(FileUrl.getPistonMetaMojang(), source.getMetaUrl());
+        if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
+            GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
         }
         if (PlatformUtils.FileExistenceAndSize(launcher.getGameAssetsListJson(), AssetIndexJson.getInt("size"))) {
             StartDownloadTask(GameAssetsListJsonUrl, launcher.getGameAssetsListJson());
@@ -57,8 +58,8 @@ public class DownloadVersionGameFile extends DownloadTask {
     public void DownloadVersionJar() throws IOException {
         JSONObject ClientObject = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client");
         String JarUrl = ClientObject.getString("url");
-        if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-            JarUrl = JarUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl());
+        if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
+            JarUrl = JarUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl());
         }
         File VersionJar = launcher.getVersionJar();
         if (PlatformUtils.FileExistenceAndSize(VersionJar, ClientObject.getInt("size"))) {

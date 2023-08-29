@@ -1,7 +1,7 @@
 package org.wdt.wdtc.auth;
 
-import org.wdt.wdtc.download.FileUrl;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.game.FileManger;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ public class Accounts {
         if (AccountsIsOffline()) {
             return "";
         } else {
-            return " -javaagent:" + FilePath.getAuthlibInjector() + "=" + FileUrl.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
+            return " -javaagent:" + FileManger.getAuthlibInjector() + "=" + UrlManger.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
                     User.getUsers().getAPIBase64();
         }
     }

@@ -3,7 +3,7 @@ package org.wdt.wdtc.auth;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.auth.skin.SkinUtils;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class OfflineAccounts implements AccountsInterface {
         SkinUtils utils = new SkinUtils(getUtils().getSkinFile());
         utils.setUserSkinInput(OfflineAccounts.class.getResourceAsStream("/steve.png"));
         user.setHeadFile(utils.writeSkinHead());
-        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), user);
+        JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
         logmaker.info(user);
         return user;
     }

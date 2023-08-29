@@ -4,12 +4,11 @@ package org.wdt.wdtc.platform;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.download.FileUrl;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
@@ -17,36 +16,25 @@ import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
 
-public class AboutSetting {
-    private static final Logger logmaker = Logger.getLogger(AboutSetting.class);
-
-    public static File GetSettingFile() {
-        return new File(FilePath.getWdtcConfig(), "setting/setting.json");
-    }
+public class SettingManger {
+    private static final Logger logmaker = Logger.getLogger(SettingManger.class);
 
     public static void GenerateSettingFile() throws IOException {
-        String readme = IOUtils.toString(requireNonNull(AboutSetting.class.getResourceAsStream("/readme.txt")));
-        File writeReadme = new File(FilePath.getWdtcConfig(), "readme.txt");
+        String readme = IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/readme.txt")));
+        File writeReadme = new File(FileManger.getWdtcConfig(), "readme.txt");
         FileUtils.writeStringToFile(writeReadme, readme);
-        if (PlatformUtils.FileExistenceAndSize(FilePath.getUserListFile())) {
-            JSONUtils.ObjectToJsonFile(FilePath.getUserListFile(), new JsonObject());
+        FileUtils.createDirectories(FileManger.getWdtcCache());
+        if (PlatformUtils.FileExistenceAndSize(FileManger.getUserListFile())) {
+            JSONUtils.ObjectToJsonFile(FileManger.getUserListFile(), new JsonObject());
         }
-        if (PlatformUtils.FileExistenceAndSize(GetSettingFile())) {
-            JSONUtils.ObjectToJsonFile(GetSettingFile(), new Setting());
-        }
-    }
-
-    public static JSONObject SettingObject() {
-        try {
-            return JSONUtils.getJSONObject(GetSettingFile());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (PlatformUtils.FileExistenceAndSize(FileManger.getSettingFile())) {
+            JSONUtils.ObjectToJsonFile(FileManger.getSettingFile(), new Setting());
         }
     }
 
     public static Setting getSetting() {
         try {
-            return JSONUtils.JsonFileToClass(GetSettingFile(), Setting.class);
+            return JSONUtils.JsonFileToClass(FileManger.getSettingFile(), Setting.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,12 +42,12 @@ public class AboutSetting {
 
 
     public static void putSettingToFile(Setting setting) {
-        JSONUtils.ObjectToJsonFile(GetSettingFile(), setting);
+        JSONUtils.ObjectToJsonFile(FileManger.getSettingFile(), setting);
     }
 
     public static class Setting {
-        private FileUrl.DownloadSourceList DownloadSource = FileUrl.DownloadSourceList.OFFICIAL;
-        private boolean console = false;
+        private UrlManger.DownloadSourceList DownloadSource = UrlManger.DownloadSourceList.OFFICIAL;
+        private boolean Console = false;
         private boolean LlvmpipeLoader = false;
         private String DefaultGamePath = System.getProperty("user.dir");
         private JsonArray JavaPath = new JsonArray();
@@ -93,11 +81,11 @@ public class AboutSetting {
         }
 
         public boolean isConsole() {
-            return console;
+            return Console;
         }
 
         public void setConsole(boolean console) {
-            this.console = console;
+            this.Console = console;
         }
 
         public boolean isLlvmpipeLoader() {
@@ -132,11 +120,11 @@ public class AboutSetting {
             ChineseLanguage = chineseLanguage;
         }
 
-        public FileUrl.DownloadSourceList getDownloadSource() {
+        public UrlManger.DownloadSourceList getDownloadSource() {
             return DownloadSource;
         }
 
-        public void setDownloadSource(FileUrl.DownloadSourceList downloadSource) {
+        public void setDownloadSource(UrlManger.DownloadSourceList downloadSource) {
             DownloadSource = downloadSource;
         }
 
@@ -144,7 +132,7 @@ public class AboutSetting {
         public String toString() {
             return "Setting{" +
                     "DownloadSource=" + DownloadSource +
-                    ", console=" + console +
+                    ", Console=" + Console +
                     ", LlvmpipeLoader=" + LlvmpipeLoader +
                     ", DefaultGamePath='" + DefaultGamePath + '\'' +
                     ", JavaPath=" + JavaPath +

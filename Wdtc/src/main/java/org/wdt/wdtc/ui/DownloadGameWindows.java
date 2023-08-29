@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 import org.wdt.wdtc.utils.ThreadUtils;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class DownloadGameWindows {
 
     public void setDownGameWin(Stage MainStage) {
         WindwosSize size = new WindwosSize(MainStage);
-        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
+        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - 下载游戏");
         AnchorPane pane = new AnchorPane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {

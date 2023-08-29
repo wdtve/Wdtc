@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ModChooseWindows {
         DownloadForge.setLayoutX(67.0);
         DownloadForge.setLayoutY(53.0);
         DownloadForge.setPrefSize(47, 23);
-        DownloadForge.setDisable(!Starter.getForgeSwitch());
+        DownloadForge.setDisable(!VMManger.getForgeSwitch());
         JFXButton CancelForge = new JFXButton("X");
         CancelForge.setLayoutX(36.0);
         CancelForge.setLayoutY(53.0);

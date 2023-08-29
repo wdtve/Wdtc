@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilTextures;
-import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -52,7 +52,7 @@ public class LittleskinWindow {
                 logmaker.warn("* 用户名、密码为空");
             } else {
                 try {
-                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(FileUrl.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
+                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(UrlManger.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
                     UserList.addUser(yggdrasilAccounts.getUser());
                     try {
                         YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();

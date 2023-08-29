@@ -3,7 +3,7 @@ package org.wdt.wdtc.ui;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 
 public class WindwosSize {
     public static final double WindowsWidht = 616.0;
@@ -47,7 +47,7 @@ public class WindwosSize {
     }
 
     public void SettingSize() {
-        AboutSetting.Setting setting = AboutSetting.getSetting();
+        SettingManger.Setting setting = SettingManger.getSetting();
         MainStage.setWidth(setting.getWindowsWidth());
         MainStage.setHeight(setting.getWindowsHeight());
     }

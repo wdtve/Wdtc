@@ -1,6 +1,5 @@
 package org.wdt.wdtc.ui;
 
-import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -13,15 +12,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -32,7 +30,7 @@ import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 
 
-public class VersionSettingWindows extends AboutSetting {
+public class VersionSettingWindows extends SettingManger {
     private static final double layoutX = 10;
     private static final Logger logmaker = WdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
@@ -109,11 +107,11 @@ public class VersionSettingWindows extends AboutSetting {
         delete.setOnAction(event -> {
             try {
                 FileUtils.deleteDirectory(launcher.getVersionPath());
-                HomeWindow homeWindow = new HomeWindow(null);
+                Setting setting = getSetting();
+                setting.setPreferredVersion(null);
+                putSettingToFile(setting);
+                HomeWindow homeWindow = new HomeWindow();
                 homeWindow.setHome(MainStage);
-                JsonObject object = SettingObject().getJsonObjects();
-                object.remove("PreferredVersion");
-                JSONUtils.ObjectToJsonFile(GetSettingFile(), object);
                 logmaker.info("* " + launcher.getVersionNumber() + " Deleted");
             } catch (IOException e) {
                 ErrorWindow.setErrorWin(e);
@@ -190,7 +188,7 @@ public class VersionSettingWindows extends AboutSetting {
         InputWidth.setText(String.valueOf(config.getWindowWidth()));
         InputHeight.setText(String.valueOf(config.getWindowHeight()));
         Input.setText(String.valueOf(config.getRunningMemory()));
-        tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(config.getJavaPath()));
+        tips2.setText("Java版本: " + JavaUtils.getJavaVersion(config.getJavaPath()));
         choose.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("选择Java文件");
@@ -217,7 +215,7 @@ public class VersionSettingWindows extends AboutSetting {
                 logmaker.info(gameConfig);
                 launcher.getGameConfig().PutConfigToFile(gameConfig);
                 tips6.setText("设置成功");
-                tips2.setText("Java版本: " + JavaHomePath.getJavaVersion(JavaPath.getText()));
+                tips2.setText("Java版本: " + JavaUtils.getJavaVersion(JavaPath.getText()));
             } catch (NumberFormatException e) {
                 tips6.setTextFill(Color.RED);
                 tips6.setText("请输入正确配置");

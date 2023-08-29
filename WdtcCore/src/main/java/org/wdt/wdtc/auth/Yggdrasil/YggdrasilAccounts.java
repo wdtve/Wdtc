@@ -10,8 +10,8 @@ import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.AccountsInterface;
 import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.auth.skin.SkinUtils;
-import org.wdt.wdtc.download.FileUrl;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -80,11 +80,11 @@ public class YggdrasilAccounts implements AccountsInterface {
         user.setUserName(selectedProfile.getString("name"));
         user.setUuid(selectedProfile.getString("id"));
         user.setAccessToken(UserInfo.getAccessToken());
-        user.setAPI(PlatformUtils.GetUrlContent(FileUrl.getLittleskinApi()));
+        user.setAPI(IOUtils.toString(UrlManger.getLittleskinApi()));
         user.setAPIBase64(PlatformUtils.StringToBase64(user.getAPI()));
         SkinUtils utils = textures.getUtils();
         user.setHeadFile(utils.writeSkinHead());
-        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), user);
+        JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
         logmaker.info(user);
         return user;
     }

@@ -1,13 +1,13 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 
 import java.io.File;
 
 public class GamePath {
     //此必须在编辑运行配置里把工作目录改成"$ProjectFileDir$"不然游戏文件夹地址会出错
-    protected File here = AboutSetting.getSetting().getDefaultGamePath();
+    protected File here = SettingManger.getSetting().getDefaultGamePath();
 
     public GamePath() {
     }

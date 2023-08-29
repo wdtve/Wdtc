@@ -14,7 +14,7 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.auth.UserList;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWindow;
 
@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class UserListPane {
-    private static final File UserFile = FilePath.getUsersJson();
-    private static final File UserListFile = FilePath.getUserListFile();
+    private static final File UserFile = FileManger.getUsersJson();
+    private static final File UserListFile = FileManger.getUserListFile();
 
     public static void setUserList(Pane pane) {
         pane.getChildren().clear();

@@ -1,25 +1,21 @@
 package org.wdt.wdtc.game;
 
-import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 
 import java.io.File;
 
-public class FilePath {
-    private static final String WDTC_CONFIG = Starter.getWdtcConfigFromVM() + "/.wdtc/";
-    private static final File SETTING_FILE = AboutSetting.GetSettingFile();
+public class FileManger {
+
 
 
     public static File getMinecraftComSkin() {
         return new File(System.getProperty("user.home"), "AppData/Roaming/.minecraft/assets/skins");
     }
 
-    public static File getSettingFile() {
-        return SETTING_FILE;
-    }
+
 
     public static File getWdtcConfig() {
-        return new File(WDTC_CONFIG);
+        return new File(VMManger.getWdtcConfigFromVM(), ".wdtc");
     }
 
 
@@ -40,11 +36,11 @@ public class FilePath {
     }
 
     public static File getWdtcCache() {
-        return new File(WDTC_CONFIG, "cache");
+        return new File(getWdtcConfig(), "cache");
     }
 
     public static File getWdtcImplementationPath() {
-        return new File(WDTC_CONFIG, "dependencies");
+        return new File(getWdtcConfig(), "dependencies");
     }
 
     public static File getWtdcOpenJFXPath() {
@@ -61,5 +57,9 @@ public class FilePath {
 
     public static File getUserListFile() {
         return new File(getWdtcUser(), "users.json");
+    }
+
+    public static File getSettingFile() {
+        return new File(getWdtcConfig(), "setting/setting.json");
     }
 }

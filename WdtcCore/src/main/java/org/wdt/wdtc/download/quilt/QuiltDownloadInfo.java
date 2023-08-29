@@ -4,7 +4,7 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class QuiltDownloadInfo implements DownloadInfo {
     }
 
     public File getQuiltVersionJson() {
-        return new File(FilePath.getWdtcCache() + "/" + launcher.getVersionNumber() + "-quilt-" + QuiltVersionNumber + ".json");
+        return new File(FileManger.getWdtcCache() + "/" + launcher.getVersionNumber() + "-quilt-" + QuiltVersionNumber + ".json");
     }
 
     public String getQuiltVersionJsonUrl() {

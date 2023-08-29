@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.User;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.launch.LauncherGame;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 import org.wdt.wdtc.ui.users.NewUserWindows;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -39,8 +39,8 @@ public class HomeWindow {
         setting.setOnMousePressed(event -> {
             if (event.isControlDown()) {
                 try {
-                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FilePath.getWdtcConfig().getCanonicalPath()});
-                    logmaker.info("* 配置目录" + FilePath.getWdtcConfig() + "已打开");
+                    Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FileManger.getWdtcConfig().getCanonicalPath()});
+                    logmaker.info("* 配置目录" + FileManger.getWdtcConfig() + "已打开");
                 } catch (IOException e) {
                     ErrorWindow.setErrorWin(e);
                 }
@@ -65,7 +65,7 @@ public class HomeWindow {
     public void setHome(Stage MainStage) {
         AnchorPane pane = new AnchorPane();
         WindwosSize windwosSize = new WindwosSize(MainStage);
-        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());
+        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion());
         VBox Menu = new VBox();
         Menu.setPrefSize(128, 450);
         JFXButton home = new JFXButton("首页");
@@ -113,7 +113,7 @@ public class HomeWindow {
             }
         });
 
-        Label name = new Label("Wdtc\n" + Starter.getLauncherVersion());
+        Label name = new Label("Wdtc\n" + VMManger.getLauncherVersion());
         name.setLayoutX(17.0);
         name.setLayoutY(161.0);
         Label readme = new Label("一个简单到不能再简单的我的世界Java版启动器");

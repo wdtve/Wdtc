@@ -1,10 +1,10 @@
 package org.wdt.wdtc.utils;
 
 import org.apache.log4j.*;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 
 public class WdtcLogger {
-    private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] %m%n");
+    private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n");
 
     public static <T> Logger getLogger(Class<T> clazz) {
         Logger logmaker = Logger.getLogger(clazz.getName());
@@ -15,7 +15,7 @@ public class WdtcLogger {
 
     private static RollingFileAppender getFileAppender() {
         RollingFileAppender FileAppender = new RollingFileAppender();
-        FileAppender.setFile(FilePath.getWdtcConfig() + "/logs/Wdtc.log");
+        FileAppender.setFile(FileManger.getWdtcConfig() + "/logs/Wdtc.log");
         FileAppender.setAppend(true);
         FileAppender.setLayout(layout);
         FileAppender.setMaxFileSize("10MB");

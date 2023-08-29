@@ -2,9 +2,9 @@ package org.wdt.wdtc.download.fabric;
 
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class FabricAPIDownloadTask {
     }
 
     public void DownloadFabricAPI() throws IOException {
-        JSONArray VersionListArray = JSONArray.parseJSONArray(PlatformUtils.GetUrlContent(VersionListUrl));
+        JSONArray VersionListArray = JSONArray.parseJSONArray(IOUtils.toString(VersionListUrl));
         for (int i = 0; i < VersionListArray.size(); i++) {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             if (VersionObject.getString("version_number").equals(FabricAPIVersionNumber)) {

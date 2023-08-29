@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.FileUtils;
 import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
-import org.wdt.wdtc.download.FileUrl;
+import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
@@ -15,7 +15,7 @@ import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.game.config.VersionInfo;
 import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -34,7 +34,7 @@ public class Launcher extends Version {
 
 
     public Launcher(String version) {
-        this(version, AboutSetting.getSetting().getDefaultGamePath());
+        this(version, SettingManger.getSetting().getDefaultGamePath());
     }
 
     public Launcher(String version, File here) {
@@ -88,17 +88,15 @@ public class Launcher extends Version {
 
 
     public static DownloadSource getDownloadSource() {
-        return FileUrl.DownloadSourceList.getDownloadSource();
+        return UrlManger.DownloadSourceList.getDownloadSource();
     }
 
-
-    public void writeStartScript() {
-        try {
-            String Script = Jvmattribute + Gameattribute;
-            logmaker.info(Script);
-            FileUtils.writeStringToFile(FilePath.getStarterBat(), Script);
-        } catch (IOException e) {
-            logmaker.error("* Error,", e);
+    public static Launcher getPreferredLauncher() {
+        SettingManger.Setting setting = SettingManger.getSetting();
+        if (setting.getPreferredVersion() != null) {
+            return ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
+        } else {
+            return null;
         }
     }
 
@@ -106,12 +104,13 @@ public class Launcher extends Version {
         return new OfficialDownloadSource();
     }
 
-    public static Launcher getPreferredLauncher() {
-        AboutSetting.Setting setting = AboutSetting.getSetting();
-        if (setting.getPreferredVersion() != null) {
-            return ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
-        } else {
-            return null;
+    public void writeStartScript() {
+        try {
+            String Script = Jvmattribute + Gameattribute;
+            logmaker.info(Script);
+            FileUtils.writeStringToFile(FileManger.getStarterBat(), Script);
+        } catch (IOException e) {
+            logmaker.error("* Error,", e);
         }
     }
 
@@ -120,7 +119,7 @@ public class Launcher extends Version {
     }
 
     public void LaunchTask() throws IOException {
-        if (AboutSetting.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
+        if (SettingManger.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
             String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
             File OptionsFile = getGameOptionsFile();
             FileUtils.writeStringToFile(OptionsFile, Options);
@@ -132,15 +131,15 @@ public class Launcher extends Version {
     }
 
     public boolean Console() {
-        return AboutSetting.getSetting().isConsole();
+        return SettingManger.getSetting().isConsole();
     }
 
     public Accounts GetAccounts() {
         return new Accounts();
     }
 
-    public FileUrl.DownloadSourceList getDownloadSourceKind() {
-        return AboutSetting.getSetting().getDownloadSource();
+    public UrlManger.DownloadSourceList getDownloadSourceKind() {
+        return SettingManger.getSetting().getDownloadSource();
     }
 
     public VersionInfo getVersionInfo() {
@@ -164,7 +163,7 @@ public class Launcher extends Version {
     @Override
     public String toString() {
         return "Launcher{" +
-                "version=" + getVersionNumber() +
+                "version=" + VersionNumber +
                 ",kind=" + kind +
                 '}';
 

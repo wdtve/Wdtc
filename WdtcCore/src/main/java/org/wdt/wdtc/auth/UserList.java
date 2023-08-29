@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSON;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserList {
-    private static final File UserListFile = FilePath.getUserListFile();
+    private static final File UserListFile = FileManger.getUserListFile();
     private static final Logger logmaker = WdtcLogger.getLogger(UserList.class);
 
     public static void addUser(User user) throws IOException {

@@ -8,7 +8,7 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.ZipUtils;
@@ -47,7 +47,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
     }
 
     public String getForgeInstallJarPath() {
-        return FilePath.getWdtcCache() + "/" + ForgeVersionNumber + "-installer.jar";
+        return FileManger.getWdtcCache() + "/" + ForgeVersionNumber + "-installer.jar";
     }
 
     public String getForgeInstallJarUrl() {
@@ -61,7 +61,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
 
     public String getInstallProfilePath() {
-        return FilePath.getWdtcCache() + "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
+        return FileManger.getWdtcCache() + "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
     }
 
     public JSONObject getInstallPrefileJSONObject() throws IOException {
@@ -70,7 +70,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
 
     public String getForgeVersionJsonPath() {
-        return FilePath.getWdtcCache() + "/version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
+        return FileManger.getWdtcCache() + "/version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
     }
 
     public void getForgeVersionJson() {

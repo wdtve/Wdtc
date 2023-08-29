@@ -1,8 +1,9 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
 import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.FileInputStream;
@@ -15,13 +16,13 @@ public class AuthlibInjector {
 
     public static void DownloadauthlibInjector() throws IOException {
         String authlib_injector_url = GetBmclAuthlibInjectorLatestJsonObject().getString("download_url");
-        DownloadTask.StartDownloadTask(authlib_injector_url, FilePath.getAuthlibInjector());
+        DownloadTask.StartDownloadTask(authlib_injector_url, FileManger.getAuthlibInjector());
     }
 
     public static void UpdateAuthlibInjector() throws IOException {
-        if (!PlatformUtils.FileExistenceAndSize(FilePath.getAuthlibInjector())) {
+        if (!PlatformUtils.FileExistenceAndSize(FileManger.getAuthlibInjector())) {
             String LatestVersionNumber = GetBmclAuthlibInjectorLatestJsonObject().getString("version");
-            String PresentVersionNumber = new JarInputStream(new FileInputStream(FilePath.getAuthlibInjector())).getManifest().getMainAttributes().getValue("Implementation-Version");
+            String PresentVersionNumber = new JarInputStream(new FileInputStream(FileManger.getAuthlibInjector())).getManifest().getMainAttributes().getValue("Implementation-Version");
             if (!PresentVersionNumber.equals(LatestVersionNumber)) {
                 DownloadauthlibInjector();
             }
@@ -31,6 +32,6 @@ public class AuthlibInjector {
     }
 
     private static JSONObject GetBmclAuthlibInjectorLatestJsonObject() throws IOException {
-        return JSONObject.parseObject(PlatformUtils.GetUrlContent(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
+        return JSONObject.parseObject(IOUtils.toString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
     }
 }

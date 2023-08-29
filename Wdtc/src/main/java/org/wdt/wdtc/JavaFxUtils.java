@@ -10,7 +10,7 @@ import org.wdt.utils.FilenameUtils;
 import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
@@ -34,7 +34,7 @@ public class JavaFxUtils {
 
     public static void setJavaFXListJson() {
         try {
-            File OpenJfxListFile = new File(FilePath.getWdtcImplementationPath(), "openjfx-list.json");
+            File OpenJfxListFile = new File(FileManger.getWdtcImplementationPath(), "openjfx-list.json");
             if (PlatformUtils.FileExistenceAndSize(OpenJfxListFile, 2393)) {
                 List<String> MoudleList = List.of("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics", "javafx.media");
                 JsonArray array = new JsonArray();
@@ -66,7 +66,7 @@ public class JavaFxUtils {
         for (int i = 0; i < array.size(); i++) {
             LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
             LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
-            File Library = new File(FilePath.getWtdcOpenJFXPath(), artifact.getPath());
+            File Library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
             ThreadUtils.StartThread(() -> {
                 try {
                     if (PlatformUtils.FileExistenceAndSize(Library, artifact.getSize())) {
@@ -97,7 +97,7 @@ public class JavaFxUtils {
                 for (int i = 0; i < array.size(); i++) {
                     LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
                     LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
-                    File Library = new File(FilePath.getWtdcOpenJFXPath(), artifact.getPath());
+                    File Library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
                     jarPaths.add(Library.toPath());
                     modules.add(new DependencyDownload(libraryObject.getLibraryName()).getArtifactId());
                 }

@@ -5,19 +5,20 @@ import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Map;
 
 public class GameJvmCommand {
     private final StringBuilder JvmSet;
     private final Launcher launcher;
+    private final String LibraryList;
 
     public GameJvmCommand(Launcher launcher) {
         this.launcher = launcher;
         this.JvmSet = new StringBuilder();
+        this.LibraryList = new GetStartLibraryPath(launcher).getLibraryPath().toString();
     }
 
     public StringBuilder GetJvmList() throws IOException {
@@ -30,7 +31,7 @@ public class GameJvmCommand {
         NonBreakingSpace("-Dminecraft.client.jar=", launcher.getVersionJar());
         NonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m");
         NonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
-        Files.createDirectories(launcher.getVersionNativesPath().toPath());
+        FileUtils.createDirectories(launcher.getVersionNativesPath());
         for (JsonElement Element : VersionJsonObject.getArguments().getJvmList()) {
             if (!Element.isJsonObject()) {
                 NonBreakingSpace(ReplaceData(Element.getAsString()));
@@ -41,9 +42,9 @@ public class GameJvmCommand {
 
     private Map<String, String> getDataMap() {
         return Map.of("${natives_directory}", FileUtils.getCanonicalPath(launcher.getVersionNativesPath()), "${launcher_name}", "Wdtc",
-                "${launcher_version}", Starter.getLauncherVersion(), "${library_directory}", FileUtils.getCanonicalPath(launcher.getGameLibraryPath()),
+                "${launcher_version}", VMManger.getLauncherVersion(), "${library_directory}", FileUtils.getCanonicalPath(launcher.getGameLibraryPath()),
                 "${classpath_separator}", ";", "${version_name}", launcher.getVersionNumber(),
-                "${classpath}", new GetStartLibraryPath(launcher).getLibraryPath().toString());
+                "${classpath}", LibraryList);
     }
 
     private void NonBreakingSpace(Object str) {

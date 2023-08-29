@@ -1,11 +1,9 @@
 package org.wdt.wdtc.utils;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
-import org.wdt.utils.FilenameUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,11 +15,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JavaHomePath {
-    private static final Logger logmaker = WdtcLogger.getLogger(JavaHomePath.class);
+public class JavaUtils {
+    private static final Logger logmaker = WdtcLogger.getLogger(JavaUtils.class);
 
     public static String GetRunJavaHome() {
-        return FilenameUtils.separatorsToUnix(getJavaExePath(System.getProperty("java.home")));
+        return getJavaExePath(System.getProperty("java.home"));
     }
 
     public static void main(String[] args) {
@@ -37,11 +35,12 @@ public class JavaHomePath {
 
     private static void getPotentialJava(String key) throws IOException {
         Process process = new ProcessBuilder("reg", "query", key).start();
+        SettingManger.Setting setting = SettingManger.getSetting();
+        JsonArray JavaList = setting.getJavaPath();
         for (String s : IOUtils.readLines(process.getInputStream())) {
             if (s.startsWith(key)) {
                 for (Map<String, String> map : getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
                     String JavaPath = map.get("JavaPath");
-                    JsonArray JavaList = AboutSetting.getSetting().getJavaPath();
                     boolean AddPath = true;
                     for (int i = 0; i < JavaList.size(); i++) {
                         if (AddPath) {
@@ -52,14 +51,12 @@ public class JavaHomePath {
                     }
                     if (AddPath) {
                         JavaList.add(JavaPath);
-                        logmaker.info("* Find Java : " + map.get("JavaPath") + ", Version : " + map.get("JavaVersion"));
-                        JsonObject object = AboutSetting.SettingObject().getJsonObjects();
-                        object.add("JavaPath", JavaList);
-                        PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
+                        logmaker.info("Find Java : " + map.get("JavaPath") + ", Version : " + map.get("JavaVersion"));
                     }
                 }
             }
         }
+        SettingManger.putSettingToFile(setting);
     }
 
 
@@ -76,12 +73,16 @@ public class JavaHomePath {
 
     private static List<String> getPotentialJavaHome(List<String> list) throws IOException {
         List<String> JavaHomeList = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\s+JavaHome\\s+REG_SZ\\s+(.+)");
         for (String key : list) {
             Process process = new ProcessBuilder("reg", "query", key, "/v", "JavaHome").start();
             for (String s : IOUtils.readLines(process.getInputStream())) {
                 String JavaHomeCleaned = s.replaceAll("\\s", "");
                 if (JavaHomeCleaned.startsWith("JavaHome")) {
-                    JavaHomeList.add(JavaHomeCleaned.substring(s.indexOf("REG_SZ") - 2));
+                    Matcher matcher = pattern.matcher(s);
+                    if (matcher.find()) {
+                        JavaHomeList.add(matcher.group(1));
+                    }
                 }
             }
         }
@@ -124,12 +125,34 @@ public class JavaHomePath {
 
     public static String getJavaExePath(String JavaHome) {
         if (Pattern.compile("\\s").matcher(JavaHome).find()) {
-            return "\"" + JavaHome + "\\bin\\java.exe\"";
+            if (JavaHome.endsWith("\\")) {
+                return "\"" + JavaHome + "bin\\java.exe\"";
+            } else {
+                return "\"" + JavaHome + "\\bin\\java.exe\"";
+            }
         } else {
-            return JavaHome + "\\bin\\java.exe";
+            if (JavaHome.endsWith("\\")) {
+                return JavaHome + "bin\\java.exe";
+            } else {
+                return JavaHome + "\\bin\\java.exe";
+            }
         }
-
     }
 
+    public static void InspectJavaPath() throws IOException {
+        SettingManger.Setting setting = SettingManger.getSetting();
+        JsonArray JavaList = setting.getJavaPath();
+        for (int i = 0; i < JavaList.size(); i++) {
+            String JavaPath = JavaList.get(i).getAsString();
+            if (PlatformUtils.FileExistenceAndSize(JavaPath)) {
+                logmaker.info(JavaPath + " 无效");
+                JavaList.remove(i);
+            } else {
+                logmaker.info(JavaPath + ",Version:" + getJavaVersion(JavaPath));
+            }
+        }
+        setting.setJavaPath(JavaList);
+        SettingManger.putSettingToFile(setting);
+    }
 }
 

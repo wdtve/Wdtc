@@ -11,11 +11,11 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FilenameUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.download.FileUrl;
 import org.wdt.wdtc.download.SpeedOfProgress;
+import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
@@ -109,8 +109,8 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
         }
         String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
-        if (FileUrl.DownloadSourceList.NoOfficialDownloadSource()) {
-            TxtUrl = PlatformUtils.getRedirectUrl(TxtUrl.replaceAll(FileUrl.getPistonDataMojang(), source.getDataUrl()));
+        if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
+            TxtUrl = PlatformUtils.getRedirectUrl(TxtUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl()));
         }
         if (TxtPath != null) {
             DownloadTask.StartDownloadTask(TxtUrl, launcher.getGameLibraryPath() + TxtPath.formJar());
@@ -135,7 +135,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     }
 
     public String ClientLzmaPath() {
-        return FilenameUtils.separatorsToWindows(FilePath.getWdtcCache() + "/data/client.lzma");
+        return FilenameUtils.separatorsToWindows(FileManger.getWdtcCache() + "/data/client.lzma");
     }
 
     public String Clean(String str) {

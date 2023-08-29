@@ -2,7 +2,7 @@ package org.wdt.wdtc.auth;
 
 import com.google.gson.annotations.SerializedName;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
@@ -27,12 +27,12 @@ public class User {
     private String HeadFile;
 
     public static void setUserToJson(User user) {
-        JSONUtils.ObjectToJsonFile(FilePath.getUsersJson(), user);
+        JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
     }
 
     public static User getUsers() {
         try {
-            return JSONUtils.JsonFileToClass(FilePath.getUsersJson(), User.class);
+            return JSONUtils.JsonFileToClass(FileManger.getUsersJson(), User.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -73,7 +73,7 @@ public class User {
 
     public static boolean SetUserJson() {
         try {
-            File UserJson = FilePath.getUsersJson();
+            File UserJson = FileManger.getUsersJson();
             return !PlatformUtils.FileExistenceAndSize(UserJson);
         } catch (IOException e) {
             throw new RuntimeException(e);

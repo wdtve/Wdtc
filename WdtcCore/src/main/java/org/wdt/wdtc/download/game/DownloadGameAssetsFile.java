@@ -15,22 +15,23 @@ import java.util.Map;
 
 public class DownloadGameAssetsFile extends DownloadTask {
     private final Logger logmaker = WdtcLogger.getLogger(DownloadGameAssetsFile.class);
-    private final Launcher version;
+    private final Launcher launcher;
 
     public DownloadGameAssetsFile(Launcher launcher) {
         super(launcher);
-        this.version = launcher;
+        this.launcher = launcher;
     }
 
     public void DownloadResourceFile() {
         try {
-            Map<String, JsonElement> list = JSONUtils.getJSONObject(version.getGameAssetsListJson()).getJSONObject("objects").getJsonObjects().asMap();
+            Map<String, JsonElement> list = JSONUtils.getJSONObject(launcher.getGameAssetsListJson()).getJSONObject("objects").getJsonObjects().asMap();
             SpeedOfProgress countDownLatch = new SpeedOfProgress(list.size());
+            ThreadGroup group = new ThreadGroup("Download Assets");
             for (String str : list.keySet()) {
                 JSONObject object = new JSONObject(list.get(str).getAsJsonObject());
                 String hash = object.getString("hash");
                 int FileSize = object.getInt("size");
-                StartDownloadHashTask(hash, FileSize, countDownLatch).setName(hash);
+                StartDownloadHashTask(hash, FileSize, countDownLatch, group);
             }
             countDownLatch.await();
         } catch (IOException exception) {

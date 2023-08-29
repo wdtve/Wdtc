@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.game.GameVersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class NewDownloadWindow {
         pane.getChildren().addAll(sp, back, tips);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
-        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - 下载游戏");
+        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - 下载游戏");
         MainStage.setScene(new Scene(pane, 600, 450));
     }
 }

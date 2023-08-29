@@ -4,9 +4,9 @@ import org.wdt.wdtc.download.downloadsource.BmclDownloadSource;
 import org.wdt.wdtc.download.downloadsource.McbbsDownloadSource;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-import org.wdt.wdtc.platform.AboutSetting;
+import org.wdt.wdtc.platform.SettingManger;
 
-public class FileUrl {
+public class UrlManger {
     public static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";
     public static final String MOJANG_ASSETS = "https://resources.download.minecraft.net/";
     public static final String MOJANG_LIBRARIES = "https://libraries.minecraft.net/";
@@ -48,7 +48,7 @@ public class FileUrl {
         MCBBS;
 
         public static DownloadSource getDownloadSource() {
-            DownloadSourceList source = AboutSetting.getSetting().getDownloadSource();
+            DownloadSourceList source = SettingManger.getSetting().getDownloadSource();
             if (source == OFFICIAL) {
                 return new OfficialDownloadSource();
             } else if (source == BMCLAPI) {
@@ -59,7 +59,7 @@ public class FileUrl {
         }
 
         public static boolean NoOfficialDownloadSource() {
-            return AboutSetting.getSetting().getDownloadSource() != OFFICIAL;
+            return SettingManger.getSetting().getDownloadSource() != OFFICIAL;
         }
     }
 }

@@ -7,7 +7,7 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -41,7 +41,7 @@ public class FabricDonwloadInfo implements DownloadInfo {
     }
 
     public String getProfileZipFile() {
-        return String.format(FilePath.getWdtcCache() + "/%s-%s-frofile-zip.zip", launcher.getVersionNumber(), getFabricVersionNumber());
+        return String.format(FileManger.getWdtcCache() + "/%s-%s-frofile-zip.zip", launcher.getVersionNumber(), getFabricVersionNumber());
     }
 
     public String getProfileZipUrl() {
@@ -53,11 +53,11 @@ public class FabricDonwloadInfo implements DownloadInfo {
     }
 
     public File getFabricJar() {
-        return new File(FilePath.getWdtcCache() + "/" + FromFabricLoaderFolder() + "/" + FromFabricLoaderFolder() + ".jar");
+        return new File(FileManger.getWdtcCache() + "/" + FromFabricLoaderFolder() + "/" + FromFabricLoaderFolder() + ".jar");
     }
 
     public File getFabricVersionJson() {
-        return new File(String.format(FilePath.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersionNumber(), FabricVersionNumber));
+        return new File(String.format(FileManger.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersionNumber(), FabricVersionNumber));
     }
 
     public JSONObject getFabricVersionJsonObject() throws IOException {

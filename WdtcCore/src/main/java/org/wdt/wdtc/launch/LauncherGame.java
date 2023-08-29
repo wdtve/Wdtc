@@ -2,7 +2,7 @@ package org.wdt.wdtc.launch;
 
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.InstallGameVersion;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class LauncherGame {
-    private static final File StartBat = FilePath.getStarterBat();
+    private static final File StartBat = FileManger.getStarterBat();
     private static final Logger logmaker = WdtcLogger.getLogger(LauncherGame.class);
     private final Launcher launcher;
 

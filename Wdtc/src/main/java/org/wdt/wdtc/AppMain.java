@@ -1,17 +1,15 @@
 package org.wdt.wdtc;
 
-import com.google.gson.JsonObject;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.platform.VMManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -23,7 +21,7 @@ public class AppMain extends Application {
     private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
 
     public static void main(String[] args) {
-        if (System.getProperty("wdtc.config.path") != null) {
+        if (System.getProperty("wdtc.config.path") == null) {
             System.setProperty("wdtc.config.path", System.getProperty("user.home"));
         }
         launch(args);
@@ -38,9 +36,9 @@ public class AppMain extends Application {
                 try {
                     InputStream in = url.openStream();
                     in.close();
-                    MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion());
+                    MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion());
                 } catch (IOException e) {
-                    MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + "(无网络)");
+                    MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + "(无网络)");
                     logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
                 }
             } catch (MalformedURLException e) {
@@ -58,10 +56,10 @@ public class AppMain extends Application {
             });
             MainStage.setOnCloseRequest(windowEvent -> {
                 logmaker.info(size);
-                JsonObject object = AboutSetting.SettingObject().getJsonObjects();
-                object.addProperty("WindowsWidth", MainStage.getWidth());
-                object.addProperty("WindowsHeight", MainStage.getHeight());
-                PlatformUtils.PutJSONObject(AboutSetting.GetSettingFile(), object);
+                SettingManger.Setting setting = SettingManger.getSetting();
+                setting.setWindowsWidth(MainStage.getWidth());
+                setting.setWindowsHeight(MainStage.getHeight());
+                SettingManger.putSettingToFile(setting);
                 logmaker.info("======= exited ========");
                 Platform.exit();
             });

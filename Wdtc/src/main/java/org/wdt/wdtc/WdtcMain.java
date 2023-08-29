@@ -2,17 +2,16 @@ package org.wdt.wdtc;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONArray;
 import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.Yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.Starter;
-import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -24,51 +23,40 @@ public class WdtcMain extends JavaFxUtils {
 
     public static void main(String[] args) throws Exception {
         CkeckJavaFX();
-        logmaker.info("===== Wdtc - " + Starter.getLauncherVersion() + " =====");
+        logmaker.info("===== Wdtc - " + VMManger.getLauncherVersion() + " =====");
         logmaker.info("* Java Version:" + System.getProperty("java.version"));
         logmaker.info("* Java VM Version:" + System.getProperty("java.vm.name"));
         logmaker.info("* Java Home:" + System.getProperty("java.home"));
-        logmaker.info("* Wdtc User Path:" + FilePath.getWdtcConfig());
-        logmaker.info("* Setting File:" + FilePath.getSettingFile());
+        logmaker.info("* Wdtc User Path:" + FileManger.getWdtcConfig());
+        logmaker.info("* Setting File:" + FileManger.getSettingFile());
         logmaker.info("* Here:" + GamePath.getDefaultHere());
-        AboutSetting.GenerateSettingFile();
+        SettingManger.GenerateSettingFile();
         StartTask();
-        Ergodic();
+        JavaUtils.InspectJavaPath();
         RemovePreferredVersion();
         UserList.printUserList();
         AuthlibInjector.UpdateAuthlibInjector();
         GameConfig.writeConfigJsonToAllVersion();
-        ThreadUtils.StartThread(() -> JavaHomePath.main(args)).setName("Found Java");
+        ThreadUtils.StartThread(() -> JavaUtils.main(args)).setName("Found Java");
         AppMain.main(args);
     }
 
     public static void StartTask() throws IOException {
         String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
-        if (PlatformUtils.FileExistenceAndSize(FilePath.getLlbmpipeLoader())) {
-            DownloadTask.StartDownloadTask(LlbmpipeLoader, FilePath.getLlbmpipeLoader());
+        if (PlatformUtils.FileExistenceAndSize(FileManger.getLlbmpipeLoader())) {
+            DownloadTask.StartDownloadTask(LlbmpipeLoader, FileManger.getLlbmpipeLoader());
         }
     }
 
-    public static void Ergodic() throws IOException {
-        AboutSetting.Setting setting = AboutSetting.getSetting();
-        JSONArray JavaList = new JSONArray(setting.getJavaPath());
-        for (int i = 0; i < JavaList.size(); i++) {
-            if (PlatformUtils.FileExistenceAndSize(JavaList.getString(i))) {
-                logmaker.info("* " + JavaList.getString(i) + " 无效");
-                JavaList.remove(i);
-            }
-        }
-        setting.setJavaPath(JavaList.getJsonArrays());
-        AboutSetting.putSettingToFile(setting);
-    }
+
 
     public static void RemovePreferredVersion() throws IOException {
-        AboutSetting.Setting setting = AboutSetting.getSetting();
+        SettingManger.Setting setting = SettingManger.getSetting();
         if (setting.getPreferredVersion() != null) {
             Launcher launcher = new Launcher(setting.getPreferredVersion());
             if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
                 setting.setPreferredVersion(null);
-                AboutSetting.putSettingToFile(setting);
+                SettingManger.putSettingToFile(setting);
             }
         }
     }

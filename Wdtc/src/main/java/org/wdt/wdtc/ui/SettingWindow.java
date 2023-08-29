@@ -8,10 +8,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.utils.FileUtils;
-import org.wdt.wdtc.download.FileUrl;
-import org.wdt.wdtc.game.FilePath;
-import org.wdt.wdtc.platform.AboutSetting;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.platform.VMManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -22,14 +22,14 @@ import java.util.Calendar;
 import java.util.Objects;
 
 
-public class SettingWindow extends AboutSetting {
+public class SettingWindow extends SettingManger {
     private static final Logger logmaker = WdtcLogger.getLogger(SettingWindow.class);
 
     private SettingWindow() {
     }
 
     public static void setSettingWin(Stage MainStage) throws IOException {
-        Setting setting = AboutSetting.getSetting();
+        Setting setting = SettingManger.getSetting();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
@@ -37,11 +37,11 @@ public class SettingWindow extends AboutSetting {
             logmaker.info(getSetting());
         });
         back.getStyleClass().add("BlackBorder");
-        MainStage.setTitle("Wdtc - " + Starter.getLauncherVersion() + " - Setting");
+        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - Setting");
 
         double line = 55.0;
         TextField GamePath = new TextField();
-        GamePath.setText(FileUtils.getCanonicalPath(AboutSetting.getSetting().getDefaultGamePath()));
+        GamePath.setText(FileUtils.getCanonicalPath(SettingManger.getSetting().getDefaultGamePath()));
         GamePath.setLayoutX(coordinate.layoutX);
         GamePath.setLayoutY(line);
         GamePath.setPrefSize(297.0, 23.0);
@@ -50,8 +50,8 @@ public class SettingWindow extends AboutSetting {
         button.setLayoutY(line);
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartPath(GetSettingFile());
-                logmaker.info("* 设置文件" + GetSettingFile() + "已打开");
+                PlatformUtils.StartPath(FileManger.getSettingFile());
+                logmaker.info("* 设置文件" + FileManger.getSettingFile() + "已打开");
             } else {
                 try {
                     DirectoryChooser fileChooser = new DirectoryChooser();
@@ -119,21 +119,21 @@ public class SettingWindow extends AboutSetting {
             BmclDownloadSource.setSelected(false);
             McbbsDownloadSource.setSelected(false);
             logmaker.info("* Switch to Official DownloadSource");
-            setting.setDownloadSource(FileUrl.DownloadSourceList.OFFICIAL);
+            setting.setDownloadSource(UrlManger.DownloadSourceList.OFFICIAL);
             putSettingToFile(setting);
         });
         BmclDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             McbbsDownloadSource.setSelected(false);
             logmaker.info("* Switch to Bmcl DownloadSource");
-            setting.setDownloadSource(FileUrl.DownloadSourceList.BMCLAPI);
+            setting.setDownloadSource(UrlManger.DownloadSourceList.BMCLAPI);
             putSettingToFile(setting);
         });
         McbbsDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             BmclDownloadSource.setSelected(false);
             logmaker.info("* Switch to Mcbbs DownloadSource");
-            setting.setDownloadSource(FileUrl.DownloadSourceList.MCBBS);
+            setting.setDownloadSource(UrlManger.DownloadSourceList.MCBBS);
             putSettingToFile(setting);
         });
 
@@ -193,12 +193,12 @@ public class SettingWindow extends AboutSetting {
             try {
                 DirectoryChooser fileChooser = new DirectoryChooser();
                 fileChooser.setTitle("选择日志文件保存路径");
-                fileChooser.setInitialDirectory(FilePath.getWdtcConfig());
+                fileChooser.setInitialDirectory(FileManger.getWdtcConfig());
                 File logDirectory = fileChooser.showDialog(MainStage);
                 if (Objects.nonNull(logDirectory)) {
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                    File srcFile = new File(FilePath.getWdtcCache() + "/logs/Wdtc.log");
+                    File srcFile = new File(FileManger.getWdtcCache() + "/logs/Wdtc.log");
                     File logFile = new File(logDirectory.getAbsolutePath() + "/Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
                     FileUtils.copyFile(srcFile, logFile);
                     logmaker.info("* 日志已导出:" + logFile);
@@ -209,19 +209,19 @@ public class SettingWindow extends AboutSetting {
         });
 
         JFXButton CleanCache = new JFXButton();
-        CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FilePath.getWdtcCache()) + "B");
+        CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FileManger.getWdtcCache()) + "B");
         CleanCache.setPrefSize(105, 30);
         AnchorPane.setLeftAnchor(CleanCache, 0.0);
         AnchorPane.setBottomAnchor(CleanCache, 30.0);
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartPath(FilePath.getWdtcCache());
+                PlatformUtils.StartPath(FileManger.getWdtcCache());
                 logmaker.info("* 缓存文件夹已打开");
             } else {
                 try {
-                    FileUtils.cleanDirectory(FilePath.getWdtcCache());
+                    FileUtils.cleanDirectory(FileManger.getWdtcCache());
                     logmaker.info("* Cache Folder Cleaned");
-                    CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FilePath.getWdtcCache()) + "B");
+                    CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FileManger.getWdtcCache()) + "B");
                 } catch (IOException e) {
                     logmaker.error("* Clean Cache Folder Error,", e);
                 }

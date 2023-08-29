@@ -75,6 +75,13 @@ public class GameConfig {
         }
     }
 
+    public static void CkeckVersionInfo(Launcher launcher) throws IOException {
+        DefaultGameConfig config = new DefaultGameConfig();
+        config.setInfo(launcher.getVersionInfo());
+        FileUtils.writeStringToFile(launcher.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
+        logmaker.info("* " + launcher.getVersionNumber() + " " + config);
+    }
+
     public void PutConfigToFile(DefaultGameConfig config) {
         JSONUtils.ObjectToJsonFile(launcher.getVersionConfigFile(), config);
     }

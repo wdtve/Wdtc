@@ -52,4 +52,9 @@ public class IOUtils {
     public static String toString(URL url) throws IOException {
         return toString(url.openStream());
     }
+
+
+    public static String toString(String UrlPath) throws IOException {
+        return toString(new URL(UrlPath));
+    }
 }

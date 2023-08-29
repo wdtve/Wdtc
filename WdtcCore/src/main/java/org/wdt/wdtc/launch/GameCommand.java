@@ -7,7 +7,7 @@ import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.Starter;
+import org.wdt.wdtc.platform.VMManger;
 
 import java.io.IOException;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class GameCommand {
                 "${game_directory}", FileUtils.getCanonicalPath(launcher.getVersionPath()), "${assets_root}", FileUtils.getCanonicalPath(launcher.getGameAssetsdir()),
                 "${assets_index_name}", launcher.getGameVersionJsonObject().getAssets(), "${auth_uuid}", user.getUuid(),
                 "${auth_access_token}", user.getAccessToken(), "${user_type}", user.getType().toString(),
-                "${version_type}", "Wdtc-" + Starter.getLauncherVersion());
+                "${version_type}", "Wdtc-" + VMManger.getLauncherVersion());
     }
 
     private void NonBreakingSpace(Object o) {

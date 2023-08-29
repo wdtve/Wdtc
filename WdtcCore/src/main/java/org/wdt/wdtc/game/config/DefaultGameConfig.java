@@ -1,7 +1,7 @@
 package org.wdt.wdtc.game.config;
 
 import com.google.gson.annotations.SerializedName;
-import org.wdt.wdtc.utils.JavaHomePath;
+import org.wdt.wdtc.utils.JavaUtils;
 
 public class DefaultGameConfig {
     @SerializedName("info")
@@ -37,7 +37,7 @@ public class DefaultGameConfig {
         @SerializedName("RunningMemory")
         public int xmx = 1024;
         @SerializedName("JavaPath")
-        public String JavaHome = JavaHomePath.GetRunJavaHome();
+        public String JavaHome = JavaUtils.GetRunJavaHome();
         @SerializedName("WindowWidth")
         public int width = 618;
         @SerializedName("WindowHeight")

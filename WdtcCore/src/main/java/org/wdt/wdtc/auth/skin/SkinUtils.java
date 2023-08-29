@@ -3,7 +3,7 @@ package org.wdt.wdtc.auth.skin;
 import org.wdt.utils.FileUtils;
 import org.wdt.utils.FilenameUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.game.FilePath;
+import org.wdt.wdtc.game.FileManger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,20 +35,20 @@ public class SkinUtils {
         if (UserSkinInput != null) {
             image = ImageIO.read(UserSkinInput);
         } else {
-            image = ImageIO.read(Files.newInputStream(SkinFile.toPath()));
+            image = ImageIO.read(FileUtils.newInputStream(SkinFile));
         }
         String extension = FilenameUtils.getExtension(SkinFile.getName());
         BufferedImage image1 = image.getSubimage(8, 8, 8, 8);
-        File file = new File(FilePath.getUserAsste(), SkinFile.getName().replace("." + extension, "") + "-head." + extension);
+        File file = new File(FileManger.getUserAsste(), SkinFile.getName().replace("." + extension, "") + "-head." + extension);
         FileUtils.touch(file);
-        OutputStream outputStream = Files.newOutputStream(file.toPath());
+        OutputStream outputStream = FileUtils.newOutputStream(file);
         ImageIO.write(image1, extension, outputStream);
         outputStream.close();
         return file;
     }
 
     public File getSkinFile() {
-        return new File(FilePath.getUserAsste(), UserName + ".png");
+        return new File(FileManger.getUserAsste(), UserName + ".png");
     }
 
     public void copySkinFile() throws IOException {
