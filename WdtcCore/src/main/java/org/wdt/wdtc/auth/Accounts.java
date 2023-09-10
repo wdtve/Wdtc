@@ -1,7 +1,7 @@
 package org.wdt.wdtc.auth;
 
-import org.wdt.wdtc.download.UrlManger;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.UrlManger;
 
 import java.io.IOException;
 

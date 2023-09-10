@@ -46,18 +46,18 @@ public class DownloadTask extends GameLibraryPathAndUrl {
     public static void StartDownloadTask(URL url, File file) {
         long Now = System.currentTimeMillis();
         try {
-            logmaker.info("* Task Start: " + url);
+            logmaker.info("Task Start: " + url);
             DownloadUtils.ManyTimesToTryDownload(file, url, 5);
-            logmaker.info("* Task Finish: " + file + ", Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
+            logmaker.info("Task Finish: " + file + ", Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
         } catch (Exception e) {
-            logmaker.warn("* Task: " + url, e);
+            logmaker.warn("Task: " + url, e);
             try {
-                logmaker.info("* Task: " + url + " Start retry");
+                logmaker.info("Task: " + url + " Start retry");
                 DownloadUtils.ManyTimesToTryDownload(file, url, 5);
-                logmaker.info("* Task: " + file + " Successfully retried, Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
+                logmaker.info("Task: " + file + " Successfully retried, Take A Period Of " + (System.currentTimeMillis() - Now) + "ms");
             } catch (Exception exception) {
                 if (file.delete()) {
-                    logmaker.error("* Task: " + url + " Error", exception);
+                    logmaker.error("Task: " + url + " Error", exception);
                 }
             }
         }

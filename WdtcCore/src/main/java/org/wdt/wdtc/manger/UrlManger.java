@@ -1,10 +1,9 @@
-package org.wdt.wdtc.download;
+package org.wdt.wdtc.manger;
 
 import org.wdt.wdtc.download.downloadsource.BmclDownloadSource;
 import org.wdt.wdtc.download.downloadsource.McbbsDownloadSource;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-import org.wdt.wdtc.platform.SettingManger;
 
 public class UrlManger {
     public static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";

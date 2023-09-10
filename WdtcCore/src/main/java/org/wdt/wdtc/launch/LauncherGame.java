@@ -2,8 +2,8 @@ package org.wdt.wdtc.launch;
 
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.InstallGameVersion;
-import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -22,7 +22,7 @@ public class LauncherGame {
             logmaker.info("* Start Download");
             InstallGameVersion gameVersion = new InstallGameVersion(launcher, false);
             try {
-                gameVersion.DownloadGame();
+                gameVersion.InstallGame();
             } catch (Throwable e) {
                 logmaker.error("错误:", e);
             }

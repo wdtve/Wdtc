@@ -11,9 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.utils.ModUtils;
 
 import java.util.List;
 

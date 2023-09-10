@@ -1,6 +1,7 @@
 package org.wdt.wdtc.game;
 
 import org.wdt.wdtc.launch.GamePath;
+import org.wdt.wdtc.utils.ModUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;

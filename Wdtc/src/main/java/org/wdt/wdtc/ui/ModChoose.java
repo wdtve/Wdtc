@@ -18,7 +18,7 @@ import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.download.quilt.QuiltVersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
+import org.wdt.wdtc.utils.ModUtils;
 
 import java.io.IOException;
 

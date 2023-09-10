@@ -2,27 +2,23 @@ package org.wdt.wdtc.download;
 
 import javafx.scene.control.TextField;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.game.config.GameConfig;
+import org.wdt.wdtc.utils.ModUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public class InstallGameVersion extends ModUtils {
+public class InstallGameVersion extends DownloadGameVersion {
     private static final Logger logmaker = WdtcLogger.getLogger(InstallGameVersion.class);
     private final TextField textField;
-    private final Launcher launcher;
-    private final boolean Install;
 
     private InstallGameVersion(Launcher launcher, TextField textField, boolean Install) {
+        super(launcher, Install);
         this.textField = textField;
-        this.launcher = launcher;
-        this.Install = Install;
     }
 
     public InstallGameVersion(Launcher launcher) {
@@ -37,7 +33,7 @@ public class InstallGameVersion extends ModUtils {
         this(launcher, null, Install);
     }
 
-    public void DownloadGame() {
+    public void InstallGame() {
         try {
             long startTime = System.currentTimeMillis();
             if (PlatformUtils.FileExistenceAndSize(launcher.getVersionConfigFile())) {
@@ -45,26 +41,23 @@ public class InstallGameVersion extends ModUtils {
             } else {
                 GameConfig.CkeckVersionInfo(launcher);
             }
-            InstallTask task = getModInstallTask(launcher);
-            DownloadVersionGameFile DownloadGame = new DownloadVersionGameFile(launcher, Install);
-            DownloadGame.DownloadGameVersionJson();
-            DownloadGame.DownloadGameAssetsListJson();
-            DownloadGame.DownloadVersionJar();
+            DownloadGameFile();
+            InstallTask task = ModUtils.getModInstallTask(launcher);
             if (Install && task != null) {
                 task.BeforInstallTask();
                 task.setPatches();
                 task.execute();
             }
-            DownloadGame.DownloadGameLibFileTask().DownloadLibraryFile();
+            DownloadGameLibrary();
             String LibraryFinishTime = "游戏所需类库下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
             logmaker.debug(LibraryFinishTime);
             if (Objects.nonNull(textField)) {
                 textField.setText(LibraryFinishTime);
             }
-            DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
             if (Install && task != null) {
                 task.AfterDownloadTask();
             }
+            DownloadResourceFile();
             String EndTime = "下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
             logmaker.info(EndTime);
             if (Objects.nonNull(textField)) {

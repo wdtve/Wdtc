@@ -5,7 +5,7 @@ import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.manger.VMManger;
 
 import java.io.IOException;
 import java.util.Map;

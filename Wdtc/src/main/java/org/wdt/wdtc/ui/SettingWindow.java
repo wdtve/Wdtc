@@ -8,10 +8,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.utils.FileUtils;
-import org.wdt.wdtc.download.UrlManger;
-import org.wdt.wdtc.game.FileManger;
-import org.wdt.wdtc.platform.SettingManger;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.manger.UrlManger;
+import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 

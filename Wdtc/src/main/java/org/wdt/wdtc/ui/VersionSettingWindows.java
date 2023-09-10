@@ -16,13 +16,9 @@ import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
-import org.wdt.wdtc.platform.SettingManger;
-import org.wdt.wdtc.utils.JavaUtils;
-import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.utils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +115,7 @@ public class VersionSettingWindows extends SettingManger {
         });
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
             InstallGameVersion version = new InstallGameVersion(launcher, true);
-            version.DownloadGame();
+            version.InstallGame();
             logmaker.info("* " + launcher.getVersionNumber() + " downloaded");
         }));
     }

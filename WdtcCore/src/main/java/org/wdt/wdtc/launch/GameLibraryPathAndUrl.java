@@ -2,10 +2,10 @@ package org.wdt.wdtc.launch;
 
 
 import org.wdt.platform.DependencyDownload;
-import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.manger.UrlManger;
 
 import java.io.File;
 import java.io.IOException;

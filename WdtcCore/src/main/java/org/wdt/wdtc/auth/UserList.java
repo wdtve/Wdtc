@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSON;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;

@@ -2,7 +2,7 @@ package org.wdt.wdtc.auth;
 
 import com.google.gson.annotations.SerializedName;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;

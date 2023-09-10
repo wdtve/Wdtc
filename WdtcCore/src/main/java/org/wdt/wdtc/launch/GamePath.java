@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.manger.SettingManger;
 
 import java.io.File;
 

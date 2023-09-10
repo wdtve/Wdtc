@@ -2,10 +2,16 @@ package org.wdt.wdtc.game;
 
 
 import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.FileUtils;
+import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.launch.GamePath;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Version extends GamePath {
     protected final String VersionNumber;
@@ -19,10 +25,22 @@ public class Version extends GamePath {
         this.VersionNumber = VersionNumber;
     }
 
+    public static void DownloadVersionManifestJsonFileTask() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, -7);
+        try {
+            if (PlatformUtils.FileExistenceAndSize(FileManger.getVersionManifestFile()) || FileUtils.isFileOlder(FileManger.getVersionManifestFile(), calendar.getTime())) {
+                DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String getVersionNumber() {
         return VersionNumber;
     }
-
 
     public File getVersionPath() {
         return new File(getGameVersionsPath(), VersionNumber);

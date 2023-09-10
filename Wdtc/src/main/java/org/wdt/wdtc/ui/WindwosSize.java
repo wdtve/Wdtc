@@ -3,7 +3,7 @@ package org.wdt.wdtc.ui;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.manger.SettingManger;
 
 public class WindwosSize {
     public static final double WindowsWidht = 616.0;

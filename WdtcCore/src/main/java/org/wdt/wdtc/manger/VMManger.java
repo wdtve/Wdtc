@@ -1,4 +1,4 @@
-package org.wdt.wdtc.platform;
+package org.wdt.wdtc.manger;
 
 import org.wdt.utils.FileUtils;
 

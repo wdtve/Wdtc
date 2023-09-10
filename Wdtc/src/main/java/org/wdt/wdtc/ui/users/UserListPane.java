@@ -14,7 +14,7 @@ import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.auth.UserList;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWindow;
 

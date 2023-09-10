@@ -2,10 +2,10 @@ package org.wdt.wdtc.auth.Yggdrasil;
 
 import com.google.gson.annotations.SerializedName;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.auth.skin.SkinUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class YggdrasilTextures {
     }
 
     public Csl getCsl() throws IOException {
-        return JSONObject.parseObject(IOUtils.toString(GetUserJson()), Csl.class);
+        return JSONObject.parseObject(PlatformUtils.UrltoString(GetUserJson()), Csl.class);
     }
 
     public SkinUtils getUtils() throws IOException {

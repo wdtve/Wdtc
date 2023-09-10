@@ -10,7 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.game.GameVersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.game.Version;
+import org.wdt.wdtc.manger.VMManger;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class NewDownloadWindow {
 
 
     public static void SetWin(Stage MainStage) {
+        Version.DownloadVersionManifestJsonFileTask();
         WindwosSize size = new WindwosSize(MainStage);
         AnchorPane pane = new AnchorPane();
         VBox list = new VBox();

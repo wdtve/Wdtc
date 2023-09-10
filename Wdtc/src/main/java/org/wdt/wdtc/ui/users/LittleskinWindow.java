@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilAccounts;
 import org.wdt.wdtc.auth.Yggdrasil.YggdrasilTextures;
-import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
 

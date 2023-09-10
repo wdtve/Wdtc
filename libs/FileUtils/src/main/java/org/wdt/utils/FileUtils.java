@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class FileUtils {
@@ -147,4 +148,11 @@ public class FileUtils {
         }
     }
 
+    public static boolean isFileOlder(File file, Date date) throws IOException {
+        return isFileOlder(file, date.getTime());
+    }
+
+    public static boolean isFileOlder(File file, long l) throws IOException {
+        return Files.getLastModifiedTime(file.toPath()).compareTo(FileTime.fromMillis(l)) < 0;
+    }
 }

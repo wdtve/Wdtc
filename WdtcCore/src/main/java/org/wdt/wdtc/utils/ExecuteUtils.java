@@ -9,7 +9,6 @@ import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
-import org.wdt.wdtc.game.ModUtils;
 
 import java.io.IOException;
 import java.util.List;

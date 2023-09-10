@@ -1,9 +1,8 @@
 package org.wdt.wdtc.auth.Yggdrasil;
 
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.FileInputStream;
@@ -32,6 +31,6 @@ public class AuthlibInjector {
     }
 
     private static JSONObject GetBmclAuthlibInjectorLatestJsonObject() throws IOException {
-        return JSONObject.parseObject(IOUtils.toString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
+        return JSONObject.parseObject(PlatformUtils.UrltoString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
     }
 }

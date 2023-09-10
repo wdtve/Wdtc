@@ -1,18 +1,18 @@
-package org.wdt.wdtc.platform;
+package org.wdt.wdtc.manger;
 
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.utils.FileUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.download.UrlManger;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -49,8 +49,8 @@ public class SettingManger {
         private UrlManger.DownloadSourceList DownloadSource = UrlManger.DownloadSourceList.OFFICIAL;
         private boolean Console = false;
         private boolean LlvmpipeLoader = false;
-        private String DefaultGamePath = System.getProperty("user.dir");
-        private JsonArray JavaPath = new JsonArray();
+        private File DefaultGamePath = new File(System.getProperty("user.dir"));
+        private List<JavaUtils.JavaInfo> JavaPath = new ArrayList<>();
         private boolean ChineseLanguage = true;
         private double WindowsWidth = 616.0;
         private double WindowsHeight = 489.0;
@@ -97,18 +97,18 @@ public class SettingManger {
         }
 
         public File getDefaultGamePath() {
-            return new File(DefaultGamePath);
+            return DefaultGamePath;
         }
 
         public void setDefaultGamePath(File defaultGamePath) {
-            DefaultGamePath = FileUtils.getCanonicalPath(defaultGamePath);
+            DefaultGamePath = defaultGamePath;
         }
 
-        public JsonArray getJavaPath() {
+        public List<JavaUtils.JavaInfo> getJavaPath() {
             return JavaPath;
         }
 
-        public void setJavaPath(JsonArray javaPath) {
+        public void setJavaPath(List<JavaUtils.JavaInfo> javaPath) {
             JavaPath = javaPath;
         }
 

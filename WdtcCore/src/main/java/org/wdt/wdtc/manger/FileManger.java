@@ -1,6 +1,4 @@
-package org.wdt.wdtc.game;
-
-import org.wdt.wdtc.platform.VMManger;
+package org.wdt.wdtc.manger;
 
 import java.io.File;
 
@@ -61,5 +59,9 @@ public class FileManger {
 
     public static File getSettingFile() {
         return new File(getWdtcConfig(), "setting/setting.json");
+    }
+
+    public static File getVersionManifestFile() {
+        return new File(getWdtcCache(), "versionManifest.json");
     }
 }

@@ -1,4 +1,4 @@
-package org.wdt.wdtc.game;
+package org.wdt.wdtc.utils;
 
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
@@ -6,8 +6,7 @@ import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
-import org.wdt.wdtc.utils.PlatformUtils;
-import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.game.Launcher;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -76,7 +75,7 @@ public class ModUtils {
         }
     }
 
-    public InstallTask getModInstallTask(Launcher launcher) {
+    public static InstallTask getModInstallTask(Launcher launcher) {
         DownloadInfo info = getModDownloadInfo(launcher);
         if (info != null) {
             return info.getModInstallTask();

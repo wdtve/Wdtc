@@ -2,10 +2,10 @@ package org.wdt.wdtc.launch;
 
 
 import org.wdt.utils.FileUtils;
-import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.utils.ZipUtils;
 
 import java.io.File;

@@ -6,7 +6,7 @@ import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
+import org.wdt.wdtc.utils.ModUtils;
 
 public class VersionInfo {
     @SerializedName("GameVersionNumber")

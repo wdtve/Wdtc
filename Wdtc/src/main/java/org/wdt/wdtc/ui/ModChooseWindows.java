@@ -8,8 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.ModUtils;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.manger.VMManger;
+import org.wdt.wdtc.utils.ModUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;

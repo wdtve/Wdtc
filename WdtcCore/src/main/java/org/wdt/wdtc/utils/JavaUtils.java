@@ -1,17 +1,15 @@
 package org.wdt.wdtc.utils;
 
-import com.google.gson.JsonArray;
 import org.apache.log4j.Logger;
+import org.wdt.utils.FileUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.platform.SettingManger;
+import org.wdt.wdtc.manger.SettingManger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,15 +17,15 @@ public class JavaUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(JavaUtils.class);
 
     public static String GetRunJavaHome() {
-        return getJavaExePath(System.getProperty("java.home"));
+        return getJavaExePath(new File(System.getProperty("java.home")));
     }
 
     public static void main(String[] args) {
         try {
-            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit");
-            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update");
-            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps");
-            getPotentialJava("HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK");
+            for (String s : args) {
+                getPotentialJava(s);
+            }
+            logmaker.info("Find Java Done");
         } catch (IOException e) {
             logmaker.error("Error, ", e);
         }
@@ -36,26 +34,27 @@ public class JavaUtils {
     private static void getPotentialJava(String key) throws IOException {
         Process process = new ProcessBuilder("reg", "query", key).start();
         SettingManger.Setting setting = SettingManger.getSetting();
-        JsonArray JavaList = setting.getJavaPath();
+        List<JavaInfo> NewJavaList = new ArrayList<>();
         for (String s : IOUtils.readLines(process.getInputStream())) {
             if (s.startsWith(key)) {
                 for (Map<String, String> map : getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
-                    String JavaPath = map.get("JavaPath");
+                    JavaInfo NewInfo = new JavaUtils.JavaInfo(new File(map.get("JavaPath")));
                     boolean AddPath = true;
-                    for (int i = 0; i < JavaList.size(); i++) {
+                    for (JavaInfo info : NewJavaList) {
                         if (AddPath) {
-                            if (JavaPath.equals(JavaList.get(i).getAsString())) {
+                            if (NewInfo.equals(info)) {
                                 AddPath = false;
                             }
                         }
                     }
                     if (AddPath) {
-                        JavaList.add(JavaPath);
-                        logmaker.info("Find Java : " + map.get("JavaPath") + ", Version : " + map.get("JavaVersion"));
+                        NewJavaList.add(NewInfo);
+                        logmaker.info("Find Java : " + NewInfo.getJavaExeFile() + ", Version : " + NewInfo.getVersionNumber());
                     }
                 }
             }
         }
+        setting.setJavaPath(NewJavaList);
         SettingManger.putSettingToFile(setting);
     }
 
@@ -92,13 +91,13 @@ public class JavaUtils {
     public static List<Map<String, String>> getJavaExeAndVersion(List<String> list) throws IOException {
         List<Map<String, String>> JavaList = new ArrayList<>();
         for (String path : list) {
-            String JavaPath = getJavaExePath(path);
+            String JavaPath = getJavaExePath(new File(path));
             if (!Files.exists(Paths.get(path))) {
                 logmaker.warn("warn : ", new IOException(path + " isn't exists"));
             } else {
                 if (!PlatformUtils.FileExistenceAndSize(JavaPath)) {
                     Map<String, String> JavaExeAndVersion = new HashMap<>();
-                    JavaExeAndVersion.put("JavaPath", JavaPath);
+                    JavaExeAndVersion.put("JavaPath", path);
                     JavaExeAndVersion.put("JavaVersion", getJavaVersion(JavaPath));
                     JavaList.add(JavaExeAndVersion);
                 }
@@ -123,15 +122,16 @@ public class JavaUtils {
         return null;
     }
 
-    public static String getJavaExePath(String JavaHome) {
-        if (Pattern.compile("\\s").matcher(JavaHome).find()) {
-            if (JavaHome.endsWith("\\")) {
+    public static String getJavaExePath(File JavaHome) {
+        String JavaHomePath = FileUtils.getCanonicalPath(JavaHome);
+        if (Pattern.compile("\\s").matcher(JavaHomePath).find()) {
+            if (JavaHomePath.endsWith("\\")) {
                 return "\"" + JavaHome + "bin\\java.exe\"";
             } else {
                 return "\"" + JavaHome + "\\bin\\java.exe\"";
             }
         } else {
-            if (JavaHome.endsWith("\\")) {
+            if (JavaHomePath.endsWith("\\")) {
                 return JavaHome + "bin\\java.exe";
             } else {
                 return JavaHome + "\\bin\\java.exe";
@@ -139,20 +139,96 @@ public class JavaUtils {
         }
     }
 
-    public static void InspectJavaPath() throws IOException {
-        SettingManger.Setting setting = SettingManger.getSetting();
-        JsonArray JavaList = setting.getJavaPath();
-        for (int i = 0; i < JavaList.size(); i++) {
-            String JavaPath = JavaList.get(i).getAsString();
-            if (PlatformUtils.FileExistenceAndSize(JavaPath)) {
-                logmaker.info(JavaPath + " 无效");
-                JavaList.remove(i);
-            } else {
-                logmaker.info(JavaPath + ",Version:" + getJavaVersion(JavaPath));
+    public static File getJavaExeFile(File JavaHome) {
+        return new File(JavaHome, "bin/java.exe");
+    }
+
+
+    public enum JavaTips {
+        JDK, JRE;
+
+        public static boolean isJRE(File JavaHome) {
+            try {
+                return PlatformUtils.FileExistenceAndSize(new File(JavaHome, "bin/javac.exe"));
+            } catch (IOException e) {
+                logmaker.error("", e);
             }
+            return false;
         }
-        setting.setJavaPath(JavaList);
-        SettingManger.putSettingToFile(setting);
+
+        public static JavaTips getJavaTips(File JavaHomeFile) {
+            if (isJRE(JavaHomeFile)) return JRE;
+            return JDK;
+        }
+    }
+
+    public static class JavaInfo {
+
+        private File JavaHomeFile;
+        private File JavaExeFile;
+        private String VersionNumber;
+        private JavaTips tips;
+
+        public JavaInfo(File javaHomeFile, File javaExeFile, String versionNumber, JavaTips tips) {
+            JavaHomeFile = javaHomeFile;
+            JavaExeFile = javaExeFile;
+            VersionNumber = versionNumber;
+            this.tips = tips;
+        }
+
+        public JavaInfo(File javaHomeFile) {
+            this(javaHomeFile, JavaUtils.getJavaExeFile(javaHomeFile), getJavaVersion(getJavaExePath(javaHomeFile)), JavaTips.getJavaTips(javaHomeFile));
+        }
+
+        public File getJavaHomeFile() {
+            return JavaHomeFile;
+        }
+
+        public void setJavaHomeFile(File javaHomeFile) {
+            JavaHomeFile = javaHomeFile;
+        }
+
+        public File getJavaExeFile() {
+            return JavaExeFile;
+        }
+
+        public void setJavaExeFile(File javaExeFile) {
+            JavaExeFile = javaExeFile;
+        }
+
+        public String getVersionNumber() {
+            return VersionNumber;
+        }
+
+        public void setVersionNumber(String versionNumber) {
+            VersionNumber = versionNumber;
+        }
+
+        public JavaTips getTips() {
+            return tips;
+        }
+
+        public void setTips(JavaTips tips) {
+            this.tips = tips;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            JavaInfo javaInfo = (JavaInfo) o;
+            return Objects.equals(JavaExeFile, javaInfo.JavaExeFile) && tips == javaInfo.tips;
+        }
+
+        @Override
+        public String toString() {
+            return "JavaInfo{" +
+                    "JavaHomeFile=" + JavaHomeFile +
+                    ", JavaExeFile=" + JavaExeFile +
+                    ", VersionNumber='" + VersionNumber + '\'' +
+                    ", tips=" + tips +
+                    '}';
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package org.wdt.wdtc.utils;
 
 
 import org.wdt.utils.FileUtils;
+import org.wdt.utils.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,4 +97,7 @@ public class PlatformUtils {
         }
     }
 
+    public static String UrltoString(String UrlPath) throws IOException {
+        return IOUtils.toString(new URL(UrlPath));
+    }
 }

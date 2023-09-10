@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.utils.ThreadUtils;
 
 import java.io.IOException;
@@ -59,7 +59,7 @@ public class DownloadGameWindows {
         textField.setText(launcher.getVersionNumber() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.StartThread(() -> {
             try {
-                new InstallGameVersion(launcher, textField).DownloadGame();
+                new InstallGameVersion(launcher, textField).InstallGame();
 
             } catch (Exception e) {
                 ErrorWindow.setErrorWin(e);

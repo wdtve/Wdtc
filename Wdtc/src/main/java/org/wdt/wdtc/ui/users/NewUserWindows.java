@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.wdt.wdtc.auth.Accounts;
-import org.wdt.wdtc.download.UrlManger;
+import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.utils.PlatformUtils;
 

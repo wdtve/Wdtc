@@ -2,9 +2,9 @@ package org.wdt.wdtc.download.quilt;
 
 import org.wdt.platform.gson.JSONArray;
 import org.wdt.platform.gson.JSONObject;
-import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class QuiltVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> List = new ArrayList<>();
-        JSONArray VersionArray = JSONArray.parseJSONArray(IOUtils.toString(String.format(QuiltVersionListUrl, launcher.getVersionNumber())));
+        JSONArray VersionArray = JSONArray.parseJSONArray(PlatformUtils.UrltoString(String.format(QuiltVersionListUrl, launcher.getVersionNumber())));
         for (int i = 0; i < VersionArray.size(); i++) {
             JSONObject VersionObject = VersionArray.getJSONObject(i);
             List.add(VersionObject.getJSONObject("loader").getString("version"));

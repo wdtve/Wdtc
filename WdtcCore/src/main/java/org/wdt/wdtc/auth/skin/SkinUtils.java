@@ -3,7 +3,7 @@ package org.wdt.wdtc.auth.skin;
 import org.wdt.utils.FileUtils;
 import org.wdt.utils.FilenameUtils;
 import org.wdt.utils.IOUtils;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

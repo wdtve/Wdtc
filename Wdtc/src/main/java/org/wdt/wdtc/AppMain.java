@@ -5,8 +5,8 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.platform.SettingManger;
-import org.wdt.wdtc.platform.VMManger;
+import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
@@ -52,7 +52,7 @@ public class AppMain extends Application {
                 HomeWindow win = new HomeWindow();
                 win.setHome(MainStage);
                 MainStage.show();
-                logmaker.info("* Window Show");
+                logmaker.info("Window Show");
             });
             MainStage.setOnCloseRequest(windowEvent -> {
                 logmaker.info(size);
@@ -60,7 +60,6 @@ public class AppMain extends Application {
                 setting.setWindowsWidth(MainStage.getWidth());
                 setting.setWindowsHeight(MainStage.getHeight());
                 SettingManger.putSettingToFile(setting);
-                logmaker.info("======= exited ========");
                 Platform.exit();
             });
         } catch (Exception e) {

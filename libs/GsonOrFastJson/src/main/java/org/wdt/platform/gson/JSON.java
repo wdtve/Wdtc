@@ -1,6 +1,9 @@
 package org.wdt.platform.gson;
 
 import com.google.gson.*;
+import org.wdt.platform.gson.TypeAdapter.FileTypeAdapter;
+
+import java.io.File;
 
 public class JSON {
     public static Gson FILE_GSON = getBuilder().setPrettyPrinting().create();
@@ -35,6 +38,6 @@ public class JSON {
     }
 
     public static GsonBuilder getBuilder() {
-        return new GsonBuilder().disableHtmlEscaping();
+        return new GsonBuilder().disableHtmlEscaping().registerTypeAdapter(File.class, new FileTypeAdapter());
     }
 }

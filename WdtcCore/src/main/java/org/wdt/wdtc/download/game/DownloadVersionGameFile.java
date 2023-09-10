@@ -2,13 +2,14 @@ package org.wdt.wdtc.download.game;
 
 
 import org.wdt.platform.gson.JSONArray;
+import org.wdt.platform.gson.JSONFileUtils;
 import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.download.UrlManger;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
@@ -27,8 +28,13 @@ public class DownloadVersionGameFile extends DownloadTask {
         this.Install = Install;
     }
 
+    public static void DownloadVersionManifestJsonFile() {
+        DownloadTask.StartDownloadTask(Launcher.getDownloadSource().getVersionManifestUrl(), FileManger.getVersionManifestFile());
+        JSONFileUtils.FormatJsonFile(FileManger.getVersionManifestFile());
+    }
+
     public void DownloadGameVersionJson() throws IOException {
-        JSONArray VersionList = JSONObject.parseJSONObject(IOUtils.toString(source.getVersionManifestUrl())).getJSONArray("versions");
+        JSONArray VersionList = JSONObject.parseJSONObject(PlatformUtils.UrltoString(source.getVersionManifestUrl())).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
             if (Objects.equals(launcher.getVersionNumber(), version_name)) {
@@ -67,7 +73,7 @@ public class DownloadVersionGameFile extends DownloadTask {
         }
     }
 
-    public DownloadGameLibrary DownloadGameLibFileTask() {
+    public DownloadGameLibrary DownloadGameLibraryFileTask() {
         return new DownloadGameLibrary(launcher);
     }
 

@@ -4,8 +4,8 @@ import org.wdt.platform.gson.JSONObject;
 import org.wdt.platform.gson.JSONUtils;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
-import org.wdt.wdtc.game.FileManger;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.manger.FileManger;
 
 import java.io.File;
 import java.io.IOException;

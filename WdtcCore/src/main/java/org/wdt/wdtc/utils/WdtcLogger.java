@@ -1,7 +1,7 @@
 package org.wdt.wdtc.utils;
 
 import org.apache.log4j.*;
-import org.wdt.wdtc.game.FileManger;
+import org.wdt.wdtc.manger.FileManger;
 
 public class WdtcLogger {
     private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n");
