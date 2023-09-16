@@ -3,10 +3,11 @@ include(
     "WdtcCore",
     "Wdtc",
     "DependencyDownloader",
-    "GsonOrFastJson", "FileUtils"
+        "GsonOrFastJson",
+        "FileUtils"
 )
 
-val Modules = listOf("DependencyDownloader", "FileUtils", "GsonOrFastJson")
+val Modules = listOf("DependencyDownloader", "GsonOrFastJson", "FileUtils")
 
 for (Module in Modules) {
     project(":$Module").projectDir = file("libs/$Module")

@@ -1,8 +1,9 @@
-package org.wdt.wdtc.auth.skin;
+package org.wdt.wdtc.utils;
 
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.FilenameUtils;
-import org.wdt.utils.IOUtils;
+import lombok.Setter;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.FilenameUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.manger.FileManger;
 
 import javax.imageio.ImageIO;
@@ -11,11 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 
 public class SkinUtils {
     private File SkinFile;
     private String UserName;
+    @Setter
     private InputStream UserSkinInput;
 
     public SkinUtils(File skinFile) {
@@ -24,10 +25,6 @@ public class SkinUtils {
 
     public SkinUtils(String userName) {
         UserName = userName;
-    }
-
-    public void setUserSkinInput(InputStream userSkinInput) {
-        UserSkinInput = userSkinInput;
     }
 
     public File writeSkinHead() throws IOException {
@@ -52,6 +49,6 @@ public class SkinUtils {
     }
 
     public void copySkinFile() throws IOException {
-        IOUtils.copyLarge(UserSkinInput, Files.newOutputStream(getSkinFile().toPath()));
+        IOUtils.copyLarge(UserSkinInput, FileUtils.newOutputStream(getSkinFile()));
     }
 }

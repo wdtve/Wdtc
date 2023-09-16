@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.platform.DependencyDownload;
+import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;

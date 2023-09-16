@@ -1,8 +1,8 @@
-package org.wdt.platform.gson;
+package org.wdt.utils.gson;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class JSONUtils extends JSON {
     }
 
     public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) throws IOException {
-        return JSONObject.parseObject(FileUtils.readFileToString(JsonFile), clazz);
+        return parseObject(FileUtils.readFileToString(JsonFile), clazz);
     }
 
     public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) throws IOException {

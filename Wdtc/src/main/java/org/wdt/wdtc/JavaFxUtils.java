@@ -2,12 +2,12 @@ package org.wdt.wdtc;
 
 import com.google.gson.JsonArray;
 import org.apache.log4j.Logger;
-import org.wdt.platform.DependencyDownload;
-import org.wdt.platform.gson.JSONArray;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.FilenameUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.JSONArray;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FilenameUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.LibraryObject;
@@ -90,7 +90,7 @@ public class JavaFxUtils {
             Class.forName("javafx.application.Application");
         } catch (ClassNotFoundException e) {
             try {
-                logmaker.info("* Load JavaFX Dependencies");
+                logmaker.info("Load JavaFX Dependencies");
                 JSONArray array = getArrayObject();
                 Set<Path> jarPaths = new HashSet<>();
                 Set<String> modules = new HashSet<>();
@@ -108,7 +108,7 @@ public class JavaFxUtils {
                 }
                 Configuration config = Configuration.resolveAndBind(finder, List.of(ModuleLayer.boot().configuration()), finder, modules);
                 ModuleLayer.defineModules(config, List.of(ModuleLayer.boot()), name -> ClassLoader.getSystemClassLoader());
-                logmaker.info("* Done");
+                logmaker.info("Done");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

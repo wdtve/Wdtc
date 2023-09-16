@@ -2,10 +2,13 @@ package org.wdt.wdtc.manger;
 
 
 import com.google.gson.JsonObject;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 
@@ -45,6 +48,9 @@ public class SettingManger {
         JSONUtils.ObjectToJsonFile(FileManger.getSettingFile(), setting);
     }
 
+    @Getter
+    @Setter
+    @ToString
     public static class Setting {
         private UrlManger.DownloadSourceList DownloadSource = UrlManger.DownloadSourceList.OFFICIAL;
         private boolean Console = false;
@@ -55,92 +61,5 @@ public class SettingManger {
         private double WindowsWidth = 616.0;
         private double WindowsHeight = 489.0;
         private String PreferredVersion;
-
-        public String getPreferredVersion() {
-            return PreferredVersion;
-        }
-
-        public void setPreferredVersion(String preferredVersion) {
-            PreferredVersion = preferredVersion;
-        }
-
-        public double getWindowsWidth() {
-            return WindowsWidth;
-        }
-
-        public void setWindowsWidth(double windowsWidth) {
-            WindowsWidth = windowsWidth;
-        }
-
-        public double getWindowsHeight() {
-            return WindowsHeight;
-        }
-
-        public void setWindowsHeight(double windowsHeight) {
-            WindowsHeight = windowsHeight;
-        }
-
-        public boolean isConsole() {
-            return Console;
-        }
-
-        public void setConsole(boolean console) {
-            this.Console = console;
-        }
-
-        public boolean isLlvmpipeLoader() {
-            return LlvmpipeLoader;
-        }
-
-        public void setLlvmpipeLoader(boolean llvmpipeLoader) {
-            LlvmpipeLoader = llvmpipeLoader;
-        }
-
-        public File getDefaultGamePath() {
-            return DefaultGamePath;
-        }
-
-        public void setDefaultGamePath(File defaultGamePath) {
-            DefaultGamePath = defaultGamePath;
-        }
-
-        public List<JavaUtils.JavaInfo> getJavaPath() {
-            return JavaPath;
-        }
-
-        public void setJavaPath(List<JavaUtils.JavaInfo> javaPath) {
-            JavaPath = javaPath;
-        }
-
-        public boolean isChineseLanguage() {
-            return ChineseLanguage;
-        }
-
-        public void setChineseLanguage(boolean chineseLanguage) {
-            ChineseLanguage = chineseLanguage;
-        }
-
-        public UrlManger.DownloadSourceList getDownloadSource() {
-            return DownloadSource;
-        }
-
-        public void setDownloadSource(UrlManger.DownloadSourceList downloadSource) {
-            DownloadSource = downloadSource;
-        }
-
-        @Override
-        public String toString() {
-            return "Setting{" +
-                    "DownloadSource=" + DownloadSource +
-                    ", Console=" + Console +
-                    ", LlvmpipeLoader=" + LlvmpipeLoader +
-                    ", DefaultGamePath='" + DefaultGamePath + '\'' +
-                    ", JavaPath=" + JavaPath +
-                    ", ChineseLanguage=" + ChineseLanguage +
-                    ", WindowsWidth=" + WindowsWidth +
-                    ", WindowsHeight=" + WindowsHeight +
-                    ", PreferredVersion='" + PreferredVersion + '\'' +
-                    '}';
-        }
     }
 }

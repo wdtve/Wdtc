@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
@@ -181,9 +181,9 @@ public class VersionSettingWindows extends SettingManger {
         Consoler.setCss("BlackBorder", choose, apply);
         scrollPane.setContent(pane);
         JavaPath.setText(config.getJavaPath());
-        InputWidth.setText(String.valueOf(config.getWindowWidth()));
-        InputHeight.setText(String.valueOf(config.getWindowHeight()));
-        Input.setText(String.valueOf(config.getRunningMemory()));
+        InputWidth.setText(String.valueOf(config.getWidth()));
+        InputHeight.setText(String.valueOf(config.getHight()));
+        Input.setText(String.valueOf(config.getMemory()));
         tips2.setText("Java版本: " + JavaUtils.getJavaVersion(config.getJavaPath()));
         choose.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -199,11 +199,11 @@ public class VersionSettingWindows extends SettingManger {
                 DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config();
                 try {
                     if (!PlatformUtils.FileExistenceAndSize(JavaPath.getText()))
-                        NewConfig.setJavaHome(JavaPath.getText());
+                        NewConfig.setJavaPath(JavaPath.getText());
                 } catch (IOException e) {
                     throw new NumberFormatException();
                 }
-                NewConfig.setXmx(Integer.parseInt(Input.getText()));
+                NewConfig.setMemory(Integer.parseInt(Input.getText()));
                 NewConfig.setHight(Integer.parseInt(InputHeight.getText()));
                 NewConfig.setWidth(Integer.parseInt(InputWidth.getText()));
                 DefaultGameConfig gameConfig = launcher.getGameConfig().getDefaultGameConfig();

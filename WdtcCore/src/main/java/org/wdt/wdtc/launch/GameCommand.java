@@ -2,7 +2,7 @@ package org.wdt.wdtc.launch;
 
 
 import com.google.gson.JsonElement;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
@@ -31,9 +31,9 @@ public class GameCommand {
             }
         }
         NonBreakingSpace("--height");
-        NonBreakingSpace(gameConfig.getWindowWidth());
+        NonBreakingSpace(gameConfig.getHight());
         NonBreakingSpace("--width");
-        GameSet.append(gameConfig.getWindowHeight());
+        GameSet.append(gameConfig.getWidth());
         return GameSet;
     }
 

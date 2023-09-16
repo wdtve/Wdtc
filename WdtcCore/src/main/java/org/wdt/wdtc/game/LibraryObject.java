@@ -3,16 +3,20 @@ package org.wdt.wdtc.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.log4j.Logger;
-import org.wdt.platform.DependencyDownload;
-import org.wdt.platform.gson.JSON;
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.JSON;
+import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.net.URL;
 
+@Setter
+@Getter
 public class LibraryObject {
     private static final Logger logger = WdtcLogger.getLogger(LibraryObject.class);
     @SerializedName("downloads")
@@ -54,94 +58,32 @@ public class LibraryObject {
         return JSONObject.parseObject(object, LibraryObject.class);
     }
 
-    public JsonObject getNatives() {
-        return natives;
-    }
-
     @Override
     public String toString() {
         return JSON.GSON.toJson(this);
     }
 
-    public JsonArray getRules() {
-        return rules;
-    }
-
-    public String getLibraryName() {
-        return LibraryName;
-    }
-
-    public void setLibraryName(String libraryName) {
-        LibraryName = libraryName;
-    }
-
-    public Downloads getDownloads() {
-        return downloads;
-    }
-
-    public void setDownloads(Downloads downloads) {
-        this.downloads = downloads;
-    }
-
+    @Getter
+    @Setter
     public static class Downloads {
         @SerializedName("artifact")
         private Artifact artifact;
         @SerializedName("classifiers")
         private Classifiers classifiers;
 
-        public Classifiers getClassifiers() {
-            return classifiers;
-        }
-
-
-        public Artifact getArtifact() {
-            return artifact;
-        }
-
-        public void setArtifact(Artifact artifact) {
-            this.artifact = artifact;
-        }
     }
 
+    @Getter
+    @Setter
     public static class Artifact {
         private String path;
         private String sha1;
         private long size;
         private URL url;
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getSha1() {
-            return sha1;
-        }
-
-        public void setSha1(String sha1) {
-            this.sha1 = sha1;
-        }
-
-        public long getSize() {
-            return size;
-        }
-
-        public void setSize(long size) {
-            this.size = size;
-        }
-
-        public URL getUrl() {
-            return url;
-        }
-
-        public void setUrl(URL url) {
-            this.url = url;
-        }
     }
 
+    @Getter
+    @Setter
     public static class Classifiers {
         @SerializedName("natives-macos")
         private NativesOs NativesMacos;
@@ -150,39 +92,15 @@ public class LibraryObject {
         @SerializedName("natives-windows")
         private NativesOs Nativesindows;
 
-        public NativesOs getNativesMacos() {
-            return NativesMacos;
-        }
-
-        public NativesOs getNativesLinux() {
-            return NativesLinux;
-        }
-
-        public NativesOs getNativesindows() {
-            return Nativesindows;
-        }
     }
 
+    @Getter
+    @Setter
     public static class NativesOs {
         private String path;
         private String sha1;
         private int size;
         private URL url;
 
-        public String getPath() {
-            return path;
-        }
-
-        public String getSha1() {
-            return sha1;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public URL getUrl() {
-            return url;
-        }
     }
 }

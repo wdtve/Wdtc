@@ -1,4 +1,4 @@
-package org.wdt.platform;
+package org.wdt.utils.dependency;
 
 import java.util.Objects;
 import java.util.regex.Matcher;

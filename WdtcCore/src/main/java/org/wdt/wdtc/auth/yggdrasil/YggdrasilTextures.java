@@ -1,11 +1,12 @@
-package org.wdt.wdtc.auth.Yggdrasil;
+package org.wdt.wdtc.auth.yggdrasil;
 
 import com.google.gson.annotations.SerializedName;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.wdtc.auth.skin.SkinUtils;
+import lombok.Getter;
+import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.SkinUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,25 +67,18 @@ public class YggdrasilTextures {
     public static class Csl {
         @SerializedName("username")
         private String UserName;
+        @Getter
         @SerializedName("skins")
         private Skins Skins;
         @SerializedName("cape")
         private String Cape;
 
-
-        public Skins getSkins() {
-            return Skins;
-        }
-
     }
 
+    @Getter
     public static class Skins {
         @SerializedName(value = "default", alternate = {"slim"})
         private String SkinKind;
-
-        public String getSkinKind() {
-            return SkinKind;
-        }
     }
 
 }

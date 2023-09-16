@@ -1,7 +1,7 @@
 package org.wdt.wdtc.Yggdrasil;
 
 import org.junit.jupiter.api.Test;
-import org.wdt.wdtc.auth.Yggdrasil.YggdrasilAccounts;
+import org.wdt.wdtc.auth.yggdrasil.YggdrasilAccounts;
 
 import java.io.IOException;
 

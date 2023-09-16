@@ -1,8 +1,8 @@
 package org.wdt.wdtc.game;
 
 
-import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.launch.GamePath;
 import org.wdt.wdtc.manger.FileManger;

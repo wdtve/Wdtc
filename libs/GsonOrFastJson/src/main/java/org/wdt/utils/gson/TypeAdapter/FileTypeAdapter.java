@@ -1,4 +1,4 @@
-package org.wdt.platform.gson.TypeAdapter;
+package org.wdt.utils.gson.TypeAdapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

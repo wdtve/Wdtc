@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 import com.google.gson.JsonElement;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
@@ -27,7 +27,7 @@ public class GameJvmCommand {
         JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         NonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
         NonBreakingSpace("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());
-        NonBreakingSpace("-Xmx" + gameConfig.getRunningMemory(), "M");
+        NonBreakingSpace("-Xmx" + gameConfig.getMemory(), "M");
         NonBreakingSpace("-Dminecraft.client.jar=", launcher.getVersionJar());
         NonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m");
         NonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");

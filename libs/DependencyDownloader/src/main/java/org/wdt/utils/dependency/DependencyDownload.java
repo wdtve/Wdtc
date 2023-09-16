@@ -1,4 +1,4 @@
-package org.wdt.platform;
+package org.wdt.utils.dependency;
 
 import java.io.File;
 import java.io.IOException;

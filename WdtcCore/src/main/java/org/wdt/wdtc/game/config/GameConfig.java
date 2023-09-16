@@ -1,9 +1,9 @@
 package org.wdt.wdtc.game.config;
 
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSON;
-import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.gson.JSON;
+import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.GamePath;

@@ -3,8 +3,8 @@ package org.wdt.wdtc.download.game;
 
 import com.google.gson.JsonElement;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Launcher;

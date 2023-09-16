@@ -1,6 +1,9 @@
 package org.wdt.wdtc.game.config;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
@@ -8,6 +11,9 @@ import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.ModUtils;
 
+@Setter
+@Getter
+@ToString
 public class VersionInfo {
     @SerializedName("GameVersionNumber")
     private String VersionNumber;
@@ -27,38 +33,6 @@ public class VersionInfo {
         }
     }
 
-    public String getVersionNumber() {
-        return VersionNumber;
-    }
-
-    public void setVersionNumber(String versionNumber) {
-        VersionNumber = versionNumber;
-    }
-
-    public ModUtils.KindOfMod getKind() {
-        return kind;
-    }
-
-    public void setKind(ModUtils.KindOfMod kind) {
-        this.kind = kind;
-    }
-
-    public String getModVersion() {
-        return ModVersion;
-    }
-
-    public void setModVersion(String modVersion) {
-        ModVersion = modVersion;
-    }
-
-    @Override
-    public String toString() {
-        return "VersionInfo{" +
-                "VersionNumber='" + VersionNumber + '\'' +
-                ", kind=" + kind +
-                ", ModVersion='" + ModVersion + '\'' +
-                '}';
-    }
 
     public Launcher getLauncher() {
         Launcher launcher = new Launcher(getVersionNumber());

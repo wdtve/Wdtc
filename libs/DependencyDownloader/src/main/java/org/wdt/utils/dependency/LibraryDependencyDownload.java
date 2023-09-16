@@ -1,4 +1,4 @@
-package org.wdt.platform;
+package org.wdt.utils.dependency;
 
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;

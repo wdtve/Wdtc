@@ -1,9 +1,9 @@
 package org.wdt.wdtc.utils;
 
 import com.google.gson.JsonArray;
-import org.wdt.platform.DependencyDownload;
-import org.wdt.platform.gson.JSONArray;
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.JSONArray;
+import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.GameVersionJsonObject;

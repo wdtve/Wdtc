@@ -2,9 +2,9 @@ package org.wdt.wdtc.utils;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.FilenameUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.FilenameUtils;
+import org.wdt.utils.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,7 +1,7 @@
 package org.wdt.wdtc.gson;
 
 import org.junit.jupiter.api.Test;
-import org.wdt.platform.gson.JSON;
+import org.wdt.utils.gson.JSON;
 
 import java.io.File;
 

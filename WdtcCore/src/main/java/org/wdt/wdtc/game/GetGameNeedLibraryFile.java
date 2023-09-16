@@ -1,7 +1,7 @@
 package org.wdt.wdtc.game;
 
-import org.wdt.platform.gson.JSONArray;
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.gson.JSONArray;
+import org.wdt.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;

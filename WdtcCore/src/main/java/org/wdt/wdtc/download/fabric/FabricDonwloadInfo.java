@@ -2,8 +2,8 @@ package org.wdt.wdtc.download.fabric;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;

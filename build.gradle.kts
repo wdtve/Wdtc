@@ -9,3 +9,4 @@ subprojects {
         plugin("java")
     }
 }
+

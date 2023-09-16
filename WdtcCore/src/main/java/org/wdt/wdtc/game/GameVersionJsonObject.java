@@ -3,9 +3,13 @@ package org.wdt.wdtc.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
+@Getter
 public class GameVersionJsonObject {
     @SerializedName("arguments")
     private Arguments arguments;
@@ -38,102 +42,14 @@ public class GameVersionJsonObject {
     @SerializedName("type")
     private String type;
 
-    public void setJsonObject(List<JsonObject> jsonObject) {
-        JsonObject = jsonObject;
-    }
-
-    public Arguments getArguments() {
-        return arguments;
-    }
-
-    public void setArguments(Arguments arguments) {
-        this.arguments = arguments;
-    }
-
-    public JsonObject getAssetIndex() {
-        return assetIndex;
-    }
-
-    public String getAssets() {
-        return assets;
-    }
-
-    public int getComplianceLevel() {
-        return complianceLevel;
-    }
-
-    public JsonObject getDownloads() {
-        return downloads;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public JsonObject getJavaVersion() {
-        return javaVersion;
-    }
-
-    public List<LibraryObject> getLibraries() {
-        return libraries;
-    }
-
-    public void setLibraries(List<LibraryObject> libraries) {
-        this.libraries = libraries;
-    }
-
-    public JsonObject getLogging() {
-        return logging;
-    }
-
-    public String getMainClass() {
-        return mainClass;
-    }
-
-    public void setMainClass(String mainClass) {
-        this.mainClass = mainClass;
-    }
-
-    public int getMinimumLauncherVersion() {
-        return minimumLauncherVersion;
-    }
-
-    public String getReleaseTime() {
-        return releaseTime;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public String getType() {
-        return type;
-    }
-
+    @Setter
+    @Getter
     public static class Arguments {
         @SerializedName("game")
         private JsonArray GameList;
         @SerializedName("jvm")
         private JsonArray JvmList;
 
-        public JsonArray getGameList() {
-            return GameList;
-        }
 
-        public JsonArray getJvmList() {
-            return JvmList;
-        }
-
-        public void setGameList(JsonArray gameList) {
-            GameList = gameList;
-        }
-
-        public void setJvmList(JsonArray jvmList) {
-            JvmList = jvmList;
-        }
     }
 }

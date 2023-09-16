@@ -1,9 +1,11 @@
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    `java-library`
 }
 
 group = "org.wdt"
+version = "1.1.0"
 
 repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public/") }

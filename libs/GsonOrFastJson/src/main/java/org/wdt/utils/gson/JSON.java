@@ -1,7 +1,7 @@
-package org.wdt.platform.gson;
+package org.wdt.utils.gson;
 
 import com.google.gson.*;
-import org.wdt.platform.gson.TypeAdapter.FileTypeAdapter;
+import org.wdt.utils.gson.TypeAdapter.FileTypeAdapter;
 
 import java.io.File;
 

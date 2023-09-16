@@ -1,10 +1,10 @@
 package org.wdt.wdtc.download.game;
 
 
-import org.wdt.platform.gson.JSONArray;
-import org.wdt.platform.gson.JSONFileUtils;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.gson.JSONArray;
+import org.wdt.utils.gson.JSONFileUtils;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;

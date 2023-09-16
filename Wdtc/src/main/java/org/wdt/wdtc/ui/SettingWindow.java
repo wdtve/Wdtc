@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.UrlManger;

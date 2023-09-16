@@ -1,4 +1,4 @@
-package org.wdt.utils;
+package org.wdt.utils.io;
 
 public class FilenameUtils {
     private static final String WINDOWS_FILE_SEPARATOR = "\\";

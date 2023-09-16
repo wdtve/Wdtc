@@ -2,7 +2,7 @@ package org.wdt.wdtc;
 
 
 import org.junit.jupiter.api.Test;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

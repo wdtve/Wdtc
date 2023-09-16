@@ -1,4 +1,4 @@
-package org.wdt.utils;
+package org.wdt.utils.io;
 
 import java.io.*;
 import java.net.URL;

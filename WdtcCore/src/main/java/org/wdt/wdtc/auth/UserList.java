@@ -3,9 +3,9 @@ package org.wdt.wdtc.auth;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSON;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
+import org.wdt.utils.gson.JSON;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 

@@ -2,8 +2,8 @@ package org.wdt.wdtc.download.game;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;

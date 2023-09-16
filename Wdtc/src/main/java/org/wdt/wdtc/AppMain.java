@@ -61,6 +61,7 @@ public class AppMain extends Application {
                 setting.setWindowsHeight(MainStage.getHeight());
                 SettingManger.putSettingToFile(setting);
                 Platform.exit();
+                logmaker.info("======= Exited ========");
             });
         } catch (Exception e) {
             ErrorWindow.setErrorWin(e);

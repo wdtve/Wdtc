@@ -1,7 +1,7 @@
-package org.wdt.platform.gson;
+package org.wdt.utils.gson;
 
 import com.google.gson.JsonIOException;
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

@@ -2,8 +2,8 @@ package org.wdt.wdtc.game;
 
 
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;

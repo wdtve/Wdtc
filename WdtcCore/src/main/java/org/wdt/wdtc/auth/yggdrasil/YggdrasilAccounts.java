@@ -1,18 +1,19 @@
-package org.wdt.wdtc.auth.Yggdrasil;
+package org.wdt.wdtc.auth.yggdrasil;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import lombok.Getter;
 import org.apache.log4j.Logger;
-import org.wdt.platform.gson.JSONObject;
-import org.wdt.platform.gson.JSONUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.AccountsInterface;
 import org.wdt.wdtc.auth.User;
-import org.wdt.wdtc.auth.skin.SkinUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.SkinUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+@Getter
 public class YggdrasilAccounts implements AccountsInterface {
     private static final Logger logmaker = WdtcLogger.getLogger(YggdrasilAccounts.class);
     private final String url;
@@ -53,15 +55,6 @@ public class YggdrasilAccounts implements AccountsInterface {
         return IOUtils.toString(conn.getInputStream());
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
     public UserInformation getUserInformation() throws IOException {
         return JSONObject.parseObject(sendPostWithJson(), UserInformation.class);
     }
@@ -89,44 +82,13 @@ public class YggdrasilAccounts implements AccountsInterface {
         return user;
     }
 
+    @Getter
     public static class UserInformation {
         public String accessToken;
         public String clientToken;
         public JsonArray availableProfiles;
         public JsonObject user;
         public JsonObject selectedProfile;
-
-        public String getAccessToken() {
-            return accessToken;
-        }
-
-        public String getClientToken() {
-            return clientToken;
-        }
-
-        public JsonArray getAvailableProfiles() {
-            return availableProfiles;
-        }
-
-        public JsonObject getUser() {
-            return user;
-        }
-
-        public JsonObject getSelectedProfile() {
-            return selectedProfile;
-        }
-
-
-        @Override
-        public String toString() {
-            return "UserInformation{" +
-                    "accessToken='" + accessToken + '\'' +
-                    ", clientToken='" + clientToken + '\'' +
-                    ", availableProfiles=" + availableProfiles +
-                    ", user=" + user +
-                    ", selectedProfile=" + selectedProfile +
-                    '}';
-        }
     }
 
 }

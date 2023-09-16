@@ -1,6 +1,6 @@
-package org.wdt.wdtc.auth.Yggdrasil;
+package org.wdt.wdtc.auth.yggdrasil;
 
-import org.wdt.platform.gson.JSONObject;
+import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;

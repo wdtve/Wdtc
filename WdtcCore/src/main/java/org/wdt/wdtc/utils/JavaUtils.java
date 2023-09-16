@@ -1,8 +1,11 @@
 package org.wdt.wdtc.utils;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.log4j.Logger;
-import org.wdt.utils.FileUtils;
-import org.wdt.utils.IOUtils;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.manger.SettingManger;
 
 import java.io.File;
@@ -162,6 +165,9 @@ public class JavaUtils {
         }
     }
 
+    @Setter
+    @Getter
+    @ToString
     public static class JavaInfo {
 
         private File JavaHomeFile;
@@ -180,54 +186,12 @@ public class JavaUtils {
             this(javaHomeFile, JavaUtils.getJavaExeFile(javaHomeFile), getJavaVersion(getJavaExePath(javaHomeFile)), JavaTips.getJavaTips(javaHomeFile));
         }
 
-        public File getJavaHomeFile() {
-            return JavaHomeFile;
-        }
-
-        public void setJavaHomeFile(File javaHomeFile) {
-            JavaHomeFile = javaHomeFile;
-        }
-
-        public File getJavaExeFile() {
-            return JavaExeFile;
-        }
-
-        public void setJavaExeFile(File javaExeFile) {
-            JavaExeFile = javaExeFile;
-        }
-
-        public String getVersionNumber() {
-            return VersionNumber;
-        }
-
-        public void setVersionNumber(String versionNumber) {
-            VersionNumber = versionNumber;
-        }
-
-        public JavaTips getTips() {
-            return tips;
-        }
-
-        public void setTips(JavaTips tips) {
-            this.tips = tips;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             JavaInfo javaInfo = (JavaInfo) o;
             return Objects.equals(JavaExeFile, javaInfo.JavaExeFile) && tips == javaInfo.tips;
-        }
-
-        @Override
-        public String toString() {
-            return "JavaInfo{" +
-                    "JavaHomeFile=" + JavaHomeFile +
-                    ", JavaExeFile=" + JavaExeFile +
-                    ", VersionNumber='" + VersionNumber + '\'' +
-                    ", tips=" + tips +
-                    '}';
         }
     }
 }

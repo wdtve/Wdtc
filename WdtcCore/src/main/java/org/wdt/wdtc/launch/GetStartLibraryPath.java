@@ -1,7 +1,7 @@
 package org.wdt.wdtc.launch;
 
 
-import org.wdt.utils.FileUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
