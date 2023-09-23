@@ -50,7 +50,7 @@ public class InstallGameVersion extends DownloadGameVersion {
             }
             DownloadGameLibrary();
             String LibraryFinishTime = "游戏所需类库下载完成,耗时:" + (System.currentTimeMillis() - startTime) + "ms";
-            logmaker.debug(LibraryFinishTime);
+            logmaker.info(LibraryFinishTime);
             if (Objects.nonNull(textField)) {
                 textField.setText(LibraryFinishTime);
             }
@@ -64,11 +64,9 @@ public class InstallGameVersion extends DownloadGameVersion {
                 textField.setText(EndTime);
             }
         } catch (IOException e) {
-            logmaker.error("* Download Game Error,", e);
+            logmaker.error("Download Game Error,", e);
         }
     }
-
-
 }
 
 

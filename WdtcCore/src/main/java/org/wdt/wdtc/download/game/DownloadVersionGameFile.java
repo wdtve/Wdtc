@@ -1,12 +1,14 @@
 package org.wdt.wdtc.download.game;
 
 
+import lombok.SneakyThrows;
 import org.wdt.utils.gson.JSONArray;
 import org.wdt.utils.gson.JSONFileUtils;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
+import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
@@ -20,12 +22,15 @@ public class DownloadVersionGameFile extends DownloadTask {
     public final Launcher launcher;
     public final DownloadSource source;
     public final boolean Install;
+    private final GameVersionJsonObject VersionJsonObject;
 
+    @SneakyThrows(IOException.class)
     public DownloadVersionGameFile(Launcher launcher, boolean Install) {
         super(launcher);
         this.launcher = launcher;
         this.source = Launcher.getDownloadSource();
         this.Install = Install;
+        this.VersionJsonObject = launcher.getGameVersionJsonObject();
     }
 
     public static void DownloadVersionManifestJsonFile() {
@@ -34,7 +39,10 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameVersionJson() throws IOException {
-        JSONArray VersionList = JSONObject.parseJSONObject(PlatformUtils.UrltoString(source.getVersionManifestUrl())).getJSONArray("versions");
+        if (PlatformUtils.FileExistenceAndSize(FileManger.getVersionManifestFile())) {
+            DownloadVersionManifestJsonFile();
+        }
+        JSONArray VersionList = JSONUtils.getJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
         for (int i = 0; i < VersionList.size(); i++) {
             String version_name = VersionList.getJSONObject(i).getString("id");
             if (Objects.equals(launcher.getVersionNumber(), version_name)) {
@@ -51,7 +59,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
+        JSONObject AssetIndexJson = new JSONObject(VersionJsonObject.getAssetIndex());
         String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
@@ -62,7 +70,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadVersionJar() throws IOException {
-        JSONObject ClientObject = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads").getJSONObject("client");
+        JSONObject ClientObject = new JSONObject(VersionJsonObject.getDownloads().getAsJsonObject("client"));
         String JarUrl = ClientObject.getString("url");
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             JarUrl = JarUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl());
@@ -73,8 +81,8 @@ public class DownloadVersionGameFile extends DownloadTask {
         }
     }
 
-    public DownloadGameLibrary DownloadGameLibraryFileTask() {
-        return new DownloadGameLibrary(launcher);
+    public DownloadGameClass DownloadGameLibraryFileTask() {
+        return new DownloadGameClass(launcher);
     }
 
     public DownloadGameAssetsFile DownloadResourceFileTask() {

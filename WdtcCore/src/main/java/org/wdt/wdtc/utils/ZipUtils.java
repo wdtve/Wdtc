@@ -34,7 +34,7 @@ public class ZipUtils {
                         Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream fos = new FileOutputStream(unfile);
-                        IOUtils.copyLarge(in, fos);
+                        IOUtils.copy(in, fos);
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class ZipUtils {
                     FileUtils.touch(unZipPath);
                     InputStream in = zip.getInputStream(entry);
                     FileOutputStream fos = new FileOutputStream(unfile);
-                    IOUtils.copyLarge(in, fos);
+                    IOUtils.copy(in, fos);
                 }
             }
             zip.close();
@@ -71,7 +71,7 @@ public class ZipUtils {
             ZipFile zipFile = new ZipFile(new File(ZipPath));
             FileOutputStream outputStream = new FileOutputStream(unFilePath);
             InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
-            IOUtils.copyLarge(stream, outputStream);
+            IOUtils.copy(stream, outputStream);
         } catch (IOException e) {
             logmaker.error("* 压缩包提取发生错误:", e);
         }

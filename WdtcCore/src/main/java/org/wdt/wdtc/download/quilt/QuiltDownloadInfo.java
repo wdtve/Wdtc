@@ -1,5 +1,6 @@
 package org.wdt.wdtc.download.quilt;
 
+import lombok.Getter;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
@@ -14,15 +15,12 @@ public class QuiltDownloadInfo implements DownloadInfo {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json";
 
     protected final Launcher launcher;
+    @Getter
     protected final String QuiltVersionNumber;
 
     public QuiltDownloadInfo(Launcher launcher, String quiltVersionNumber) {
         this.launcher = launcher;
         QuiltVersionNumber = quiltVersionNumber;
-    }
-
-    public String getQuiltVersionNumber() {
-        return QuiltVersionNumber;
     }
 
     public File getQuiltVersionJson() {

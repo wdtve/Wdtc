@@ -4,7 +4,6 @@ import org.wdt.wdtc.download.downloadsource.BmclDownloadSource;
 import org.wdt.wdtc.download.downloadsource.McbbsDownloadSource;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-
 public class UrlManger {
     public static final String MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json";
     public static final String MOJANG_ASSETS = "https://resources.download.minecraft.net/";

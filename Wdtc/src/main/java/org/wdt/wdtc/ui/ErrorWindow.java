@@ -18,7 +18,7 @@ public class ErrorWindow {
 
 
     public static void setErrorWin(Throwable e) {
-        logmaker.error("* 发生错误:", e);
+        logmaker.error("发生错误:", e);
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         setWin(sw.getBuffer().toString(), "发生错误!");

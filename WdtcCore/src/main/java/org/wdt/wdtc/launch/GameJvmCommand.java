@@ -10,21 +10,19 @@ import org.wdt.wdtc.manger.VMManger;
 import java.io.IOException;
 import java.util.Map;
 
-public class GameJvmCommand {
-    private final StringBuilder JvmSet;
+public class GameJvmCommand extends AbstractGameCommand {
     private final Launcher launcher;
     private final String LibraryList;
 
     public GameJvmCommand(Launcher launcher) {
         this.launcher = launcher;
-        this.JvmSet = new StringBuilder();
-        this.LibraryList = new GetStartLibraryPath(launcher).getLibraryPath().toString();
+        this.LibraryList = new GameClassPath(launcher).getCommand().toString();
     }
 
-    public StringBuilder GetJvmList() throws IOException {
+    public StringBuilder getCommand() throws IOException {
         DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
-        JvmSet.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
+        Command.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
         NonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
         NonBreakingSpace("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());
         NonBreakingSpace("-Xmx" + gameConfig.getMemory(), "M");
@@ -37,7 +35,7 @@ public class GameJvmCommand {
                 NonBreakingSpace(ReplaceData(Element.getAsString()));
             }
         }
-        return JvmSet;
+        return Command;
     }
 
     private Map<String, String> getDataMap() {
@@ -45,14 +43,6 @@ public class GameJvmCommand {
                 "${launcher_version}", VMManger.getLauncherVersion(), "${library_directory}", FileUtils.getCanonicalPath(launcher.getGameLibraryPath()),
                 "${classpath_separator}", ";", "${version_name}", launcher.getVersionNumber(),
                 "${classpath}", LibraryList);
-    }
-
-    private void NonBreakingSpace(Object str) {
-        JvmSet.append(str).append(" ");
-    }
-
-    private void NonBreakingSpace(String str, Object string) {
-        NonBreakingSpace(str + string);
     }
 
     private String ReplaceData(String str) {

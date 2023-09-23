@@ -7,14 +7,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.auth.Accounts;
 import org.wdt.wdtc.auth.User;
+import org.wdt.wdtc.auth.accounts.Accounts;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.launch.LauncherGame;
+import org.wdt.wdtc.launch.LaunchGame;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.users.NewUserWindows;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -80,6 +81,7 @@ public class HomeWindow {
         });
 
         JFXButton downgame = new JFXButton("下载游戏");
+        downgame.setDisable(!PlatformUtils.isOnline());
         downgame.setPrefSize(128, 46);
         downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
 
@@ -87,7 +89,7 @@ public class HomeWindow {
         startgame.setLayoutY(69);
         startgame.setPrefSize(128, 46);
         startgame.setOnAction(event -> {
-            VersionChoose choose = new VersionChoose(Objects.requireNonNullElseGet(launcher, GamePath::new));
+            VersionChoose choose = new VersionChoose(Objects.requireNonNullElseGet(launcher, GameFolderManger::new));
             choose.setWindow(MainStage);
         });
 
@@ -134,11 +136,11 @@ public class HomeWindow {
         AnchorPane.setRightAnchor(LaunchGameButton, 30.0);
         LaunchGameButton.setOnAction(event -> {
             if (launcher != null) {
-                if (User.SetUserJson()) {
+                if (User.isExistUserJsonFile()) {
                     ThreadUtils.StartThread(() -> {
                         try {
-                            LauncherGame launch = new LauncherGame(launcher);
-                            LauncherGameWindow launcherGameWindow = new LauncherGameWindow(launch.getStart());
+                            LaunchGame launch = new LaunchGame(launcher);
+                            LauncherGameWindow launcherGameWindow = new LauncherGameWindow(launch.getProcess());
                             launcherGameWindow.startGame();
                         } catch (IOException e) {
                             ErrorWindow.setErrorWin(e);
@@ -162,7 +164,7 @@ public class HomeWindow {
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);
         MainStage.setScene(scene);
-        if (!User.SetUserJson()) {
+        if (!User.isExistUserJsonFile()) {
             NoUser(MainStage);
         }
     }

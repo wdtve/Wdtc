@@ -1,6 +1,8 @@
 package org.wdt.wdtc.download.fabric;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.log4j.Logger;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.utils.gson.JSONUtils;
@@ -16,18 +18,17 @@ import java.io.IOException;
 
 public class FabricDonwloadInfo implements DownloadInfo {
     private static final Logger logmaker = WdtcLogger.getLogger(FabricDonwloadInfo.class);
+    @Getter
     protected final String FabricVersionNumber;
     protected final Launcher launcher;
+    @Getter
+    @Setter
     private FabricAPIDownloadTask APIDownloadTask;
 
 
     public FabricDonwloadInfo(Launcher launcher, String FabricVersionNumber) {
         this.FabricVersionNumber = FabricVersionNumber;
         this.launcher = launcher;
-    }
-
-    public String getFabricVersionNumber() {
-        return FabricVersionNumber;
     }
 
 
@@ -65,14 +66,6 @@ public class FabricDonwloadInfo implements DownloadInfo {
     }
 
 
-
-    public FabricAPIDownloadTask getAPIDownloadTask() {
-        return APIDownloadTask;
-    }
-
-    public void setAPIDownloadTask(FabricAPIDownloadTask APIDownloadTask) {
-        this.APIDownloadTask = APIDownloadTask;
-    }
 
     public boolean getAPIDownloadTaskNoNull() {
         return APIDownloadTask != null;

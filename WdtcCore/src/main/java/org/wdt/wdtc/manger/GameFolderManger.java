@@ -1,18 +1,21 @@
-package org.wdt.wdtc.launch;
+package org.wdt.wdtc.manger;
 
-
-import org.wdt.wdtc.manger.SettingManger;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.io.File;
 
-public class GamePath {
+@Getter
+@ToString
+public class GameFolderManger {
     //此必须在编辑运行配置里把工作目录改成"$ProjectFileDir$"不然游戏文件夹地址会出错
-    protected File here = SettingManger.getSetting().getDefaultGamePath();
+    protected File here;
 
-    public GamePath() {
+    public GameFolderManger() {
+        this.here = SettingManger.getSetting().getDefaultGamePath();
     }
 
-    public GamePath(File here) {
+    public GameFolderManger(File here) {
         this.here = here;
     }
 
@@ -22,10 +25,6 @@ public class GamePath {
 
     public File getGameObjects() {
         return new File(getGameAssetsdir(), "objects");
-    }
-
-    public File getHere() {
-        return here;
     }
 
 
@@ -45,10 +44,4 @@ public class GamePath {
         return new File(getGamePath(), "assets");
     }
 
-    @Override
-    public String toString() {
-        return "GamePath{" +
-                "here=" + here +
-                '}';
-    }
 }

@@ -1,11 +1,11 @@
-package org.wdt.wdtc.game;
+package org.wdt.wdtc.manger;
 
 
+import lombok.Getter;
 import org.wdt.utils.gson.JSONUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
-import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
@@ -13,14 +13,15 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Version extends GamePath {
+@Getter
+public class GameFileManger extends GameFolderManger {
     protected final String VersionNumber;
 
-    public Version(String VersionNumber) {
+    public GameFileManger(String VersionNumber) {
         this.VersionNumber = VersionNumber;
     }
 
-    public Version(String VersionNumber, File here) {
+    public GameFileManger(String VersionNumber, File here) {
         super(here);
         this.VersionNumber = VersionNumber;
     }
@@ -38,9 +39,6 @@ public class Version extends GamePath {
         }
     }
 
-    public String getVersionNumber() {
-        return VersionNumber;
-    }
 
     public File getVersionPath() {
         return new File(getGameVersionsPath(), VersionNumber);

@@ -1,6 +1,7 @@
 package org.wdt.wdtc.launch;
 
 
+import lombok.SneakyThrows;
 import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
@@ -8,16 +9,15 @@ import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.manger.UrlManger;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GameLibraryPathAndUrl {
+public class GameLibraryData {
     private final Launcher launcher;
     private final DownloadSource source;
 
 
-    public GameLibraryPathAndUrl(Launcher launcher) {
+    public GameLibraryData(Launcher launcher) {
         this.launcher = launcher;
         this.source = Launcher.getDownloadSource();
     }
@@ -26,12 +26,12 @@ public class GameLibraryPathAndUrl {
         return new File(launcher.getGameLibraryPath(), nativesOs.getPath());
     }
 
-    public URL GetNativesLibraryUrl(LibraryObject libraryObject) throws IOException {
+    @SneakyThrows(MalformedURLException.class)
+    public URL GetNativesLibraryUrl(LibraryObject libraryObject) {
         LibraryObject.NativesOs Nativesindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             return new URL(source.getLibraryUrl() + Nativesindows.getPath());
         } else {
-
             return Nativesindows.getUrl();
         }
     }
@@ -44,7 +44,8 @@ public class GameLibraryPathAndUrl {
 
     }
 
-    public URL GetLibraryUrl(LibraryObject libraryObject) throws MalformedURLException {
+    @SneakyThrows(MalformedURLException.class)
+    public URL GetLibraryUrl(LibraryObject libraryObject) {
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             DependencyDownload dependency = new DependencyDownload(libraryObject.getLibraryName());
             dependency.setDefaultUrl(source.getLibraryUrl());

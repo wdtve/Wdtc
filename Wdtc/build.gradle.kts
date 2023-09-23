@@ -9,6 +9,8 @@ javafx {
     modules = ModuleList
 }
 
+version = "0.0.1.9"
+
 tasks.jar {
     enabled = false
     dependsOn(tasks["shadowJar"])
@@ -31,15 +33,13 @@ tasks.shadowJar {
     }
 }
 
-val Number: String = "0.0.1.8"
 tasks.create<JavaExec>("run") {
     dependsOn(tasks.jar)
     group = "application"
-    version = Number
     classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
     jvmArgs = listOf(
-        "-Dwdtc.config.path=.", "-Ddownload.forge=true",
-        "-Dlauncher.version=$Number"
+            "-Dwdtc.config.path=.", "-Dwdtc.download.forge=true",
+            "-Dwdtc.launcher.version=${project.version}"
     )
     workingDir = rootProject.rootDir
 }

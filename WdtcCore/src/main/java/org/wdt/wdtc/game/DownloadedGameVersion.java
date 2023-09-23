@@ -1,6 +1,7 @@
 package org.wdt.wdtc.game;
 
-import org.wdt.wdtc.launch.GamePath;
+import lombok.SneakyThrows;
+import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.utils.ModUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 
@@ -10,19 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DownloadedGameVersion {
-
-    public static List<Launcher> getGameVersionList(GamePath path) {
+    @SneakyThrows(IOException.class)
+    public static List<Launcher> getGameVersionList(GameFolderManger path) {
         List<Launcher> GameVersionList = new ArrayList<>();
         File[] VersionList = path.getGameVersionsPath().listFiles();
         if (VersionList != null && VersionList.length != 0) {
             for (File VersionFolder : VersionList) {
                 Launcher launcher = new Launcher(VersionFolder.getName());
-                try {
-                    if (!PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
-                        GameVersionList.add(ModUtils.getModTask(launcher));
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (!PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+                    GameVersionList.add(ModUtils.getModTask(launcher));
                 }
             }
             return GameVersionList;
@@ -31,7 +28,7 @@ public class DownloadedGameVersion {
         }
     }
 
-    public static boolean isDownloadedGame(GamePath path) {
+    public static boolean isDownloadedGame(GameFolderManger path) {
         List<Launcher> list = getGameVersionList(path);
         if (list != null) {
             return !list.isEmpty();

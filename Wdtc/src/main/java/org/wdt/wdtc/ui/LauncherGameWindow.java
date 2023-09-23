@@ -27,7 +27,7 @@ public class LauncherGameWindow {
             ThreadUtils.StartThread(() -> getRunInfo(process.getErrorStream())).join();
             logmaker.info("* 游戏已退出");
         } catch (InterruptedException e) {
-            logmaker.error("* Run Command Error,", e);
+            logmaker.error("Run Command Error,", e);
         }
 
     }

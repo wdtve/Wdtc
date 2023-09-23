@@ -1,46 +1,28 @@
 package org.wdt.wdtc.manger;
 
 
-import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.apache.log4j.Logger;
 import org.wdt.utils.gson.JSONUtils;
-import org.wdt.utils.io.FileUtils;
-import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.utils.JavaUtils;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Objects.requireNonNull;
-
 public class SettingManger {
-    private static final Logger logmaker = Logger.getLogger(SettingManger.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(SettingManger.class);
 
-    public static void GenerateSettingFile() throws IOException {
-        String readme = IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/readme.txt")));
-        File writeReadme = new File(FileManger.getWdtcConfig(), "readme.txt");
-        FileUtils.writeStringToFile(writeReadme, readme);
-        FileUtils.createDirectories(FileManger.getWdtcCache());
-        if (PlatformUtils.FileExistenceAndSize(FileManger.getUserListFile())) {
-            JSONUtils.ObjectToJsonFile(FileManger.getUserListFile(), new JsonObject());
-        }
-        if (PlatformUtils.FileExistenceAndSize(FileManger.getSettingFile())) {
-            JSONUtils.ObjectToJsonFile(FileManger.getSettingFile(), new Setting());
-        }
-    }
 
+    @SneakyThrows(IOException.class)
     public static Setting getSetting() {
-        try {
-            return JSONUtils.JsonFileToClass(FileManger.getSettingFile(), Setting.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return JSONUtils.JsonFileToClass(FileManger.getSettingFile(), Setting.class);
     }
 
 
@@ -51,6 +33,7 @@ public class SettingManger {
     @Getter
     @Setter
     @ToString
+    @Accessors(chain = true)
     public static class Setting {
         private UrlManger.DownloadSourceList DownloadSource = UrlManger.DownloadSourceList.OFFICIAL;
         private boolean Console = false;
@@ -61,5 +44,6 @@ public class SettingManger {
         private double WindowsWidth = 616.0;
         private double WindowsHeight = 489.0;
         private String PreferredVersion;
+        private boolean DownloadProcess = true;
     }
 }

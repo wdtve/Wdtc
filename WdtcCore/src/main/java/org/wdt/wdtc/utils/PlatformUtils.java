@@ -1,6 +1,7 @@
 package org.wdt.wdtc.utils;
 
 
+import lombok.SneakyThrows;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.IOUtils;
 
@@ -30,11 +31,7 @@ public class PlatformUtils {
     }
 
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {
-        if (file.exists()) {
-            return FileUtils.sizeOf(file.toPath()) != size;
-        } else {
-            return true;
-        }
+        return !file.exists() || FileUtils.sizeOf(file.toPath()) != size;
     }
 
     public static boolean FileExistenceAndSize(String path, long size) throws IOException {
@@ -76,25 +73,27 @@ public class PlatformUtils {
             while ((len = in.read(buffer)) > 0) {
                 digest.update(buffer, 0, len);
             }
-            String sha1 = new BigInteger(1, digest.digest()).toString(16);
+            StringBuilder sha1 = new StringBuilder(new BigInteger(1, digest.digest()).toString(16));
             int length = 40 - sha1.length();
             if (length > 0) {
                 for (int i = 0; i < length; i++) {
-                    sha1 = "0" + sha1;
+                    sha1.insert(0, "0");
                 }
             }
-            return sha1;
+            return sha1.toString();
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void StartPath(Object o) {
-        try {
-            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", o.toString()});
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows(IOException.class)
+    public static void StartSomething(Object o) {
+        Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", o.toString()});
+    }
+
+    @SneakyThrows(MalformedURLException.class)
+    public static boolean isOnline() {
+        return NetworkHasThisFile("https://www.bilibili.com");
     }
 
     public static String UrltoString(String UrlPath) throws IOException {

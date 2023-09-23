@@ -6,7 +6,7 @@ import org.wdt.utils.io.FileUtils;
 import java.io.File;
 
 public class VMManger {
-    private static final String LAUNCHER_VERSION = System.getProperty("launcher.version", "demo");
+    private static final String LAUNCHER_VERSION = System.getProperty("wdtc.launcher.version", "demo");
     private static final String LAUNCHER_AUTHOR = "Wdt~";
     private static final String OS = System.getProperty("os.name");
     @Getter
@@ -18,7 +18,7 @@ public class VMManger {
     }
 
     public static boolean getForgeSwitch() {
-        return Boolean.getBoolean("download.forge");
+        return Boolean.getBoolean("wdtc.download.forge");
     }
 
     public static File getWdtcConfigFromVM() {

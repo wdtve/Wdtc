@@ -1,11 +1,11 @@
 package org.wdt.wdtc.auth.yggdrasil;
 
 import org.wdt.utils.gson.JSONObject;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.jar.JarInputStream;
 
@@ -21,7 +21,8 @@ public class AuthlibInjector {
     public static void UpdateAuthlibInjector() throws IOException {
         if (!PlatformUtils.FileExistenceAndSize(FileManger.getAuthlibInjector())) {
             String LatestVersionNumber = GetBmclAuthlibInjectorLatestJsonObject().getString("version");
-            String PresentVersionNumber = new JarInputStream(new FileInputStream(FileManger.getAuthlibInjector())).getManifest().getMainAttributes().getValue("Implementation-Version");
+            String PresentVersionNumber = new JarInputStream(FileUtils.newInputStream(FileManger.getAuthlibInjector()))
+                    .getManifest().getMainAttributes().getValue("Implementation-Version");
             if (!PresentVersionNumber.equals(LatestVersionNumber)) {
                 DownloadauthlibInjector();
             }

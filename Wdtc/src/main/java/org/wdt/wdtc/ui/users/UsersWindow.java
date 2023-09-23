@@ -5,8 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.auth.OfflineAccounts;
 import org.wdt.wdtc.auth.UserList;
+import org.wdt.wdtc.auth.accounts.OfflineAccounts;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
 

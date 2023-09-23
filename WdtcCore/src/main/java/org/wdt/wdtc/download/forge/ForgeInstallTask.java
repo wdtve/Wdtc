@@ -144,7 +144,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
 
     private void StartCommand(int i) throws IOException {
         String commmand = CommandLine(i);
-        logmaker.info("* Command Line:" + commmand);
+        logmaker.info("Command Line:" + commmand);
         Process process = Runtime.getRuntime().exec(new String[]{"cmd", "/c", commmand});
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"));
         String line;

@@ -6,6 +6,7 @@ import org.wdt.wdtc.manger.FileManger;
 public class WdtcLogger {
     private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n");
 
+
     public static <T> Logger getLogger(Class<T> clazz) {
         Logger logmaker = Logger.getLogger(clazz.getName());
         logmaker.addAppender(getFileAppender());
@@ -34,4 +35,5 @@ public class WdtcLogger {
         consoleAppender.activateOptions();
         return consoleAppender;
     }
+
 }

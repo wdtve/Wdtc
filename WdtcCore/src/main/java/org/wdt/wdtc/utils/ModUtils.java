@@ -33,7 +33,7 @@ public class ModUtils {
             }
             return launcher;
         } catch (IOException e) {
-            logmaker.warn("", e);
+            logmaker.error(e);
             return null;
         }
     }

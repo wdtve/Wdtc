@@ -1,8 +1,6 @@
 package org.wdt.wdtc.utils;
 
 import com.google.gson.JsonArray;
-import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSONArray;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
@@ -24,33 +22,40 @@ public class ExecuteUtils {
         this.source = Launcher.getDownloadSource();
     }
 
+    public static GameVersionJsonObject.Arguments getArguments(GameVersionJsonObject VersionJsonObject, GameVersionJsonObject ModVersionJsonObject) {
+        GameVersionJsonObject.Arguments GameArguments = VersionJsonObject.getArguments();
+        GameVersionJsonObject.Arguments ModArguments = ModVersionJsonObject.getArguments();
+        JsonArray ModGameList = ModArguments.getGameList();
+        if (ModGameList != null) {
+            JsonArray GameList = GameArguments.getGameList();
+            GameList.add(ModGameList);
+            GameArguments.setGameList(GameList);
+        }
+        JsonArray ModJvmList = ModArguments.getJvmList();
+        if (ModJvmList != null) {
+            JsonArray GameJvmList = GameArguments.getJvmList();
+            GameJvmList.add(ModJvmList);
+            GameArguments.setJvmList(GameJvmList);
+        }
+        return GameArguments;
+    }
+
+    public static List<LibraryObject> getLibrarys(GameVersionJsonObject VersionJsonObject, GameVersionJsonObject ModVersionJsonObject) {
+        List<LibraryObject> libraryObjectList = VersionJsonObject.getLibraries();
+        libraryObjectList.addAll(ModVersionJsonObject.getLibraries());
+        return libraryObjectList;
+    }
+
     public void execute(ModUtils.KindOfMod kind) throws IOException {
         DownloadInfo info = ModUtils.getModDownloadInfo(launcher);
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
-        List<LibraryObject> LibraryObjectList = VersionJsonObject.getLibraries();
-        JSONArray FabricLibraryList = ModVersionJsonObject.getJSONArray("libraries");
-        for (int i = 0; i < FabricLibraryList.size(); i++) {
-            JSONObject object = FabricLibraryList.getJSONObject(i);
-            DependencyDownload dependency = new DependencyDownload(object.getString("name"));
-            dependency.setDefaultUrl(source.getFabricLibraryUrl());
-            dependency.setDownloadPath(launcher.getGameLibraryPath());
-            LibraryObjectList.add(LibraryObject.getLibraryObject(dependency, object.getString("url")));
-        }
-        VersionJsonObject.setLibraries(LibraryObjectList);
-        VersionJsonObject.setMainClass(ModVersionJsonObject.getString("mainClass"));
-        GameVersionJsonObject.Arguments arguments = VersionJsonObject.getArguments();
-        JSONObject Arguments = ModVersionJsonObject.getJSONObject("arguments");
-        JsonArray JvmList = arguments.getJvmList();
-        JvmList.addAll(Arguments.getJSONArray("jvm").getJsonArrays());
-        arguments.setJvmList(JvmList);
-        JsonArray GameList = arguments.getGameList();
-        GameList.addAll(Arguments.getJSONArray("game").getJsonArrays());
-        arguments.setGameList(GameList);
-        VersionJsonObject.setArguments(arguments);
+        GameVersionJsonObject ModVersionJsonObject = JSONObject.parseObject(this.ModVersionJsonObject, GameVersionJsonObject.class);
+        VersionJsonObject.setMainClass(ModVersionJsonObject.getMainClass());
+        VersionJsonObject.setArguments(getArguments(VersionJsonObject, ModVersionJsonObject));
+        VersionJsonObject.setLibraries(getLibrarys(VersionJsonObject, ModVersionJsonObject));
         if (info != null) {
             VersionJsonObject.setId(launcher.getVersionNumber() + kind.toString().toLowerCase() + info.getModVersion());
         }
-
         launcher.PutToVersionJson(VersionJsonObject);
     }
 }

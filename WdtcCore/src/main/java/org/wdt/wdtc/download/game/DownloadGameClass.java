@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-public class DownloadGameLibrary extends DownloadTask {
-    private final Logger logmaker = WdtcLogger.getLogger(DownloadGameLibrary.class);
+public class DownloadGameClass extends DownloadTask {
+    private final Logger logmaker = WdtcLogger.getLogger(DownloadGameClass.class);
     private final Launcher launcher;
 
-    public DownloadGameLibrary(Launcher launcher) {
+    public DownloadGameClass(Launcher launcher) {
         super(launcher);
         this.launcher = launcher;
     }

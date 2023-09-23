@@ -1,7 +1,8 @@
-package org.wdt.wdtc.auth;
+package org.wdt.wdtc.auth.accounts;
 
 import org.apache.log4j.Logger;
 import org.wdt.utils.gson.JSONUtils;
+import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.SkinUtils;
 import org.wdt.wdtc.utils.WdtcLogger;

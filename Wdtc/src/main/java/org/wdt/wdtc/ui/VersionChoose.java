@@ -11,16 +11,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.launch.GamePath;
+import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.utils.ModUtils;
 
 import java.util.List;
 
 public class VersionChoose {
-    private final GamePath path;
+    private final GameFolderManger path;
 
-    public VersionChoose(GamePath path) {
+    public VersionChoose(GameFolderManger path) {
         this.path = path;
     }
 

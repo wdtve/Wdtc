@@ -12,16 +12,14 @@ import org.wdt.wdtc.manger.VMManger;
 import java.io.IOException;
 import java.util.Map;
 
-public class GameCommand {
-    private final StringBuilder GameSet;
+public class GameCLICommand extends AbstractGameCommand {
     private final Launcher launcher;
 
-    public GameCommand(Launcher launcher) {
+    public GameCLICommand(Launcher launcher) {
         this.launcher = launcher;
-        this.GameSet = new StringBuilder();
     }
 
-    public StringBuilder Getgame() throws IOException {
+    public StringBuilder getCommand() throws IOException {
         DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         NonBreakingSpace(VersionJsonObject.getMainClass());
@@ -33,8 +31,8 @@ public class GameCommand {
         NonBreakingSpace("--height");
         NonBreakingSpace(gameConfig.getHight());
         NonBreakingSpace("--width");
-        GameSet.append(gameConfig.getWidth());
-        return GameSet;
+        Command.append(gameConfig.getWidth());
+        return Command;
     }
 
     private Map<String, String> getDataMap() throws IOException {
@@ -46,9 +44,6 @@ public class GameCommand {
                 "${version_type}", "Wdtc-" + VMManger.getLauncherVersion());
     }
 
-    private void NonBreakingSpace(Object o) {
-        GameSet.append(o).append(" ");
-    }
 
     private String ReplaceData(String str) throws IOException {
         Map<String, String> ReplaceMap = getDataMap();

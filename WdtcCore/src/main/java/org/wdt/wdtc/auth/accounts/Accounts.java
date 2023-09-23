@@ -1,5 +1,6 @@
-package org.wdt.wdtc.auth;
+package org.wdt.wdtc.auth.accounts;
 
+import org.wdt.wdtc.auth.User;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
 

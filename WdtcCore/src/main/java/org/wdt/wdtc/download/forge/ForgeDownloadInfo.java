@@ -1,6 +1,7 @@
 package org.wdt.wdtc.download.forge;
 
 
+import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.utils.gson.JSONUtils;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 public class ForgeDownloadInfo implements DownloadInfo {
     private static final Logger logmaker = WdtcLogger.getLogger(ForgeDownloadInfo.class);
+    @Getter
     protected final String ForgeVersionNumber;
     protected final Launcher launcher;
 
@@ -29,14 +31,6 @@ public class ForgeDownloadInfo implements DownloadInfo {
         this.source = Launcher.getDownloadSource();
     }
 
-    public Launcher getLauncher() {
-        return launcher;
-    }
-
-
-    public String getForgeVersionNumber() {
-        return ForgeVersionNumber;
-    }
 
     public void DownloadInstallJar() {
         DownloadTask.StartDownloadTask(getForgeInstallJarUrl(), getForgeInstallJarPath());

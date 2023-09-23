@@ -49,6 +49,6 @@ public class SkinUtils {
     }
 
     public void copySkinFile() throws IOException {
-        IOUtils.copyLarge(UserSkinInput, FileUtils.newOutputStream(getSkinFile()));
+        IOUtils.copy(UserSkinInput, FileUtils.newOutputStream(getSkinFile()));
     }
 }

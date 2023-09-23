@@ -8,13 +8,14 @@ import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class DownloadGameAssetsFile extends DownloadTask {
-    private final Logger logmaker = WdtcLogger.getLogger(DownloadGameAssetsFile.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(DownloadGameAssetsFile.class);
     private final Launcher launcher;
 
     public DownloadGameAssetsFile(Launcher launcher) {
@@ -28,14 +29,16 @@ public class DownloadGameAssetsFile extends DownloadTask {
             SpeedOfProgress countDownLatch = new SpeedOfProgress(list.size());
             ThreadGroup group = new ThreadGroup("Download Assets");
             for (String str : list.keySet()) {
+                if (!SettingManger.getSetting().isDownloadProcess()) {
+                    return;
+                }
                 JSONObject object = new JSONObject(list.get(str).getAsJsonObject());
                 String hash = object.getString("hash");
                 int FileSize = object.getInt("size");
                 StartDownloadHashTask(hash, FileSize, countDownLatch, group);
             }
-            countDownLatch.await();
         } catch (IOException exception) {
-            logmaker.error("* Download Assets File Error,", exception);
+            logmaker.error("Download Assets File Error,", exception);
         }
     }
 }

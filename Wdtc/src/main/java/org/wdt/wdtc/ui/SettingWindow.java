@@ -50,7 +50,7 @@ public class SettingWindow extends SettingManger {
         button.setLayoutY(line);
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartPath(FileManger.getSettingFile());
+                PlatformUtils.StartSomething(FileManger.getSettingFile());
                 logmaker.info("* 设置文件" + FileManger.getSettingFile() + "已打开");
             } else {
                 try {
@@ -215,7 +215,7 @@ public class SettingWindow extends SettingManger {
         AnchorPane.setBottomAnchor(CleanCache, 30.0);
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartPath(FileManger.getWdtcCache());
+                PlatformUtils.StartSomething(FileManger.getWdtcCache());
                 logmaker.info("* 缓存文件夹已打开");
             } else {
                 try {

@@ -1,5 +1,6 @@
 package org.wdt.wdtc.game;
 
+import lombok.Getter;
 import org.wdt.utils.gson.JSONArray;
 import org.wdt.utils.gson.JSONObject;
 
@@ -44,6 +45,7 @@ public class GetGameNeedLibraryFile {
         return FileList;
     }
 
+    @Getter
     public static class LibraryFile {
         private final LibraryObject libraryObject;
         private final boolean NativesLibrary;
@@ -55,14 +57,6 @@ public class GetGameNeedLibraryFile {
 
         public LibraryFile(LibraryObject libraryObject) {
             this(libraryObject, false);
-        }
-
-        public LibraryObject getLibraryObject() {
-            return libraryObject;
-        }
-
-        public boolean isNativesLibrary() {
-            return NativesLibrary;
         }
 
     }

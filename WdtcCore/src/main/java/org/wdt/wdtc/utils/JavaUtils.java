@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class JavaUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(JavaUtils.class);
 
-    public static String GetRunJavaHome() {
+    public static String getRunJavaHome() {
         return getJavaExePath(new File(System.getProperty("java.home")));
     }
 
@@ -154,7 +154,7 @@ public class JavaUtils {
             try {
                 return PlatformUtils.FileExistenceAndSize(new File(JavaHome, "bin/javac.exe"));
             } catch (IOException e) {
-                logmaker.error("", e);
+                logmaker.error(e);
             }
             return false;
         }

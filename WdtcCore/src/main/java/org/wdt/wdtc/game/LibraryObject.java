@@ -3,11 +3,9 @@ package org.wdt.wdtc.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSON;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -15,8 +13,7 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.IOException;
 import java.net.URL;
 
-@Setter
-@Getter
+@Data
 public class LibraryObject {
     private static final Logger logger = WdtcLogger.getLogger(LibraryObject.class);
     @SerializedName("downloads")
@@ -27,6 +24,7 @@ public class LibraryObject {
     private JsonArray rules;
     @SerializedName("natives")
     private JsonObject natives;
+
 
     public static LibraryObject getLibraryObject(DependencyDownload dependency, String DefaultUrl) {
 
@@ -58,13 +56,8 @@ public class LibraryObject {
         return JSONObject.parseObject(object, LibraryObject.class);
     }
 
-    @Override
-    public String toString() {
-        return JSON.GSON.toJson(this);
-    }
 
-    @Getter
-    @Setter
+    @Data
     public static class Downloads {
         @SerializedName("artifact")
         private Artifact artifact;
@@ -73,8 +66,7 @@ public class LibraryObject {
 
     }
 
-    @Getter
-    @Setter
+    @Data
     public static class Artifact {
         private String path;
         private String sha1;
@@ -82,8 +74,7 @@ public class LibraryObject {
         private URL url;
     }
 
-    @Getter
-    @Setter
+    @Data
     public static class Classifiers {
         @SerializedName("natives-macos")
         private NativesOs NativesMacos;
@@ -94,8 +85,7 @@ public class LibraryObject {
 
     }
 
-    @Getter
-    @Setter
+    @Data
     public static class NativesOs {
         private String path;
         private String sha1;

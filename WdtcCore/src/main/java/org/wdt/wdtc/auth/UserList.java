@@ -42,7 +42,6 @@ public class UserList {
     public static List<User> getUserList() {
         List<User> userList = new ArrayList<>();
         try {
-
             JsonObject UserList = UserListObject();
             Map<String, JsonElement> UserListMap = UserList.asMap();
             if (!UserListMap.keySet().isEmpty()) {
@@ -51,7 +50,7 @@ public class UserList {
                 }
             }
         } catch (IOException e) {
-            logmaker.error("", e);
+            logmaker.error(e);
         }
         return userList;
     }

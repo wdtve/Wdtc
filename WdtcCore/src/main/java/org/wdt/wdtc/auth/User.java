@@ -3,13 +3,14 @@ package org.wdt.wdtc.auth;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.wdt.utils.gson.JSONUtils;
+import org.wdt.wdtc.auth.accounts.Accounts;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -34,33 +35,23 @@ public class User {
         JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
     }
 
+    @SneakyThrows(IOException.class)
     public static User getUsers() {
-        try {
-            return JSONUtils.JsonFileToClass(FileManger.getUsersJson(), User.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return JSONUtils.JsonFileToClass(FileManger.getUsersJson(), User.class);
     }
 
-    public static boolean SetUserJson() {
-        try {
-            File UserJson = FileManger.getUsersJson();
-            return !PlatformUtils.FileExistenceAndSize(UserJson);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows(IOException.class)
+    public static boolean isExistUserJsonFile() {
+        return !PlatformUtils.FileExistenceAndSize(FileManger.getUsersJson());
     }
-
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(UserName, user.UserName);
+        return UserName.equals(user.getUserName());
     }
-
-
 
     @Override
     public String toString() {

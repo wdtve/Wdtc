@@ -4,15 +4,9 @@ package org.wdt.wdtc;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.auth.UserList;
 import org.wdt.wdtc.auth.yggdrasil.AuthlibInjector;
-import org.wdt.wdtc.download.DownloadTask;
-import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.game.Version;
 import org.wdt.wdtc.game.config.GameConfig;
-import org.wdt.wdtc.launch.GamePath;
-import org.wdt.wdtc.manger.FileManger;
-import org.wdt.wdtc.manger.SettingManger;
-import org.wdt.wdtc.manger.VMManger;
+import org.wdt.wdtc.manger.*;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
@@ -27,16 +21,16 @@ public class WdtcMain extends JavaFxUtils {
     public static void main(String[] args) {
         try {
             CkeckJavaFX();
-            logmaker.info("===== Wdtc - " + VMManger.getLauncherVersion() + " =====");
-            logmaker.info("Java Version:" + System.getProperty("java.version"));
-            logmaker.info("Java VM Version:" + System.getProperty("java.vm.name"));
-            logmaker.info("Java Home:" + System.getProperty("java.home"));
-            logmaker.info("Wdtc User Path:" + FileManger.getWdtcConfig());
+            CkeckWdtcConfigPath();
+            logmaker.info(String.format("===== Wdtc - %s - =====", VMManger.getLauncherVersion()));
+            logmaker.info(String.format("Java Version:%s", System.getProperty("java.version")));
+            logmaker.info(String.format("Java VM Version:%s", System.getProperty("java.vm.name")));
+            logmaker.info(String.format("Java Home:%s", System.getProperty("java.home")));
+            logmaker.info("Wdtc Config Path:" + FileManger.getWdtcConfig());
             logmaker.info("Setting File:" + FileManger.getSettingFile());
-            logmaker.info("Here:" + GamePath.getDefaultHere());
-            SettingManger.GenerateSettingFile();
-            StartTask();
-            Version.DownloadVersionManifestJsonFileTask();
+            logmaker.info("Here:" + GameFolderManger.getDefaultHere());
+            TaskManger.StartUpTask();
+            GameFileManger.DownloadVersionManifestJsonFileTask();
             RemovePreferredVersion();
             UserList.printUserList();
             AuthlibInjector.UpdateAuthlibInjector();
@@ -45,16 +39,6 @@ public class WdtcMain extends JavaFxUtils {
             AppMain.main(args);
         } catch (Throwable e) {
             ErrorWindow.setErrorWin(e);
-        }
-    }
-
-    public static void StartTask() throws IOException {
-        String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
-        if (PlatformUtils.FileExistenceAndSize(FileManger.getLlbmpipeLoader())) {
-            DownloadTask.StartDownloadTask(LlbmpipeLoader, FileManger.getLlbmpipeLoader());
-        }
-        if (PlatformUtils.FileExistenceAndSize(FileManger.getVersionManifestFile())) {
-            DownloadVersionGameFile.DownloadVersionManifestJsonFile();
         }
     }
 
@@ -74,5 +58,11 @@ public class WdtcMain extends JavaFxUtils {
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"};
+    }
+
+    public static void CkeckWdtcConfigPath() {
+        if (System.getProperty("wdtc.config.path") == null) {
+            System.setProperty("wdtc.config.path", System.getProperty("user.home"));
+        }
     }
 }

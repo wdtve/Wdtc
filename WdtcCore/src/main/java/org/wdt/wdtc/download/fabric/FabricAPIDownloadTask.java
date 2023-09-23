@@ -1,5 +1,6 @@
 package org.wdt.wdtc.download.fabric;
 
+import lombok.Getter;
 import org.wdt.utils.gson.JSONArray;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.DownloadTask;
@@ -11,6 +12,7 @@ import java.io.IOException;
 public class FabricAPIDownloadTask {
     private static final String VersionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version";
     private final Launcher launcher;
+    @Getter
     private final String FabricAPIVersionNumber;
 
     public FabricAPIDownloadTask(Launcher launcher, String FabricAPIVersionNumber) {
@@ -30,7 +32,4 @@ public class FabricAPIDownloadTask {
         }
     }
 
-    public String getFabricAPIVersionNumber() {
-        return FabricAPIVersionNumber;
-    }
 }

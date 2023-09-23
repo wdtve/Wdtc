@@ -26,7 +26,7 @@ public class IOUtils {
         return stringWriter.toString();
     }
 
-    public static void copyLarge(InputStream inputStream, OutputStream outputStream) throws IOException {
+    public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
         int m;
         byte[] data = new byte[1024];
         while ((m = inputStream.read(data, 0, 1024)) >= 0) {

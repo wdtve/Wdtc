@@ -67,6 +67,7 @@ public class VersionSettingWindows extends SettingManger {
         AnchorPane.setTopAnchor(GameSetting, 50.0);
         AnchorPane.setLeftAnchor(GameSetting, 0.0);
         JFXButton AutoDownload = new JFXButton("自动下载");
+        AutoDownload.setDisable(true);
         AutoDownload.setPrefSize(105, 30);
         AnchorPane.setTopAnchor(AutoDownload, 80.0);
         AnchorPane.setLeftAnchor(AutoDownload, 0.0);
@@ -108,7 +109,7 @@ public class VersionSettingWindows extends SettingManger {
                 putSettingToFile(setting);
                 HomeWindow homeWindow = new HomeWindow();
                 homeWindow.setHome(MainStage);
-                logmaker.info("* " + launcher.getVersionNumber() + " Deleted");
+                logmaker.info(launcher.getVersionNumber() + " Deleted");
             } catch (IOException e) {
                 ErrorWindow.setErrorWin(e);
             }
@@ -116,7 +117,7 @@ public class VersionSettingWindows extends SettingManger {
         completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
             InstallGameVersion version = new InstallGameVersion(launcher, true);
             version.InstallGame();
-            logmaker.info("* " + launcher.getVersionNumber() + " downloaded");
+            logmaker.info(launcher.getVersionNumber() + " downloaded");
         }));
     }
 
@@ -196,26 +197,22 @@ public class VersionSettingWindows extends SettingManger {
         });
         apply.setOnAction(event -> {
             try {
-                DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config();
-                try {
-                    if (!PlatformUtils.FileExistenceAndSize(JavaPath.getText()))
-                        NewConfig.setJavaPath(JavaPath.getText());
-                } catch (IOException e) {
+                if (PlatformUtils.FileExistenceAndSize(JavaPath.getText()))
                     throw new NumberFormatException();
-                }
-                NewConfig.setMemory(Integer.parseInt(Input.getText()));
-                NewConfig.setHight(Integer.parseInt(InputHeight.getText()));
-                NewConfig.setWidth(Integer.parseInt(InputWidth.getText()));
+                DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config(
+                        Integer.parseInt(Input.getText()), JavaPath.getText(),
+                        Integer.parseInt(InputHeight.getText()), Integer.parseInt(InputWidth.getText())
+                );
                 DefaultGameConfig gameConfig = launcher.getGameConfig().getDefaultGameConfig();
                 gameConfig.setConfig(NewConfig);
                 logmaker.info(gameConfig);
                 launcher.getGameConfig().PutConfigToFile(gameConfig);
                 tips6.setText("设置成功");
                 tips2.setText("Java版本: " + JavaUtils.getJavaVersion(JavaPath.getText()));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | IOException e) {
                 tips6.setTextFill(Color.RED);
                 tips6.setText("请输入正确配置");
-                logmaker.warn("* 配置无效", e);
+                logmaker.warn("配置无效", e);
             }
         });
     }

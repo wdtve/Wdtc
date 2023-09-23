@@ -1,9 +1,12 @@
 package org.wdt.wdtc.download;
 
+import lombok.Getter;
+
 import java.util.concurrent.CountDownLatch;
 
 public class SpeedOfProgress {
     private final CountDownLatch countDown;
+    @Getter
     private int Spend;
 
     public SpeedOfProgress(int spend) {
@@ -16,9 +19,6 @@ public class SpeedOfProgress {
         countDown.countDown();
     }
 
-    public int getSpend() {
-        return Spend;
-    }
 
     public void await() {
         try {
