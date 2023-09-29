@@ -1,14 +1,12 @@
 package org.wdt.wdtc.download.game;
 
 
-import lombok.SneakyThrows;
 import org.wdt.utils.gson.JSONArray;
 import org.wdt.utils.gson.JSONFileUtils;
 import org.wdt.utils.gson.JSONObject;
 import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
@@ -22,15 +20,12 @@ public class DownloadVersionGameFile extends DownloadTask {
     public final Launcher launcher;
     public final DownloadSource source;
     public final boolean Install;
-    private final GameVersionJsonObject VersionJsonObject;
 
-    @SneakyThrows(IOException.class)
     public DownloadVersionGameFile(Launcher launcher, boolean Install) {
         super(launcher);
         this.launcher = launcher;
         this.source = Launcher.getDownloadSource();
         this.Install = Install;
-        this.VersionJsonObject = launcher.getGameVersionJsonObject();
     }
 
     public static void DownloadVersionManifestJsonFile() {
@@ -59,7 +54,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = new JSONObject(VersionJsonObject.getAssetIndex());
+        JSONObject AssetIndexJson = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
         String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
@@ -70,7 +65,8 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadVersionJar() throws IOException {
-        JSONObject ClientObject = new JSONObject(VersionJsonObject.getDownloads().getAsJsonObject("client"));
+        JSONObject ClientObject = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
+                .getJSONObject("client");
         String JarUrl = ClientObject.getString("url");
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             JarUrl = JarUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl());

@@ -20,8 +20,8 @@ public class WdtcMain extends JavaFxUtils {
 
     public static void main(String[] args) {
         try {
+            TaskManger.CkeckVMConfig();
             CkeckJavaFX();
-            CkeckWdtcConfigPath();
             logmaker.info(String.format("===== Wdtc - %s - =====", VMManger.getLauncherVersion()));
             logmaker.info(String.format("Java Version:%s", System.getProperty("java.version")));
             logmaker.info(String.format("Java VM Version:%s", System.getProperty("java.vm.name")));
@@ -58,11 +58,5 @@ public class WdtcMain extends JavaFxUtils {
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps",
                 "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"};
-    }
-
-    public static void CkeckWdtcConfigPath() {
-        if (System.getProperty("wdtc.config.path") == null) {
-            System.setProperty("wdtc.config.path", System.getProperty("user.home"));
-        }
     }
 }

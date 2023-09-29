@@ -30,8 +30,6 @@ public class Launcher extends GameFileManger {
     private ModUtils.KindOfMod kind = ModUtils.KindOfMod.Original;
     private ForgeDownloadInfo ForgeModDownloadInfo;
     private QuiltDownloadInfo QuiltModDownloadInfo;
-
-
     public Launcher(String version) {
         this(version, SettingManger.getSetting().getDefaultGamePath());
     }
@@ -67,23 +65,20 @@ public class Launcher extends GameFileManger {
     }
 
 
-
     public static DownloadSource getDownloadSource() {
         return UrlManger.DownloadSourceList.getDownloadSource();
     }
 
     public static Launcher getPreferredLauncher() {
         SettingManger.Setting setting = SettingManger.getSetting();
-        if (setting.getPreferredVersion() != null) {
-            return ModUtils.getModTask(new Launcher(setting.getPreferredVersion()));
-        }
-        return null;
+        return setting.getPreferredVersion() != null
+                ? ModUtils.getModTask(new Launcher(setting.getPreferredVersion()))
+                : null;
     }
 
     public static DownloadSource getOfficialDownloadSource() {
         return new OfficialDownloadSource();
     }
-
 
 
     public GameConfig getGameConfig() {

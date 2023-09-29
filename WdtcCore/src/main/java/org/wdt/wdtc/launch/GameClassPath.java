@@ -32,7 +32,7 @@ public class GameClassPath extends AbstractGameCommand {
             Command.append(launcher.getVersionJar());
             String Accounts = launcher.getAccounts().getJvm();
             if (!Accounts.isEmpty()) {
-                Command.append(launcher.getAccounts().getJvm());
+                Command.append(Accounts);
             }
             if (SettingManger.getSetting().isLlvmpipeLoader()) {
                 Command.append(LlbmpipeLoader());

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Enumeration;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -24,13 +23,12 @@ public class ZipUtils {
     public static void unzipByFile(File file, String path) {
         try {
             ZipFile zip = new ZipFile(file);
-            for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
+            for (ZipEntry entry : zip.stream().toList()) {
                 String name = entry.getName();
                 if (Objects.equals(FilenameUtils.getExtension(name), "dll")) {
                     File unfile = new File(path + File.separator + name);
                     if (PlatformUtils.FileExistenceAndSize(unfile)) {
-                        logmaker.info("* 提取natives库dll文件" + name + "中");
+                        logmaker.info("提取natives库dll文件" + name + "中");
                         Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
                         FileOutputStream fos = new FileOutputStream(unfile);
@@ -40,7 +38,7 @@ public class ZipUtils {
             }
             zip.close();
         } catch (Exception e) {
-            logmaker.error("* 压缩包提取发生错误:", e);
+            logmaker.error("压缩包提取发生错误:", e);
         }
     }
 
@@ -48,11 +46,10 @@ public class ZipUtils {
         try {
             File unZipPath = new File(unFilePath);
             ZipFile zip = new ZipFile(new File(FilenameUtils.separatorsToWindows(ZipFile)));
-            for (Enumeration<?> entries = zip.entries(); entries.hasMoreElements(); ) {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
+            for (ZipEntry entry : zip.stream().toList()) {
                 String name = entry.getName();
                 if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
-                    logmaker.info("* 提取 " + unZipPath + " 中");
+                    logmaker.info("提取 " + unZipPath + " 中");
                     File unfile = new File(FilenameUtils.separatorsToWindows(unFilePath));
                     FileUtils.touch(unZipPath);
                     InputStream in = zip.getInputStream(entry);
@@ -62,7 +59,7 @@ public class ZipUtils {
             }
             zip.close();
         } catch (Exception e) {
-            logmaker.error("* 压缩包提取发生错误:", e);
+            logmaker.error("压缩包提取发生错误:", e);
         }
     }
 
@@ -73,7 +70,7 @@ public class ZipUtils {
             InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
             IOUtils.copy(stream, outputStream);
         } catch (IOException e) {
-            logmaker.error("* 压缩包提取发生错误:", e);
+            logmaker.error("压缩包提取发生错误:", e);
         }
     }
 }

@@ -2,7 +2,7 @@ package org.wdt.wdtc.utils;
 
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
-import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.manger.FileManger;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.File;
@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.net.URL;
 
 public class DownloadUtils {
+    public static final File StopProcess = new File(FileManger.getWdtcCache(), "process");
     private static final Logger logmaker = WdtcLogger.getLogger(DownloadUtils.class);
     private final File DownloadFile;
     private final URL SrcousFileUrl;
@@ -21,23 +22,8 @@ public class DownloadUtils {
         SrcousFileUrl = srcousFileUrl;
     }
 
-    public void DownloadFile() throws IOException {
-        HttpsURLConnection connection = (HttpsURLConnection) SrcousFileUrl.openConnection();
-        FileUtils.touch(DownloadFile);
-        OutputStream DownloadFileOutput = FileUtils.newOutputStream(DownloadFile);
-        InputStream UrlFileInput = connection.getInputStream();
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
-//        double InitialFileSize = 0;
-        double Donwloaded;
-        Thread.currentThread().setName(DownloadFile.getName());
-        byte[] data = new byte[1024];
-        while ((Donwloaded = UrlFileInput.read(data, 0, 1024)) >= 0 && SettingManger.getSetting().isDownloadProcess()) {
-//            InitialFileSize += Donwloaded;
-            DownloadFileOutput.write(data, 0, (int) Donwloaded);
-        }
-        DownloadFileOutput.close();
-        UrlFileInput.close();
+    public static boolean isDownloadProcess() throws IOException {
+        return !PlatformUtils.FileExistenceAndSize(StopProcess);
     }
 
     public void ManyTimesToTryDownload(int times) {
@@ -53,5 +39,25 @@ public class DownloadUtils {
         if (exception != null) {
             logmaker.warn("* Thread " + Thread.currentThread().getName() + " Error,", exception);
         }
+    }
+
+    public void DownloadFile() throws IOException {
+        HttpsURLConnection connection = (HttpsURLConnection) SrcousFileUrl.openConnection();
+        FileUtils.touch(DownloadFile);
+        OutputStream DownloadFileOutput = FileUtils.newOutputStream(DownloadFile);
+        InputStream UrlFileInput = connection.getInputStream();
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+        double Donwloaded;
+        Thread.currentThread().setName(DownloadFile.getName());
+        byte[] data = new byte[1024];
+        while ((Donwloaded = UrlFileInput.read(data, 0, 1024)) >= 0) {
+            if (isDownloadProcess()) {
+                return;
+            }
+            DownloadFileOutput.write(data, 0, (int) Donwloaded);
+        }
+        DownloadFileOutput.close();
+        UrlFileInput.close();
     }
 }

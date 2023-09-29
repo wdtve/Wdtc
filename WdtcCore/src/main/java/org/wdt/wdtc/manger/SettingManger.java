@@ -44,6 +44,5 @@ public class SettingManger {
         private double WindowsWidth = 616.0;
         private double WindowsHeight = 489.0;
         private String PreferredVersion;
-        private boolean DownloadProcess = true;
     }
 }

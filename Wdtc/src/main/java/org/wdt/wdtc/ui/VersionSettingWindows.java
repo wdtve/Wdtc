@@ -201,7 +201,7 @@ public class VersionSettingWindows extends SettingManger {
                     throw new NumberFormatException();
                 DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config(
                         Integer.parseInt(Input.getText()), JavaPath.getText(),
-                        Integer.parseInt(InputHeight.getText()), Integer.parseInt(InputWidth.getText())
+                        Integer.parseInt(InputWidth.getText()), Integer.parseInt(InputHeight.getText())
                 );
                 DefaultGameConfig gameConfig = launcher.getGameConfig().getDefaultGameConfig();
                 gameConfig.setConfig(NewConfig);

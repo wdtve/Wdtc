@@ -8,7 +8,7 @@ import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.manger.SettingManger;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class DownloadGameAssetsFile extends DownloadTask {
             SpeedOfProgress countDownLatch = new SpeedOfProgress(list.size());
             ThreadGroup group = new ThreadGroup("Download Assets");
             for (String str : list.keySet()) {
-                if (!SettingManger.getSetting().isDownloadProcess()) {
+                if (DownloadUtils.isDownloadProcess()) {
                     return;
                 }
                 JSONObject object = new JSONObject(list.get(str).getAsJsonObject());

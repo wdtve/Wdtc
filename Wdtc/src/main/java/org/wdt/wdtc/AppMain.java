@@ -5,13 +5,17 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+
+import java.io.IOException;
 
 public class AppMain extends Application {
     private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
@@ -34,6 +38,7 @@ public class AppMain extends Application {
             MainStage.setMinHeight(WindwosSize.WindowsHeight);
             size.SettingSize();
             MainStage.getIcons().add(new Image("ico.jpg"));
+            MainStage.setResizable(VMManger.isChangeWindowsSize());
             HomeWindow win = new HomeWindow();
             win.setHome(MainStage);
             MainStage.show();
@@ -41,7 +46,12 @@ public class AppMain extends Application {
             MainStage.setOnCloseRequest(windowEvent -> {
                 logmaker.info(size);
                 SettingManger.Setting setting = SettingManger.getSetting();
-                setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight()).setDownloadProcess(false);
+                setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
+                try {
+                    FileUtils.touch(DownloadUtils.StopProcess);
+                } catch (IOException e) {
+                    logmaker.error("", e);
+                }
                 SettingManger.putSettingToFile(setting);
                 Platform.exit();
                 logmaker.info("======= Exited ========");

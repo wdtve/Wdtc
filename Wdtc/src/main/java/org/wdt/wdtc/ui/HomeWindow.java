@@ -141,7 +141,7 @@ public class HomeWindow {
                         try {
                             LaunchGame launch = new LaunchGame(launcher);
                             LauncherGameWindow launcherGameWindow = new LauncherGameWindow(launch.getProcess());
-                            launcherGameWindow.startGame();
+                            launcherGameWindow.StartGame();
                         } catch (IOException e) {
                             ErrorWindow.setErrorWin(e);
                         }

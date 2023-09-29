@@ -47,7 +47,7 @@ public class ModChooseWindows {
         DownloadForge.setLayoutX(67.0);
         DownloadForge.setLayoutY(53.0);
         DownloadForge.setPrefSize(47, 23);
-        DownloadForge.setDisable(!VMManger.getForgeSwitch());
+        DownloadForge.setDisable(!VMManger.isForgeSwitch());
         JFXButton CancelForge = new JFXButton("X");
         CancelForge.setLayoutX(36.0);
         CancelForge.setLayoutY(53.0);

@@ -41,11 +41,10 @@ public class LaunchGame {
     }
 
     public Process getProcess() throws IOException {
-        if (launcher.Console()) {
-            return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", StartBat.getCanonicalPath()});
-        } else {
-            return new ProcessBuilder(StartBat.getCanonicalPath()).directory(launcher.getVersionPath()).start();
-        }
+        return launcher.Console()
+                ? Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", StartBat.getCanonicalPath()})
+                : new ProcessBuilder(StartBat.getCanonicalPath()).directory(launcher.getVersionPath()).start();
+
     }
 
     @SneakyThrows(IOException.class)

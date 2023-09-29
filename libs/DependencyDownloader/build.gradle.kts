@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dom4j:dom4j:1.6.1")
+    implementation("org.dom4j:dom4j:2.1.4")
     implementation("commons-io:commons-io:2.13.0")
 }
 

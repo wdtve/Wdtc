@@ -21,11 +21,11 @@ public class LauncherGameWindow {
         this.process = process;
     }
 
-    public void startGame() throws IOException {
+    public void StartGame() throws IOException {
         try {
             ThreadUtils.StartThread(() -> getRunInfo(process.getInputStream()));
             ThreadUtils.StartThread(() -> getRunInfo(process.getErrorStream())).join();
-            logmaker.info("* 游戏已退出");
+            logmaker.info("Game Stop");
         } catch (InterruptedException e) {
             logmaker.error("Run Command Error,", e);
         }
@@ -52,7 +52,7 @@ public class LauncherGameWindow {
             }
 
         } catch (IOException e) {
-            logmaker.error("* Run Command Error,", e);
+            logmaker.error("Run Command Error,", e);
         }
     }
 

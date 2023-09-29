@@ -9,7 +9,7 @@ javafx {
     modules = ModuleList
 }
 
-version = "0.0.1.9"
+version = "0.0.1.10"
 
 tasks.jar {
     enabled = false
@@ -38,8 +38,8 @@ tasks.create<JavaExec>("run") {
     group = "application"
     classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
     jvmArgs = listOf(
-            "-Dwdtc.config.path=.", "-Dwdtc.download.forge=true",
-            "-Dwdtc.launcher.version=${project.version}"
+        "-Dwdtc.debug.switch=true",
+        "-Dwdtc.launcher.version=${project.version}"
     )
     workingDir = rootProject.rootDir
 }
@@ -59,8 +59,8 @@ dependencies {
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
 

@@ -14,8 +14,7 @@ public class AuthlibInjector {
     private static final String AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/";
 
     public static void DownloadauthlibInjector() throws IOException {
-        String authlib_injector_url = GetBmclAuthlibInjectorLatestJsonObject().getString("download_url");
-        DownloadTask.StartDownloadTask(authlib_injector_url, FileManger.getAuthlibInjector());
+        DownloadTask.StartDownloadTask(GetBmclAuthlibInjectorLatestJsonObject().getString("download_url"), FileManger.getAuthlibInjector());
     }
 
     public static void UpdateAuthlibInjector() throws IOException {

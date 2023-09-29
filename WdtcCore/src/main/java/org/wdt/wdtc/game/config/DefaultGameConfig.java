@@ -40,8 +40,8 @@ public class DefaultGameConfig {
         public Config() {
             this.Memory = 1024;
             this.JavaPath = JavaUtils.getRunJavaHome();
-            this.width = 618;
-            this.hight = 1000;
+            this.width = 1000;
+            this.hight = 618;
         }
 
         public Config(int memory, String javaPath, int width, int hight) {

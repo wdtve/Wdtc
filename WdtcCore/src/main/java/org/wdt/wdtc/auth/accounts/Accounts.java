@@ -10,11 +10,7 @@ public class Accounts {
     private final AccountsType type;
 
     public Accounts() {
-        if (User.getUsers().getType() == AccountsType.Offline) {
-            type = AccountsType.Offline;
-        } else {
-            type = AccountsType.Yggdrasil;
-        }
+        this.type = User.getUsers().getType() == AccountsType.Offline ? AccountsType.Offline : AccountsType.Yggdrasil;
     }
 
     public boolean AccountsIsOffline() {
@@ -22,12 +18,8 @@ public class Accounts {
     }
 
     public String getJvm() throws IOException {
-        if (AccountsIsOffline()) {
-            return "";
-        } else {
-            return " -javaagent:" + FileManger.getAuthlibInjector() + "=" + UrlManger.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
-                    User.getUsers().getAPIBase64();
-        }
+        return AccountsIsOffline() ? "" : " -javaagent:" + FileManger.getAuthlibInjector() + "=" + UrlManger.getLittleskinApi() + " -Dauthlibinjector.yggdrasil.prefetched=" +
+                User.getUsers().getAPIBase64();
     }
 
 

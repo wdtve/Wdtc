@@ -155,4 +155,8 @@ public class FileUtils {
     public static boolean isFileOlder(File file, long l) throws IOException {
         return Files.getLastModifiedTime(file.toPath()).compareTo(FileTime.fromMillis(l)) < 0;
     }
+
+    public static List<String> readLines(File file) throws IOException {
+        return IOUtils.readLines(newInputStream(file));
+    }
 }

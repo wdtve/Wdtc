@@ -31,7 +31,10 @@ public class PlatformUtils {
     }
 
     public static boolean FileExistenceAndSize(File file, long size) throws IOException {
-        return !file.exists() || FileUtils.sizeOf(file.toPath()) != size;
+        if (file.exists()) {
+            return FileUtils.sizeOf(file.toPath()) != size;
+        }
+        return true;
     }
 
     public static boolean FileExistenceAndSize(String path, long size) throws IOException {

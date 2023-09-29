@@ -25,7 +25,7 @@ public class ErrorWindow {
     }
 
     public static void setWin(String e, String title) {
-        Platform.runLater(() -> {
+        Runnable runnable = (() -> {
             Stage stage = new Stage();
             stage.setWidth(1000);
             stage.setHeight(600);
@@ -43,5 +43,6 @@ public class ErrorWindow {
             stage.show();
             stage.setOnCloseRequest(windowEvent -> vBox.getChildren().clear());
         });
+        Platform.runLater(runnable);
     }
 }
