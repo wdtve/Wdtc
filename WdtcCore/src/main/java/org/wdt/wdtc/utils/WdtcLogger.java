@@ -3,6 +3,9 @@ package org.wdt.wdtc.utils;
 import org.apache.log4j.*;
 import org.wdt.wdtc.manger.FileManger;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class WdtcLogger {
     private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n");
 
@@ -36,4 +39,9 @@ public class WdtcLogger {
         return consoleAppender;
     }
 
+    public static String getErrorMessage(Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        return sw.getBuffer().toString();
+    }
 }

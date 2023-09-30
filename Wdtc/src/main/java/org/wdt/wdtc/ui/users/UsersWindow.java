@@ -44,7 +44,7 @@ public class UsersWindow {
                 if (isContainChinese(username)) {
                     OfflineAccounts offline = new OfflineAccounts(username);
                     UserList.addUser(offline.getUser());
-                    loggmaker.info("* 离线账户" + username + "注册成功");
+                    loggmaker.info("离线账户" + username + "注册成功");
                     UserListPane.setUserList(pane);
                 } else {
                     OKRegister.setText("不能带中文字符哦");

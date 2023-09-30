@@ -56,7 +56,7 @@ public class JavaFxUtils {
                 JSONUtils.ObjectToJsonFile(OpenJfxListFile, array);
             }
         } catch (IOException e) {
-            logmaker.warn("", e);
+            logmaker.warn(WdtcLogger.getErrorMessage(e));
         }
     }
 
@@ -74,7 +74,7 @@ public class JavaFxUtils {
                     }
                     speed.countDown();
                 } catch (IOException e) {
-                    logmaker.warn("", e);
+                    throw new RuntimeException(e);
                 }
             });
         }

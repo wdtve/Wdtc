@@ -9,10 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.manger.VMManger;
+import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
-
-import java.io.IOException;
 
 
 public class DownloadGameWindows {
@@ -24,7 +22,7 @@ public class DownloadGameWindows {
 
     public void setDownGameWin(Stage MainStage) {
         WindwosSize size = new WindwosSize(MainStage);
-        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - 下载游戏");
+        MainStage.setTitle(Consoler.getWindowsTitle("下载游戏"));
         AnchorPane pane = new AnchorPane();
         JFXButton back = new JFXButton("返回");
         back.setOnAction(event -> {
@@ -45,11 +43,7 @@ public class DownloadGameWindows {
         status_bar.setLayoutY(305.0);
         Button bmclHome = new Button("BMCLAPI");
         bmclHome.setOnAction(event -> {
-            try {
-                Runtime.getRuntime().exec("cmd.exe /C start https://bmclapidoc.bangbang93.com/");
-            } catch (IOException | RuntimeException exception) {
-                ErrorWindow.setErrorWin(exception);
-            }
+            PlatformUtils.StartSomething("https://bmclapidoc.bangbang93.com/");
         });
         AnchorPane.setRightAnchor(bmclHome, 0.0);
         AnchorPane.setTopAnchor(bmclHome, 0.0);
@@ -58,12 +52,7 @@ public class DownloadGameWindows {
         read_bmcl.setLayoutY(4.0);
         textField.setText(launcher.getVersionNumber() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.StartThread(() -> {
-            try {
-                new InstallGameVersion(launcher, textField).InstallGame();
-
-            } catch (Exception e) {
-                ErrorWindow.setErrorWin(e);
-            }
+            new InstallGameVersion(launcher, textField).InstallGame();
         }).setName("Download Game");
         pane.setBackground(Consoler.getBackground());
         size.ModifyWindwosSize(pane, back, time, status_bar, bmclHome, read_bmcl, textField);

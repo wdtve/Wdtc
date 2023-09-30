@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.utils.gson.JSONObject;
@@ -25,27 +26,22 @@ public class LibraryObject {
     @SerializedName("natives")
     private JsonObject natives;
 
-
+    @SneakyThrows(IOException.class)
     public static LibraryObject getLibraryObject(DependencyDownload dependency, String DefaultUrl) {
-
-        try {
-            LibraryObject.Artifact artifact = new LibraryObject.Artifact();
-            URL url = dependency.getLibraryUrl();
-            artifact.setSha1(PlatformUtils.getFileSha1(url.openStream()));
-            artifact.setPath(dependency.formJar());
-            artifact.setSize(url.openConnection().getContentLengthLong());
-            dependency.setDefaultUrl(DefaultUrl);
-            artifact.setUrl(dependency.getLibraryUrl());
-            LibraryObject.Downloads downloads = new LibraryObject.Downloads();
-            downloads.setArtifact(artifact);
-            LibraryObject object = new LibraryObject();
-            object.setLibraryName(dependency.getLibraryName());
-            object.setDownloads(downloads);
-            logger.info(object);
-            return object;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        LibraryObject.Artifact artifact = new LibraryObject.Artifact();
+        URL url = dependency.getLibraryUrl();
+        artifact.setSha1(PlatformUtils.getFileSha1(url.openStream()));
+        artifact.setPath(dependency.formJar());
+        artifact.setSize(url.openConnection().getContentLengthLong());
+        dependency.setDefaultUrl(DefaultUrl);
+        artifact.setUrl(dependency.getLibraryUrl());
+        LibraryObject.Downloads downloads = new LibraryObject.Downloads();
+        downloads.setArtifact(artifact);
+        LibraryObject object = new LibraryObject();
+        object.setLibraryName(dependency.getLibraryName());
+        object.setDownloads(downloads);
+        logger.info(object);
+        return object;
     }
 
     public static LibraryObject getLibraryObject(JSONObject object) {

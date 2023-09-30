@@ -3,6 +3,7 @@ package org.wdt.wdtc.ui;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import org.wdt.wdtc.manger.VMManger;
 
 import java.util.Objects;
 
@@ -46,5 +47,13 @@ public class Consoler {
     public static void setTopLowerRight(Node node) {
         AnchorPane.setBottomAnchor(node, 0.0);
         AnchorPane.setRightAnchor(node, 0.0);
+    }
+
+    public static String getWindowsTitle(String WindowsName) {
+        return String.format(VMManger.isDebug() ? "Wdtc - %s - %s" : "Wdtc - Debug - %s - %s", VMManger.getLauncherVersion(), WindowsName);
+    }
+
+    public static String getWindowsTitle() {
+        return String.format(VMManger.isDebug() ? "Wdtc - %s" : "Wdtc - Debug - %s", VMManger.getLauncherVersion());
     }
 }

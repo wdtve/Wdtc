@@ -120,7 +120,7 @@ public class JavaUtils {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logmaker.error(WdtcLogger.getErrorMessage(e));
         }
         return null;
     }

@@ -9,7 +9,7 @@ javafx {
     modules = ModuleList
 }
 
-version = "0.0.1.10"
+version = "0.0.1.10.1"
 
 tasks.jar {
     enabled = false
@@ -20,7 +20,7 @@ tasks.shadowJar {
     minimize()
     dependencies {
         for (Module in ModuleList) {
-            exclude(dependency("org.openjfx:" + Module + ":" + javafx.version))
+            exclude(dependency("org.openjfx:$Module:${javafx.version}"))
         }
         exclude(dependency("com.alibaba.fastjson2:.*:.*"))
         exclude(dependency("commons-io:commons-io:.*"))

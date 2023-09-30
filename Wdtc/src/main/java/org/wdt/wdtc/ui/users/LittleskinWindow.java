@@ -49,7 +49,7 @@ public class LittleskinWindow {
             String PowerWord = inputpowerword.getText();
             if (UserName.isEmpty() && PowerWord.isEmpty()) {
                 label.setText("请输入用户名、密码");
-                logmaker.warn("* 用户名、密码为空");
+                logmaker.warn("用户名、密码为空");
             } else {
                 try {
                     YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(UrlManger.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
@@ -57,14 +57,14 @@ public class LittleskinWindow {
                     try {
                         YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();
                         yggdrasilTextures.DownloadUserSkin();
-                        logmaker.info("* Littleskin用户:" + Inputusername.getText() + "登陆成功!");
+                        logmaker.info("Littleskin用户:" + Inputusername.getText() + "登陆成功!");
                         UserListPane.setUserList(pane);
                     } catch (IOException e) {
                         ErrorWindow.setErrorWin(e);
                     }
                 } catch (IOException e) {
                     label.setText("用户名或密码错误");
-                    logmaker.warn("* 用户名或密码错误", e);
+                    logmaker.warn("用户名或密码错误", e);
                 }
             }
         });

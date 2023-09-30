@@ -11,7 +11,6 @@ import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -37,7 +36,7 @@ public class SettingWindow extends SettingManger {
             logmaker.info(getSetting());
         });
         back.getStyleClass().add("BlackBorder");
-        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - Setting");
+        MainStage.setTitle(Consoler.getWindowsTitle("Setting"));
 
         double line = 55.0;
         TextField GamePath = new TextField();
@@ -91,13 +90,13 @@ public class SettingWindow extends SettingManger {
         FalseLog.setLayoutY(line2);
         FalseLog.setOnAction(event -> {
             TrueLog.setSelected(false);
-            logmaker.info("* 启动日志器关闭显示");
+            logmaker.info("启动日志器关闭显示");
             setting.setConsole(false);
             putSettingToFile(setting);
         });
         TrueLog.setOnAction(event -> {
             FalseLog.setSelected(false);
-            logmaker.info("* 启动日志器开启显示");
+            logmaker.info("启动日志器开启显示");
             setting.setConsole(true);
             putSettingToFile(setting);
         });
@@ -125,14 +124,14 @@ public class SettingWindow extends SettingManger {
         BmclDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             McbbsDownloadSource.setSelected(false);
-            logmaker.info("* Switch to Bmcl DownloadSource");
+            logmaker.info("Switch to Bmcl DownloadSource");
             setting.setDownloadSource(UrlManger.DownloadSourceList.BMCLAPI);
             putSettingToFile(setting);
         });
         McbbsDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             BmclDownloadSource.setSelected(false);
-            logmaker.info("* Switch to Mcbbs DownloadSource");
+            logmaker.info("Switch to Mcbbs DownloadSource");
             setting.setDownloadSource(UrlManger.DownloadSourceList.MCBBS);
             putSettingToFile(setting);
         });
@@ -151,13 +150,13 @@ public class SettingWindow extends SettingManger {
         TrueOpenGl.setOnAction(event -> {
             FalseOpenGL.setSelected(false);
             setting.setLlvmpipeLoader(true);
-            logmaker.info("* OpenGL软渲染已开启");
+            logmaker.info("OpenGL软渲染已开启");
             putSettingToFile(setting);
         });
         FalseOpenGL.setOnAction(event -> {
             TrueOpenGl.setSelected(false);
             setting.setLlvmpipeLoader(false);
-            logmaker.info("* OpenGL软渲染已关闭");
+            logmaker.info("OpenGL软渲染已关闭");
             putSettingToFile(setting);
         });
 
@@ -174,13 +173,13 @@ public class SettingWindow extends SettingManger {
         FalseZhcn.setOnAction(event -> {
             setting.setChineseLanguage(false);
             TrueZhcn.setSelected(false);
-            logmaker.info("* 取消将游戏设置为中文");
+            logmaker.info("取消将游戏设置为中文");
             putSettingToFile(setting);
         });
         TrueZhcn.setOnAction(event -> {
             setting.setChineseLanguage(true);
             FalseZhcn.setSelected(false);
-            logmaker.info("* 将游戏设置为中文");
+            logmaker.info("将游戏设置为中文");
             putSettingToFile(setting);
         });
 
@@ -198,16 +197,15 @@ public class SettingWindow extends SettingManger {
                 if (Objects.nonNull(logDirectory)) {
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-                    File srcFile = new File(FileManger.getWdtcCache() + "/logs/Wdtc.log");
-                    File logFile = new File(logDirectory.getAbsolutePath() + "/Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
+                    File srcFile = new File(FileManger.getWdtcCache(), "logs/Wdtc.log");
+                    File logFile = new File(logDirectory.getAbsoluteFile(), "Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
                     FileUtils.copyFile(srcFile, logFile);
-                    logmaker.info("* 日志已导出:" + logFile);
+                    logmaker.info("日志已导出:" + logFile);
                 }
             } catch (IOException e) {
                 ErrorWindow.setErrorWin(e);
             }
         });
-
         JFXButton CleanCache = new JFXButton();
         CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FileManger.getWdtcCache()) + "B");
         CleanCache.setPrefSize(105, 30);
@@ -216,14 +214,14 @@ public class SettingWindow extends SettingManger {
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
                 PlatformUtils.StartSomething(FileManger.getWdtcCache());
-                logmaker.info("* 缓存文件夹已打开");
+                logmaker.info("缓存文件夹已打开");
             } else {
                 try {
                     FileUtils.cleanDirectory(FileManger.getWdtcCache());
-                    logmaker.info("* Cache Folder Cleaned");
+                    logmaker.info("Cache Folder Cleaned");
                     CleanCache.setText("清除缓存:" + FileUtils.sizeOfDirectory(FileManger.getWdtcCache()) + "B");
                 } catch (IOException e) {
-                    logmaker.error("* Clean Cache Folder Error,", e);
+                    logmaker.error("Clean Cache Folder Error,", e);
                 }
             }
         });

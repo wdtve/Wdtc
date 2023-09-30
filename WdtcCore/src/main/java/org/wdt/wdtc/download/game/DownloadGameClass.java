@@ -38,14 +38,14 @@ public class DownloadGameClass extends DownloadTask {
             }
             speed.await();
         } catch (IOException e) {
-            logmaker.error("* Download Library File Error,", e);
+            logmaker.error("Download Library File Error,", e);
         }
         try {
             File VersionLog = launcher.getVersionLog4j2();
             FileUtils.writeStringToFile(VersionLog, IOUtils.toString(getClass().getResourceAsStream("/log4j2.xml")));
 
         } catch (IOException e) {
-            logmaker.error("* logej.xml不存在或路径错误!", e);
+            logmaker.error("logej.xml不存在或路径错误!", e);
         }
     }
 }

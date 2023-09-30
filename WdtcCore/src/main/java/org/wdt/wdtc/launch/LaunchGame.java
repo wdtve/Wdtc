@@ -26,7 +26,7 @@ public class LaunchGame {
             try {
                 gameVersion.DownloadGame();
             } catch (Throwable e) {
-                logmaker.error("", e);
+                logmaker.error(WdtcLogger.getErrorMessage(e));
             }
             logmaker.info("Downloaded Finish");
             logmaker.info("Write Start Script");
@@ -36,7 +36,7 @@ public class LaunchGame {
             logmaker.info(String.format("Launch Version: %s - %s", launcher.getVersionNumber(), launcher.getKind().toString()));
             logmaker.info(launcher.getGameConfig().getConfig());
         } catch (Exception e) {
-            logmaker.error(e);
+            logmaker.error(WdtcLogger.getErrorMessage(e));
         }
     }
 

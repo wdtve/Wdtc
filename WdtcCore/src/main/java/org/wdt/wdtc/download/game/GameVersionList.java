@@ -31,7 +31,7 @@ public class GameVersionList implements VersionList {
                 }
             }
         } catch (IOException e) {
-            logmaker.error("* 出现错误,可能是网络错误", e);
+            logmaker.error(WdtcLogger.getErrorMessage(e));
         }
         return VersionList;
     }

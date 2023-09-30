@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.VMManger;
+import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSize;
@@ -29,10 +30,10 @@ public class AppMain extends Application {
         try {
             WindwosSize size = new WindwosSize(MainStage);
             if (PlatformUtils.isOnline()) {
-                MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion());
+                MainStage.setTitle(Consoler.getWindowsTitle());
             } else {
-                MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + "(无网络)");
-                logmaker.error("* 当前无网络连接,下载功能无法正常使用!");
+                MainStage.setTitle(Consoler.getWindowsTitle("无网络"));
+                logmaker.warn("* 当前无网络连接,下载功能无法正常使用!");
             }
             MainStage.setMinWidth(WindwosSize.WindowsWidht);
             MainStage.setMinHeight(WindwosSize.WindowsHeight);
@@ -50,11 +51,11 @@ public class AppMain extends Application {
                 try {
                     FileUtils.touch(DownloadUtils.StopProcess);
                 } catch (IOException e) {
-                    logmaker.error("", e);
+                    logmaker.error(WdtcLogger.getErrorMessage(e));
                 }
                 SettingManger.putSettingToFile(setting);
                 Platform.exit();
-                logmaker.info("======= Exited ========");
+                logmaker.info("======= Wdtc Stop ========");
             });
         } catch (Exception e) {
             ErrorWindow.setErrorWin(e);

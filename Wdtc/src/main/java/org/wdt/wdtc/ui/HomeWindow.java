@@ -41,7 +41,7 @@ public class HomeWindow {
             if (event.isControlDown()) {
                 try {
                     Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", FileManger.getWdtcConfig().getCanonicalPath()});
-                    logmaker.info("* 配置目录" + FileManger.getWdtcConfig() + "已打开");
+                    logmaker.info("配置目录" + FileManger.getWdtcConfig() + "已打开");
                 } catch (IOException e) {
                     ErrorWindow.setErrorWin(e);
                 }
@@ -66,7 +66,7 @@ public class HomeWindow {
     public void setHome(Stage MainStage) {
         AnchorPane pane = new AnchorPane();
         WindwosSize windwosSize = new WindwosSize(MainStage);
-        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion());
+        MainStage.setTitle(Consoler.getWindowsTitle());
         VBox Menu = new VBox();
         Menu.setPrefSize(128, 450);
         JFXButton home = new JFXButton("首页");
@@ -110,7 +110,7 @@ public class HomeWindow {
         github.setOnAction(event -> {
             try {
                 Runtime.getRuntime().exec(new String[]{"cmd", "/C", "start", "https://github.com/Wd-t/Wdtc"});
-            } catch (IOException | RuntimeException e) {
+            } catch (IOException e) {
                 ErrorWindow.setErrorWin(e);
             }
         });

@@ -26,6 +26,7 @@ public class WdtcMain extends JavaFxUtils {
             logmaker.info(String.format("Java Version:%s", System.getProperty("java.version")));
             logmaker.info(String.format("Java VM Version:%s", System.getProperty("java.vm.name")));
             logmaker.info(String.format("Java Home:%s", System.getProperty("java.home")));
+            logmaker.info(String.format("Wdtc Debug Mode:%b", VMManger.isDebug()));
             logmaker.info("Wdtc Config Path:" + FileManger.getWdtcConfig());
             logmaker.info("Setting File:" + FileManger.getSettingFile());
             logmaker.info("Here:" + GameFolderManger.getDefaultHere());

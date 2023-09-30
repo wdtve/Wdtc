@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import org.wdt.wdtc.download.game.GameVersionList;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.GameFileManger;
-import org.wdt.wdtc.manger.VMManger;
 
 import java.util.List;
 
@@ -57,11 +56,10 @@ public class NewDownloadWindow {
         sp.setLayoutX(155.0);
         sp.setPrefHeight(WindwosSize.WindowsHeight);
         sp.setPrefWidth(461);
-//        size.ModifyWindwosSize(pane, sp, back, tips);
         pane.getChildren().addAll(sp, back, tips);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
-        MainStage.setTitle("Wdtc - " + VMManger.getLauncherVersion() + " - 下载游戏");
+        MainStage.setTitle(Consoler.getWindowsTitle("下载游戏"));
         MainStage.setScene(new Scene(pane, 600, 450));
     }
 }
