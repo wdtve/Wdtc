@@ -2,11 +2,10 @@ package org.wdt.wdtc.manger;
 
 
 import lombok.Getter;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.game.GameVersionJsonObject;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +25,13 @@ public class GameFileManger extends GameFolderManger {
         this.VersionNumber = VersionNumber;
     }
 
-    public static void DownloadVersionManifestJsonFileTask() {
+    public static void downloadVersionManifestJsonFileTask() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, -7);
         try {
-            if (PlatformUtils.FileExistenceAndSize(FileManger.getVersionManifestFile()) || FileUtils.isFileOlder(FileManger.getVersionManifestFile(), calendar.getTime())) {
+            if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile()) ||
+                    FileUtils.isFileOlder(FileManger.getVersionManifestFile(), calendar.getTime())) {
                 DownloadVersionGameFile.DownloadVersionManifestJsonFile();
             }
         } catch (IOException e) {

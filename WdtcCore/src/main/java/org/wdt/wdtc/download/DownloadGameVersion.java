@@ -8,7 +8,7 @@ import java.io.IOException;
 public class DownloadGameVersion {
     protected final Launcher launcher;
     protected final DownloadVersionGameFile DownloadGame;
-    protected boolean Install;
+    protected final boolean install;
 
     public DownloadGameVersion(Launcher launcher) {
         this(launcher, false);
@@ -16,7 +16,7 @@ public class DownloadGameVersion {
 
     public DownloadGameVersion(Launcher launcher, boolean Install) {
         this.launcher = launcher;
-        this.Install = Install;
+        this.install = Install;
         this.DownloadGame = new DownloadVersionGameFile(launcher, Install);
     }
 
@@ -31,7 +31,7 @@ public class DownloadGameVersion {
     }
 
     public void DownloadResourceFile() {
-        DownloadGame.DownloadResourceFileTask().DownloadResourceFile();
+        DownloadGame.getDownloadGameAssetsFile().DownloadAssetsFiles();
     }
 
     public void DownloadGame() throws IOException {

@@ -17,7 +17,7 @@ public class PostTest {
     }
 
     @Test
-    public void GetTest() throws IOException {
+    public void GetTest() {
 
 
     }

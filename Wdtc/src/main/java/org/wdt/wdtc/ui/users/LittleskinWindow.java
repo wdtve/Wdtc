@@ -29,9 +29,9 @@ public class LittleskinWindow {
         TextField Inputusername = new TextField();
         Inputusername.setLayoutX(220.0);
         Inputusername.setLayoutY(103.0);
-        Label powerwrod = new Label("密码:");
-        powerwrod.setLayoutX(179.0);
-        powerwrod.setLayoutY(135.0);
+        Label powerWordTip = new Label("密码:");
+        powerWordTip.setLayoutX(179.0);
+        powerWordTip.setLayoutY(135.0);
         TextField inputpowerword = new TextField();
         inputpowerword.setLayoutX(221.0);
         inputpowerword.setLayoutY(131.0);
@@ -43,7 +43,7 @@ public class LittleskinWindow {
         Button ok = new Button("登录");
         ok.setLayoutX(267.0);
         ok.setLayoutY(219.0);
-        pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerwrod, inputpowerword, label, ok);
+        pane.getChildren().addAll(littleskinTitle, username, Inputusername, powerWordTip, inputpowerword, label, ok);
         ok.setOnAction(event -> {
             String UserName = Inputusername.getText();
             String PowerWord = inputpowerword.getText();
@@ -52,12 +52,13 @@ public class LittleskinWindow {
                 logmaker.warn("用户名、密码为空");
             } else {
                 try {
-                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(UrlManger.getLittleskinUrl(), Inputusername.getText(), inputpowerword.getText());
+                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(UrlManger.getLittleskinUrl(),
+                            UserName, PowerWord);
                     UserList.addUser(yggdrasilAccounts.getUser());
                     try {
                         YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();
                         yggdrasilTextures.DownloadUserSkin();
-                        logmaker.info("Littleskin用户:" + Inputusername.getText() + "登陆成功!");
+                        logmaker.info("Littleskin用户:" + UserName + "登陆成功!");
                         UserListPane.setUserList(pane);
                     } catch (IOException e) {
                         ErrorWindow.setErrorWin(e);

@@ -3,15 +3,15 @@ package org.wdt.wdtc.download.fabric;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

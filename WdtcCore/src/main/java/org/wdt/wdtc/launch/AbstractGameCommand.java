@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 abstract class AbstractGameCommand {
-    protected StringBuilder Command;
+    protected final StringBuilder Command;
 
     public AbstractGameCommand() {
         Command = new StringBuilder();

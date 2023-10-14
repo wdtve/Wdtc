@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 public class SkinUtils {
     private File SkinFile;
@@ -28,19 +27,12 @@ public class SkinUtils {
     }
 
     public File writeSkinHead() throws IOException {
-        BufferedImage image;
-        if (UserSkinInput != null) {
-            image = ImageIO.read(UserSkinInput);
-        } else {
-            image = ImageIO.read(FileUtils.newInputStream(SkinFile));
-        }
+        BufferedImage image = ImageIO.read(UserSkinInput != null ? UserSkinInput : FileUtils.newInputStream(SkinFile));
         String extension = FilenameUtils.getExtension(SkinFile.getName());
         BufferedImage image1 = image.getSubimage(8, 8, 8, 8);
-        File file = new File(FileManger.getUserAsste(), SkinFile.getName().replace("." + extension, "") + "-head." + extension);
+        File file = new File(FileManger.getUserAsste(), StringUtils.cleanStrInString(SkinFile.getName(), "." + extension) + "-head." + extension);
         FileUtils.touch(file);
-        OutputStream outputStream = FileUtils.newOutputStream(file);
-        ImageIO.write(image1, extension, outputStream);
-        outputStream.close();
+        ImageIO.write(image1, extension, FileUtils.newOutputStream(file));
         return file;
     }
 

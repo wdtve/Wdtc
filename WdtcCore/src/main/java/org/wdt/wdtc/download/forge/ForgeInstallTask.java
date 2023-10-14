@@ -6,12 +6,10 @@ import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DefaultDependency;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.utils.io.FilenameUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
+import org.wdt.wdtc.download.game.DownloadGameClass;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
@@ -20,9 +18,13 @@ import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.StringUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.ZipUtils;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -110,7 +112,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
         String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
-            TxtUrl = PlatformUtils.getRedirectUrl(TxtUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl()));
+            TxtUrl = UrlUtils.getRedirectUrl(TxtUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl()));
         }
         if (TxtPath != null) {
             DownloadTask.StartDownloadTask(TxtUrl, launcher.getGameLibraryPath() + TxtPath.formJar());
@@ -139,7 +141,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     }
 
     public String Clean(String str) {
-        return str.replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+        return StringUtils.cleanStrInString(str, "[", "]", "{", "}");
     }
 
     private void StartCommand(int i) throws IOException {
@@ -216,7 +218,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
         SpeedOfProgress speed = new SpeedOfProgress(LibraryList.size());
         for (int i = 0; i < LibraryList.size(); i++) {
             LibraryObject object = LibraryObject.getLibraryObject(LibraryList.getJSONObject(i));
-            DownloadTask task = new DownloadTask(launcher);
+            DownloadGameClass task = new DownloadGameClass(launcher);
             task.StartDownloadLibraryTask(object, speed);
         }
         speed.await();

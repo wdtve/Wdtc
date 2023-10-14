@@ -2,14 +2,13 @@ package org.wdt.wdtc.game.config;
 
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
-import org.wdt.utils.gson.JSON;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.game.DownloadedGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.GameFolderManger;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.gson.JSON;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +27,7 @@ public class GameConfig {
             List<Launcher> list = DownloadedGameVersion.getGameVersionList(gameFolderManger);
             for (Launcher child : list) {
                 GameConfig config = child.getGameConfig();
-                if (PlatformUtils.FileExistenceAndSize(child.getVersionConfigFile())) {
+                if (FileUtils.isFileNotExists(child.getVersionConfigFile())) {
                     writeConfigJson(child);
                 } else {
                     DefaultGameConfig GameConfig = config.getDefaultGameConfig();

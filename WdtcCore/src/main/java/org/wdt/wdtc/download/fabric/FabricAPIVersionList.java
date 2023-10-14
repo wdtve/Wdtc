@@ -1,10 +1,10 @@
 package org.wdt.wdtc.download.fabric;
 
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONObject;
 import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class FabricAPIVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> VersionList = new ArrayList<>();
-        JSONArray VersionListArray = JSONArray.parseJSONArray(PlatformUtils.UrltoString(VersionListUrl));
+        JSONArray VersionListArray = JSONArray.parseJSONArray(UrlUtils.getUrlToString(VersionListUrl));
         for (int i = 0; i < VersionListArray.size(); i++) {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             JSONArray GameVersionsList = VersionObject.getJSONArray("game_versions");

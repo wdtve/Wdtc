@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.auth.accounts.Accounts;
 import org.wdt.wdtc.manger.FileManger;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,9 @@ public class User {
     @SerializedName("HeadPhotoPath")
     private File HeadFile;
 
+    public User() {
+    }
+
     public static void setUserToJson(User user) {
         JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
     }
@@ -40,9 +43,8 @@ public class User {
         return JSONUtils.JsonFileToClass(FileManger.getUsersJson(), User.class);
     }
 
-    @SneakyThrows(IOException.class)
     public static boolean isExistUserJsonFile() {
-        return !PlatformUtils.FileExistenceAndSize(FileManger.getUsersJson());
+        return FileUtils.isFileExists(FileManger.getUsersJson());
     }
 
 

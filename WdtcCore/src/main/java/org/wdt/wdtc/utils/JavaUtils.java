@@ -79,7 +79,7 @@ public class JavaUtils {
         for (String key : list) {
             Process process = new ProcessBuilder("reg", "query", key, "/v", "JavaHome").start();
             for (String s : IOUtils.readLines(process.getInputStream())) {
-                String JavaHomeCleaned = s.replaceAll("\\s", "");
+                String JavaHomeCleaned = StringUtils.cleanStrInString(s, " ");
                 if (JavaHomeCleaned.startsWith("JavaHome")) {
                     Matcher matcher = pattern.matcher(s);
                     if (matcher.find()) {
@@ -98,7 +98,7 @@ public class JavaUtils {
             if (!Files.exists(Paths.get(path))) {
                 logmaker.warn("warn : ", new IOException(path + " isn't exists"));
             } else {
-                if (!PlatformUtils.FileExistenceAndSize(JavaPath)) {
+                if (FileUtils.isFileExists(FileUtils.toFile(JavaPath))) {
                     Map<String, String> JavaExeAndVersion = new HashMap<>();
                     JavaExeAndVersion.put("JavaPath", path);
                     JavaExeAndVersion.put("JavaVersion", getJavaVersion(JavaPath));
@@ -152,9 +152,9 @@ public class JavaUtils {
 
         public static boolean isJRE(File JavaHome) {
             try {
-                return PlatformUtils.FileExistenceAndSize(new File(JavaHome, "bin/javac.exe"));
+                return FileUtils.isFileNotExists(new File(JavaHome, "bin/javac.exe"));
             } catch (IOException e) {
-                logmaker.error(e);
+                logmaker.error(WdtcLogger.getErrorMessage(e));
             }
             return false;
         }

@@ -1,14 +1,14 @@
-package org.wdt.utils.gson;
+package org.wdt.wdtc.utils.gson;
 
 import com.google.gson.*;
-import org.wdt.utils.gson.TypeAdapter.FileTypeAdapter;
+import org.wdt.wdtc.utils.gson.typeadapter.FileTypeAdapter;
 
 import java.io.File;
 
 public class JSON {
-    public static Gson FILE_GSON = getBuilder().setPrettyPrinting().create();
-    public static Gson GSON = getBuilder().create();
-    public static GsonBuilder GSONBUILDER = getBuilder();
+    public static final Gson FILE_GSON = getBuilder().setPrettyPrinting().create();
+    public static final Gson GSON = getBuilder().create();
+    public static final GsonBuilder GSONBUILDER = getBuilder();
     public static JsonObject parseJsonObject(String json) {
         return JsonParser.parseString(json).getAsJsonObject();
     }

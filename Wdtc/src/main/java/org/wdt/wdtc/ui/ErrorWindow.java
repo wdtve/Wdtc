@@ -32,7 +32,7 @@ public class ErrorWindow {
             VBox vBox = new VBox();
             stage.setTitle(title);
             stage.getIcons().add(new Image("ico.jpg"));
-            WindwosSize size = new WindwosSize(stage);
+            WindwosSizeManger size = new WindwosSizeManger(stage);
             size.ModifyWindwosSize(vBox, label);
             stage.setScene(new Scene(vBox));
             stage.show();

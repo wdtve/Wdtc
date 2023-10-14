@@ -11,7 +11,7 @@ import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class SettingWindow extends SettingManger {
         button.setLayoutY(line);
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartSomething(FileManger.getSettingFile());
+                UrlUtils.openSomething(FileManger.getSettingFile());
                 logmaker.info("* 设置文件" + FileManger.getSettingFile() + "已打开");
             } else {
                 try {
@@ -213,7 +213,7 @@ public class SettingWindow extends SettingManger {
         AnchorPane.setBottomAnchor(CleanCache, 30.0);
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                PlatformUtils.StartSomething(FileManger.getWdtcCache());
+                UrlUtils.openSomething(FileManger.getWdtcCache());
                 logmaker.info("缓存文件夹已打开");
             } else {
                 try {
@@ -230,7 +230,7 @@ public class SettingWindow extends SettingManger {
         Consoler.setTopGrid(SonPane);
 
         SonPane.setPrefSize(493, 336);
-        WindwosSize size = new WindwosSize(MainStage);
+        WindwosSizeManger size = new WindwosSizeManger(MainStage);
         size.ModifyWindwosSize(SonPane, back, OfficialDownloadSource, BmclDownloadSource, McbbsDownloadSource, TrueLog,
                 FalseLog, cmd, DownloadSourceTips, GamePath, tips2, tips, button, tips3, TrueOpenGl, FalseOpenGL, tips4, TrueZhcn, FalseZhcn);
         ScrollPane scrollPane = new ScrollPane(SonPane);

@@ -1,8 +1,8 @@
 package org.wdt.wdtc.game;
 
 import lombok.Getter;
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;

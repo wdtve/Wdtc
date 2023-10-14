@@ -3,18 +3,18 @@ package org.wdt.wdtc;
 import com.google.gson.JsonArray;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.FilenameUtils;
 import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.manger.FileManger;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class JavaFxUtils {
     public static void setJavaFXListJson() {
         try {
             File OpenJfxListFile = new File(FileManger.getWdtcImplementationPath(), "openjfx-list.json");
-            if (PlatformUtils.FileExistenceAndSize(OpenJfxListFile, 2393)) {
+            if (FileUtils.isFileNotExistsAndIsNotSameSize(OpenJfxListFile, 2393)) {
                 List<String> MoudleList = List.of("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics", "javafx.media");
                 JsonArray array = new JsonArray();
                 for (String s : MoudleList) {
@@ -44,7 +44,7 @@ public class JavaFxUtils {
                     LibraryObject.Artifact artifact = new LibraryObject.Artifact();
                     artifact.setUrl(url);
                     artifact.setPath(FilenameUtils.separatorsToUnix(path));
-                    artifact.setSha1(PlatformUtils.getFileSha1(url.openStream()));
+                    artifact.setSha1(IOUtils.getInputStreamSha1(url.openStream()));
                     artifact.setSize(url.openConnection().getContentLength());
                     LibraryObject.Downloads downloads = new LibraryObject.Downloads();
                     downloads.setArtifact(artifact);
@@ -60,16 +60,16 @@ public class JavaFxUtils {
         }
     }
 
-    public static void DownloadDependencies() throws IOException {
+    public static void downloadDependencies() throws IOException {
         JSONArray array = getArrayObject();
         SpeedOfProgress speed = new SpeedOfProgress(array.size());
         for (int i = 0; i < array.size(); i++) {
             LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
             LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
             File Library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
-            ThreadUtils.StartThread(() -> {
+            ThreadUtils.startThread(() -> {
                 try {
-                    if (PlatformUtils.FileExistenceAndSize(Library, artifact.getSize())) {
+                    if (FileUtils.isFileNotExistsAndIsNotSameSize(Library, artifact.getSize())) {
                         DownloadTask.StartDownloadTask(artifact.getUrl(), Library);
                     }
                     speed.countDown();
@@ -97,8 +97,8 @@ public class JavaFxUtils {
                 for (int i = 0; i < array.size(); i++) {
                     LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
                     LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
-                    File Library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
-                    jarPaths.add(Library.toPath());
+                    File library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
+                    jarPaths.add(library.toPath());
                     modules.add(new DependencyDownload(libraryObject.getLibraryName()).getArtifactId());
                 }
                 // Form : HMCL3
@@ -115,8 +115,8 @@ public class JavaFxUtils {
         }
     }
 
-    public static void CkeckJavaFX() throws IOException {
-        DownloadDependencies();
+    public static void ckeckJavaFX() throws IOException {
+        downloadDependencies();
         loadJavaFXPatch();
     }
 }

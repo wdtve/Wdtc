@@ -18,8 +18,8 @@ public class NewDownloadWindow {
 
 
     public static void SetWin(Stage MainStage) {
-        GameFileManger.DownloadVersionManifestJsonFileTask();
-        WindwosSize size = new WindwosSize(MainStage);
+        GameFileManger.downloadVersionManifestJsonFileTask();
+        WindwosSizeManger size = new WindwosSizeManger(MainStage);
         AnchorPane pane = new AnchorPane();
         VBox list = new VBox();
         Consoler.setTopGrid(list);
@@ -54,7 +54,7 @@ public class NewDownloadWindow {
         });
         sp.setContent(list);
         sp.setLayoutX(155.0);
-        sp.setPrefHeight(WindwosSize.WindowsHeight);
+        sp.setPrefHeight(WindwosSizeManger.WindowsHeight);
         sp.setPrefWidth(461);
         pane.getChildren().addAll(sp, back, tips);
         Consoler.setStylesheets(pane);

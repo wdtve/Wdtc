@@ -1,11 +1,13 @@
-package org.wdt.utils.gson;
+package org.wdt.wdtc.utils.gson;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+@Getter
 public class JSONArray extends JSON implements Iterable<JsonElement> {
     private final JsonArray JsonArrays;
 
@@ -33,16 +35,8 @@ public class JSONArray extends JSON implements Iterable<JsonElement> {
         return JsonArrays.size();
     }
 
-    public com.alibaba.fastjson2.JSONArray getFastJSONArray() {
-        return com.alibaba.fastjson2.JSONArray.parseArray(JsonArrays.toString());
-    }
-
     public void remove(int index) {
         JsonArrays.remove(index);
-    }
-
-    public JsonArray getJsonArrays() {
-        return JsonArrays;
     }
 
     public void add(String str) {

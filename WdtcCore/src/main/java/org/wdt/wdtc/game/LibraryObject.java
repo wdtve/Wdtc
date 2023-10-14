@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +30,7 @@ public class LibraryObject {
     public static LibraryObject getLibraryObject(DependencyDownload dependency, String DefaultUrl) {
         LibraryObject.Artifact artifact = new LibraryObject.Artifact();
         URL url = dependency.getLibraryUrl();
-        artifact.setSha1(PlatformUtils.getFileSha1(url.openStream()));
+        artifact.setSha1(IOUtils.getInputStreamSha1(url.openStream()));
         artifact.setPath(dependency.formJar());
         artifact.setSize(url.openConnection().getContentLengthLong());
         dependency.setDefaultUrl(DefaultUrl);

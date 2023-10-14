@@ -27,7 +27,7 @@ public class ZipUtils {
                 String name = entry.getName();
                 if (Objects.equals(FilenameUtils.getExtension(name), "dll")) {
                     File unfile = new File(path + File.separator + name);
-                    if (PlatformUtils.FileExistenceAndSize(unfile)) {
+                    if (FileUtils.isFileNotExists(unfile)) {
                         logmaker.info("提取natives库dll文件" + name + "中");
                         Files.createFile(Paths.get(path + File.separator + name));
                         InputStream in = zip.getInputStream(entry);
@@ -65,7 +65,7 @@ public class ZipUtils {
 
     public static void unZipToFile(String ZipPath, String unFilePath, String unFileName) {
         try {
-            ZipFile zipFile = new ZipFile(new File(ZipPath));
+            ZipFile zipFile = new ZipFile(FileUtils.toFile(ZipPath));
             FileOutputStream outputStream = new FileOutputStream(unFilePath);
             InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
             IOUtils.copy(stream, outputStream);

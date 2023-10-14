@@ -9,7 +9,7 @@ javafx {
     modules = ModuleList
 }
 
-version = "0.0.1.10.1"
+version = "0.0.1.11"
 
 tasks.jar {
     enabled = false
@@ -22,8 +22,6 @@ tasks.shadowJar {
         for (Module in ModuleList) {
             exclude(dependency("org.openjfx:$Module:${javafx.version}"))
         }
-        exclude(dependency("com.alibaba.fastjson2:.*:.*"))
-        exclude(dependency("commons-io:commons-io:.*"))
     }
     manifest {
         attributes(
@@ -53,9 +51,8 @@ tasks.compileJava<JavaCompile> {
 
 dependencies {
     implementation(project(":WdtcCore"))
-    implementation(project(":GsonOrFastJson"))
     implementation(project(":DependencyDownloader"))
-    implementation(project(":FileUtils"))
+    implementation(files("../libs/IOUtils-1.1.1.jar"))
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")

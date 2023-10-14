@@ -13,10 +13,10 @@ import org.wdt.wdtc.utils.WdtcLogger;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-public class UsersWindow {
+public class OfflineUserWindow {
 
 
-    private final static Logger loggmaker = WdtcLogger.getLogger(UsersWindow.class);
+    private final static Logger loggmaker = WdtcLogger.getLogger(OfflineUserWindow.class);
 
     public static void setUserWin(Pane pane) {
         pane.getChildren().clear();
@@ -41,7 +41,7 @@ public class UsersWindow {
         button.setOnAction(event -> {
             try {
                 String username = Registerusername.getText();
-                if (isContainChinese(username)) {
+                if (isQualified(username)) {
                     OfflineAccounts offline = new OfflineAccounts(username);
                     UserList.addUser(offline.getUser());
                     loggmaker.info("离线账户" + username + "注册成功");
@@ -55,7 +55,7 @@ public class UsersWindow {
         });
     }
 
-    public static boolean isContainChinese(String str) {
+    public static boolean isQualified(String str) {
         return Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,999}$").matcher(str).find();
     }
 

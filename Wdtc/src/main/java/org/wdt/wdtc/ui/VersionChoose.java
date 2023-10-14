@@ -25,7 +25,7 @@ public class VersionChoose {
     }
 
     public void setWindow(Stage MainStage) {
-        WindwosSize size = new WindwosSize(MainStage);
+        WindwosSizeManger size = new WindwosSizeManger(MainStage);
         AnchorPane ParentPane = new AnchorPane();
         ScrollPane SonScrollPane = new ScrollPane();
         AnchorPane.setLeftAnchor(SonScrollPane, 100.0);

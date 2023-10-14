@@ -18,12 +18,12 @@ public class ModChooseWindows {
     private static final Logger logmaker = WdtcLogger.getLogger(ModChooseWindows.class);
     private final Launcher launcher;
     private final Stage MainStage;
-    private final WindwosSize size;
+    private final WindwosSizeManger size;
 
     public ModChooseWindows(Launcher launcher, Stage MainStage) {
         this.launcher = launcher;
         this.MainStage = MainStage;
-        this.size = new WindwosSize(MainStage);
+        this.size = new WindwosSizeManger(MainStage);
     }
 
     public void setChooseWin() {

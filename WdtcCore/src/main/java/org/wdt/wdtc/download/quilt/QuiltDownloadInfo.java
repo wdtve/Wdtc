@@ -1,12 +1,12 @@
 package org.wdt.wdtc.download.quilt;
 
 import lombok.Getter;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;

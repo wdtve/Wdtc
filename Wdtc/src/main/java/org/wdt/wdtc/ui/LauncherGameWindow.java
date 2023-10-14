@@ -23,8 +23,8 @@ public class LauncherGameWindow {
 
     public void StartGame() throws IOException {
         try {
-            ThreadUtils.StartThread(() -> getRunInfo(process.getInputStream()));
-            ThreadUtils.StartThread(() -> getRunInfo(process.getErrorStream())).join();
+            ThreadUtils.startThread(() -> getRunInfo(process.getInputStream()));
+            ThreadUtils.startThread(() -> getRunInfo(process.getErrorStream())).join();
             logmaker.info("Game Stop");
         } catch (InterruptedException e) {
             logmaker.error("Run Command Error,", e);
@@ -34,12 +34,12 @@ public class LauncherGameWindow {
 
     private void getRunInfo(InputStream inputStream) {
         try {
-            BufferedReader ErrorReader = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
+            BufferedReader Reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
             String line;
-            while ((line = ErrorReader.readLine()) != null) {
+            while ((line = Reader.readLine()) != null) {
                 if (Thread.currentThread().isInterrupted()) {
                     showErrorWin();
-                    break;
+                    return;
                 } else {
                     Matcher ErrorWarn = Pattern.compile("FATAL").matcher(line);
                     if (ErrorWarn.find()) {

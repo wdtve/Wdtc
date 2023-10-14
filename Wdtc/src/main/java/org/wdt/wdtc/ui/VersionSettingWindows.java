@@ -18,7 +18,10 @@ import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.manger.SettingManger;
-import org.wdt.wdtc.utils.*;
+import org.wdt.wdtc.utils.JavaUtils;
+import org.wdt.wdtc.utils.ModUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +34,13 @@ public class VersionSettingWindows extends SettingManger {
     private static final Logger logmaker = WdtcLogger.getLogger(VersionSettingWindows.class);
     private final Launcher launcher;
     private final DefaultGameConfig.Config config;
-    private final WindwosSize size;
+    private final WindwosSizeManger size;
     private final Stage MainStage;
 
     public VersionSettingWindows(Launcher launcher, Stage MainStage) {
         this.launcher = launcher;
         this.config = launcher.getGameConfig().getConfig();
-        this.size = new WindwosSize(MainStage);
+        this.size = new WindwosSizeManger(MainStage);
         this.MainStage = MainStage;
     }
 
@@ -114,7 +117,7 @@ public class VersionSettingWindows extends SettingManger {
                 ErrorWindow.setErrorWin(e);
             }
         });
-        completion.setOnAction(event -> ThreadUtils.StartThread(() -> {
+        completion.setOnAction(event -> ThreadUtils.startThread(() -> {
             InstallGameVersion version = new InstallGameVersion(launcher, true);
             version.InstallGame();
             logmaker.info(launcher.getVersionNumber() + " downloaded");
@@ -197,7 +200,7 @@ public class VersionSettingWindows extends SettingManger {
         });
         apply.setOnAction(event -> {
             try {
-                if (PlatformUtils.FileExistenceAndSize(JavaPath.getText()))
+                if (FileUtils.isFileNotExists(FileUtils.toFile(JavaPath.getText())))
                     throw new NumberFormatException();
                 DefaultGameConfig.Config NewConfig = new DefaultGameConfig.Config(
                         Integer.parseInt(Input.getText()), JavaPath.getText(),

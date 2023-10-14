@@ -14,8 +14,7 @@ tasks.processResources {
 
 dependencies {
     implementation(project(":DependencyDownloader"))
-    implementation(project(":GsonOrFastJson"))
-    implementation(project(":FileUtils"))
+    implementation(files("../libs/IOUtils-1.1.1.jar"))
     implementation("org.dom4j:dom4j:2.1.4")
     implementation("org.hildan.fxgson:fx-gson:5.0.0")
     implementation("log4j:log4j:1.2.17")

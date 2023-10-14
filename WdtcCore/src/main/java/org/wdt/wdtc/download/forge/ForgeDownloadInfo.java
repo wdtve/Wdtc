@@ -3,8 +3,6 @@ package org.wdt.wdtc.download.forge;
 
 import lombok.Getter;
 import org.apache.log4j.Logger;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
@@ -13,6 +11,8 @@ import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.ZipUtils;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.IOException;
 

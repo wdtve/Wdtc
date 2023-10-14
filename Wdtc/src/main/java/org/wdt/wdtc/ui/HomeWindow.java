@@ -15,8 +15,8 @@ import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.users.NewUserWindows;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class HomeWindow {
 
     public void setHome(Stage MainStage) {
         AnchorPane pane = new AnchorPane();
-        WindwosSize windwosSize = new WindwosSize(MainStage);
+        WindwosSizeManger windwosSizeManger = new WindwosSizeManger(MainStage);
         MainStage.setTitle(Consoler.getWindowsTitle());
         VBox Menu = new VBox();
         Menu.setPrefSize(128, 450);
@@ -81,7 +81,7 @@ public class HomeWindow {
         });
 
         JFXButton downgame = new JFXButton("下载游戏");
-        downgame.setDisable(!PlatformUtils.isOnline());
+        downgame.setDisable(!UrlUtils.isOnline());
         downgame.setPrefSize(128, 46);
         downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
 
@@ -137,7 +137,7 @@ public class HomeWindow {
         LaunchGameButton.setOnAction(event -> {
             if (launcher != null) {
                 if (User.isExistUserJsonFile()) {
-                    ThreadUtils.StartThread(() -> {
+                    ThreadUtils.startThread(() -> {
                         try {
                             LaunchGame launch = new LaunchGame(launcher);
                             LauncherGameWindow launcherGameWindow = new LauncherGameWindow(launch.getProcess());
@@ -159,7 +159,7 @@ public class HomeWindow {
         AnchorPane.setBottomAnchor(Menu, 0.0);
         AnchorPane.setLeftAnchor(Menu, 0.0);
         pane.getChildren().addAll(Menu, LaunchGameButton);
-        windwosSize.ModifyWindwosSize(pane, readme);
+        windwosSizeManger.ModifyWindwosSize(pane, readme);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         Scene scene = new Scene(pane, 600, 450);

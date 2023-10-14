@@ -26,14 +26,14 @@ public class ModChoose {
     private final ModUtils.KindOfMod kind;
 
     private final Stage MainStage;
-    private final WindwosSize size;
+    private final WindwosSizeManger size;
     private final Launcher launcher;
 
     public ModChoose(ModUtils.KindOfMod kind, Stage MainStage, Launcher launcher) {
         this.kind = kind;
         this.MainStage = MainStage;
         this.launcher = launcher;
-        this.size = new WindwosSize(MainStage);
+        this.size = new WindwosSizeManger(MainStage);
     }
 
     public VersionList ModVersionList() throws IOException {

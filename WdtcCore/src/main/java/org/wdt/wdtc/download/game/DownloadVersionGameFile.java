@@ -1,16 +1,16 @@
 package org.wdt.wdtc.download.game;
 
 
-import org.wdt.utils.gson.JSONArray;
-import org.wdt.utils.gson.JSONFileUtils;
-import org.wdt.utils.gson.JSONObject;
-import org.wdt.utils.gson.JSONUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.gson.JSONArray;
+import org.wdt.wdtc.utils.gson.JSONFileUtils;
+import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class DownloadVersionGameFile extends DownloadTask {
     }
 
     public void DownloadGameVersionJson() throws IOException {
-        if (PlatformUtils.FileExistenceAndSize(FileManger.getVersionManifestFile())) {
+        if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile())) {
             DownloadVersionManifestJsonFile();
         }
         JSONArray VersionList = JSONUtils.getJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
@@ -45,7 +45,7 @@ public class DownloadVersionGameFile extends DownloadTask {
                 if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
                     VersionJsonUrl = VersionJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
                 }
-                if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson()) || Install) {
+                if (FileUtils.isFileNotExists(launcher.getVersionJson()) || Install) {
                     StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
 
                 }
@@ -59,7 +59,7 @@ public class DownloadVersionGameFile extends DownloadTask {
         if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
             GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(UrlManger.getPistonMetaMojang(), source.getMetaUrl());
         }
-        if (PlatformUtils.FileExistenceAndSize(launcher.getGameAssetsListJson(), AssetIndexJson.getInt("size"))) {
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.getGameAssetsListJson(), AssetIndexJson.getInt("size"))) {
             StartDownloadTask(GameAssetsListJsonUrl, launcher.getGameAssetsListJson());
         }
     }
@@ -72,7 +72,7 @@ public class DownloadVersionGameFile extends DownloadTask {
             JarUrl = JarUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl());
         }
         File VersionJar = launcher.getVersionJar();
-        if (PlatformUtils.FileExistenceAndSize(VersionJar, ClientObject.getInt("size"))) {
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(VersionJar, ClientObject.getInt("size"))) {
             StartDownloadTask(JarUrl, VersionJar);
         }
     }
@@ -81,7 +81,7 @@ public class DownloadVersionGameFile extends DownloadTask {
         return new DownloadGameClass(launcher);
     }
 
-    public DownloadGameAssetsFile DownloadResourceFileTask() {
+    public DownloadGameAssetsFile getDownloadGameAssetsFile() {
         return new DownloadGameAssetsFile(launcher);
     }
 }

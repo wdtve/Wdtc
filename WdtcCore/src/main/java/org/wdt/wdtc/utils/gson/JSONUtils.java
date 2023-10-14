@@ -1,4 +1,4 @@
-package org.wdt.utils.gson;
+package org.wdt.wdtc.utils.gson;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

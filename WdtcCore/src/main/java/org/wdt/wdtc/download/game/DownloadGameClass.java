@@ -1,6 +1,7 @@
 package org.wdt.wdtc.download.game;
 
 
+import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.IOUtils;
@@ -8,6 +9,9 @@ import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.game.Launcher;
+import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.launch.GameLibraryData;
+import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -15,7 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-public class DownloadGameClass extends DownloadTask {
+public class DownloadGameClass extends GameLibraryData {
     private final Logger logmaker = WdtcLogger.getLogger(DownloadGameClass.class);
     private final Launcher launcher;
 
@@ -46,6 +50,35 @@ public class DownloadGameClass extends DownloadTask {
 
         } catch (IOException e) {
             logmaker.error("logej.xml不存在或路径错误!", e);
+        }
+    }
+
+    @SneakyThrows(IOException.class)
+    public void StartDownloadLibraryTask(LibraryObject libraryObject, SpeedOfProgress speed) {
+        File LibraryFile = GetLibraryFile(libraryObject);
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(LibraryFile, libraryObject.getDownloads().getArtifact().getSize())) {
+            ThreadUtils.startThread(() -> {
+                DownloadTask.StartDownloadTask(GetLibraryUrl(libraryObject), LibraryFile);
+                speed.countDown();
+            });
+        } else {
+            speed.countDown();
+        }
+
+
+    }
+
+    @SneakyThrows(IOException.class)
+    public void StartDownloadNativesLibTask(LibraryObject libraryObject, SpeedOfProgress speed) {
+        LibraryObject.NativesOs NativesWindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
+        File NativesLibrary = GetNativesLibraryFile(NativesWindows);
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(NativesLibrary, NativesWindows.getSize())) {
+            ThreadUtils.startThread(() -> {
+                DownloadTask.StartDownloadTask(GetNativesLibraryUrl(libraryObject), NativesLibrary);
+                speed.countDown();
+            });
+        } else {
+            speed.countDown();
         }
     }
 }

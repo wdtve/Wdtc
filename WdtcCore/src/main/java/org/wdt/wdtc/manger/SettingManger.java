@@ -7,9 +7,9 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.log4j.Logger;
-import org.wdt.utils.gson.JSONUtils;
 import org.wdt.wdtc.utils.JavaUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
+import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;

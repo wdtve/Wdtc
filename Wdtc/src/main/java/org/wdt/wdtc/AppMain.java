@@ -11,9 +11,9 @@ import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
-import org.wdt.wdtc.ui.WindwosSize;
+import org.wdt.wdtc.ui.WindwosSizeManger;
 import org.wdt.wdtc.utils.DownloadUtils;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -28,16 +28,16 @@ public class AppMain extends Application {
     @Override
     public void start(Stage MainStage) {
         try {
-            WindwosSize size = new WindwosSize(MainStage);
-            if (PlatformUtils.isOnline()) {
+            WindwosSizeManger size = new WindwosSizeManger(MainStage);
+            if (UrlUtils.isOnline()) {
                 MainStage.setTitle(Consoler.getWindowsTitle());
             } else {
                 MainStage.setTitle(Consoler.getWindowsTitle("无网络"));
-                logmaker.warn("* 当前无网络连接,下载功能无法正常使用!");
+                logmaker.warn("当前无网络连接,下载功能无法正常使用!");
             }
-            MainStage.setMinWidth(WindwosSize.WindowsWidht);
-            MainStage.setMinHeight(WindwosSize.WindowsHeight);
-            size.SettingSize();
+            MainStage.setMinWidth(WindwosSizeManger.WindowsWidht);
+            MainStage.setMinHeight(WindwosSizeManger.WindowsHeight);
+            size.setWindwosSize();
             MainStage.getIcons().add(new Image("ico.jpg"));
             MainStage.setResizable(VMManger.isChangeWindowsSize());
             HomeWindow win = new HomeWindow();

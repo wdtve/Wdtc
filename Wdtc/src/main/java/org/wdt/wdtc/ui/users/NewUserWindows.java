@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.wdt.wdtc.auth.accounts.Accounts;
 import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.ui.Consoler;
-import org.wdt.wdtc.utils.PlatformUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 
 public class NewUserWindows {
     private final Stage MainStage;
@@ -41,7 +41,7 @@ public class NewUserWindows {
         } else {
             switch (type) {
                 case Yggdrasil -> LittleskinWindow.setLittleskinWin(SonPane);
-                case Offline -> UsersWindow.setUserWin(SonPane);
+                case Offline -> OfflineUserWindow.setUserWin(SonPane);
             }
         }
         UserStage.initOwner(MainStage);
@@ -57,7 +57,7 @@ public class NewUserWindows {
         JFXButton OfflineButton = new JFXButton("离线账户");
         AnchorPane.setTopAnchor(OfflineButton, 30.0);
         OfflineButton.setPrefSize(125, 30);
-        OfflineButton.setOnAction(event -> UsersWindow.setUserWin(SonPane));
+        OfflineButton.setOnAction(event -> OfflineUserWindow.setUserWin(SonPane));
         JFXButton LittleskinCom = new JFXButton("Littleskin官网");
         LittleskinCom.setPrefSize(125, 30);
         AnchorPane.setBottomAnchor(LittleskinCom, 30.0);
@@ -82,8 +82,8 @@ public class NewUserWindows {
         UserStage.initModality(Modality.APPLICATION_MODAL);
         UserStage.setResizable(false);
         UserStage.show();
-        LittleskinCom.setOnAction(event -> PlatformUtils.StartSomething(UrlManger.getLittleskinUrl()));
-        buygame.setOnAction(event -> PlatformUtils.StartSomething("https://www.minecraft.net/zh-hans"));
+        LittleskinCom.setOnAction(event -> UrlUtils.openSomething(UrlManger.getLittleskinUrl()));
+        buygame.setOnAction(event -> UrlUtils.openSomething("https://www.minecraft.net/zh-hans"));
     }
 
 

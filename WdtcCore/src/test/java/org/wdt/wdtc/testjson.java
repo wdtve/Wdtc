@@ -5,11 +5,9 @@ import org.wdt.wdtc.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.launch.LaunchGame;
 
-import java.io.IOException;
-
 public class testjson {
     @Test
-    public void test() throws IOException {
+    public void test() {
         Launcher launcher = new Launcher("1.19.4");
         System.out.println(launcher.equals(new Launcher("1.19.4")));
 

@@ -23,7 +23,7 @@ public class DownloadUtils {
     }
 
     public static boolean isDownloadProcess() throws IOException {
-        return !PlatformUtils.FileExistenceAndSize(StopProcess);
+        return FileUtils.isFileExists(StopProcess);
     }
 
     public void ManyTimesToTryDownload(int times) {
@@ -53,6 +53,7 @@ public class DownloadUtils {
         byte[] data = new byte[1024];
         while ((Donwloaded = UrlFileInput.read(data, 0, 1024)) >= 0) {
             if (isDownloadProcess()) {
+                logmaker.debug(Thread.currentThread().getName() + " Stop");
                 return;
             }
             DownloadFileOutput.write(data, 0, (int) Donwloaded);

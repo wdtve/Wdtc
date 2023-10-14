@@ -5,13 +5,13 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.wdt.wdtc.manger.SettingManger;
 
-public class WindwosSize {
+public class WindwosSizeManger {
     public static final double WindowsWidht = 616.0;
     public static final double WindowsHeight = 489.0;
     private final Stage MainStage;
 
 
-    public WindwosSize(Stage mainStage) {
+    public WindwosSizeManger(Stage mainStage) {
         MainStage = mainStage;
     }
 
@@ -46,7 +46,7 @@ public class WindwosSize {
         }
     }
 
-    public void SettingSize() {
+    public void setWindwosSize() {
         SettingManger.Setting setting = SettingManger.getSetting();
         MainStage.setWidth(setting.getWindowsWidth());
         MainStage.setHeight(setting.getWindowsHeight());

@@ -9,8 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
+import org.wdt.wdtc.utils.UrlUtils;
 
 
 public class DownloadGameWindows {
@@ -21,7 +21,7 @@ public class DownloadGameWindows {
     }
 
     public void setDownGameWin(Stage MainStage) {
-        WindwosSize size = new WindwosSize(MainStage);
+        WindwosSizeManger size = new WindwosSizeManger(MainStage);
         MainStage.setTitle(Consoler.getWindowsTitle("下载游戏"));
         AnchorPane pane = new AnchorPane();
         JFXButton back = new JFXButton("返回");
@@ -37,13 +37,13 @@ public class DownloadGameWindows {
         textField.setPrefSize(200, 10);
         Label time = new Label("下载时间不会太长");
         Label status_bar = new Label("下面是状态栏");
-        time.setLayoutX(241.0);
+        time.setLayoutX(240.0);
         time.setLayoutY(160.0);
         status_bar.setLayoutX(253.0);
         status_bar.setLayoutY(305.0);
         Button bmclHome = new Button("BMCLAPI");
         bmclHome.setOnAction(event -> {
-            PlatformUtils.StartSomething("https://bmclapidoc.bangbang93.com/");
+            UrlUtils.openSomething("https://bmclapidoc.bangbang93.com/");
         });
         AnchorPane.setRightAnchor(bmclHome, 0.0);
         AnchorPane.setTopAnchor(bmclHome, 0.0);
@@ -51,7 +51,7 @@ public class DownloadGameWindows {
         read_bmcl.setLayoutX(429.0);
         read_bmcl.setLayoutY(4.0);
         textField.setText(launcher.getVersionNumber() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
-        ThreadUtils.StartThread(() -> {
+        ThreadUtils.startThread(() -> {
             new InstallGameVersion(launcher, textField).InstallGame();
         }).setName("Download Game");
         pane.setBackground(Consoler.getBackground());

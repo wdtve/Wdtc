@@ -1,6 +1,7 @@
 package org.wdt.wdtc.utils;
 
 import org.apache.log4j.Logger;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.download.forge.ForgeDownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
@@ -17,7 +18,7 @@ public class ModUtils {
 
     public static Launcher getModTask(Launcher launcher) {
         try {
-            if (PlatformUtils.FileExistenceAndSize(launcher.getVersionJson())) {
+            if (FileUtils.isFileNotExists(launcher.getVersionJson())) {
                 return null;
             }
             Pattern r = Pattern.compile("(.+?)-(.+?)-(.+)");

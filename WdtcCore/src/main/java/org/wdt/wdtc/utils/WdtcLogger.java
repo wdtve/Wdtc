@@ -2,6 +2,7 @@ package org.wdt.wdtc.utils;
 
 import org.apache.log4j.*;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.manger.VMManger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -24,7 +25,7 @@ public class WdtcLogger {
         FileAppender.setLayout(layout);
         FileAppender.setMaxFileSize("10MB");
         FileAppender.setMaxBackupIndex(10);
-        FileAppender.setThreshold(Level.INFO);
+        FileAppender.setThreshold(Level.DEBUG);
         FileAppender.activateOptions();
         return FileAppender;
     }
@@ -34,7 +35,7 @@ public class WdtcLogger {
         consoleAppender.setTarget("System.err");
         consoleAppender.setImmediateFlush(true);
         consoleAppender.setEncoding("UTF-8");
-        consoleAppender.setThreshold(Level.INFO);
+        consoleAppender.setThreshold(VMManger.isDebug() ? Level.DEBUG : Level.INFO);
         consoleAppender.activateOptions();
         return consoleAppender;
     }

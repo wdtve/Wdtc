@@ -2,11 +2,11 @@ package org.wdt.wdtc.download;
 
 import javafx.scene.control.TextField;
 import org.apache.log4j.Logger;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
 import org.wdt.wdtc.utils.ModUtils;
-import org.wdt.wdtc.utils.PlatformUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -36,14 +36,14 @@ public class InstallGameVersion extends DownloadGameVersion {
     public void InstallGame() {
         try {
             long startTime = System.currentTimeMillis();
-            if (PlatformUtils.FileExistenceAndSize(launcher.getVersionConfigFile())) {
+            if (FileUtils.isFileNotExists(launcher.getVersionConfigFile())) {
                 GameConfig.writeConfigJson(launcher);
             } else {
                 GameConfig.CkeckVersionInfo(launcher);
             }
             DownloadGameFile();
             InstallTask task = ModUtils.getModInstallTask(launcher);
-            if (Install && task != null) {
+            if (install && task != null) {
                 task.BeforInstallTask();
                 task.setPatches();
                 task.execute();
@@ -54,7 +54,7 @@ public class InstallGameVersion extends DownloadGameVersion {
             if (Objects.nonNull(textField)) {
                 textField.setText(LibraryFinishTime);
             }
-            if (Install && task != null) {
+            if (install && task != null) {
                 task.AfterDownloadTask();
             }
             DownloadResourceFile();

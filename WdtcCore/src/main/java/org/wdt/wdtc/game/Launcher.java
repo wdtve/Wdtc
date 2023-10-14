@@ -18,7 +18,6 @@ import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.SettingManger;
 import org.wdt.wdtc.manger.UrlManger;
 import org.wdt.wdtc.utils.ModUtils;
-import org.wdt.wdtc.utils.PlatformUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +85,7 @@ public class Launcher extends GameFileManger {
     }
 
     public void LaunchTask() throws IOException {
-        if (SettingManger.getSetting().isChineseLanguage() && PlatformUtils.FileExistenceAndSize(getGameOptionsFile())) {
+        if (SettingManger.getSetting().isChineseLanguage() && FileUtils.isFileNotExists(getGameOptionsFile())) {
             String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
             FileUtils.writeStringToFile(getGameOptionsFile(), Options);
         }
