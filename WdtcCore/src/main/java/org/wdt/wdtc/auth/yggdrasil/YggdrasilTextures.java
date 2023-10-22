@@ -2,10 +2,10 @@ package org.wdt.wdtc.auth.yggdrasil;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.SkinUtils;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.gson.JSONObject;
 
 import java.io.File;
@@ -46,7 +46,7 @@ public class YggdrasilTextures {
     public void DownloadUserSkin() throws IOException {
         String UserSkinHash = GetUserSkinHash();
         File SkinPath = new File(FileManger.getMinecraftComSkin(), UserSkinHash.substring(0, 2) + "/" + UserSkinHash);
-        DownloadTask.StartDownloadTask(getSkinUrl(), SkinPath);
+        DownloadUtils.StartDownloadTask(getSkinUrl(), SkinPath);
     }
 
     public URL getSkinUrl() throws IOException {
@@ -54,7 +54,7 @@ public class YggdrasilTextures {
     }
 
     public Csl getCsl() throws IOException {
-        return JSONObject.parseObject(UrlUtils.getUrlToString(GetUserJson()), Csl.class);
+        return JSONObject.parseObject(URLUtils.getURLToString(GetUserJson()), Csl.class);
     }
 
     public SkinUtils getUtils() throws IOException {

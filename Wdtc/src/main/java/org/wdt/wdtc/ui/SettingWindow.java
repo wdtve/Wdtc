@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.manger.SettingManger;
-import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.manger.URLManger;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class SettingWindow extends SettingManger {
         button.setLayoutY(line);
         button.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                UrlUtils.openSomething(FileManger.getSettingFile());
+                URLUtils.openSomething(FileManger.getSettingFile());
                 logmaker.info("* 设置文件" + FileManger.getSettingFile() + "已打开");
             } else {
                 try {
@@ -118,21 +118,21 @@ public class SettingWindow extends SettingManger {
             BmclDownloadSource.setSelected(false);
             McbbsDownloadSource.setSelected(false);
             logmaker.info("* Switch to Official DownloadSource");
-            setting.setDownloadSource(UrlManger.DownloadSourceList.OFFICIAL);
+            setting.setDownloadSource(URLManger.DownloadSourceList.OFFICIAL);
             putSettingToFile(setting);
         });
         BmclDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             McbbsDownloadSource.setSelected(false);
             logmaker.info("Switch to Bmcl DownloadSource");
-            setting.setDownloadSource(UrlManger.DownloadSourceList.BMCLAPI);
+            setting.setDownloadSource(URLManger.DownloadSourceList.BMCLAPI);
             putSettingToFile(setting);
         });
         McbbsDownloadSource.setOnAction(event -> {
             OfficialDownloadSource.setSelected(false);
             BmclDownloadSource.setSelected(false);
             logmaker.info("Switch to Mcbbs DownloadSource");
-            setting.setDownloadSource(UrlManger.DownloadSourceList.MCBBS);
+            setting.setDownloadSource(URLManger.DownloadSourceList.MCBBS);
             putSettingToFile(setting);
         });
 
@@ -198,7 +198,8 @@ public class SettingWindow extends SettingManger {
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
                     File srcFile = new File(FileManger.getWdtcCache(), "logs/Wdtc.log");
-                    File logFile = new File(logDirectory.getAbsoluteFile(), "Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
+                    File logFile = new File(logDirectory.getAbsoluteFile(),
+                            "Wdtc-Demo-" + formatter.format(calendar.getTime()) + ".log");
                     FileUtils.copyFile(srcFile, logFile);
                     logmaker.info("日志已导出:" + logFile);
                 }
@@ -213,7 +214,7 @@ public class SettingWindow extends SettingManger {
         AnchorPane.setBottomAnchor(CleanCache, 30.0);
         CleanCache.setOnMousePressed(event -> {
             if (event.isControlDown()) {
-                UrlUtils.openSomething(FileManger.getWdtcCache());
+                URLUtils.openSomething(FileManger.getWdtcCache());
                 logmaker.info("缓存文件夹已打开");
             } else {
                 try {

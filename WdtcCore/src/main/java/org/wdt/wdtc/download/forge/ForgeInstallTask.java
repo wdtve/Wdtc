@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DefaultDependency;
 import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.utils.io.FilenameUtils;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.download.game.DownloadGameClass;
 import org.wdt.wdtc.download.infterface.DownloadSource;
@@ -17,11 +16,8 @@ import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.game.config.DefaultGameConfig;
 import org.wdt.wdtc.manger.FileManger;
-import org.wdt.wdtc.manger.UrlManger;
-import org.wdt.wdtc.utils.StringUtils;
-import org.wdt.wdtc.utils.UrlUtils;
-import org.wdt.wdtc.utils.WdtcLogger;
-import org.wdt.wdtc.utils.ZipUtils;
+import org.wdt.wdtc.manger.URLManger;
+import org.wdt.wdtc.utils.*;
 import org.wdt.wdtc.utils.gson.JSONArray;
 import org.wdt.wdtc.utils.gson.JSONObject;
 import org.wdt.wdtc.utils.gson.JSONUtils;
@@ -109,13 +105,13 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
                 TxtPath = new DefaultDependency(matcher.group(1));
             }
         }
-        String TxtUrl = JSONUtils.getJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
+        String TxtUrl = JSONUtils.readJsonFiletoJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
-        if (UrlManger.DownloadSourceList.NoOfficialDownloadSource()) {
-            TxtUrl = UrlUtils.getRedirectUrl(TxtUrl.replaceAll(UrlManger.getPistonDataMojang(), source.getDataUrl()));
+        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
+            TxtUrl = URLUtils.getRedirectUrl(TxtUrl.replaceAll(URLManger.getPistonDataMojang(), source.getDataUrl()));
         }
         if (TxtPath != null) {
-            DownloadTask.StartDownloadTask(TxtUrl, launcher.getGameLibraryPath() + TxtPath.formJar());
+            DownloadUtils.StartDownloadTask(TxtUrl, launcher.getGameLibraryPath() + TxtPath.formJar());
         }
 
     }
@@ -193,28 +189,28 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTask {
     public void setPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
-        ObjectList.add(JSONUtils.getJsonObject(launcher.getVersionJson()));
-        ObjectList.add(JSONUtils.getJsonObject(getForgeVersionJsonPath()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(getForgeVersionJsonPath()));
         Object.setJsonObject(ObjectList);
         launcher.PutToVersionJson(Object);
     }
 
     @Override
-    public void AfterDownloadTask() throws IOException {
+    public void afterDownloadTask() throws IOException {
         DownloadForgeLibraryFile(getInstallProfilePath());
         DownloadClientText();
         InstallForge();
     }
 
     @Override
-    public void BeforInstallTask() {
+    public void beforInstallTask() {
         DownloadInstallJar();
         getInstallProfile();
         getForgeVersionJson();
     }
 
     public void DownloadForgeLibraryFile(String FilePath) throws IOException {
-        JSONArray LibraryList = JSONUtils.getJSONObject(FilePath).getJSONArray("libraries");
+        JSONArray LibraryList = JSONUtils.readJsonFiletoJSONObject(FilePath).getJSONArray("libraries");
         SpeedOfProgress speed = new SpeedOfProgress(LibraryList.size());
         for (int i = 0; i < LibraryList.size(); i++) {
             LibraryObject object = LibraryObject.getLibraryObject(LibraryList.getJSONObject(i));

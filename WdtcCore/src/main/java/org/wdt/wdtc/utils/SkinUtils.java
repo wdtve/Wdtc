@@ -30,7 +30,8 @@ public class SkinUtils {
         BufferedImage image = ImageIO.read(UserSkinInput != null ? UserSkinInput : FileUtils.newInputStream(SkinFile));
         String extension = FilenameUtils.getExtension(SkinFile.getName());
         BufferedImage image1 = image.getSubimage(8, 8, 8, 8);
-        File file = new File(FileManger.getUserAsste(), StringUtils.cleanStrInString(SkinFile.getName(), "." + extension) + "-head." + extension);
+        File file = new File(FileManger.getUserAsste(), StringUtils.cleanStrInString(SkinFile.getName(),
+                "." + extension) + "-head." + extension);
         FileUtils.touch(file);
         ImageIO.write(image1, extension, FileUtils.newOutputStream(file));
         return file;

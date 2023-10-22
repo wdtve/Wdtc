@@ -3,12 +3,12 @@ package org.wdt.wdtc.download.fabric;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.gson.JSONArray;
 import org.wdt.wdtc.utils.gson.JSONObject;
 import org.wdt.wdtc.utils.gson.JSONUtils;
@@ -63,21 +63,21 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
     public void setPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
-        ObjectList.add(JSONUtils.getJsonObject(launcher.getVersionJson()));
-        ObjectList.add(JSONUtils.getJsonObject(getFabricVersionJson()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(getFabricVersionJson()));
         Object.setJsonObject(ObjectList);
         launcher.PutToVersionJson(Object);
     }
 
     @Override
-    public void AfterDownloadTask() throws IOException {
+    public void afterDownloadTask() throws IOException {
         if (getAPIDownloadTaskNoNull()) {
             getAPIDownloadTask().DownloadFabricAPI();
         }
     }
 
     @Override
-    public void BeforInstallTask() {
-        DownloadTask.StartDownloadTask(String.format(getFabricVersionFileUrl(), launcher.getVersionNumber(), FabricVersionNumber), getFabricVersionJson());
+    public void beforInstallTask() {
+        DownloadUtils.StartDownloadTask(String.format(getFabricVersionFileUrl(), launcher.getVersionNumber(), FabricVersionNumber), getFabricVersionJson());
     }
 }

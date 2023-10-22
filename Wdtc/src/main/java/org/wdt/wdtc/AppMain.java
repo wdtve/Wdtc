@@ -13,7 +13,7 @@ import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.ui.HomeWindow;
 import org.wdt.wdtc.ui.WindwosSizeManger;
 import org.wdt.wdtc.utils.DownloadUtils;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class AppMain extends Application {
     public void start(Stage MainStage) {
         try {
             WindwosSizeManger size = new WindwosSizeManger(MainStage);
-            if (UrlUtils.isOnline()) {
+            if (URLUtils.isOnline()) {
                 MainStage.setTitle(Consoler.getWindowsTitle());
             } else {
                 MainStage.setTitle(Consoler.getWindowsTitle("无网络"));
@@ -39,21 +39,21 @@ public class AppMain extends Application {
             MainStage.setMinHeight(WindwosSizeManger.WindowsHeight);
             size.setWindwosSize();
             MainStage.getIcons().add(new Image("ico.jpg"));
-            MainStage.setResizable(VMManger.isChangeWindowsSize());
+            MainStage.setResizable(VMManger.isDebug());
             HomeWindow win = new HomeWindow();
             win.setHome(MainStage);
             MainStage.show();
             logmaker.info("Window Show");
             MainStage.setOnCloseRequest(windowEvent -> {
                 logmaker.info(size);
-                SettingManger.Setting setting = SettingManger.getSetting();
-                setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
                 try {
+                    SettingManger.Setting setting = SettingManger.getSetting();
+                    setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
                     FileUtils.touch(DownloadUtils.StopProcess);
+                    SettingManger.putSettingToFile(setting);
                 } catch (IOException e) {
                     logmaker.error(WdtcLogger.getErrorMessage(e));
                 }
-                SettingManger.putSettingToFile(setting);
                 Platform.exit();
                 logmaker.info("======= Wdtc Stop ========");
             });

@@ -16,7 +16,7 @@ import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.VMManger;
 import org.wdt.wdtc.ui.users.NewUserWindows;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.IOException;
@@ -81,9 +81,9 @@ public class HomeWindow {
         });
 
         JFXButton downgame = new JFXButton("下载游戏");
-        downgame.setDisable(!UrlUtils.isOnline());
+        downgame.setDisable(!URLUtils.isOnline());
         downgame.setPrefSize(128, 46);
-        downgame.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
+        downgame.setOnAction(event -> NewDownloadWindow.setWindowScene(MainStage));
 
         JFXButton startgame = new JFXButton("选择版本");
         startgame.setLayoutY(69);
@@ -150,7 +150,7 @@ public class HomeWindow {
                     NoUser(MainStage);
                 }
             } else {
-                NewDownloadWindow.SetWin(MainStage);
+                NewDownloadWindow.setWindowScene(MainStage);
             }
         });
         Menu.getChildren().addAll(home, UserWindow, downgame, startgame, VersionSetting, setting, github);

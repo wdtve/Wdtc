@@ -1,8 +1,6 @@
 package org.wdt.wdtc.utils;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.IOUtils;
@@ -12,7 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +27,9 @@ public class JavaUtils {
     public static void main(String[] args) {
         try {
             for (String s : args) {
+                if (DownloadUtils.isDownloadProcess()) {
+                    break;
+                }
                 getPotentialJava(s);
             }
             logmaker.info("Find Java Done");
@@ -165,9 +169,7 @@ public class JavaUtils {
         }
     }
 
-    @Setter
-    @Getter
-    @ToString
+    @Data
     public static class JavaInfo {
 
         private File JavaHomeFile;
@@ -186,13 +188,6 @@ public class JavaUtils {
             this(javaHomeFile, JavaUtils.getJavaExeFile(javaHomeFile), getJavaVersion(getJavaExePath(javaHomeFile)), JavaTips.getJavaTips(javaHomeFile));
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            JavaInfo javaInfo = (JavaInfo) o;
-            return Objects.equals(JavaExeFile, javaInfo.JavaExeFile) && tips == javaInfo.tips;
-        }
     }
 }
 

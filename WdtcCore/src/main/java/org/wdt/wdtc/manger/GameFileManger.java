@@ -77,11 +77,11 @@ public class GameFileManger extends GameFolderManger {
     }
 
     public void PutToVersionJson(GameVersionJsonObject o) {
-        JSONUtils.ObjectToJsonFile(getVersionJson(), o);
+        JSONUtils.writeObjectToJsonFile(getVersionJson(), o);
     }
 
     public GameVersionJsonObject getGameVersionJsonObject() throws IOException {
-        return JSONUtils.JsonFileToClass(getVersionJson(), GameVersionJsonObject.class);
+        return JSONUtils.readJsonFileToClass(getVersionJson(), GameVersionJsonObject.class);
     }
 
     public File getVersionConfigFile() {

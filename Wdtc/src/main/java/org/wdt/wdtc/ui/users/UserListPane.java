@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.auth.User;
-import org.wdt.wdtc.auth.UserList;
+import org.wdt.wdtc.auth.UsersList;
 import org.wdt.wdtc.manger.FileManger;
 import org.wdt.wdtc.ui.Consoler;
 import org.wdt.wdtc.ui.ErrorWindow;
@@ -32,7 +32,7 @@ public class UserListPane {
         scrollPane.setPrefSize(600, 400);
         VBox vBox = new VBox();
         vBox.setPrefSize(595, 395);
-        List<User> users = UserList.getUserList();
+        List<User> users = UsersList.getUserList();
         if (!users.isEmpty()) {
             for (User user : users) {
                 String UserName = user.getUserName();
@@ -44,13 +44,13 @@ public class UserListPane {
                 AnchorPane.setLeftAnchor(enter, 15.0);
                 enter.setOnAction(event -> {
                     try {
-                        User.setUserToJson(UserList.getUser(UserName));
+                        User.setUserToJson(UsersList.getUser(UserName));
                         setUserList(pane);
                     } catch (IOException e) {
                         ErrorWindow.setErrorWin(e);
                     }
                 });
-                if (user.equals(User.getUsers())) {
+                if (user.equals(User.getUser())) {
                     enter.setSelected(true);
                 }
                 Image image = null;
@@ -80,9 +80,9 @@ public class UserListPane {
                 AnchorPane.setLeftAnchor(detele, 530.0);
                 detele.setOnAction(event -> {
                     try {
-                        JsonObject UserListObject = UserList.UserListObject();
+                        JsonObject UserListObject = UsersList.UserListObject();
                         UserListObject.remove(UserName);
-                        JSONUtils.ObjectToJsonFile(UserListFile, UserListObject);
+                        JSONUtils.writeObjectToJsonFile(UserListFile, UserListObject);
                         setUserList(pane);
                     } catch (IOException e) {
                         ErrorWindow.setErrorWin(e);

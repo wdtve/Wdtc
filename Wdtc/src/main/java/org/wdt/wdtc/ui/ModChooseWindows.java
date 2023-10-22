@@ -47,7 +47,7 @@ public class ModChooseWindows {
         DownloadForge.setLayoutX(67.0);
         DownloadForge.setLayoutY(53.0);
         DownloadForge.setPrefSize(47, 23);
-        DownloadForge.setDisable(!VMManger.isForgeSwitch());
+        DownloadForge.setDisable(!VMManger.isDebug());
         JFXButton CancelForge = new JFXButton("X");
         CancelForge.setLayoutX(36.0);
         CancelForge.setLayoutY(53.0);
@@ -215,7 +215,7 @@ public class ModChooseWindows {
             DownloadForge.setDisable(true);
         }
 
-        back.setOnAction(event -> NewDownloadWindow.SetWin(MainStage));
+        back.setOnAction(event -> NewDownloadWindow.setWindowScene(MainStage));
         confirm.setOnAction(event -> {
             DownloadGameWindows downloadGameWindows = new DownloadGameWindows(launcher);
             downloadGameWindows.setDownGameWin(MainStage);

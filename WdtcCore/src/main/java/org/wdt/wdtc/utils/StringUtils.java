@@ -4,11 +4,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class StringUtils {
-    public static String STRING_EMPTY = "";
+    public static final String STRING_EMPTY = "";
+    public static final String STRING_SPACE = " ";
 
     public static String cleanStrInString(String string, String... strs) {
         for (String str : strs) {
-            string = string.replace(str, "");
+            string = string.replace(str, STRING_EMPTY);
         }
         return string;
     }

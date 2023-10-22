@@ -1,10 +1,8 @@
 package org.wdt.wdtc.manger;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.SneakyThrows;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.log4j.Logger;
 import org.wdt.wdtc.utils.JavaUtils;
@@ -22,20 +20,18 @@ public class SettingManger {
 
     @SneakyThrows(IOException.class)
     public static Setting getSetting() {
-        return JSONUtils.JsonFileToClass(FileManger.getSettingFile(), Setting.class);
+        return JSONUtils.readJsonFileToClass(FileManger.getSettingFile(), Setting.class);
     }
 
 
     public static void putSettingToFile(Setting setting) {
-        JSONUtils.ObjectToJsonFile(FileManger.getSettingFile(), setting);
+        JSONUtils.writeObjectToJsonFile(FileManger.getSettingFile(), setting);
     }
 
-    @Getter
-    @Setter
-    @ToString
+    @Data
     @Accessors(chain = true)
     public static class Setting {
-        private UrlManger.DownloadSourceList DownloadSource = UrlManger.DownloadSourceList.OFFICIAL;
+        private URLManger.DownloadSourceList DownloadSource = URLManger.DownloadSourceList.OFFICIAL;
         private boolean Console = false;
         private boolean LlvmpipeLoader = false;
         private File DefaultGamePath = new File(System.getProperty("user.dir"));

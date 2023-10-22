@@ -32,7 +32,7 @@ public class QuiltDownloadInfo implements DownloadInfo {
     }
 
     public JSONObject getQuiltGameVersionJsonObject() throws IOException {
-        return JSONUtils.getJSONObject(getQuiltVersionJson());
+        return JSONUtils.readJsonFiletoJSONObject(getQuiltVersionJson());
     }
 
     @Override

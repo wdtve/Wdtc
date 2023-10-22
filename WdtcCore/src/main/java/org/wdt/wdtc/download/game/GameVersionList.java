@@ -23,7 +23,7 @@ public class GameVersionList implements VersionList {
     public List<String> getVersionList() {
         List<String> VersionList = new ArrayList<>();
         try {
-            JSONArray version_list = JSONUtils.getJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
+            JSONArray version_list = JSONUtils.readJsonFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
             for (int i = 0; i < version_list.size(); i++) {
                 JSONObject VersionObject = version_list.getJSONObject(i);
                 if (VersionObject.getString("type").equals("release")) {

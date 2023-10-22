@@ -35,12 +35,12 @@ public class User {
     }
 
     public static void setUserToJson(User user) {
-        JSONUtils.ObjectToJsonFile(FileManger.getUsersJson(), user);
+        JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
     }
 
     @SneakyThrows(IOException.class)
-    public static User getUsers() {
-        return JSONUtils.JsonFileToClass(FileManger.getUsersJson(), User.class);
+    public static User getUser() {
+        return JSONUtils.readJsonFileToClass(FileManger.getUsersJson(), User.class);
     }
 
     public static boolean isExistUserJsonFile() {

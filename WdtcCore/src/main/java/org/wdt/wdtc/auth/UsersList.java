@@ -15,24 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserList {
+public class UsersList {
     private static final File UserListFile = FileManger.getUserListFile();
-    private static final Logger logmaker = WdtcLogger.getLogger(UserList.class);
+    private static final Logger logmaker = WdtcLogger.getLogger(UsersList.class);
 
     public static void addUser(User user) throws IOException {
         JsonObject UserList = UserListObject();
         String UserName = user.getUserName();
         if (UserList.has(UserName)) {
-            logmaker.warn("* " + UserName + " Remove");
+            logmaker.warn(UserName + " Remove");
             UserList.remove(UserName);
         }
         UserList.add(UserName, JSON.GSON.toJsonTree(user, User.class));
-        JSONUtils.ObjectToJsonFile(UserListFile, UserList);
+        JSONUtils.writeObjectToJsonFile(UserListFile, UserList);
     }
 
 
     public static JsonObject UserListObject() throws IOException {
-        return JSONUtils.getJsonObject(UserListFile);
+        return JSONUtils.readJsonFiletoJsonObject(UserListFile);
     }
 
     public static User getUser(String UserName) throws IOException {

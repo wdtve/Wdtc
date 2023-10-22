@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.wdt.wdtc.download.InstallGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.ThreadUtils;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.URLUtils;
 
 
 public class DownloadGameWindows {
@@ -32,9 +32,10 @@ public class DownloadGameWindows {
         back.setStyle("-fx-border-color: #000000");
         TextField textField = new TextField();
         textField.setPromptText("三个阶段");
-        textField.setLayoutX(218.0);
-        textField.setLayoutY(320.0);
-        textField.setPrefSize(200, 10);
+        AnchorPane.setTopAnchor(textField, 350.0);
+        AnchorPane.setLeftAnchor(textField, 150.0);
+        AnchorPane.setRightAnchor(textField, 150.0);
+
         Label time = new Label("下载时间不会太长");
         Label status_bar = new Label("下面是状态栏");
         time.setLayoutX(240.0);
@@ -43,16 +44,18 @@ public class DownloadGameWindows {
         status_bar.setLayoutY(305.0);
         Button bmclHome = new Button("BMCLAPI");
         bmclHome.setOnAction(event -> {
-            UrlUtils.openSomething("https://bmclapidoc.bangbang93.com/");
+            URLUtils.openSomething("https://bmclapidoc.bangbang93.com/");
         });
         AnchorPane.setRightAnchor(bmclHome, 0.0);
         AnchorPane.setTopAnchor(bmclHome, 0.0);
         Label read_bmcl = new Label("国内快速下载源→");
-        read_bmcl.setLayoutX(429.0);
-        read_bmcl.setLayoutY(4.0);
+        AnchorPane.setRightAnchor(read_bmcl, 70.0);
+        AnchorPane.setTopAnchor(read_bmcl, 4.0);
         textField.setText(launcher.getVersionNumber() + "开始下载,下载源: " + launcher.getDownloadSourceKind());
         ThreadUtils.startThread(() -> {
-            new InstallGameVersion(launcher, textField).InstallGame();
+            InstallGameVersion installGameVersion = new InstallGameVersion(launcher, true);
+            installGameVersion.setSetUIText(textField::setText);
+            installGameVersion.InstallGame();
         }).setName("Download Game");
         pane.setBackground(Consoler.getBackground());
         size.ModifyWindwosSize(pane, back, time, status_bar, bmclHome, read_bmcl, textField);

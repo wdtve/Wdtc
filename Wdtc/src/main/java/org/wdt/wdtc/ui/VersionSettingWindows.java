@@ -209,7 +209,7 @@ public class VersionSettingWindows extends SettingManger {
                 DefaultGameConfig gameConfig = launcher.getGameConfig().getDefaultGameConfig();
                 gameConfig.setConfig(NewConfig);
                 logmaker.info(gameConfig);
-                launcher.getGameConfig().PutConfigToFile(gameConfig);
+                launcher.getGameConfig().putConfigToFile(gameConfig);
                 tips6.setText("设置成功");
                 tips2.setText("Java版本: " + JavaUtils.getJavaVersion(JavaPath.getText()));
             } catch (NumberFormatException | IOException e) {

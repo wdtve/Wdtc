@@ -6,6 +6,7 @@ import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.DownloadGameVersion;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.StringUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 
 import java.io.File;
@@ -49,9 +50,9 @@ public class LaunchGame {
 
     @SneakyThrows(IOException.class)
     public void writeStartScript() {
-        StringBuilder Script = new StringBuilder().append(new GameJvmCommand(launcher).getCommand())
-                .append(new GameCLICommand(launcher).getCommand());
-        logmaker.info(Script);
-        FileUtils.writeStringToFile(FileManger.getStarterBat(), Script.toString());
+        String script = StringUtils.appendForString(new GameJvmCommand(launcher).getCommand(),
+                new GameCLICommand(launcher).getCommand());
+        logmaker.info(script);
+        FileUtils.writeStringToFile(FileManger.getStarterBat(), script);
     }
 }

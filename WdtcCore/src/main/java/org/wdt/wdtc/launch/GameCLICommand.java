@@ -36,7 +36,7 @@ public class GameCLICommand extends AbstractGameCommand {
     }
 
     private Map<String, String> getDataMap() throws IOException {
-        User user = User.getUsers();
+        User user = User.getUser();
         return Map.of("${auth_player_name}", user.getUserName(), "${version_name}", launcher.getVersionNumber(),
                 "${game_directory}", FileUtils.getCanonicalPath(launcher.getVersionPath()), "${assets_root}", FileUtils.getCanonicalPath(launcher.getGameAssetsdir()),
                 "${assets_index_name}", launcher.getGameVersionJsonObject().getAssets(), "${auth_uuid}", user.getUuid(),

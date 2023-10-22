@@ -3,7 +3,7 @@ package org.wdt.wdtc.download.forge;
 
 import org.wdt.wdtc.download.infterface.VersionList;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.gson.JSONArray;
 import org.wdt.wdtc.utils.gson.JSONObject;
 
@@ -26,7 +26,7 @@ public class ForgeVersionList implements VersionList {
     @Override
     public List<String> getVersionList() throws IOException {
         List<String> VersionName = new ArrayList<>();
-        JSONArray VersionList = JSONArray.parseJSONArray(UrlUtils.getUrlToString(getForgeListUrl()));
+        JSONArray VersionList = JSONArray.parseJSONArray(URLUtils.getURLToString(getForgeListUrl()));
         for (int i = 0; i < VersionList.size(); i++) {
             JSONObject VersionObject = VersionList.getJSONObject(i);
             VersionName.add(VersionObject.getString("version"));

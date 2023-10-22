@@ -1,9 +1,9 @@
 package org.wdt.wdtc.auth.yggdrasil;
 
 import org.wdt.utils.io.FileUtils;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.manger.FileManger;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.DownloadUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.gson.JSONObject;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class AuthlibInjector {
     private static final String AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/";
 
     public static void downloadauthlibInjector() throws IOException {
-        DownloadTask.StartDownloadTask(getBmclAuthlibInjectorLatestJsonObject().getString("download_url"), FileManger.getAuthlibInjector());
+        DownloadUtils.StartDownloadTask(getBmclAuthlibInjectorLatestJsonObject().getString("download_url"), FileManger.getAuthlibInjector());
     }
 
     public static void updateAuthlibInjector() throws IOException {
@@ -31,6 +31,6 @@ public class AuthlibInjector {
     }
 
     private static JSONObject getBmclAuthlibInjectorLatestJsonObject() throws IOException {
-        return JSONObject.parseObject(UrlUtils.getUrlToString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
+        return JSONObject.parseObject(URLUtils.getURLToString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON));
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.wdt.wdtc.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.download.game.GameVersionList;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.GameFileManger;
@@ -17,13 +18,18 @@ import java.util.List;
 public class NewDownloadWindow {
 
 
-    public static void SetWin(Stage MainStage) {
+    public static void setWindowScene(Stage MainStage) {
         GameFileManger.downloadVersionManifestJsonFileTask();
         WindwosSizeManger size = new WindwosSizeManger(MainStage);
         AnchorPane pane = new AnchorPane();
         VBox list = new VBox();
         Consoler.setTopGrid(list);
         ScrollPane sp = new ScrollPane();
+        JFXButton refreshButton = new JFXButton("刷新");
+        refreshButton.setPrefSize(155, 30);
+        refreshButton.getStyleClass().add("BackGroundWriteButton");
+        AnchorPane.setBottomAnchor(refreshButton, 0.0);
+        AnchorPane.setLeftAnchor(refreshButton, 0.0);
         AnchorPane.setLeftAnchor(sp, 155.0);
         AnchorPane.setTopAnchor(sp, 0.0);
         AnchorPane.setBottomAnchor(sp, 0.0);
@@ -36,6 +42,10 @@ public class NewDownloadWindow {
         back.setOnAction(event -> {
             HomeWindow win = new HomeWindow();
             win.setHome(MainStage);
+        });
+        refreshButton.setOnAction(event -> {
+            DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+            setWindowScene(MainStage);
         });
         Platform.runLater(() -> {
             List<String> Versionlist = new GameVersionList().getVersionList();
@@ -56,7 +66,7 @@ public class NewDownloadWindow {
         sp.setLayoutX(155.0);
         sp.setPrefHeight(WindwosSizeManger.WindowsHeight);
         sp.setPrefWidth(461);
-        pane.getChildren().addAll(sp, back, tips);
+        pane.getChildren().addAll(sp, back, tips, refreshButton);
         Consoler.setStylesheets(pane);
         pane.setBackground(Consoler.getBackground());
         MainStage.setTitle(Consoler.getWindowsTitle("下载游戏"));

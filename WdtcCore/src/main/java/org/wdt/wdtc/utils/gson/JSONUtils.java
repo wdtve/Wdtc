@@ -2,61 +2,59 @@ package org.wdt.wdtc.utils.gson;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import lombok.SneakyThrows;
 import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 public class JSONUtils extends JSON {
-    public static JSONObject getJSONObject(File file) throws IOException {
+    public static JSONObject readJsonFiletoJSONObject(File file) throws IOException {
         return new JSONObject(FileUtils.readFileToString(file));
     }
 
-    public static JSONObject getJSONObject(String filepath) throws IOException {
-        return getJSONObject(new File(filepath));
+    public static JSONObject readJsonFiletoJSONObject(String filepath) throws IOException {
+        return readJsonFiletoJSONObject(FileUtils.toFile(filepath));
     }
 
-    public static JsonObject getJsonObject(File JsonFile) throws IOException {
+    public static JsonObject readJsonFiletoJsonObject(File JsonFile) throws IOException {
         return parseJsonObject(FileUtils.readFileToString(JsonFile));
     }
 
-    public static JsonObject getJsonObject(String JsonFilePath) throws IOException {
-        return getJsonObject(new File(JsonFilePath));
+    public static JsonObject readJsonFiletoJsonObject(String JsonFilePath) throws IOException {
+        return readJsonFiletoJsonObject(FileUtils.toFile(JsonFilePath));
     }
 
-    public static <T> T JsonFileToClass(File JsonFile, Class<T> clazz) throws IOException {
+    public static <T> T readJsonFileToClass(File JsonFile, Class<T> clazz) throws IOException {
         return parseObject(FileUtils.readFileToString(JsonFile), clazz);
     }
 
-    public static <T> T JsonFileToClass(String JsonFilePath, Class<T> clazz) throws IOException {
-        return JsonFileToClass(new File(JsonFilePath), clazz);
+    public static <T> T readJsonFileToClass(String JsonFilePath, Class<T> clazz) throws IOException {
+        return readJsonFileToClass(FileUtils.toFile(JsonFilePath), clazz);
     }
 
-    public static void ObjectToJsonFile(File JsonFile, Object object) {
-        try {
-            FileUtils.writeStringToFile(JsonFile, FILE_GSON.toJson(object));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows(IOException.class)
+    public static void writeObjectToJsonFile(File JsonFile, Object object) {
+        FileUtils.writeStringToFile(JsonFile, FILE_GSON.toJson(object));
     }
 
-    public static void ObjectToJsonFile(String JsonFilePath, Object object) {
-        ObjectToJsonFile(new File(JsonFilePath), object);
+    public static void writeObjectToJsonFile(String JsonFilePath, Object object) {
+        writeObjectToJsonFile(FileUtils.toFile(JsonFilePath), object);
     }
 
-    public static JsonArray getJsonArray(File JsonFile) throws IOException {
+    public static JsonArray readJsonFiletoJsonArray(File JsonFile) throws IOException {
         return parseJsonArray(FileUtils.readFileToString(JsonFile));
     }
 
-    public static JsonArray getJsonArray(String JsonFilePath) throws IOException {
-        return getJsonArray(new File(JsonFilePath));
+    public static JsonArray readJsonFiletoJsonArray(String JsonFilePath) throws IOException {
+        return readJsonFiletoJsonArray(FileUtils.toFile(JsonFilePath));
     }
 
-    public static JSONArray getJSONArray(File JsonFile) throws IOException {
-        return new JSONArray(getJsonArray(JsonFile));
+    public static JSONArray readJsonFiletoJSONArray(File JsonFile) throws IOException {
+        return new JSONArray(readJsonFiletoJsonArray(JsonFile));
     }
 
     public static JSONArray getJSONArray(String JsonFilePath) throws IOException {
-        return new JSONArray(getJsonArray(JsonFilePath));
+        return new JSONArray(readJsonFiletoJsonArray(JsonFilePath));
     }
 }

@@ -4,7 +4,8 @@ import org.wdt.wdtc.download.downloadsource.BmclDownloadSource;
 import org.wdt.wdtc.download.downloadsource.McbbsDownloadSource;
 import org.wdt.wdtc.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.download.infterface.DownloadSource;
-public class UrlManger {
+
+public class URLManger {
     public static final String BMCALAPI_COM = "https://download.mcbbs.net/";
 
     public static final String LITTLESKIN_URL = "https://littleskin.cn";

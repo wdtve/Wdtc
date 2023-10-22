@@ -1,9 +1,9 @@
 package org.wdt.wdtc.download.fabric;
 
 import lombok.Getter;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.utils.UrlUtils;
+import org.wdt.wdtc.utils.DownloadUtils;
+import org.wdt.wdtc.utils.URLUtils;
 import org.wdt.wdtc.utils.gson.JSONArray;
 import org.wdt.wdtc.utils.gson.JSONObject;
 
@@ -21,13 +21,13 @@ public class FabricAPIDownloadTask {
     }
 
     public void DownloadFabricAPI() throws IOException {
-        JSONArray VersionListArray = JSONArray.parseJSONArray(UrlUtils.getUrlToString(VersionListUrl));
+        JSONArray VersionListArray = JSONArray.parseJSONArray(URLUtils.getURLToString(VersionListUrl));
         for (int i = 0; i < VersionListArray.size(); i++) {
             JSONObject VersionObject = VersionListArray.getJSONObject(i);
             if (VersionObject.getString("version_number").equals(FabricAPIVersionNumber)) {
                 String FabricAPIUrl = VersionObject.getJSONArray("files").getJSONObject(0).getString("url");
                 String FabircAPIPath = launcher.getGameModsPath() + VersionObject.getJSONArray("files").getJSONObject(0).getString("filename");
-                DownloadTask.StartDownloadTask(FabricAPIUrl, FabircAPIPath);
+                DownloadUtils.StartDownloadTask(FabricAPIUrl, FabircAPIPath);
             }
         }
     }

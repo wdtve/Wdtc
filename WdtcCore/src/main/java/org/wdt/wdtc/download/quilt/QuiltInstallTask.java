@@ -4,12 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.GameVersionJsonObject;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.LibraryObject;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.gson.JSONArray;
 import org.wdt.wdtc.utils.gson.JSONObject;
@@ -31,7 +31,7 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTask {
 
 
     public void DownloadQuiltGameVersionJson() {
-        DownloadTask.StartDownloadTask(getQuiltVersionJsonUrl(), getQuiltVersionJson());
+        DownloadUtils.StartDownloadTask(getQuiltVersionJsonUrl(), getQuiltVersionJson());
     }
 
 
@@ -68,19 +68,19 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTask {
     public void setPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
-        ObjectList.add(JSONUtils.getJsonObject(launcher.getVersionJson()));
-        ObjectList.add(JSONUtils.getJsonObject(getQuiltVersionJson()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
+        ObjectList.add(JSONUtils.readJsonFiletoJsonObject(getQuiltVersionJson()));
         Object.setJsonObject(ObjectList);
         launcher.PutToVersionJson(Object);
     }
 
     @Override
-    public void AfterDownloadTask() {
+    public void afterDownloadTask() {
 
     }
 
     @Override
-    public void BeforInstallTask() {
+    public void beforInstallTask() {
         DownloadQuiltGameVersionJson();
     }
 }

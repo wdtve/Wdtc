@@ -6,10 +6,10 @@ import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.FilenameUtils;
 import org.wdt.utils.io.IOUtils;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.SpeedOfProgress;
 import org.wdt.wdtc.game.LibraryObject;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.gson.JSONArray;
@@ -53,7 +53,7 @@ public class JavaFxUtils {
                     libraryObject.setLibraryName("org.openjfx:" + s + ":win:17.0.6");
                     array.add(JSONObject.GSON.toJsonTree(libraryObject, LibraryObject.class));
                 }
-                JSONUtils.ObjectToJsonFile(OpenJfxListFile, array);
+                JSONUtils.writeObjectToJsonFile(OpenJfxListFile, array);
             }
         } catch (IOException e) {
             logmaker.warn(WdtcLogger.getErrorMessage(e));
@@ -70,7 +70,7 @@ public class JavaFxUtils {
             ThreadUtils.startThread(() -> {
                 try {
                     if (FileUtils.isFileNotExistsAndIsNotSameSize(Library, artifact.getSize())) {
-                        DownloadTask.StartDownloadTask(artifact.getUrl(), Library);
+                        DownloadUtils.StartDownloadTask(artifact.getUrl(), Library);
                     }
                     speed.countDown();
                 } catch (IOException e) {

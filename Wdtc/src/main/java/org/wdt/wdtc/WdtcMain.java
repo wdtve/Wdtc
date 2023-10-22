@@ -3,7 +3,7 @@ package org.wdt.wdtc;
 
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
-import org.wdt.wdtc.auth.UserList;
+import org.wdt.wdtc.auth.UsersList;
 import org.wdt.wdtc.auth.yggdrasil.AuthlibInjector;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.game.config.GameConfig;
@@ -33,7 +33,7 @@ public class WdtcMain extends JavaFxUtils {
             TaskManger.runStartUpTask();
             GameFileManger.downloadVersionManifestJsonFileTask();
             removePreferredVersion();
-            UserList.printUserList();
+            UsersList.printUserList();
             AuthlibInjector.updateAuthlibInjector();
             GameConfig.writeConfigJsonToAllVersion();
             ThreadUtils.startThread(() -> JavaUtils.main(getRegistryKey())).setName("Found Java");

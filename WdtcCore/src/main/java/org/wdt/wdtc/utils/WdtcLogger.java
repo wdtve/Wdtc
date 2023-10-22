@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class WdtcLogger {
-    private static final Layout layout = new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n");
 
 
     public static <T> Logger getLogger(Class<T> clazz) {
@@ -22,7 +21,7 @@ public class WdtcLogger {
         RollingFileAppender FileAppender = new RollingFileAppender();
         FileAppender.setFile(FileManger.getWdtcConfig() + "/logs/Wdtc.log");
         FileAppender.setAppend(true);
-        FileAppender.setLayout(layout);
+        FileAppender.setLayout(new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p]:%t * %m%n"));
         FileAppender.setMaxFileSize("10MB");
         FileAppender.setMaxBackupIndex(10);
         FileAppender.setThreshold(Level.DEBUG);
@@ -31,7 +30,7 @@ public class WdtcLogger {
     }
 
     private static ConsoleAppender getConsoleAppender() {
-        ConsoleAppender consoleAppender = new ConsoleAppender(layout);
+        ConsoleAppender consoleAppender = new ConsoleAppender(new PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n"));
         consoleAppender.setTarget("System.err");
         consoleAppender.setImmediateFlush(true);
         consoleAppender.setEncoding("UTF-8");

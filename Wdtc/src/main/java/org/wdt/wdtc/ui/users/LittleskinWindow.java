@@ -5,10 +5,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.auth.UserList;
+import org.wdt.wdtc.auth.UsersList;
 import org.wdt.wdtc.auth.yggdrasil.YggdrasilAccounts;
 import org.wdt.wdtc.auth.yggdrasil.YggdrasilTextures;
-import org.wdt.wdtc.manger.UrlManger;
+import org.wdt.wdtc.manger.URLManger;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
 
@@ -52,9 +52,9 @@ public class LittleskinWindow {
                 logmaker.warn("用户名、密码为空");
             } else {
                 try {
-                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(UrlManger.getLittleskinUrl(),
+                    YggdrasilAccounts yggdrasilAccounts = new YggdrasilAccounts(URLManger.getLittleskinUrl(),
                             UserName, PowerWord);
-                    UserList.addUser(yggdrasilAccounts.getUser());
+                    UsersList.addUser(yggdrasilAccounts.getUser());
                     try {
                         YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();
                         yggdrasilTextures.DownloadUserSkin();

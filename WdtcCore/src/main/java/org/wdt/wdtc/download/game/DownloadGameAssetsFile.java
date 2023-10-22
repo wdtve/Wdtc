@@ -8,18 +8,21 @@ import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.download.SpeedOfProgress;
+import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.utils.DownloadUtils;
+import org.wdt.wdtc.utils.ThreadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 public class DownloadGameAssetsFile {
     private static final Logger logmaker = WdtcLogger.getLogger(DownloadGameAssetsFileTask.class);
-    private final Launcher launcher;
+    protected final Launcher launcher;
 
     public DownloadGameAssetsFile(Launcher launcher) {
         this.launcher = launcher;
@@ -27,7 +30,7 @@ public class DownloadGameAssetsFile {
 
     @SneakyThrows(IOException.class)
     public void DownloadAssetsFiles() {
-        Map<String, JsonElement> list = JSONUtils.getJSONObject(launcher.getGameAssetsListJson())
+        Map<String, JsonElement> list = JSONUtils.readJsonFiletoJSONObject(launcher.getGameAssetsListJson())
                 .getJSONObject("objects").getJsonObjects().asMap();
         SpeedOfProgress progress = new SpeedOfProgress(list.size());
         for (String key : list.keySet()) {
@@ -35,7 +38,7 @@ public class DownloadGameAssetsFile {
             if (DownloadUtils.isDownloadProcess()) return;
             if (FileUtils.isFileNotExistsAndIsNotSameSize(new File(launcher.getGameObjects(), data.getHashSplicing()), data.getSize())) {
                 DownloadGameAssetsFileTask task = new DownloadGameAssetsFileTask(launcher, data, progress);
-                task.start();
+                ThreadUtils.startThread(task);
             } else {
                 progress.countDown();
             }
@@ -60,4 +63,28 @@ public class DownloadGameAssetsFile {
         }
     }
 
+    public static class DownloadGameAssetsFileTask extends Thread {
+        private final Launcher launcher;
+        private final AssetsFileData data;
+        private final SpeedOfProgress progress;
+        private final DownloadSource source;
+
+        public DownloadGameAssetsFileTask(Launcher launcher, AssetsFileData data, SpeedOfProgress progress) {
+            this.launcher = launcher;
+            this.data = data;
+            this.progress = progress;
+            this.source = Launcher.getDownloadSource();
+        }
+
+        @Override
+        @SneakyThrows(IOException.class)
+        public void run() {
+            File HashFile = new File(launcher.getGameObjects(), data.getHashSplicing());
+            URL HashUrl = new URL(source.getAssetsUrl() + data.getHashSplicing());
+            DownloadUtils.StartDownloadTask(HashUrl, HashFile);
+            synchronized (this) {
+                progress.countDown();
+            }
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package org.wdt.wdtc.launch;
 
+import org.wdt.wdtc.utils.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ abstract class AbstractGameCommand {
     abstract StringBuilder getCommand() throws IOException;
 
     protected void NonBreakingSpace(Object o) {
-        Command.append(o).append(" ");
+        Command.append(o).append(StringUtils.STRING_SPACE);
     }
 
     protected void InsertclasspathSeparator(File file) {
@@ -25,7 +27,7 @@ abstract class AbstractGameCommand {
     }
 
     protected void InsertSpace(String str) {
-        Command.append(str).append(" ");
+        Command.append(str).append(StringUtils.STRING_SPACE);
     }
 
     protected void NonBreakingSpace(String str, Object string) {

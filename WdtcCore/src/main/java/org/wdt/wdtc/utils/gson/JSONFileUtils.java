@@ -1,17 +1,14 @@
 package org.wdt.wdtc.utils.gson;
 
-import com.google.gson.JsonIOException;
+import lombok.SneakyThrows;
 import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 public class JSONFileUtils {
-    public static void FormatJsonFile(File file) {
-        try {
-            FileUtils.writeStringToFile(file, JSON.FILE_GSON.toJson(JSONUtils.getJsonObject(file)));
-        } catch (IOException e) {
-            throw new JsonIOException(e);
-        }
+    @SneakyThrows(IOException.class)
+    public static void formatJsonFile(File file) {
+        FileUtils.writeStringToFile(file, JSON.FILE_GSON.toJson(JSONUtils.readJsonFiletoJsonObject(file)));
     }
 }

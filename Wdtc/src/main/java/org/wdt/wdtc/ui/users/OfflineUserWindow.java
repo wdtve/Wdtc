@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.auth.UserList;
+import org.wdt.wdtc.auth.UsersList;
 import org.wdt.wdtc.auth.accounts.OfflineAccounts;
 import org.wdt.wdtc.ui.ErrorWindow;
 import org.wdt.wdtc.utils.WdtcLogger;
@@ -43,7 +43,7 @@ public class OfflineUserWindow {
                 String username = Registerusername.getText();
                 if (isQualified(username)) {
                     OfflineAccounts offline = new OfflineAccounts(username);
-                    UserList.addUser(offline.getUser());
+                    UsersList.addUser(offline.getUser());
                     loggmaker.info("离线账户" + username + "注册成功");
                     UserListPane.setUserList(pane);
                 } else {

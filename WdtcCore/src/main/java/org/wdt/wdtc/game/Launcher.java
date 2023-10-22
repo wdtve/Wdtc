@@ -16,7 +16,7 @@ import org.wdt.wdtc.game.config.VersionInfo;
 import org.wdt.wdtc.manger.GameFileManger;
 import org.wdt.wdtc.manger.GameFolderManger;
 import org.wdt.wdtc.manger.SettingManger;
-import org.wdt.wdtc.manger.UrlManger;
+import org.wdt.wdtc.manger.URLManger;
 import org.wdt.wdtc.utils.ModUtils;
 
 import java.io.File;
@@ -65,7 +65,7 @@ public class Launcher extends GameFileManger {
 
 
     public static DownloadSource getDownloadSource() {
-        return UrlManger.DownloadSourceList.getDownloadSource();
+        return URLManger.DownloadSourceList.getDownloadSource();
     }
 
     public static Launcher getPreferredLauncher() {
@@ -103,7 +103,7 @@ public class Launcher extends GameFileManger {
         return new Accounts();
     }
 
-    public UrlManger.DownloadSourceList getDownloadSourceKind() {
+    public URLManger.DownloadSourceList getDownloadSourceKind() {
         return SettingManger.getSetting().getDownloadSource();
     }
 

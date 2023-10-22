@@ -33,7 +33,7 @@ public class GameConfig {
                     DefaultGameConfig GameConfig = config.getDefaultGameConfig();
                     GameConfig.setInfo(config.getVersionInfo());
                     logmaker.info(GameConfig);
-                    config.PutConfigToFile(GameConfig);
+                    config.putConfigToFile(GameConfig);
                 }
             }
         } else {
@@ -65,16 +65,16 @@ public class GameConfig {
 
     @SneakyThrows(IOException.class)
     public DefaultGameConfig getDefaultGameConfig() {
-        return JSONUtils.JsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
+        return JSONUtils.readJsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
     }
 
-    @SneakyThrows(IOException.class)
     public VersionInfo getVersionInfo() {
-        return JSONUtils.JsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class).getInfo();
+        return getDefaultGameConfig().getInfo();
 
     }
 
-    public void PutConfigToFile(DefaultGameConfig config) {
-        JSONUtils.ObjectToJsonFile(launcher.getVersionConfigFile(), config);
+    public void putConfigToFile(DefaultGameConfig config) throws IOException {
+        FileUtils.writeStringToFile(launcher.getVersionConfigFile(),
+                JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
     }
 }

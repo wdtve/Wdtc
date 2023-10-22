@@ -36,7 +36,6 @@ public class GetGameNeedLibraryFile {
                     } else if (Objects.equals(action, "allow") && Objects.equals(OsName, "windows")) {
                         FileList.add(new LibraryFile(LibraryObject));
                     }
-
                 } else {
                     FileList.add(new LibraryFile(LibraryObject));
                 }

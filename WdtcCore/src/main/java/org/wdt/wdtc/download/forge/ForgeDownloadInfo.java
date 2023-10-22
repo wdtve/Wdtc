@@ -3,12 +3,12 @@ package org.wdt.wdtc.download.forge;
 
 import lombok.Getter;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.download.DownloadTask;
 import org.wdt.wdtc.download.infterface.DownloadInfo;
 import org.wdt.wdtc.download.infterface.DownloadSource;
 import org.wdt.wdtc.download.infterface.InstallTask;
 import org.wdt.wdtc.game.Launcher;
 import org.wdt.wdtc.manger.FileManger;
+import org.wdt.wdtc.utils.DownloadUtils;
 import org.wdt.wdtc.utils.WdtcLogger;
 import org.wdt.wdtc.utils.ZipUtils;
 import org.wdt.wdtc.utils.gson.JSONObject;
@@ -33,7 +33,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
 
     public void DownloadInstallJar() {
-        DownloadTask.StartDownloadTask(getForgeInstallJarUrl(), getForgeInstallJarPath());
+        DownloadUtils.StartDownloadTask(getForgeInstallJarUrl(), getForgeInstallJarPath());
     }
 
     private String getInstallJarUrl() {
@@ -59,7 +59,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
     }
 
     public JSONObject getInstallPrefileJSONObject() throws IOException {
-        return JSONUtils.getJSONObject(getInstallProfilePath());
+        return JSONUtils.readJsonFiletoJSONObject(getInstallProfilePath());
     }
 
 
@@ -73,7 +73,7 @@ public class ForgeDownloadInfo implements DownloadInfo {
 
     public JSONObject getForgeVersionJsonObject() {
         try {
-            return JSONUtils.getJSONObject(getForgeVersionJsonPath());
+            return JSONUtils.readJsonFiletoJSONObject(getForgeVersionJsonPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
