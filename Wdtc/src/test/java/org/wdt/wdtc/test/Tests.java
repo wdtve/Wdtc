@@ -1,9 +1,9 @@
 package org.wdt.wdtc.test;
 
 import org.junit.jupiter.api.Test;
-import org.wdt.wdtc.JavaFxUtils;
-import org.wdt.wdtc.game.Launcher;
-import org.wdt.wdtc.manger.GameFolderManger;
+import org.wdt.wdtc.core.game.Launcher;
+import org.wdt.wdtc.core.manger.GameDirectoryManger;
+import org.wdt.wdtc.ui.JavaFxUtils;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ public class Tests {
         JavaFxUtils.setJavaFXListJson();
     }
 
-    public void get(GameFolderManger gameFolderManger) {
-        System.out.println(gameFolderManger instanceof Launcher);
+    public void get(GameDirectoryManger gameDirectoryManger) {
+        System.out.println(gameDirectoryManger instanceof Launcher);
     }
 }
 

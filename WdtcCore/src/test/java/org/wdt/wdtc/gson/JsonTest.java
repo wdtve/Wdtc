@@ -3,8 +3,8 @@ package org.wdt.wdtc.gson;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.wdt.utils.io.FileUtils;
-import org.wdt.wdtc.utils.gson.JSON;
-import org.wdt.wdtc.utils.gson.JSONObject;
+import org.wdt.wdtc.core.utils.gson.JSON;
+import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.File;
 

@@ -1,14 +1,14 @@
-plugins {
-
-}
 
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+group = "org.wdt.wdtc.core"
+version = rootProject.version
+
 dependencies {
+    implementation(files("../libs/utils-io-1.1.2.jar"))
     implementation(project(":DependencyDownloader"))
-    implementation(files("../libs/utils-io-1.1.0.jar"))
     implementation("org.dom4j:dom4j:2.1.4")
     implementation("org.hildan.fxgson:fx-gson:5.0.0")
     implementation("log4j:log4j:1.2.17")

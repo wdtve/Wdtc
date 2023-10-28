@@ -9,7 +9,8 @@ javafx {
     modules = moduleList
 }
 
-version = "0.0.1.12"
+group = "org.wdt.wdtc.ui"
+version = rootProject.version
 
 tasks.jar {
     enabled = false
@@ -25,18 +26,19 @@ tasks.shadowJar {
     }
     manifest {
         attributes(
-            "Main-Class" to "org.wdt.wdtc.WdtcMain",
+            "Main-Class" to "org.wdt.wdtc.ui.WdtcMain",
             "Add-Opens" to listOf("java.base/jdk.internal.loader").joinToString(" ")
         )
     }
 }
 
-tasks.create<JavaExec>("run") {
+tasks.create<JavaExec>("runShadowJar") {
     dependsOn(tasks.jar)
     group = "application"
     classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
     jvmArgs = listOf(
         "-Dwdtc.debug.switch=true",
+        "-Dwtdc.application.type=ui",
         "-Dwdtc.launcher.version=${project.version}"
     )
     workingDir = rootProject.rootDir
@@ -52,7 +54,7 @@ tasks.compileJava<JavaCompile> {
 dependencies {
     implementation(project(":WdtcCore"))
     implementation(project(":DependencyDownloader"))
-    implementation(files("../libs/utils-io-1.1.0.jar"))
+    implementation(files("../libs/utils-io-1.1.2.jar"))
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")

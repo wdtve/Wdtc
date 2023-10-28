@@ -10,3 +10,5 @@ subprojects {
         plugin("java")
     }
 }
+
+version = "0.0.1.13"
