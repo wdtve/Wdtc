@@ -3,7 +3,7 @@ package org.wdt.wdtc.core.launch;
 import lombok.Setter;
 import org.apache.log4j.Logger;
 import org.wdt.utils.io.IOUtils;
-import org.wdt.wdtc.core.download.infterface.SetTextInterface;
+import org.wdt.wdtc.core.download.infterface.TextInterface;
 import org.wdt.wdtc.core.utils.ThreadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
 
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class LaunchProcess {
     private static final Logger logmaker = WdtcLogger.getLogger(LaunchProcess.class);
     private final Process process;
-    private SetTextInterface setUIText;
+    private TextInterface setUIText;
 
     public LaunchProcess(Process process) {
         this.process = process;

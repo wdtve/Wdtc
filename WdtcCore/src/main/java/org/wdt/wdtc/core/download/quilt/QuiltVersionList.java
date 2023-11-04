@@ -52,7 +52,7 @@ public class QuiltVersionList implements VersionListInterface {
         }
 
         @Override
-        public String getVersionMumber() {
+        public String getVersionNumber() {
             return versionNumber;
         }
 

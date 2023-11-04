@@ -11,10 +11,10 @@ import org.wdt.wdtc.core.manger.VMManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.URLUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.ui.image.Consoler;
-import org.wdt.wdtc.ui.image.ErrorWindow;
-import org.wdt.wdtc.ui.image.HomeWindow;
-import org.wdt.wdtc.ui.image.WindwosSizeManger;
+import org.wdt.wdtc.ui.window.Consoler;
+import org.wdt.wdtc.ui.window.ExceptionWindow;
+import org.wdt.wdtc.ui.window.HomeWindow;
+import org.wdt.wdtc.ui.window.WindwosSizeManger;
 
 import java.io.IOException;
 
@@ -52,13 +52,13 @@ public class AppMain extends Application {
                     FileUtils.touch(DownloadUtils.StopProcess);
                     SettingManger.putSettingToFile(setting);
                 } catch (IOException e) {
-                    logmaker.error(WdtcLogger.getErrorMessage(e));
+                    logmaker.error(WdtcLogger.getExceptionMessage(e));
                 }
                 Platform.exit();
                 logmaker.info("======= Wdtc Stop ========");
             });
         } catch (Exception e) {
-            ErrorWindow.setErrorWin(e);
+            ExceptionWindow.setErrorWin(e);
         }
     }
 }

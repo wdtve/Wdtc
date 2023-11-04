@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
@@ -13,8 +13,8 @@ tasks.jar {
 }
 
 dependencies {
-    implementation(files("../libs/utils-io-1.1.2.jar"))
-    implementation(files("./libs/utils-gson-1.1.1.jar"))
+    implementation("com.github.wd-t.utils:utils-gson:v1.1.2.1")
+    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
     implementation(project(":WdtcCore"))
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")

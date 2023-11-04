@@ -1,11 +1,12 @@
 package org.wdt.wdtc.core.utils;
 
 import com.google.gson.JsonArray;
-import org.wdt.wdtc.core.download.infterface.DownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
+import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
 import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.game.LibraryObject;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class ExecuteUtils {
     public ExecuteUtils(Launcher launcher, JSONObject modVersionJsonObject) {
         this.launcher = launcher;
         ModVersionJsonObject = modVersionJsonObject;
-        this.source = Launcher.getDownloadSource();
+        this.source = DownloadSourceManger.getDownloadSource();
     }
 
     public static GameVersionJsonObject.Arguments getArguments(GameVersionJsonObject VersionJsonObject, GameVersionJsonObject ModVersionJsonObject) {
@@ -47,7 +48,7 @@ public class ExecuteUtils {
     }
 
     public void execute(ModUtils.KindOfMod kind) throws IOException {
-        DownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
+        ModDownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         GameVersionJsonObject ModVersionJsonObject = JSONObject.parseObject(this.ModVersionJsonObject, GameVersionJsonObject.class);
         VersionJsonObject.setMainClass(ModVersionJsonObject.getMainClass());

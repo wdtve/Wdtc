@@ -48,7 +48,7 @@ public class DownloadGameClass extends GameLibraryData {
         try {
             File VersionLog = launcher.getVersionLog4j2();
             FileUtils.writeStringToFile(VersionLog,
-                    IOUtils.toString(Objects.requireNonNull(DownloadGameClass.class.getResourceAsStream("/log4j2.xml"))));
+                    IOUtils.toString(Objects.requireNonNull(DownloadGameClass.class.getResourceAsStream("/assets/log4j2.xml"))));
         } catch (IOException e) {
             logmaker.error("logej.xml不存在或路径错误!", e);
         }

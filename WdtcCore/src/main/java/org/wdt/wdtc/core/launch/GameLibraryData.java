@@ -6,7 +6,7 @@ import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.game.LibraryObject;
-import org.wdt.wdtc.core.manger.URLManger;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -19,7 +19,7 @@ public class GameLibraryData {
 
     public GameLibraryData(Launcher launcher) {
         this.launcher = launcher;
-        this.source = Launcher.getDownloadSource();
+        this.source = DownloadSourceManger.getDownloadSource();
     }
 
     public File GetNativesLibraryFile(LibraryObject.NativesOs nativesOs) {
@@ -29,7 +29,7 @@ public class GameLibraryData {
     @SneakyThrows(MalformedURLException.class)
     public URL GetNativesLibraryUrl(LibraryObject libraryObject) {
         LibraryObject.NativesOs Nativesindows = libraryObject.getDownloads().getClassifiers().getNativesindows();
-        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
+        if (DownloadSourceManger.isNotOfficialDownloadSource()) {
             return new URL(source.getLibraryUrl() + Nativesindows.getPath());
         } else {
             return Nativesindows.getUrl();
@@ -46,7 +46,7 @@ public class GameLibraryData {
 
     @SneakyThrows(MalformedURLException.class)
     public URL GetLibraryUrl(LibraryObject libraryObject) {
-        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
+        if (DownloadSourceManger.isNotOfficialDownloadSource()) {
             DependencyDownload dependency = new DependencyDownload(libraryObject.getLibraryName());
             dependency.setDefaultUrl(source.getLibraryUrl());
             return dependency.getLibraryUrl();

@@ -8,6 +8,7 @@ import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,7 +66,7 @@ public class GameFileManger extends GameDirectoryManger {
     }
 
     public File getGameOptionsFile() {
-        return new File(getVersionPath(), "options.txt");
+        return new File(getVersionPath(), "assets/options.txt");
     }
 
     public File getGameModsPath() {
@@ -81,6 +82,9 @@ public class GameFileManger extends GameDirectoryManger {
     }
 
     public GameVersionJsonObject getGameVersionJsonObject() throws IOException {
+        if (FileUtils.isFileNotExists(getVersionJson())) {
+            throw new FileNotFoundException(getVersionJson() + " not exists");
+        }
         return JSONUtils.readJsonFileToClass(getVersionJson(), GameVersionJsonObject.class);
     }
 

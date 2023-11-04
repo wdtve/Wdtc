@@ -31,7 +31,7 @@ public class SettingManger {
     @Data
     @Accessors(chain = true)
     public static class Setting {
-        private URLManger.DownloadSourceList DownloadSource = URLManger.DownloadSourceList.OFFICIAL;
+        private DownloadSourceManger.DownloadSourceList DownloadSource = DownloadSourceManger.DownloadSourceList.OFFICIAL;
         private boolean Console = false;
         private boolean LlvmpipeLoader = false;
         private File DefaultGamePath = new File(System.getProperty("user.dir"));

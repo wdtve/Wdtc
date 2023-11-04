@@ -1,6 +1,8 @@
 package org.wdt.wdtc.core.download.fabric;
 
 import lombok.Getter;
+import org.wdt.utils.io.FileUtils;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.URLUtils;
@@ -14,22 +16,36 @@ public class FabricAPIDownloadTask {
     private final Launcher launcher;
     @Getter
     private final String FabricAPIVersionNumber;
+    @Getter
+    private VersionJsonObjectInterface versionJsonObjectInterface;
 
     public FabricAPIDownloadTask(Launcher launcher, String FabricAPIVersionNumber) {
         this.launcher = launcher;
         this.FabricAPIVersionNumber = FabricAPIVersionNumber;
     }
 
-    public void DownloadFabricAPI() throws IOException {
-        JSONArray VersionListArray = JSONArray.parseJSONArray(URLUtils.getURLToString(VersionListUrl));
-        for (int i = 0; i < VersionListArray.size(); i++) {
-            JSONObject VersionObject = VersionListArray.getJSONObject(i);
-            if (VersionObject.getString("version_number").equals(FabricAPIVersionNumber)) {
-                String FabricAPIUrl = VersionObject.getJSONArray("files").getJSONObject(0).getString("url");
-                String FabircAPIPath = launcher.getGameModsPath() + VersionObject.getJSONArray("files").getJSONObject(0).getString("filename");
-                DownloadUtils.StartDownloadTask(FabricAPIUrl, FabircAPIPath);
+    public FabricAPIDownloadTask(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        this(launcher, versionJsonObjectInterface.getVersionNumber());
+        this.versionJsonObjectInterface = versionJsonObjectInterface;
+    }
+
+    public void startDownloadFabricAPI() throws IOException {
+        FabricAPIVersionList.FabricAPIVersionJsonObjectImpl versionJsonObject = (FabricAPIVersionList.FabricAPIVersionJsonObjectImpl) versionJsonObjectInterface;
+        if (versionJsonObject == null) {
+            JSONArray VersionListArray = JSONArray.parseJSONArray(URLUtils.getURLToString(VersionListUrl));
+            for (int i = 0; i < VersionListArray.size(); i++) {
+                JSONObject VersionObject = VersionListArray.getJSONObject(i);
+                FabricAPIVersionList.FabricAPIVersionJsonObjectImpl newVersionJsonObject = JSONObject.parseObject(VersionObject, FabricAPIVersionList.FabricAPIVersionJsonObjectImpl.class);
+                if (newVersionJsonObject.getVersionNumber().equals(FabricAPIVersionNumber)) {
+                    downloadFabricAPITask(newVersionJsonObject.getFilesObjectList().get(0));
+                }
             }
+        } else {
+            downloadFabricAPITask(versionJsonObject.getFilesObjectList().get(0));
         }
     }
 
+    public void downloadFabricAPITask(FabricAPIVersionList.FabricAPIVersionJsonObjectImpl.FilesObject filesObject) {
+        DownloadUtils.StartDownloadTask(filesObject.getJarDownloadURL(), FileUtils.toFile(launcher.getGameModsPath(), filesObject.getJarFileName()));
+    }
 }

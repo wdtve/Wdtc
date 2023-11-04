@@ -124,7 +124,7 @@ public class JavaUtils {
                 }
             }
         } catch (IOException e) {
-            logmaker.error(WdtcLogger.getErrorMessage(e));
+            logmaker.error(WdtcLogger.getExceptionMessage(e));
         }
         return null;
     }
@@ -158,7 +158,7 @@ public class JavaUtils {
             try {
                 return FileUtils.isFileNotExists(new File(JavaHome, "bin/javac.exe"));
             } catch (IOException e) {
-                logmaker.error(WdtcLogger.getErrorMessage(e));
+                logmaker.error(WdtcLogger.getExceptionMessage(e));
             }
             return false;
         }

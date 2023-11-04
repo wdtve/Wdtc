@@ -48,7 +48,7 @@ public class ForgeVersionList implements VersionListInterface {
         private String mcversion;
 
         @Override
-        public String getVersionMumber() {
+        public String getVersionNumber() {
             return versionNumber;
         }
 

@@ -1,6 +1,7 @@
 package org.wdt.wdtc.core.utils;
 
 import lombok.SneakyThrows;
+import org.apache.log4j.Logger;
 import org.wdt.utils.io.IOUtils;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -11,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class URLUtils {
+    private static final Logger logmaker = WdtcLogger.getLogger(URLUtils.class);
 
     public static boolean isNetworkHasThisFile(URL url) {
         try {
@@ -42,6 +44,7 @@ public class URLUtils {
     @SneakyThrows(IOException.class)
     public static void openSomething(Object o) {
         Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", o.toString()});
+        logmaker.info(o + " is open");
     }
 
     public static InputStream newInputStream(URL url) throws IOException {

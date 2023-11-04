@@ -23,6 +23,7 @@ tasks.shadowJar {
         for (module in moduleList) {
             exclude(dependency("org.openjfx:$module:${javafx.version}"))
         }
+        exclude(dependency("org.jetbrains.kotlin:.*:.*"))
     }
     manifest {
         attributes(
@@ -54,7 +55,7 @@ tasks.compileJava<JavaCompile> {
 dependencies {
     implementation(project(":WdtcCore"))
     implementation(project(":DependencyDownloader"))
-    implementation(files("../libs/utils-io-1.1.2.jar"))
+    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")

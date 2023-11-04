@@ -6,9 +6,11 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.game.LibraryObject;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
 import org.wdt.wdtc.core.utils.gson.JSONArray;
@@ -26,9 +28,13 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
 
     public QuiltInstallTask(Launcher launcher, String quiltVersionNumber) {
         super(launcher, quiltVersionNumber);
-        this.source = Launcher.getDownloadSource();
+        this.source = DownloadSourceManger.getDownloadSource();
     }
 
+    public QuiltInstallTask(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        super(launcher, versionJsonObjectInterface);
+        this.source = DownloadSourceManger.getDownloadSource();
+    }
 
     public void DownloadQuiltGameVersionJson() {
         DownloadUtils.StartDownloadTask(getQuiltVersionJsonUrl(), getQuiltVersionJson());
@@ -36,7 +42,7 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
 
 
     @Override
-    public void execute() throws IOException {
+    public void overwriteVersionJson() throws IOException {
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         JSONObject QuiltVersionJsonObject = getQuiltGameVersionJsonObject();
         JSONObject Arguments = QuiltVersionJsonObject.getJSONObject("arguments");
@@ -65,7 +71,7 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
     }
 
     @Override
-    public void setPatches() throws IOException {
+    public void writeVersionJsonPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
         ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));

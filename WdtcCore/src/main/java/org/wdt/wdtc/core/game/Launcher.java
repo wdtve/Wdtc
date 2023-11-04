@@ -5,10 +5,8 @@ import lombok.Getter;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.core.auth.accounts.Accounts;
-import org.wdt.wdtc.core.download.downloadsource.OfficialDownloadSource;
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo;
-import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo;
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.core.game.config.GameConfig;
@@ -16,7 +14,6 @@ import org.wdt.wdtc.core.game.config.VersionInfo;
 import org.wdt.wdtc.core.manger.GameDirectoryManger;
 import org.wdt.wdtc.core.manger.GameFileManger;
 import org.wdt.wdtc.core.manger.SettingManger;
-import org.wdt.wdtc.core.manger.URLManger;
 import org.wdt.wdtc.core.utils.ModUtils;
 
 import java.io.File;
@@ -29,43 +26,13 @@ public class Launcher extends GameFileManger {
     private ModUtils.KindOfMod kind = ModUtils.KindOfMod.Original;
     private ForgeDownloadInfo ForgeModDownloadInfo;
     private QuiltDownloadInfo QuiltModDownloadInfo;
+
     public Launcher(String version) {
         this(version, SettingManger.getSetting().getDefaultGamePath());
     }
 
     public Launcher(String version, File here) {
         super(version, here);
-    }
-
-
-    public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
-        kind = ModUtils.KindOfMod.QUILT;
-        QuiltModDownloadInfo = quiltModDownloadInfo;
-    }
-
-
-    public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
-        kind = ModUtils.KindOfMod.FABRIC;
-        this.FabricModInstallInfo = fabricModInstallInfo;
-    }
-
-
-    public void setKind(ModUtils.KindOfMod kind) {
-        this.kind = kind;
-    }
-
-    public ForgeDownloadInfo getForgeDownloadInfo() {
-        return ForgeModDownloadInfo;
-    }
-
-    public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
-        kind = ModUtils.KindOfMod.FORGE;
-        ForgeModDownloadInfo = forgeModDownloadInfo;
-    }
-
-
-    public static DownloadSourceInterface getDownloadSource() {
-        return URLManger.DownloadSourceList.getDownloadSource();
     }
 
     public static Launcher getPreferredLauncher() {
@@ -75,18 +42,33 @@ public class Launcher extends GameFileManger {
                 : null;
     }
 
-    public static DownloadSourceInterface getOfficialDownloadSource() {
-        return new OfficialDownloadSource();
+    public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
+        kind = ModUtils.KindOfMod.QUILT;
+        QuiltModDownloadInfo = quiltModDownloadInfo;
     }
 
+    public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
+        kind = ModUtils.KindOfMod.FABRIC;
+        this.FabricModInstallInfo = fabricModInstallInfo;
+    }
+
+    public void setKind(ModUtils.KindOfMod kind) {
+        this.kind = kind;
+    }
+
+
+    public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
+        kind = ModUtils.KindOfMod.FORGE;
+        ForgeModDownloadInfo = forgeModDownloadInfo;
+    }
 
     public GameConfig getGameConfig() {
         return new GameConfig(this);
     }
 
-    public void LaunchTask() throws IOException {
+    public void beforLaunchTask() throws IOException {
         if (SettingManger.getSetting().isChineseLanguage() && FileUtils.isFileNotExists(getGameOptionsFile())) {
-            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/options.txt")));
+            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/assets/options.txt")));
             FileUtils.writeStringToFile(getGameOptionsFile(), Options);
         }
     }
@@ -95,25 +77,19 @@ public class Launcher extends GameFileManger {
         kind = ModUtils.KindOfMod.Original;
     }
 
-    public boolean Console() {
-        return SettingManger.getSetting().isConsole();
-    }
-
     public Accounts getAccounts() {
         return new Accounts();
     }
 
-    public URLManger.DownloadSourceList getDownloadSourceKind() {
-        return SettingManger.getSetting().getDownloadSource();
-    }
 
     public VersionInfo getVersionInfo() {
         return new VersionInfo(this);
     }
 
-    public GameDirectoryManger getGetGamePath() {
+    public GameDirectoryManger getGameDirectoryManger() {
         return this;
     }
+
 
     @Override
     public boolean equals(Object o) {

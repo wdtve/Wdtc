@@ -10,6 +10,7 @@ import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.SpeedOfProgress;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.game.Launcher;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.ThreadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
@@ -73,7 +74,7 @@ public class DownloadGameAssetsFile {
             this.launcher = launcher;
             this.data = data;
             this.progress = progress;
-            this.source = Launcher.getDownloadSource();
+            this.source = DownloadSourceManger.getDownloadSource();
         }
 
         @Override

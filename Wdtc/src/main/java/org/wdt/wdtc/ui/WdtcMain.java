@@ -10,7 +10,7 @@ import org.wdt.wdtc.core.manger.*;
 import org.wdt.wdtc.core.utils.JavaUtils;
 import org.wdt.wdtc.core.utils.ThreadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.ui.image.ErrorWindow;
+import org.wdt.wdtc.ui.window.ExceptionWindow;
 
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ public class WdtcMain extends JavaFxUtils {
             ThreadUtils.startThread(() -> JavaUtils.main(getRegistryKey())).setName("Found Java");
             AppMain.main(args);
         } catch (Throwable e) {
-            ErrorWindow.setErrorWin(e);
+            ExceptionWindow.setErrorWin(e);
         }
     }
 

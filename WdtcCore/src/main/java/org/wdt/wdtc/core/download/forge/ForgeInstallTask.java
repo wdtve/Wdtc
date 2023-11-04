@@ -9,12 +9,13 @@ import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.utils.io.FilenameUtils;
 import org.wdt.wdtc.core.download.SpeedOfProgress;
 import org.wdt.wdtc.core.download.game.DownloadGameClass;
-import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.game.LibraryObject;
 import org.wdt.wdtc.core.game.config.DefaultGameConfig;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.manger.URLManger;
 import org.wdt.wdtc.core.utils.*;
@@ -35,15 +36,15 @@ import java.util.regex.Pattern;
 public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskInterface {
     private static final Logger logmaker = WdtcLogger.getLogger(ForgeInstallTask.class);
     private final DefaultGameConfig.Config config;
-    private final DownloadSourceInterface source;
-
 
     public ForgeInstallTask(Launcher launcher, String forgeVersion) {
         super(launcher, forgeVersion);
         this.config = launcher.getGameConfig().getConfig();
-        this.source = Launcher.getDownloadSource();
     }
 
+    public ForgeInstallTask(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        this(launcher, versionJsonObjectInterface.getVersionNumber());
+    }
 
     public String CommandLine(int index) throws IOException {
         JSONObject JsonObject = getInstallPrefileJSONObject().getJSONArray("processors").getJSONObject(index);
@@ -107,7 +108,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
         }
         String TxtUrl = JSONUtils.readJsonFiletoJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
                 .getJSONObject("client_mappings").getString("url");
-        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
+        if (DownloadSourceManger.isNotOfficialDownloadSource()) {
             TxtUrl = URLUtils.getRedirectUrl(TxtUrl.replaceAll(URLManger.getPistonDataMojang(), source.getDataUrl()));
         }
         if (TxtPath != null) {
@@ -161,7 +162,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
     }
 
     @Override
-    public void execute() throws IOException {
+    public void overwriteVersionJson() throws IOException {
         JSONObject ForgeVersionJsonObject = getForgeVersionJsonObject();
         JSONArray LibraryArray = ForgeVersionJsonObject.getJSONArray("libraries");
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
@@ -186,7 +187,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
     }
 
     @Override
-    public void setPatches() throws IOException {
+    public void writeVersionJsonPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
         ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));

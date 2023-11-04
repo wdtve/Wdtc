@@ -3,17 +3,18 @@ package org.wdt.wdtc.core.download.game;
 
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
+import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.game.Launcher;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.manger.URLManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
+import org.wdt.wdtc.core.utils.URLUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
+import java.net.URL;
+import java.util.List;
 
 public class DownloadVersionGameFile {
     public final Launcher launcher;
@@ -22,55 +23,51 @@ public class DownloadVersionGameFile {
 
     public DownloadVersionGameFile(Launcher launcher, boolean Install) {
         this.launcher = launcher;
-        this.source = Launcher.getDownloadSource();
+        this.source = DownloadSourceManger.getDownloadSource();
         this.Install = Install;
     }
 
     public static void DownloadVersionManifestJsonFile() {
-        DownloadUtils.StartDownloadTask(Launcher.getDownloadSource().getVersionManifestUrl(), FileManger.getVersionManifestFile());
+        DownloadUtils.StartDownloadTask(DownloadSourceManger.getDownloadSource().getVersionManifestUrl(), FileManger.getVersionManifestFile());
     }
 
-    public void DownloadGameVersionJson() throws IOException {
-        if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile())) {
-            DownloadVersionManifestJsonFile();
+    public void DownloadGameVersionJson() {
+        if (!Install) {
+            return;
         }
-        JSONArray VersionList = JSONUtils.readJsonFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
-        for (int i = 0; i < VersionList.size(); i++) {
-            String version_name = VersionList.getJSONObject(i).getString("id");
-            if (Objects.equals(launcher.getVersionNumber(), version_name)) {
-                String VersionJsonUrl = VersionList.getJSONObject(i).getString("url");
-                if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
-                    VersionJsonUrl = VersionJsonUrl.replaceAll(URLManger.getPistonMetaMojang(), source.getMetaUrl());
-                }
-                if (FileUtils.isFileNotExists(launcher.getVersionJson()) || Install) {
-                    DownloadUtils.StartDownloadTask(VersionJsonUrl, launcher.getVersionJson());
-
+        if (DownloadSourceManger.isOfficialDownloadSource()) {
+            List<VersionJsonObjectInterface> versionJsonObjectList = new GameVersionList().getVersionList();
+            for (VersionJsonObjectInterface versionJsonObjectInterface : versionJsonObjectList) {
+                if (versionJsonObjectInterface.isInstanceofThis(new GameVersionList.GameVersionJsonObjectImpl())) {
+                    GameVersionList.GameVersionJsonObjectImpl versionJsonObject = (GameVersionList.GameVersionJsonObjectImpl) versionJsonObjectInterface;
+                    if (versionJsonObject.getVersionNumber().equals(launcher.getVersionNumber())) {
+                        DownloadUtils.StartDownloadTask(versionJsonObject.getVersionJsonURL(), launcher.getVersionJson());
+                    }
                 }
             }
+        } else {
+            URL jsonURL = URLUtils.toURL(String.format(source.getVersionClientUrl(), launcher.getVersionNumber(), "json"));
+            DownloadUtils.StartDownloadTask(jsonURL, launcher.getVersionJson());
         }
     }
 
     public void DownloadGameAssetsListJson() throws IOException {
-        JSONObject AssetIndexJson = JSONUtils.readJsonFiletoJSONObject(launcher.getVersionJson()).getJSONObject("assetIndex");
-        String GameAssetsListJsonUrl = AssetIndexJson.getString("url");
-        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
-            GameAssetsListJsonUrl = GameAssetsListJsonUrl.replaceAll(URLManger.getPistonMetaMojang(), source.getMetaUrl());
-        }
-        if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.getGameAssetsListJson(), AssetIndexJson.getInt("size"))) {
-            DownloadUtils.StartDownloadTask(GameAssetsListJsonUrl, launcher.getGameAssetsListJson());
+        GameVersionJsonObject.FileDataObject fileDataObject = launcher.getGameVersionJsonObject().getAssetIndex();
+        URL listJsonURL = DownloadSourceManger.isOfficialDownloadSource()
+                ? fileDataObject.getListJsonURL()
+                : URLUtils.toURL(fileDataObject.getListJsonURL().toString().replace(URLManger.getPistonMetaMojang(), source.getMetaUrl()));
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.getGameAssetsListJson(), fileDataObject.getFileSize())) {
+            DownloadUtils.StartDownloadTask(listJsonURL, launcher.getGameAssetsListJson());
         }
     }
 
     public void DownloadVersionJar() throws IOException {
-        JSONObject ClientObject = JSONUtils.readJsonFiletoJSONObject(launcher.getVersionJson()).getJSONObject("downloads")
-                .getJSONObject("client");
-        String JarUrl = ClientObject.getString("url");
-        if (URLManger.DownloadSourceList.NoOfficialDownloadSource()) {
-            JarUrl = JarUrl.replaceAll(URLManger.getPistonDataMojang(), source.getDataUrl());
-        }
-        File VersionJar = launcher.getVersionJar();
-        if (FileUtils.isFileNotExistsAndIsNotSameSize(VersionJar, ClientObject.getInt("size"))) {
-            DownloadUtils.StartDownloadTask(JarUrl, VersionJar);
+        GameVersionJsonObject.FileDataObject fileDataObject = launcher.getGameVersionJsonObject().getDownloads().getClient();
+        URL JarUrl = DownloadSourceManger.isOfficialDownloadSource()
+                ? fileDataObject.getListJsonURL()
+                : URLUtils.toURL(String.format(source.getVersionClientUrl(), launcher.getVersionNumber(), "client"));
+        if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.getVersionJar(), fileDataObject.getFileSize())) {
+            DownloadUtils.StartDownloadTask(JarUrl, launcher.getVersionJar());
         }
     }
 

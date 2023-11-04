@@ -27,8 +27,8 @@ public class TaskManger {
 
     public static void runStartUpTask() throws IOException {
         FileUtils.delete(DownloadUtils.StopProcess);
-        FileUtils.writeStringToFile(new File(FileManger.getWdtcConfig(), "readme.txt"),
-                IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/readme.txt"))));
+        FileUtils.writeStringToFile(new File(FileManger.getWdtcConfig(), "assets/readme.txt"),
+                IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/assets/readme.txt"))));
         FileUtils.createDirectories(FileManger.getWdtcCache());
         if (FileUtils.isFileNotExists(FileManger.getUserListFile())) {
             JSONUtils.writeObjectToJsonFile(FileManger.getUserListFile(), new JsonObject());

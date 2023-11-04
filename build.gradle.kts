@@ -6,9 +6,9 @@ subprojects {
         mavenCentral()
     }
     apply {
-        plugin("idea")
         plugin("java")
     }
 }
 
-version = "0.0.1.13"
+group = "org.wdt.wdtc"
+version = "0.0.1.14"

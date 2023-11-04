@@ -4,11 +4,14 @@ package org.wdt.wdtc.core.download.fabric;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.log4j.Logger;
-import org.wdt.wdtc.core.download.infterface.DownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.Launcher;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
+import org.wdt.wdtc.core.utils.ModUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
 import org.wdt.wdtc.core.utils.gson.JSONObject;
 import org.wdt.wdtc.core.utils.gson.JSONUtils;
@@ -16,7 +19,7 @@ import org.wdt.wdtc.core.utils.gson.JSONUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class FabricDonwloadInfo implements DownloadInfoInterface {
+public class FabricDonwloadInfo implements ModDownloadInfoInterface {
     private static final Logger logmaker = WdtcLogger.getLogger(FabricDonwloadInfo.class);
     @Getter
     protected final String FabricVersionNumber;
@@ -31,9 +34,12 @@ public class FabricDonwloadInfo implements DownloadInfoInterface {
         this.launcher = launcher;
     }
 
+    public FabricDonwloadInfo(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        this(launcher, versionJsonObjectInterface.getVersionNumber());
+    }
 
     public String getFabricVersionFileUrl() {
-        return Launcher.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/json";
+        return DownloadSourceManger.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/json";
     }
 
 
@@ -46,7 +52,7 @@ public class FabricDonwloadInfo implements DownloadInfoInterface {
     }
 
     public String getProfileZipUrl() {
-        return String.format(Launcher.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/zip", launcher.getVersionNumber(), getFabricVersionNumber());
+        return String.format(DownloadSourceManger.getOfficialDownloadSource().getFabricMetaUrl() + "v2/versions/loader/%s/%s/profile/zip", launcher.getVersionNumber(), getFabricVersionNumber());
     }
 
     public String FromFabricLoaderFolder() {
@@ -66,8 +72,7 @@ public class FabricDonwloadInfo implements DownloadInfoInterface {
     }
 
 
-
-    public boolean getAPIDownloadTaskNoNull() {
+    public boolean isAPIDownloadTaskNoNull() {
         return APIDownloadTask != null;
     }
 
@@ -79,5 +84,10 @@ public class FabricDonwloadInfo implements DownloadInfoInterface {
     @Override
     public InstallTaskInterface getModInstallTask() {
         return new FabricInstallTask(launcher, FabricVersionNumber);
+    }
+
+    @Override
+    public ModUtils.KindOfMod getModKind() {
+        return ModUtils.KindOfMod.FABRIC;
     }
 }

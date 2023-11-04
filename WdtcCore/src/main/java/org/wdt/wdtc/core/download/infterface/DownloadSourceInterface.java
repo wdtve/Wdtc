@@ -23,4 +23,8 @@ public interface DownloadSourceInterface {
 
     String getForgeLibraryMavenUrl();
 
+    String getVersionClientUrl();
+
+    String getOfficialUrl();
+
 }

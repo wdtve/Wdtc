@@ -1,4 +1,3 @@
-
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
@@ -7,7 +6,7 @@ group = "org.wdt.wdtc.core"
 version = rootProject.version
 
 dependencies {
-    implementation(files("../libs/utils-io-1.1.2.jar"))
+    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
     implementation(project(":DependencyDownloader"))
     implementation("org.dom4j:dom4j:2.1.4")
     implementation("org.hildan.fxgson:fx-gson:5.0.0")

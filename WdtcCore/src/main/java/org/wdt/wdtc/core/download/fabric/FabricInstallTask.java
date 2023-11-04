@@ -5,9 +5,11 @@ import com.google.gson.JsonObject;
 import org.wdt.utils.dependency.DependencyDownload;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.GameVersionJsonObject;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.game.LibraryObject;
+import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.gson.JSONArray;
 import org.wdt.wdtc.core.utils.gson.JSONObject;
@@ -21,17 +23,17 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
     private final DownloadSourceInterface source;
 
 
-
     public FabricInstallTask(Launcher launcher, String FabricVersionNumber) {
         super(launcher, FabricVersionNumber);
-        this.source = Launcher.getDownloadSource();
-
+        this.source = DownloadSourceManger.getDownloadSource();
     }
 
-
+    public FabricInstallTask(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        this(launcher, versionJsonObjectInterface.getVersionNumber());
+    }
 
     @Override
-    public void execute() throws IOException {
+    public void overwriteVersionJson() throws IOException {
         GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
         List<LibraryObject> libraryObjectList = VersionJsonObject.getLibraries();
         JSONObject FabricVersionJsonObject = getFabricVersionJsonObject();
@@ -60,7 +62,7 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
 
 
     @Override
-    public void setPatches() throws IOException {
+    public void writeVersionJsonPatches() throws IOException {
         GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
         List<JsonObject> ObjectList = new ArrayList<>();
         ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
@@ -71,8 +73,8 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
 
     @Override
     public void afterDownloadTask() throws IOException {
-        if (getAPIDownloadTaskNoNull()) {
-            getAPIDownloadTask().DownloadFabricAPI();
+        if (isAPIDownloadTaskNoNull()) {
+            getAPIDownloadTask().startDownloadFabricAPI();
         }
     }
 

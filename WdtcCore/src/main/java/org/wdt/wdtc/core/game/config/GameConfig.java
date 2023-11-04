@@ -48,7 +48,7 @@ public class GameConfig {
             FileUtils.writeStringToFile(launcher.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
             logmaker.info(launcher.getVersionNumber() + " " + config);
         } catch (IOException e) {
-            logmaker.error(WdtcLogger.getErrorMessage(e));
+            logmaker.error(WdtcLogger.getExceptionMessage(e));
         }
     }
 

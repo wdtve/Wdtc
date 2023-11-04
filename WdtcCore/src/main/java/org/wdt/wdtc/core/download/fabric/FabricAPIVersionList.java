@@ -1,7 +1,6 @@
 package org.wdt.wdtc.core.download.fabric;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 import lombok.Getter;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
@@ -48,7 +47,7 @@ public class FabricAPIVersionList implements VersionListInterface {
         private List<String> gameVersion;
 
         @Override
-        public String getVersionMumber() {
+        public String getVersionNumber() {
             return versionNumber;
         }
 
@@ -70,10 +69,14 @@ public class FabricAPIVersionList implements VersionListInterface {
             return Objects.hash(versionNumber);
         }
 
-        @Data
+        @Getter
         public static class FilesObject {
             @SerializedName("url")
             private URL jarDownloadURL;
+            @SerializedName("size")
+            private int fileSize;
+            @SerializedName("filename")
+            private String jarFileName;
         }
     }
 }

@@ -31,7 +31,7 @@ public class OfflineAccounts extends BaseUser {
         user.setAccessToken("${auth_access_token}");
         user.setUuid(UserUuid);
         SkinUtils utils = new SkinUtils(getUtils().getSkinFile());
-        utils.setUserSkinInput(OfflineAccounts.class.getResourceAsStream("/steve.png"));
+        utils.setUserSkinInput(OfflineAccounts.class.getResourceAsStream("/assets/skin/steve.png"));
         user.setHeadFile(utils.writeSkinHead());
         JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
         logmaker.info(user);

@@ -41,7 +41,7 @@ public class WdtcLogger {
         return consoleAppender;
     }
 
-    public static String getErrorMessage(Throwable e) {
+    public static String getExceptionMessage(Throwable e) {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         return sw.getBuffer().toString();

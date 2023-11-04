@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo;
-import org.wdt.wdtc.core.download.infterface.DownloadInfoInterface;
+import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.ModUtils;
@@ -25,7 +25,7 @@ public class VersionInfo {
     public VersionInfo(Launcher launcher) {
         this.VersionNumber = launcher.getVersionNumber();
         this.kind = launcher.getKind();
-        DownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
+        ModDownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
         if (info != null) {
             this.ModVersion = info.getModVersion();
         } else {

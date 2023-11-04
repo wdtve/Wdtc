@@ -56,7 +56,7 @@ public class JavaFxUtils {
                 JSONUtils.writeObjectToJsonFile(OpenJfxListFile, array);
             }
         } catch (IOException e) {
-            logmaker.warn(WdtcLogger.getErrorMessage(e));
+            logmaker.warn(WdtcLogger.getExceptionMessage(e));
         }
     }
 

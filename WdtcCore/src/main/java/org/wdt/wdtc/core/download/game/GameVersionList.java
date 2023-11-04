@@ -3,7 +3,9 @@ package org.wdt.wdtc.core.download.game;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
 import org.wdt.wdtc.core.manger.FileManger;
@@ -21,7 +23,11 @@ import java.util.Objects;
 public class GameVersionList implements VersionListInterface {
     private static final Logger logmaker = WdtcLogger.getLogger(GameVersionList.class);
 
+    @SneakyThrows
     public GameVersionList() {
+        if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile())) {
+            DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+        }
     }
 
 
@@ -37,7 +43,7 @@ public class GameVersionList implements VersionListInterface {
                 }
             }
         } catch (IOException e) {
-            logmaker.error(WdtcLogger.getErrorMessage(e));
+            logmaker.error(WdtcLogger.getExceptionMessage(e));
         }
         return VersionList;
     }
@@ -56,7 +62,7 @@ public class GameVersionList implements VersionListInterface {
         private String releaseTime;
 
         @Override
-        public String getVersionMumber() {
+        public String getVersionNumber() {
             return versionNumber;
         }
 

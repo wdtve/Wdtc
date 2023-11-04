@@ -28,6 +28,7 @@ public class WdtcMain {
             CommandTaskManger commandTaskManger = new CommandTaskManger(options, args);
             commandTaskManger.startTask();
         } catch (Throwable e) {
+            logmaker.error(WdtcLogger.getExceptionMessage(e));
             throw new RuntimeException(e);
         }
     }

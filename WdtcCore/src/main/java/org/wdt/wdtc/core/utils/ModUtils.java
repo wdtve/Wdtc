@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo;
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo;
-import org.wdt.wdtc.core.download.infterface.DownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask;
 import org.wdt.wdtc.core.game.Launcher;
 
@@ -52,11 +52,11 @@ public class ModUtils {
         return launcher.getKind() == KindOfMod.QUILT;
     }
 
-    public static DownloadInfoInterface getModDownloadInfo(Launcher launcher) {
+    public static ModDownloadInfoInterface getModDownloadInfo(Launcher launcher) {
         if (GameModIsFabric(launcher)) {
             return launcher.getFabricModInstallInfo();
         } else if (GameModIsForge(launcher)) {
-            return launcher.getForgeDownloadInfo();
+            return launcher.getForgeModDownloadInfo();
         } else if (GameModIsQuilt(launcher)) {
             return launcher.getQuiltModDownloadInfo();
         } else {
@@ -64,11 +64,11 @@ public class ModUtils {
         }
     }
 
-    public static DownloadInfoInterface getVersionModInstall(Launcher launcher, KindOfMod kind) {
+    public static ModDownloadInfoInterface getVersionModInstall(Launcher launcher, KindOfMod kind) {
         if (kind == KindOfMod.QUILT) {
             return launcher.getQuiltModDownloadInfo();
         } else if (kind == KindOfMod.FORGE) {
-            return launcher.getForgeDownloadInfo();
+            return launcher.getForgeModDownloadInfo();
         } else if (kind == KindOfMod.FABRIC) {
             return launcher.getFabricModInstallInfo();
         } else {
@@ -77,7 +77,7 @@ public class ModUtils {
     }
 
     public static InstallTaskInterface getModInstallTask(Launcher launcher) {
-        DownloadInfoInterface info = getModDownloadInfo(launcher);
+        ModDownloadInfoInterface info = getModDownloadInfo(launcher);
         if (info != null) {
             return info.getModInstallTask();
         } else {

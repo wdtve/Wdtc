@@ -1,22 +1,28 @@
 package org.wdt.wdtc.core.download.quilt;
 
 import lombok.Getter;
-import org.wdt.wdtc.core.download.infterface.DownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
+import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
+import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.manger.FileManger;
+import org.wdt.wdtc.core.utils.ModUtils;
 import org.wdt.wdtc.core.utils.gson.JSONObject;
 import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
 
-public class QuiltDownloadInfo implements DownloadInfoInterface {
+public class QuiltDownloadInfo implements ModDownloadInfoInterface {
     private static final String LibraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json";
 
     protected final Launcher launcher;
     @Getter
     protected final String QuiltVersionNumber;
+
+    public QuiltDownloadInfo(Launcher launcher, VersionJsonObjectInterface versionJsonObjectInterface) {
+        this(launcher, versionJsonObjectInterface.getVersionNumber());
+    }
 
     public QuiltDownloadInfo(Launcher launcher, String quiltVersionNumber) {
         this.launcher = launcher;
@@ -43,5 +49,10 @@ public class QuiltDownloadInfo implements DownloadInfoInterface {
     @Override
     public InstallTaskInterface getModInstallTask() {
         return new QuiltInstallTask(launcher, QuiltVersionNumber);
+    }
+
+    @Override
+    public ModUtils.KindOfMod getModKind() {
+        return ModUtils.KindOfMod.QUILT;
     }
 }
