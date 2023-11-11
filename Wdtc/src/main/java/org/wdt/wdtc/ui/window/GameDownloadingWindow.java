@@ -56,7 +56,7 @@ public class GameDownloadingWindow {
         ThreadUtils.startThread(() -> {
             InstallGameVersion installGameVersion = new InstallGameVersion(launcher, true);
             installGameVersion.setSetTextFieldText(textField::setText);
-            installGameVersion.InstallGame();
+            installGameVersion.startInstallGame();
         }).setName("Download Game");
         pane.setBackground(Consoler.getBackground());
         size.ModifyWindwosSize(pane, back, time, status_bar, bmclHome, read_bmcl, textField);

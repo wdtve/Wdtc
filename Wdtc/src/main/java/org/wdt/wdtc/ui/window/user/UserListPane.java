@@ -10,11 +10,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.auth.User;
 import org.wdt.wdtc.core.auth.UsersList;
 import org.wdt.wdtc.core.manger.FileManger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 import org.wdt.wdtc.ui.window.Consoler;
 import org.wdt.wdtc.ui.window.ExceptionWindow;
 
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class UserListPane {
-    private static final File UserFile = FileManger.getUsersJson();
+    private static final File UserFile = FileManger.getUserJson();
     private static final File UserListFile = FileManger.getUserListFile();
 
     public static void setUserList(Pane pane) {
@@ -43,12 +43,8 @@ public class UserListPane {
                 AnchorPane.setBottomAnchor(enter, 15.0);
                 AnchorPane.setLeftAnchor(enter, 15.0);
                 enter.setOnAction(event -> {
-                    try {
-                        User.setUserToJson(UsersList.getUser(UserName));
-                        setUserList(pane);
-                    } catch (IOException e) {
-                        ExceptionWindow.setErrorWin(e);
-                    }
+                    User.setUserToJson(UsersList.getUser(UserName));
+                    setUserList(pane);
                 });
                 if (user.equals(User.getUser())) {
                     enter.setSelected(true);
@@ -80,9 +76,9 @@ public class UserListPane {
                 AnchorPane.setLeftAnchor(detele, 530.0);
                 detele.setOnAction(event -> {
                     try {
-                        JsonObject UserListObject = UsersList.UserListObject();
+                        JsonObject UserListObject = JsonUtils.getJsonObject(FileManger.getUserListFile());
                         UserListObject.remove(UserName);
-                        JSONUtils.writeObjectToJsonFile(UserListFile, UserListObject);
+                        JsonUtils.writeObjectToFile(UserListFile, UserListObject);
                         setUserList(pane);
                     } catch (IOException e) {
                         ExceptionWindow.setErrorWin(e);

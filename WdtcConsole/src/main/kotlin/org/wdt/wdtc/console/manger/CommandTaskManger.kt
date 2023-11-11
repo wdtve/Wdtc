@@ -3,19 +3,27 @@ package org.wdt.wdtc.console.manger
 import org.apache.commons.cli.*
 import org.wdt.wdtc.console.options.DownloadGameOption
 import org.wdt.wdtc.console.options.PrintVersionInfoOption
+import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 
 class CommandTaskManger(private val options: Options, private val args: Array<String>) {
 
     fun startTask() {
-        val printInfo = PrintVersionInfoOption(options)
-        val downloadGame = DownloadGameOption(options)
+        OptionsManger.addAllOptions(options)
+        val printInfo = PrintVersionInfoOption()
+        val downloadGame = DownloadGameOption()
         if (args.isEmpty()) {
             printHelp()
         } else {
-            val line = initCommandLine()
-            if (line.hasOption(printInfo.option)) {
-                printInfo.printInfo()
-            } else {
+            try {
+                val line = initCommandLine()
+                if (line.hasOption(OptionsManger.printVersionInfoOption)) {
+                    printInfo.printInfo()
+                }
+                if (line.hasOption(OptionsManger.downloadGameOption)) {
+                    downloadGame.donwloadGame(line)
+                }
+            } catch (e: ParseException) {
+                println(e.getExceptionMessage())
                 printHelp()
             }
         }

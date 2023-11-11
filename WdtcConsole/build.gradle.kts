@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     application
 }
@@ -13,15 +13,16 @@ tasks.jar {
 }
 
 dependencies {
-    implementation("com.github.wd-t.utils:utils-gson:v1.1.2.1")
-    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
     implementation(project(":WdtcCore"))
+    implementation("com.github.wd-t.utils:utils-gson:1.2.2")
+    implementation("com.github.wd-t.utils:utils-io:1.2.2")
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("commons-cli:commons-cli:1.6.0")
+    implementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 val mainClazz = "org.wdt.wdtc.console.WdtcMain"
@@ -52,7 +53,7 @@ tasks.create<JavaExec>("runShadowJar") {
         "-Dwtdc.application.type=console",
         "-Dwdtc.launcher.version=${project.version}"
     )
-
+    args = listOf("-d")
     workingDir = rootProject.rootDir
 }
 

@@ -45,7 +45,7 @@ public class GameVersionListWindow {
             win.setHome(MainStage);
         });
         refreshButton.setOnAction(event -> {
-            DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+            DownloadVersionGameFile.startDownloadVersionManifestJsonFile();
             setWindowScene(MainStage);
         });
         Platform.runLater(() -> {

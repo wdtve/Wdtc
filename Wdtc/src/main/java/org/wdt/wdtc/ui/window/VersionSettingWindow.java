@@ -106,7 +106,7 @@ public class VersionSettingWindow extends SettingManger {
 
         delete.setOnAction(event -> {
             try {
-                FileUtils.deleteDirectory(launcher.getVersionPath());
+                FileUtils.deleteDirectory(launcher.getVersionDirectory());
                 Setting setting = getSetting();
                 setting.setPreferredVersion(null);
                 putSettingToFile(setting);
@@ -119,7 +119,7 @@ public class VersionSettingWindow extends SettingManger {
         });
         completion.setOnAction(event -> ThreadUtils.startThread(() -> {
             InstallGameVersion version = new InstallGameVersion(launcher, true);
-            version.InstallGame();
+            version.startInstallGame();
             logmaker.info(launcher.getVersionNumber() + " downloaded");
         }));
     }
@@ -240,13 +240,13 @@ public class VersionSettingWindow extends SettingManger {
         ImageView ModIcon = new ImageView();
         switch (kind) {
             case FORGE ->
-                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/forge.png"))));
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/assets/icon/forge.png"))));
             case FABRIC ->
-                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/fabric.png"))));
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/assets/icon/fabric.png"))));
             case QUILT ->
-                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/quilt.png"))));
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/assets/icon/quilt.png"))));
             case Original ->
-                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/ico.jpg"))));
+                    ModIcon.setImage(new Image(requireNonNull(VersionSettingWindow.class.getResourceAsStream("/assets/icon/ico.jpg"))));
         }
         AnchorPane.setTopAnchor(ModIcon, 4.0);
         AnchorPane.setLeftAnchor(ModIcon, 10.0);

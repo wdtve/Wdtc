@@ -1,27 +1,36 @@
 package org.wdt.wdtc.console.options
 
 import org.apache.commons.cli.CommandLine
-import org.apache.commons.cli.Options
-import org.wdt.wdtc.console.utils.OptionUtils
+import org.wdt.wdtc.console.manger.OptionsManger.chooseVersionNumber
 import org.wdt.wdtc.core.download.InstallGameVersion
+import org.wdt.wdtc.core.download.game.GameVersionList
+import org.wdt.wdtc.core.download.game.GameVersionList.GameVersionJsonObjectImpl
+import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
+import java.util.*
 
-class DownloadGameOption(options: Options) {
-    val downloadGameOption = OptionUtils.getOption("d", "download", "Download a game version")
-    val chooseVersionNumber =
-        OptionUtils.getOption("cv", "chooseversion", true, "Choose a version to download(Need '-d' command)")
-
-    init {
-        options.addOption(chooseVersionNumber)
-        options.addOption(downloadGameOption)
-    }
+class DownloadGameOption {
 
     fun donwloadGame(commandLine: CommandLine) {
+        var launcher: Launcher? = null;
         if (commandLine.hasOption(chooseVersionNumber)) {
-            val launcher = Launcher(commandLine.getOptionValue(chooseVersionNumber))
-            val installGameVersion = InstallGameVersion(launcher, true)
-            installGameVersion.setSetTextFieldText { string -> println(string) }
-            installGameVersion.InstallGame()
+            launcher = Launcher(commandLine.getOptionValue(chooseVersionNumber))
+
+        } else {
+            val versionList = GameVersionList().versionList
+            for (i in 0 until versionList.size) {
+                val versionObejct = versionList[i] as GameVersionJsonObjectImpl
+                println("$i. Version: ${versionObejct.versionNumber}, Type: ${versionObejct.gameType}")
+            }
+            val input = Scanner(System.`in`)
+            print("Choose a number:")
+            if (input.hasNext()) {
+                val index = input.nextInt()
+                launcher = Launcher(versionList[index].versionNumber)
+            }
         }
+        val installGameVersion = InstallGameVersion(launcher!!, true)
+        installGameVersion.setTextFieldText = TextInterface { string -> println(string) }
+        installGameVersion.startInstallGame()
     }
 }

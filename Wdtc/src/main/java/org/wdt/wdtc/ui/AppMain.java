@@ -38,7 +38,7 @@ public class AppMain extends Application {
             MainStage.setMinWidth(WindwosSizeManger.WindowsWidht);
             MainStage.setMinHeight(WindwosSizeManger.WindowsHeight);
             size.setWindwosSize();
-            MainStage.getIcons().add(new Image("ico.jpg"));
+            MainStage.getIcons().add(new Image("assets/icon/ico.jpg"));
             MainStage.setResizable(VMManger.isDebug());
             HomeWindow win = new HomeWindow();
             win.setHome(MainStage);
@@ -48,7 +48,8 @@ public class AppMain extends Application {
                 logmaker.info(size);
                 try {
                     SettingManger.Setting setting = SettingManger.getSetting();
-                    setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
+                    setting.setWindowsWidth(MainStage.getWidth());
+                    setting.setWindowsHeight(MainStage.getHeight());
                     FileUtils.touch(DownloadUtils.StopProcess);
                     SettingManger.putSettingToFile(setting);
                 } catch (IOException e) {

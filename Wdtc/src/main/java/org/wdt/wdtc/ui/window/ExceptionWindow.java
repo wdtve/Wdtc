@@ -31,7 +31,7 @@ public class ExceptionWindow {
             label.setPrefWidth(stage.getWidth());
             VBox vBox = new VBox();
             stage.setTitle(title);
-            stage.getIcons().add(new Image("ico.jpg"));
+            stage.getIcons().add(new Image("assets/icon/ico.jpg"));
             WindwosSizeManger size = new WindwosSizeManger(stage);
             size.ModifyWindwosSize(vBox, label);
             stage.setScene(new Scene(vBox));

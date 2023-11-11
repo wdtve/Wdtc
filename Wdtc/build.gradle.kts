@@ -1,5 +1,5 @@
 plugins {
-    id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.openjfx.javafxplugin") version "0.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 val moduleList = listOf("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
@@ -23,7 +23,7 @@ tasks.shadowJar {
         for (module in moduleList) {
             exclude(dependency("org.openjfx:$module:${javafx.version}"))
         }
-        exclude(dependency("org.jetbrains.kotlin:.*:.*"))
+//        exclude(dependency("org.jetbrains.kotlin:.*:.*"))
     }
     manifest {
         attributes(
@@ -45,9 +45,6 @@ tasks.create<JavaExec>("runShadowJar") {
     workingDir = rootProject.rootDir
 }
 
-tasks.processResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
 tasks.compileJava<JavaCompile> {
     options.compilerArgs.add("--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED")
 }
@@ -55,7 +52,8 @@ tasks.compileJava<JavaCompile> {
 dependencies {
     implementation(project(":WdtcCore"))
     implementation(project(":DependencyDownloader"))
-    implementation("com.github.wd-t.utils:utils-io:v1.1.2.1")
+    implementation("com.github.wd-t.utils:utils-gson:1.2.2")
+    implementation("com.github.wd-t.utils:utils-io:1.2.2")
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.jfoenix:jfoenix:9.0.10")

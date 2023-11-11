@@ -34,7 +34,7 @@ public class NewUserWindows {
         UserStage.setWidth(725);
         UserStage.setHeight(430);
         AnchorPane ParentPane = new AnchorPane();
-        UserStage.getIcons().add(new Image("/ico.jpg"));
+        UserStage.getIcons().add(new Image("/assets/icon/ico.jpg"));
         Pane SonPane = new Pane();
         if (type == null) {
             UserListPane.setUserList(SonPane);

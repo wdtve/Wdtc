@@ -14,7 +14,7 @@ public class Consoler {
 
     public static Background getBackground() {
         //Form:https://www.bilibili.com/video/BV1EY411m7uZ
-        Image image = new Image(Objects.requireNonNull(Consoler.class.getResourceAsStream("/BlackGround.jpg")));
+        Image image = new Image(Objects.requireNonNull(Consoler.class.getResourceAsStream("/assets/blackGround/BlackGround.jpg")));
         return new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(WindwosSizeManger.WindowsWidht, WindwosSizeManger.WindowsHeight, false, false, true, true)));
     }
 

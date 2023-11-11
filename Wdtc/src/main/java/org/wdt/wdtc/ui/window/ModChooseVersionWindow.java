@@ -91,8 +91,11 @@ public class ModChooseVersionWindow {
                 case FORGE -> launcher.setForgeModDownloadInfo(new ForgeDownloadInfo(launcher, versionJsonObject));
                 case FABRIC -> launcher.setFabricModInstallInfo(new FabricDonwloadInfo(launcher, versionJsonObject));
                 case QUILT -> launcher.setQuiltModDownloadInfo(new QuiltInstallTask(launcher, versionJsonObject));
-                case FABRICAPI ->
-                        launcher.getFabricModInstallInfo().setAPIDownloadTask(new FabricAPIDownloadTask(launcher, versionJsonObject));
+                case FABRICAPI -> {
+                    if (launcher.fabricModInstallInfo != null) {
+                        launcher.fabricModInstallInfo.setApiDownloadTask(new FabricAPIDownloadTask(launcher, versionJsonObject));
+                    }
+                }
             }
             ModChooseWindow Choose = new ModChooseWindow(launcher, MainStage);
             Choose.setChooseWin();

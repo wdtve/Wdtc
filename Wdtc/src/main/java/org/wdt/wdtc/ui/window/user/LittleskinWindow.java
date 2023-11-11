@@ -57,7 +57,7 @@ public class LittleskinWindow {
                     UsersList.addUser(yggdrasilAccounts.getUser());
                     try {
                         YggdrasilTextures yggdrasilTextures = yggdrasilAccounts.getYggdrasilTextures();
-                        yggdrasilTextures.DownloadUserSkin();
+                        yggdrasilTextures.startDownloadUserSkin();
                         logmaker.info("Littleskin用户:" + UserName + "登陆成功!");
                         UserListPane.setUserList(pane);
                     } catch (IOException e) {

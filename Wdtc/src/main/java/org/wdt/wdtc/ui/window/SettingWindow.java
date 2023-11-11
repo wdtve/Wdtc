@@ -246,12 +246,12 @@ public class SettingWindow extends SettingManger {
         pane.getChildren().addAll(scrollPane, back, ExportLog, CleanCache);
         pane.setBackground(Consoler.getBackground());
         MainStage.setScene(new Scene(pane));
-        FalseLog.setSelected(!setting.isConsole());
-        FalseOpenGL.setSelected(!setting.isLlvmpipeLoader());
-        FalseZhcn.setSelected(!setting.isChineseLanguage());
-        TrueLog.setSelected(setting.isConsole());
-        TrueOpenGl.setSelected(setting.isLlvmpipeLoader());
-        TrueZhcn.setSelected(setting.isChineseLanguage());
+        FalseLog.setSelected(!setting.getConsole());
+        FalseOpenGL.setSelected(!setting.getLlvmpipeLoader());
+        FalseZhcn.setSelected(!setting.getChineseLanguage());
+        TrueLog.setSelected(setting.getConsole());
+        TrueOpenGl.setSelected(setting.getLlvmpipeLoader());
+        TrueZhcn.setSelected(setting.getChineseLanguage());
 
         switch (setting.getDownloadSource()) {
             case MCBBS -> McbbsDownloadSource.setSelected(true);
