@@ -1,7 +1,6 @@
 subprojects {
     repositories {
         maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://maven.aliyun.com/repository/public/") }
         mavenLocal()
         mavenCentral()
     }
@@ -11,4 +10,4 @@ subprojects {
 }
 
 group = "org.wdt.wdtc"
-version = "0.0.1.14"
+version = "0.0.1.15"
