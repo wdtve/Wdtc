@@ -9,25 +9,25 @@ import org.wdt.wdtc.core.utils.WdtcLogger
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 
 object WdtcMain {
-    private val logmaker = WdtcLogger.getLogger(WdtcMain::class.java)
+  private val logmaker = WdtcLogger.getLogger(WdtcMain::class.java)
 
-    init {
-        TaskManger.ckeckVMConfig()
-    }
+  init {
+    TaskManger.ckeckVMConfig()
+  }
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-        try {
-            TaskManger.runStartUpTask()
-            AuthlibInjector.updateAuthlibInjector()
-            GameFileManger.downloadVersionManifestJsonFileTask()
-            val options = Options()
-            logmaker.info("Args: " + args.contentToString())
-            val commandTaskManger = CommandTaskManger(options, args)
-            commandTaskManger.startTask()
-        } catch (e: Throwable) {
-            logmaker.error(e.getExceptionMessage())
-            throw RuntimeException(e)
-        }
+  @JvmStatic
+  fun main(args: Array<String>) {
+    try {
+      TaskManger.runStartUpTask()
+      AuthlibInjector.updateAuthlibInjector()
+      GameFileManger.downloadVersionManifestJsonFileTask()
+      val options = Options()
+      logmaker.info("Args: " + args.contentToString())
+      val commandTaskManger = CommandTaskManger(options, args)
+      commandTaskManger.startTask()
+    } catch (e: Throwable) {
+      logmaker.error(e.getExceptionMessage())
+      throw RuntimeException(e)
     }
+  }
 }

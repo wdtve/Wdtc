@@ -2,7 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19">
     <Label layoutX="250.0" layoutY="69.0" text="Littleskin外置登录"/>
     <Label layoutX="175.0" layoutY="107.0" text="用户名:"/>

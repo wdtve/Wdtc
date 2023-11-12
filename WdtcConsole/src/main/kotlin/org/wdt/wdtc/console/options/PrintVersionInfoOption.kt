@@ -4,7 +4,7 @@ import org.wdt.wdtc.core.manger.VMManger
 
 class PrintVersionInfoOption {
 
-    fun printInfo() {
-        println("Launcher Version: ${VMManger.launcherVersion}")
-    }
+  fun printInfo() {
+    println("Launcher Version: ${VMManger.launcherVersion}")
+  }
 }

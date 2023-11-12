@@ -5,8 +5,8 @@ import org.wdt.wdtc.core.game.*
 import java.io.IOException
 
 open class DownloadGameVersion @JvmOverloads constructor(
-    protected val launcher: Launcher,
-    protected val install: Boolean = false
+  protected val launcher: Launcher,
+  protected val install: Boolean = false
 ) {
   protected val downloadGame: DownloadVersionGameFile = DownloadVersionGameFile(launcher, install)
 

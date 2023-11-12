@@ -6,11 +6,6 @@ plugins {
 group = "org.wdt.wdtc.console"
 version = rootProject.version
 
-tasks.jar {
-    enabled = false
-    dependsOn(tasks["shadowJar"])
-}
-
 dependencies {
     implementation(project(":WdtcCore"))
     implementation("com.github.wd-t.utils:utils-gson:1.2.2")
@@ -25,24 +20,24 @@ dependencies {
 }
 
 val mainClazz = "org.wdt.wdtc.console.WdtcMain"
+val sameManifest = mapOf(
+    "Implementation-Vendor" to "Wdt~(wd-t)",
+    "Implementation-Title" to "wdtc-console-kotlin",
+    "Implementation-Version" to "${project.version}",
+    "Main-Class" to mainClazz,
+)
 tasks.shadowJar {
     minimize()
-    manifest {
-        attributes(
-            "Implementation-Vendor" to "Wdt~(wd-t)",
-            "Implementation-Title" to "wdtc-console-kotlin",
-            "Implementation-Version" to "${project.version}",
-            "Main-Class" to mainClazz
-        )
-    }
+    manifest.attributes(sameManifest)
+}
+tasks.jar {
+    manifest.attributes(sameManifest)
+    dependsOn(tasks["shadowJar"])
 }
 
 application {
     mainClass.set(mainClazz)
-    applicationDefaultJvmArgs = listOf(
-        "-Dwtdc.application.type=console",
-        "-Dwdtc.launcher.version=${project.version}"
-    )
+    applicationDefaultJvmArgs = getJvmArgs(false)
 }
 
 
@@ -50,15 +45,23 @@ tasks.create<JavaExec>("runShadowJar") {
     dependsOn(tasks.jar)
     group = "application"
     classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
-    jvmArgs = listOf(
-        "-Dwdtc.debug.switch=true",
-        "-Dwtdc.application.type=console",
-        "-Dwdtc.launcher.version=${project.version}"
-    )
+    jvmArgs = getJvmArgs(true)
     args = listOf("-d")
     workingDir = rootProject.rootDir
 }
 
+fun getJvmArgs(debug: Boolean): MutableList<String> {
+    val jvmList = mutableListOf(
+        "-Dwtdc.application.type=console",
+        "-Dwdtc.launcher.version=${project.version}"
+    )
+    return if (debug) {
+        jvmList.add("-Dwdtc.debug.switch=true")
+        jvmList
+    } else {
+        jvmList
+    }
+}
 
 tasks.test {
     useJUnitPlatform()

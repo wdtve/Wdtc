@@ -10,7 +10,7 @@ import java.io.IOException
 
 // TODO Optimize download speed
 class InstallGameVersion @JvmOverloads constructor(launcher: Launcher, install: Boolean = false) :
-    DownloadGameVersion(launcher, install) {
+  DownloadGameVersion(launcher, install) {
 
   var setTextFieldText: TextInterface? = null
   private val logmaker = InstallGameVersion::class.java.getWdtcLogger()
