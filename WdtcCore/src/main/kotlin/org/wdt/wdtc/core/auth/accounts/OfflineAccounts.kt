@@ -12,27 +12,27 @@ import java.io.IOException
 import java.util.*
 
 class OfflineAccounts(private val username: String) : BaseUser() {
-    private val userUuid = UUID.randomUUID().toString().cleanStrInString("-")
+  private val userUuid = UUID.randomUUID().toString().cleanStrInString("-")
 
-    @get:Throws(IOException::class)
-    override val user: User
-        get() {
-            val user = User()
-            user.userName = username
-            user.type = AccountsType.Offline
-            user.accessToken = "\${auth_access_token}"
-            user.uuid = userUuid
-            val utils = SkinUtils(utils.getSkinFile())
-            utils.userSkinInput = OfflineAccounts::class.java.getResourceAsStream("/assets/skin/steve.png")
-            user.headFile = utils.writeSkinHead()
-            userJson.writeObjectToFile(user)
-            logmaker.info(user)
-            return user
-        }
-    val utils: SkinUtils
-        get() = SkinUtils(username)
-
-    companion object {
-        private val logmaker = getLogger(OfflineAccounts::class.java)
+  @get:Throws(IOException::class)
+  override val user: User
+    get() {
+      val user = User()
+      user.userName = username
+      user.type = AccountsType.Offline
+      user.accessToken = "\${auth_access_token}"
+      user.uuid = userUuid
+      val utils = SkinUtils(utils.getSkinFile())
+      utils.userSkinInput = OfflineAccounts::class.java.getResourceAsStream("/assets/skin/steve.png")
+      user.headFile = utils.writeSkinHead()
+      userJson.writeObjectToFile(user)
+      logmaker.info(user)
+      return user
     }
+  val utils: SkinUtils
+    get() = SkinUtils(username)
+
+  companion object {
+    private val logmaker = getLogger(OfflineAccounts::class.java)
+  }
 }

@@ -7,31 +7,31 @@ import org.wdt.wdtc.core.utils.StringUtils
 import org.wdt.wdtc.core.utils.StringUtils.appendForString
 
 class Accounts {
-	private val type: AccountsType
+  private val type: AccountsType
 
-	init {
-		type = if (User.user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
-	}
+  init {
+    type = if (User.user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
+  }
 
-	fun ifAccountsIsOffline(): Boolean {
-		return type != AccountsType.Yggdrasil
-	}
+  fun ifAccountsIsOffline(): Boolean {
+    return type != AccountsType.Yggdrasil
+  }
 
-	val jvmCommand: String
-		get() = if (ifAccountsIsOffline())
-			StringUtils.STRING_EMPTY
-		else StringUtils.STRING_SPACE.appendForString(
-			"-javaagent:",
-			authlibInjector,
-			"=",
-			littleskinApi,
-			StringUtils.STRING_SPACE,
-			"-Dauthlibinjector.yggdrasil.prefetched=",
-			User.user.base64Data
-		)
+  val jvmCommand: String
+    get() = if (ifAccountsIsOffline())
+      StringUtils.STRING_EMPTY
+    else StringUtils.STRING_SPACE.appendForString(
+      "-javaagent:",
+      authlibInjector,
+      "=",
+      littleskinApi,
+      StringUtils.STRING_SPACE,
+      "-Dauthlibinjector.yggdrasil.prefetched=",
+      User.user.base64Data
+    )
 
-	enum class AccountsType {
-		Offline,
-		Yggdrasil
-	}
+  enum class AccountsType {
+    Offline,
+    Yggdrasil
+  }
 }

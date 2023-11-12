@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    application
 }
 
 group = "org.wdt.wdtc.console"
@@ -19,7 +18,7 @@ dependencies {
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("commons-cli:commons-cli:1.6.0")
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
@@ -30,7 +29,10 @@ tasks.shadowJar {
     minimize()
     manifest {
         attributes(
-            "Main-Class" to mainClazz,
+            "Implementation-Vendor" to "Wdt~(wd-t)",
+            "Implementation-Title" to "wdtc-console-kotlin",
+            "Implementation-Version" to "${project.version}",
+            "Main-Class" to mainClazz
         )
     }
 }

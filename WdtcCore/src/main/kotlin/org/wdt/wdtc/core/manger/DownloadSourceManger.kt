@@ -6,45 +6,45 @@ import org.wdt.wdtc.core.download.source.McbbsDownloadSource
 import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
 object DownloadSourceManger {
-    @JvmStatic
-    val officialDownloadSource: DownloadSourceInterface
-        get() = OfficialDownloadSource()
+  @JvmStatic
+  val officialDownloadSource: DownloadSourceInterface
+    get() = OfficialDownloadSource()
 
-    @JvmStatic
-    val downloadSourceKind: DownloadSourceList
-        get() = SettingManger.setting.downloadSource
+  @JvmStatic
+  val downloadSourceKind: DownloadSourceList
+    get() = SettingManger.setting.downloadSource
 
-    @JvmStatic
-    val downloadSource: DownloadSourceInterface
-        get() {
-            val source = downloadSourceKind
-            return when (source) {
-                DownloadSourceList.OFFICIAL -> {
-                    OfficialDownloadSource()
-                }
-
-                DownloadSourceList.BMCLAPI -> {
-                    BmclDownloadSource()
-                }
-
-                else -> {
-                    McbbsDownloadSource()
-                }
-            }
+  @JvmStatic
+  val downloadSource: DownloadSourceInterface
+    get() {
+      val source = downloadSourceKind
+      return when (source) {
+        DownloadSourceList.OFFICIAL -> {
+          OfficialDownloadSource()
         }
 
-    @JvmStatic
-    val isNotOfficialDownloadSource: Boolean
-        get() = !isOfficialDownloadSource()
+        DownloadSourceList.BMCLAPI -> {
+          BmclDownloadSource()
+        }
 
-    @JvmStatic
-    fun isOfficialDownloadSource(): Boolean {
-        return downloadSourceKind == DownloadSourceList.OFFICIAL
+        else -> {
+          McbbsDownloadSource()
+        }
+      }
     }
 
-    enum class DownloadSourceList {
-        OFFICIAL,
-        BMCLAPI,
-        MCBBS
-    }
+  @JvmStatic
+  val isNotOfficialDownloadSource: Boolean
+    get() = !isOfficialDownloadSource()
+
+  @JvmStatic
+  fun isOfficialDownloadSource(): Boolean {
+    return downloadSourceKind == DownloadSourceList.OFFICIAL
+  }
+
+  enum class DownloadSourceList {
+    OFFICIAL,
+    BMCLAPI,
+    MCBBS
+  }
 }

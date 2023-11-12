@@ -21,76 +21,76 @@ import java.io.PrintWriter
 import java.net.URL
 
 class YggdrasilAccounts(val url: String, val username: String, val password: String) : BaseUser() {
-    private val logmaker = getLogger(YggdrasilAccounts::class.java)
+  private val logmaker = getLogger(YggdrasilAccounts::class.java)
 
-    @Throws(IOException::class)
-    fun sendPostWithJson(): String {
-        val requestUrl = URL("$url/api/yggdrasil/authserver/authenticate")
-        val jsonObject = PostJsonObject(username, password)
-        val jsonStr: String = jsonObject.toJsonString()
-        val conn = requestUrl.openConnection()
-        conn.setRequestProperty("content-type", "application/json")
-        conn.setDoOutput(true)
-        conn.setDoInput(true)
-        val out = PrintWriter(conn.getOutputStream())
-        out.print(jsonStr)
-        out.flush()
-        return IOUtils.toString(conn.getInputStream())
+  @Throws(IOException::class)
+  fun sendPostWithJson(): String {
+    val requestUrl = URL("$url/api/yggdrasil/authserver/authenticate")
+    val jsonObject = PostJsonObject(username, password)
+    val jsonStr: String = jsonObject.toJsonString()
+    val conn = requestUrl.openConnection()
+    conn.setRequestProperty("content-type", "application/json")
+    conn.setDoOutput(true)
+    conn.setDoInput(true)
+    val out = PrintWriter(conn.getOutputStream())
+    out.print(jsonStr)
+    out.flush()
+    return IOUtils.toString(conn.getInputStream())
+  }
+
+  @get:Throws(IOException::class)
+  val userInformation: UserInformation = sendPostWithJson().parseObject()
+  val yggdrasilTextures: YggdrasilTextures
+    get() = YggdrasilTextures(this)
+
+  @get:Throws(IOException::class)
+  override val user: User
+    get() {
+      val userInfo = userInformation
+      val textures = yggdrasilTextures
+      val user = User()
+      user.type = AccountsType.Yggdrasil
+      val selectedProfile = userInfo.selectedProfile!!
+      user.userName = selectedProfile.getString("name")
+      user.uuid = selectedProfile.getString("id")
+      user.accessToken = userInfo.accessToken
+      user.metaData = getURLToString(littleskinApi)
+      user.base64Data = user.metaData!!.toBase64()
+      val utils = textures.utils
+      user.headFile = utils.writeSkinHead()
+      userJson.writeObjectToFile(user)
+      logmaker.info(user)
+      return user
     }
 
-    @get:Throws(IOException::class)
-    val userInformation: UserInformation = sendPostWithJson().parseObject()
-    val yggdrasilTextures: YggdrasilTextures
-        get() = YggdrasilTextures(this)
+  class PostJsonObject(
+    @field:SerializedName("username") private val username: String,
+    @field:SerializedName("password") private val password: String
+  ) {
+    @SerializedName("requestUser")
+    private val requestUser = true
 
-    @get:Throws(IOException::class)
-    override val user: User
-        get() {
-            val userInfo = userInformation
-            val textures = yggdrasilTextures
-            val user = User()
-            user.type = AccountsType.Yggdrasil
-            val selectedProfile = userInfo.selectedProfile!!
-            user.userName = selectedProfile.getString("name")
-            user.uuid = selectedProfile.getString("id")
-            user.accessToken = userInfo.accessToken
-            user.metaData = getURLToString(littleskinApi)
-            user.base64Data = user.metaData!!.toBase64()
-            val utils = textures.utils
-            user.headFile = utils.writeSkinHead()
-            userJson.writeObjectToFile(user)
-            logmaker.info(user)
-            return user
-        }
+    @SerializedName("agent")
+    private val agent: Agent
 
-    class PostJsonObject(
-        @field:SerializedName("username") private val username: String,
-        @field:SerializedName("password") private val password: String
-    ) {
-        @SerializedName("requestUser")
-        private val requestUser = true
-
-        @SerializedName("agent")
-        private val agent: Agent
-
-        init {
-            agent = Agent()
-        }
-
-        class Agent {
-            @SerializedName("name")
-            private val name = "Minecraft"
-
-            @SerializedName("version")
-            private val version = 1
-        }
+    init {
+      agent = Agent()
     }
 
-    class UserInformation {
-        var accessToken: String? = null
-        var clientToken: String? = null
-        var availableProfiles: JsonArray? = null
-        var user: JsonObject? = null
-        var selectedProfile: JsonObject? = null
+    class Agent {
+      @SerializedName("name")
+      private val name = "Minecraft"
+
+      @SerializedName("version")
+      private val version = 1
     }
+  }
+
+  class UserInformation {
+    var accessToken: String? = null
+    var clientToken: String? = null
+    var availableProfiles: JsonArray? = null
+    var user: JsonObject? = null
+    var selectedProfile: JsonObject? = null
+  }
 }

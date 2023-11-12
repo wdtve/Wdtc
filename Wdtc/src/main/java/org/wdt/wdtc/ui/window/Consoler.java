@@ -50,10 +50,10 @@ public class Consoler {
     }
 
     public static String getWindowsTitle(String WindowsName) {
-        return String.format(VMManger.isDebug() ? "Wdtc - %s - %s" : "Wdtc - Debug - %s - %s", VMManger.getLauncherVersion(), WindowsName);
+        return String.format(VMManger.isDebug() ? "Wdtc - Debug - %s - %s" : "Wdtc - %s - %s", VMManger.getLauncherVersion(), WindowsName);
     }
 
     public static String getWindowsTitle() {
-        return String.format(VMManger.isDebug() ? "Wdtc - %s" : "Wdtc - Debug - %s", VMManger.getLauncherVersion());
+        return String.format(VMManger.isDebug() ? "Wdtc - Debug - %s" : "Wdtc - %s", VMManger.getLauncherVersion());
     }
 }

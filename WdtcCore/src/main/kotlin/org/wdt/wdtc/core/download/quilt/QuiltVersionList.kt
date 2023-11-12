@@ -12,40 +12,40 @@ import java.io.IOException
 import java.util.*
 
 class QuiltVersionList(private val launcher: Launcher) : VersionListInterface {
-    private val quiltquVersionListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s"
+  private val quiltquVersionListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s"
 
-    @get:Throws(IOException::class)
-    override val versionList: List<VersionJsonObjectInterface>
-        get() {
-            val list: MutableList<VersionJsonObjectInterface> = ArrayList()
-            val versionArray = getURLToString(quiltquVersionListUrl.format(launcher.versionNumber)).parseJsonArray()
-            for (i in 0 until versionArray.size()) {
-                val versionObject = versionArray.getJsonObject(i)
-                list.add(versionObject.getJsonObject("loader").parseObject())
-            }
-            return list
-        }
-
-    class QuiltVersionJsonObjectImpl : VersionJsonObjectInterface {
-        @SerializedName("version")
-        override var versionNumber: String? = null
-
-        @SerializedName("build")
-        var buildNumber = 0
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other == null || javaClass != other.javaClass) return false
-            val that = other as QuiltVersionJsonObjectImpl
-            return buildNumber == that.buildNumber && versionNumber == that.versionNumber
-        }
-
-        override fun hashCode(): Int {
-            return Objects.hash(versionNumber, buildNumber)
-        }
-
-        override fun isInstanceofThis(o: Any?): Boolean {
-            return o is QuiltVersionJsonObjectImpl
-        }
+  @get:Throws(IOException::class)
+  override val versionList: List<VersionJsonObjectInterface>
+    get() {
+      val list: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val versionArray = getURLToString(quiltquVersionListUrl.format(launcher.versionNumber)).parseJsonArray()
+      for (i in 0 until versionArray.size()) {
+        val versionObject = versionArray.getJsonObject(i)
+        list.add(versionObject.getJsonObject("loader").parseObject())
+      }
+      return list
     }
+
+  class QuiltVersionJsonObjectImpl : VersionJsonObjectInterface {
+    @SerializedName("version")
+    override var versionNumber: String? = null
+
+    @SerializedName("build")
+    var buildNumber = 0
+    override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other == null || javaClass != other.javaClass) return false
+      val that = other as QuiltVersionJsonObjectImpl
+      return buildNumber == that.buildNumber && versionNumber == that.versionNumber
+    }
+
+    override fun hashCode(): Int {
+      return Objects.hash(versionNumber, buildNumber)
+    }
+
+    override fun isInstanceofThis(o: Any?): Boolean {
+      return o is QuiltVersionJsonObjectImpl
+    }
+  }
 
 }

@@ -19,80 +19,77 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class Launcher @JvmOverloads constructor(version: String?, here: File? = setting.defaultGamePath) : GameFileManger(
-    version!!, here!!
-) {
-    @JvmField
-    var fabricModInstallInfo: FabricDonwloadInfo? = null
-    var kind = KindOfMod.Original
+class Launcher @JvmOverloads constructor(version: String, here: File = setting.defaultGamePath) :
+  GameFileManger(version, here) {
+  @JvmField
+  var fabricModInstallInfo: FabricDonwloadInfo? = null
+  var kind = KindOfMod.Original
 
-    @JvmField
-    var forgeModDownloadInfo: ForgeDownloadInfo? = null
+  @JvmField
+  var forgeModDownloadInfo: ForgeDownloadInfo? = null
 
-    @JvmField
-    var quiltModDownloadInfo: QuiltDownloadInfo? = null
-    fun setQuiltModDownloadInfo(quiltModDownloadInfo: QuiltInstallTask?) {
-        kind = KindOfMod.QUILT
-        this.quiltModDownloadInfo = quiltModDownloadInfo
+  @JvmField
+  var quiltModDownloadInfo: QuiltDownloadInfo? = null
+  fun setQuiltModDownloadInfo(quiltModDownloadInfo: QuiltInstallTask?) {
+    kind = KindOfMod.QUILT
+    this.quiltModDownloadInfo = quiltModDownloadInfo
+  }
+
+  fun setFabricModInstallInfo(fabricModInstallInfo: FabricDonwloadInfo?) {
+    kind = KindOfMod.FABRIC
+    this.fabricModInstallInfo = fabricModInstallInfo
+  }
+
+  fun setForgeModDownloadInfo(forgeModDownloadInfo: ForgeDownloadInfo?) {
+    kind = KindOfMod.FORGE
+    this.forgeModDownloadInfo = forgeModDownloadInfo
+  }
+
+  val gameConfig: GameConfig
+    get() = GameConfig(this)
+
+  @Throws(IOException::class)
+  fun beforLaunchTask() {
+    if (setting.chineseLanguage && FileUtils.isFileNotExists(gameOptionsFile)) {
+      val options = IOUtils.toString(Objects.requireNonNull(javaClass.getResourceAsStream("/assets/options.txt")))
+      gameOptionsFile.writeStringToFile(options)
     }
+  }
 
-    fun setFabricModInstallInfo(fabricModInstallInfo: FabricDonwloadInfo?) {
-        kind = KindOfMod.FABRIC
-        this.fabricModInstallInfo = fabricModInstallInfo
-    }
+  fun cleanKind() {
+    kind = KindOfMod.Original
+  }
 
-    fun setForgeModDownloadInfo(forgeModDownloadInfo: ForgeDownloadInfo?) {
-        kind = KindOfMod.FORGE
-        this.forgeModDownloadInfo = forgeModDownloadInfo
-    }
+  val accounts: Accounts
+    get() = Accounts()
+  val versionInfo: VersionInfo
+    get() = VersionInfo(this)
+  val gameDirectoryManger: GameDirectoryManger
+    get() = this
 
-    val gameConfig: GameConfig
-        get() = GameConfig(this)
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Launcher) return false
+    return if (other.versionNumber == versionNumber) {
+      other.kind === kind
+    } else false
+  }
 
-    @Throws(IOException::class)
-    fun beforLaunchTask() {
-        if (setting.chineseLanguage && FileUtils.isFileNotExists(gameOptionsFile)) {
-            val options = IOUtils.toString(Objects.requireNonNull(javaClass.getResourceAsStream("/assets/options.txt")))
-            gameOptionsFile.writeStringToFile(options)
-        }
-    }
+  override fun hashCode(): Int {
+    return Objects.hash(versionNumber, kind)
+  }
 
-    fun cleanKind() {
-        kind = KindOfMod.Original
-    }
+  override fun toString(): String {
+    return "Launcher(versionNumber=$versionNumber, kind=$kind)"
+  }
 
-    val accounts: Accounts
-        get() = Accounts()
-    val versionInfo: VersionInfo
-        get() = VersionInfo(this)
-    val gameDirectoryManger: GameDirectoryManger
-        get() = this
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Launcher) return false
-        return if (other.versionNumber == versionNumber) {
-            other.kind === kind
-        } else false
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(versionNumber, kind)
-    }
-
-    override fun toString(): String {
-        return "Launcher{" +
-                "version=" + versionNumber +
-                ",kind=" + kind +
-                '}'
-    }
-
-    companion object {
-        @JvmStatic
-        val preferredLauncher: Launcher?
-            get() {
-                val setting = setting
-                return if (setting.preferredVersion != null) getModTask(Launcher(setting.preferredVersion)) else null
-            }
-    }
+  companion object {
+    @JvmStatic
+    val preferredLauncher: Launcher?
+      get() {
+        val setting = setting
+        return if (setting.preferredVersion != null) getModTask(Launcher(setting.preferredVersion!!)) else null
+      }
+  }
 }

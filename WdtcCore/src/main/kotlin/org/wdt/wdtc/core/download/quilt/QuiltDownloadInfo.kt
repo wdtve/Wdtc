@@ -11,23 +11,23 @@ import java.io.File
 import java.io.IOException
 
 open class QuiltDownloadInfo(protected val launcher: Launcher, override val modVersion: String?) :
-	ModDownloadInfoInterface {
-	private val libraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json"
+  ModDownloadInfoInterface {
+  private val libraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json"
 
-	constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
-			this(launcher, versionJsonObjectInterface.versionNumber)
+  constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
+      this(launcher, versionJsonObjectInterface.versionNumber)
 
-	val quiltVersionJson: File
-		get() = File(wdtcCache, "${launcher.versionNumber}-quilt-$modVersion.json")
-	val quiltVersionJsonUrl: String
-		get() = libraryListUrl.format(launcher.versionNumber, modVersion)
+  val quiltVersionJson: File
+    get() = File(wdtcCache, "${launcher.versionNumber}-quilt-$modVersion.json")
+  val quiltVersionJsonUrl: String
+    get() = libraryListUrl.format(launcher.versionNumber, modVersion)
 
-	@get:Throws(IOException::class)
-	val quiltGameVersionJsonObject
-		get() = quiltVersionJson.readFileToJsonObject()
-	override val modInstallTask: InstallTaskInterface
-		get() = QuiltInstallTask(launcher, modVersion)
-	override val modKind: KindOfMod?
-		get() = KindOfMod.QUILT
+  @get:Throws(IOException::class)
+  val quiltGameVersionJsonObject
+    get() = quiltVersionJson.readFileToJsonObject()
+  override val modInstallTask: InstallTaskInterface
+    get() = QuiltInstallTask(launcher, modVersion)
+  override val modKind: KindOfMod?
+    get() = KindOfMod.QUILT
 
 }

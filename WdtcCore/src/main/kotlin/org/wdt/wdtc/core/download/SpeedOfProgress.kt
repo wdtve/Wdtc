@@ -4,18 +4,19 @@ import java.util.concurrent.CountDownLatch
 import kotlin.concurrent.Volatile
 
 class SpeedOfProgress(@field:Volatile private var spend: Int) {
-    private val countDown: CountDownLatch = CountDownLatch(spend)
 
-    @Synchronized
-    fun countDown() {
-        spend -= 1
-        countDown.countDown()
-    }
+  private val countDown: CountDownLatch = CountDownLatch(spend)
 
-    fun await() {
-        countDown.await()
-    }
+  @Synchronized
+  fun countDown() {
+    spend -= 1
+    countDown.countDown()
+  }
 
-    val isSpendZero: Boolean
-        get() = spend == 0
+  fun await() {
+    countDown.await()
+  }
+
+  val isSpendZero: Boolean
+    get() = spend == 0
 }

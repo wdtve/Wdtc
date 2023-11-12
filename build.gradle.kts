@@ -1,13 +1,16 @@
 subprojects {
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-        mavenLocal()
-        mavenCentral()
-    }
-    apply {
-        plugin("java")
-    }
+  repositories {
+    maven { url = uri("https://jitpack.io") }
+    mavenLocal()
+    mavenCentral()
+  }
+  apply {
+    plugin("java")
+    plugin("application")
+  }
+
 }
 
+val versionNumber = "0.0.1.15.1"
 group = "org.wdt.wdtc"
-version = "0.0.1.15"
+version = "$versionNumber-kotlin"

@@ -12,13 +12,13 @@ import java.util.*
 class DownloadGameOption {
 
     fun donwloadGame(commandLine: CommandLine) {
-        var launcher: Launcher? = null;
+        var launcher: Launcher? = null
         if (commandLine.hasOption(chooseVersionNumber)) {
             launcher = Launcher(commandLine.getOptionValue(chooseVersionNumber))
 
         } else {
             val versionList = GameVersionList().versionList
-            for (i in 0 until versionList.size) {
+            for (i in versionList.indices) {
                 val versionObejct = versionList[i] as GameVersionJsonObjectImpl
                 println("$i. Version: ${versionObejct.versionNumber}, Type: ${versionObejct.gameType}")
             }
@@ -26,7 +26,7 @@ class DownloadGameOption {
             print("Choose a number:")
             if (input.hasNext()) {
                 val index = input.nextInt()
-                launcher = Launcher(versionList[index].versionNumber)
+                launcher = Launcher(versionList[index].versionNumber!!)
             }
         }
         val installGameVersion = InstallGameVersion(launcher!!, true)

@@ -13,69 +13,69 @@ import java.util.*
 
 
 open class GameFileManger : GameDirectoryManger {
-    val versionNumber: String
+  val versionNumber: String
 
-    constructor(versionNumber: String) {
-        this.versionNumber = versionNumber
+  constructor(versionNumber: String) {
+    this.versionNumber = versionNumber
+  }
+
+  constructor(versionNumber: String, here: File) : super(here) {
+    this.versionNumber = versionNumber
+  }
+
+  val versionDirectory: File
+    get() = File(gameVersionsDirectory, versionNumber)
+  val versionJson: File
+    get() = File(versionDirectory, "$versionNumber.json")
+  val versionJar: File
+    get() = File(versionDirectory, "$versionNumber.jar")
+  val versionLog4j2: File
+    get() = File(versionDirectory, "log4j2.xml")
+  val versionNativesPath: File
+    get() = File(versionDirectory, "natives-windows-x86_64")
+
+  @get:Throws(IOException::class)
+  val gameAssetsListJson: File
+    get() = File(gameAssetsDirectory, "indexes/${gameVersionJsonObject.assets}.json")
+  val gameOptionsFile: File
+    get() = File(versionDirectory, "assets/options.txt")
+  val gameModsPath: File
+    get() = File(versionDirectory, "mods")
+  val gameLogDirectory: File
+    get() = File(versionDirectory, "logs")
+
+  fun putToVersionJson(o: GameVersionJsonObject) {
+    versionJson.writeObjectToFile(o)
+  }
+
+  @get:Throws(IOException::class)
+  val gameVersionJsonObject: GameVersionJsonObject
+    get() {
+      if (versionJson.isFileNotExists()) {
+        throw FileNotFoundException("$versionJson not exists")
+      }
+      return versionJson.readFileToClass()
     }
+  val laucnherProfiles: File
+    get() = File(gameDirectory, "Launcher_profiles.json")
+  val versionConfigFile: File
+    get() = File(versionDirectory, "config.json")
 
-    constructor(versionNumber: String, here: File) : super(here) {
-        this.versionNumber = versionNumber
-    }
-
-    val versionDirectory: File
-        get() = File(gameVersionsDirectory, versionNumber)
-    val versionJson: File
-        get() = File(versionDirectory, "$versionNumber.json")
-    val versionJar: File
-        get() = File(versionDirectory, "$versionNumber.jar")
-    val versionLog4j2: File
-        get() = File(versionDirectory, "log4j2.xml")
-    val versionNativesPath: File
-        get() = File(versionDirectory, "natives-windows-x86_64")
-
-    @get:Throws(IOException::class)
-    val gameAssetsListJson: File
-        get() = File(gameAssetsDirectory, "indexes/${gameVersionJsonObject.assets}.json")
-    val gameOptionsFile: File
-        get() = File(versionDirectory, "assets/options.txt")
-    val gameModsPath: File
-        get() = File(versionDirectory, "mods")
-    val gameLogDirectory: File
-        get() = File(versionDirectory, "logs")
-
-    fun putToVersionJson(o: GameVersionJsonObject) {
-        versionJson.writeObjectToFile(o)
-    }
-
-    @get:Throws(IOException::class)
-    val gameVersionJsonObject: GameVersionJsonObject
-        get() {
-            if (versionJson.isFileNotExists()) {
-                throw FileNotFoundException("$versionJson not exists")
-            }
-            return versionJson.readFileToClass()
+  companion object {
+    @JvmStatic
+    fun downloadVersionManifestJsonFileTask() {
+      val calendar = Calendar.getInstance()
+      calendar.setTime(Date())
+      calendar.add(Calendar.DATE, -7)
+      try {
+        if (FileManger.versionManifestFile.isFileNotExists() ||
+          FileManger.versionManifestFile.isFileOlder(calendar.time)
+        ) {
+          DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
         }
-    val laucnherProfiles: File
-        get() = File(gameDirectory, "Launcher_profiles.json")
-    val versionConfigFile: File
-        get() = File(versionDirectory, "config.json")
-
-    companion object {
-        @JvmStatic
-        fun downloadVersionManifestJsonFileTask() {
-            val calendar = Calendar.getInstance()
-            calendar.setTime(Date())
-            calendar.add(Calendar.DATE, -7)
-            try {
-                if (FileManger.versionManifestFile.isFileNotExists() ||
-                    FileManger.versionManifestFile.isFileOlder(calendar.time)
-                ) {
-                    DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
-                }
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            }
-        }
+      } catch (e: IOException) {
+        throw RuntimeException(e)
+      }
     }
+  }
 }

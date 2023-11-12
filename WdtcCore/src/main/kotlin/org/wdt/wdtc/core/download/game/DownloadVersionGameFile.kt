@@ -14,67 +14,67 @@ import org.wdt.wdtc.core.utils.URLUtils.toURL
 import java.io.IOException
 
 class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
-    val source: DownloadSourceInterface = downloadSource
+  val source: DownloadSourceInterface = downloadSource
 
-    fun startDownloadGameVersionJson() {
-        if (!install) {
-            return
-        }
-        var notFoundVersion = true
-        if (isOfficialDownloadSource()) {
-            val versionJsonObjectList = GameVersionList().versionList
-            for (versionJsonObjectInterface in versionJsonObjectList) {
-                if (versionJsonObjectInterface.isInstanceofThis(GameVersionJsonObjectImpl())) {
-                    val versionJsonObject = versionJsonObjectInterface as GameVersionJsonObjectImpl
-                    if (versionJsonObject.versionNumber == launcher.versionNumber) {
-                        startDownloadTask(versionJsonObject.versionJsonURL!!, launcher.versionJson)
-                        notFoundVersion = false
-                    }
-                }
-            }
-            if (notFoundVersion) {
-                throw VersionNotFoundException("${launcher.versionJson} not found")
-            }
-        } else {
-            val jsonURL = toURL(source.versionClientUrl.format(launcher.versionNumber, "json"))
-            startDownloadTask(jsonURL, launcher.versionJson)
-        }
+  fun startDownloadGameVersionJson() {
+    if (!install) {
+      return
     }
-
-    @Throws(IOException::class)
-    fun startDownloadGameAssetsListJson() {
-        val fileDataObject = launcher.gameVersionJsonObject.assetIndex!!
-        val listJsonURL = if (isOfficialDownloadSource()) fileDataObject.listJsonURL else toURL(
-            fileDataObject.listJsonURL.toString().replace(
-                pistonMetaMojang, source.metaUrl
-            )
-        )
-        if (launcher.gameAssetsListJson.isFileNotExistsAndIsNotSameSize(fileDataObject.fileSize.toLong())) {
-            startDownloadTask(listJsonURL!!, launcher.gameAssetsListJson)
+    var notFoundVersion = true
+    if (isOfficialDownloadSource()) {
+      val versionJsonObjectList = GameVersionList().versionList
+      for (versionJsonObjectInterface in versionJsonObjectList) {
+        if (versionJsonObjectInterface.isInstanceofThis(GameVersionJsonObjectImpl())) {
+          val versionJsonObject = versionJsonObjectInterface as GameVersionJsonObjectImpl
+          if (versionJsonObject.versionNumber == launcher.versionNumber) {
+            startDownloadTask(versionJsonObject.versionJsonURL!!, launcher.versionJson)
+            notFoundVersion = false
+          }
         }
+      }
+      if (notFoundVersion) {
+        throw VersionNotFoundException("${launcher.versionJson} not found")
+      }
+    } else {
+      val jsonURL = toURL(source.versionClientUrl.format(launcher.versionNumber, "json"))
+      startDownloadTask(jsonURL, launcher.versionJson)
     }
+  }
 
-    @Throws(IOException::class)
-    fun startDownloadVersionJar() {
-        val fileDataObject = launcher.gameVersionJsonObject.downloads?.client!!
-        val jarUrl = if (isOfficialDownloadSource()) fileDataObject.listJsonURL else toURL(
-            source.versionClientUrl.format(launcher.versionNumber, "client")
-        )
-        if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.versionJar, fileDataObject.fileSize.toLong())) {
-            startDownloadTask(jarUrl!!, launcher.versionJar)
-        }
+  @Throws(IOException::class)
+  fun startDownloadGameAssetsListJson() {
+    val fileDataObject = launcher.gameVersionJsonObject.assetIndex!!
+    val listJsonURL = if (isOfficialDownloadSource()) fileDataObject.listJsonURL else toURL(
+      fileDataObject.listJsonURL.toString().replace(
+        pistonMetaMojang, source.metaUrl
+      )
+    )
+    if (launcher.gameAssetsListJson.isFileNotExistsAndIsNotSameSize(fileDataObject.fileSize.toLong())) {
+      startDownloadTask(listJsonURL!!, launcher.gameAssetsListJson)
     }
+  }
 
-    val downloadGameLibraryFileTask: DownloadGameClass
-        get() = DownloadGameClass(launcher)
-
-    val downloadGameAssetsFile: DownloadGameAssetsFile
-        get() = DownloadGameAssetsFile(launcher)
-
-    companion object {
-        @JvmStatic
-        fun startDownloadVersionManifestJsonFile() {
-            startDownloadTask(downloadSource.versionManifestUrl, versionManifestFile)
-        }
+  @Throws(IOException::class)
+  fun startDownloadVersionJar() {
+    val fileDataObject = launcher.gameVersionJsonObject.downloads?.client!!
+    val jarUrl = if (isOfficialDownloadSource()) fileDataObject.listJsonURL else toURL(
+      source.versionClientUrl.format(launcher.versionNumber, "client")
+    )
+    if (FileUtils.isFileNotExistsAndIsNotSameSize(launcher.versionJar, fileDataObject.fileSize.toLong())) {
+      startDownloadTask(jarUrl!!, launcher.versionJar)
     }
+  }
+
+  val downloadGameLibraryFileTask: DownloadGameClass
+    get() = DownloadGameClass(launcher)
+
+  val downloadGameAssetsFile: DownloadGameAssetsFile
+    get() = DownloadGameAssetsFile(launcher)
+
+  companion object {
+    @JvmStatic
+    fun startDownloadVersionManifestJsonFile() {
+      startDownloadTask(downloadSource.versionManifestUrl, versionManifestFile)
+    }
+  }
 }

@@ -13,6 +13,7 @@ import org.wdt.wdtc.core.utils.WdtcLogger;
 import org.wdt.wdtc.ui.window.ExceptionWindow;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class WdtcMain extends JavaFxUtils {
     private static final Logger logmaker = WdtcLogger.getLogger(WdtcMain.class);
@@ -20,6 +21,9 @@ public class WdtcMain extends JavaFxUtils {
     public static void main(String[] args) {
         try {
             TaskManger.ckeckVMConfig();
+          if (args.length != 0) {
+            TaskManger.removeConfigDirectory(Arrays.stream(args).toList().get(0).equals("refresh"));
+          }
             ckeckJavaFX();
             logmaker.info(String.format("===== Wdtc - %s - =====", VMManger.getLauncherVersion()));
             logmaker.info(String.format("Java Version:%s", System.getProperty("java.version")));

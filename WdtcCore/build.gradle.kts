@@ -13,6 +13,7 @@ dependencies {
     implementation("org.hildan.fxgson:fx-gson:5.0.0")
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

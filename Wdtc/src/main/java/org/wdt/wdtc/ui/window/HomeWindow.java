@@ -131,7 +131,7 @@ public class HomeWindow {
                 if (User.isExistUserJsonFile()) {
                     ThreadUtils.startThread(() -> {
                         try {
-                            LaunchGame launch = LaunchGame.init(launcher);
+                          LaunchGame launch = LaunchGame.create(launcher);
                             LaunchProcess launchProcess = launch.getLaunchProcess();
                             launchProcess.setSetUIText(string -> ExceptionWindow.setWin(string, "Launch Error"));
                             launchProcess.startLaunchGame();

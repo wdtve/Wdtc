@@ -5,6 +5,6 @@ import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 
 class LiteloaderVersionList : VersionListInterface {
-    override val versionList: List<VersionJsonObjectInterface>
-        get() = throw VersionNotFoundException("Not version")
+  override val versionList: List<VersionJsonObjectInterface>
+    get() = throw VersionNotFoundException("Not version")
 }
