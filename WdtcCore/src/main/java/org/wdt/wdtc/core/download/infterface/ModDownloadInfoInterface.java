@@ -4,10 +4,10 @@ import org.wdt.wdtc.core.utils.ModUtils;
 
 public interface ModDownloadInfoInterface {
 
-    String getModVersion();
+  String getModVersion();
 
-    InstallTaskInterface getModInstallTask();
+  InstallTaskInterface getModInstallTask();
 
-    ModUtils.KindOfMod getModKind();
+  ModUtils.KindOfMod getModKind();
 
 }

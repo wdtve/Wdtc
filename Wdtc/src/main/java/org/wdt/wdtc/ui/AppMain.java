@@ -19,46 +19,46 @@ import org.wdt.wdtc.ui.window.WindwosSizeManger;
 import java.io.IOException;
 
 public class AppMain extends Application {
-    private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
+  private static final Logger logmaker = WdtcLogger.getLogger(AppMain.class);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+  public static void main(String[] args) {
+    launch(args);
+  }
 
-    @Override
-    public void start(Stage MainStage) {
+  @Override
+  public void start(Stage MainStage) {
+    try {
+      WindwosSizeManger size = new WindwosSizeManger(MainStage);
+      if (URLUtils.isOnline()) {
+        MainStage.setTitle(Consoler.getWindowsTitle());
+      } else {
+        MainStage.setTitle(Consoler.getWindowsTitle("无网络"));
+        logmaker.warn("当前无网络连接,下载功能无法正常使用!");
+      }
+      MainStage.setMinWidth(WindwosSizeManger.WindowsWidht);
+      MainStage.setMinHeight(WindwosSizeManger.WindowsHeight);
+      size.setWindwosSize();
+      MainStage.getIcons().add(new Image("ico.jpg"));
+      MainStage.setResizable(VMManger.isDebug());
+      HomeWindow win = new HomeWindow();
+      win.setHome(MainStage);
+      MainStage.show();
+      logmaker.info("Window Show");
+      MainStage.setOnCloseRequest(windowEvent -> {
+        logmaker.info(size);
         try {
-            WindwosSizeManger size = new WindwosSizeManger(MainStage);
-            if (URLUtils.isOnline()) {
-                MainStage.setTitle(Consoler.getWindowsTitle());
-            } else {
-                MainStage.setTitle(Consoler.getWindowsTitle("无网络"));
-                logmaker.warn("当前无网络连接,下载功能无法正常使用!");
-            }
-            MainStage.setMinWidth(WindwosSizeManger.WindowsWidht);
-            MainStage.setMinHeight(WindwosSizeManger.WindowsHeight);
-            size.setWindwosSize();
-            MainStage.getIcons().add(new Image("ico.jpg"));
-            MainStage.setResizable(VMManger.isDebug());
-            HomeWindow win = new HomeWindow();
-            win.setHome(MainStage);
-            MainStage.show();
-            logmaker.info("Window Show");
-            MainStage.setOnCloseRequest(windowEvent -> {
-                logmaker.info(size);
-                try {
-                    SettingManger.Setting setting = SettingManger.getSetting();
-                    setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
-                    FileUtils.touch(DownloadUtils.StopProcess);
-                    SettingManger.putSettingToFile(setting);
-                } catch (IOException e) {
-                    logmaker.error(WdtcLogger.getExceptionMessage(e));
-                }
-                Platform.exit();
-                logmaker.info("======= Wdtc Stop ========");
-            });
-        } catch (Exception e) {
-            ExceptionWindow.setErrorWin(e);
+          SettingManger.Setting setting = SettingManger.getSetting();
+          setting.setWindowsWidth(MainStage.getWidth()).setWindowsHeight(MainStage.getHeight());
+          FileUtils.touch(DownloadUtils.StopProcess);
+          SettingManger.putSettingToFile(setting);
+        } catch (IOException e) {
+          logmaker.error(WdtcLogger.getExceptionMessage(e));
         }
+        Platform.exit();
+        logmaker.info("======= Wdtc Stop ========");
+      });
+    } catch (Exception e) {
+      ExceptionWindow.setErrorWin(e);
     }
+  }
 }

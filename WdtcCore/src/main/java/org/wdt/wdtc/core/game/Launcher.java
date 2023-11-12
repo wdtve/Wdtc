@@ -22,92 +22,92 @@ import java.util.Objects;
 
 @Getter
 public class Launcher extends GameFileManger {
-    private FabricDonwloadInfo FabricModInstallInfo;
-    private ModUtils.KindOfMod kind = ModUtils.KindOfMod.Original;
-    private ForgeDownloadInfo ForgeModDownloadInfo;
-    private QuiltDownloadInfo QuiltModDownloadInfo;
+  private FabricDonwloadInfo FabricModInstallInfo;
+  private ModUtils.KindOfMod kind = ModUtils.KindOfMod.Original;
+  private ForgeDownloadInfo ForgeModDownloadInfo;
+  private QuiltDownloadInfo QuiltModDownloadInfo;
 
-    public Launcher(String version) {
-        this(version, SettingManger.getSetting().getDefaultGamePath());
+  public Launcher(String version) {
+    this(version, SettingManger.getSetting().getDefaultGamePath());
+  }
+
+  public Launcher(String version, File here) {
+    super(version, here);
+  }
+
+  public static Launcher getPreferredLauncher() {
+    SettingManger.Setting setting = SettingManger.getSetting();
+    return setting.getPreferredVersion() != null
+        ? ModUtils.getModTask(new Launcher(setting.getPreferredVersion()))
+        : null;
+  }
+
+  public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
+    kind = ModUtils.KindOfMod.QUILT;
+    QuiltModDownloadInfo = quiltModDownloadInfo;
+  }
+
+  public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
+    kind = ModUtils.KindOfMod.FABRIC;
+    this.FabricModInstallInfo = fabricModInstallInfo;
+  }
+
+  public void setKind(ModUtils.KindOfMod kind) {
+    this.kind = kind;
+  }
+
+
+  public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
+    kind = ModUtils.KindOfMod.FORGE;
+    ForgeModDownloadInfo = forgeModDownloadInfo;
+  }
+
+  public GameConfig getGameConfig() {
+    return new GameConfig(this);
+  }
+
+  public void beforLaunchTask() throws IOException {
+    if (SettingManger.getSetting().isChineseLanguage() && FileUtils.isFileNotExists(getGameOptionsFile())) {
+      String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/assets/options.txt")));
+      FileUtils.writeStringToFile(getGameOptionsFile(), Options);
     }
+  }
 
-    public Launcher(String version, File here) {
-        super(version, here);
+  public void CleanKind() {
+    kind = ModUtils.KindOfMod.Original;
+  }
+
+  public Accounts getAccounts() {
+    return new Accounts();
+  }
+
+
+  public VersionInfo getVersionInfo() {
+    return new VersionInfo(this);
+  }
+
+  public GameDirectoryManger getGameDirectoryManger() {
+    return this;
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Launcher launcher)) return false;
+    if (launcher.getVersionNumber().equals(VersionNumber)) {
+      return launcher.getKind() == kind;
     }
+    return false;
+  }
 
-    public static Launcher getPreferredLauncher() {
-        SettingManger.Setting setting = SettingManger.getSetting();
-        return setting.getPreferredVersion() != null
-                ? ModUtils.getModTask(new Launcher(setting.getPreferredVersion()))
-                : null;
-    }
-
-    public void setQuiltModDownloadInfo(QuiltInstallTask quiltModDownloadInfo) {
-        kind = ModUtils.KindOfMod.QUILT;
-        QuiltModDownloadInfo = quiltModDownloadInfo;
-    }
-
-    public void setFabricModInstallInfo(FabricDonwloadInfo fabricModInstallInfo) {
-        kind = ModUtils.KindOfMod.FABRIC;
-        this.FabricModInstallInfo = fabricModInstallInfo;
-    }
-
-    public void setKind(ModUtils.KindOfMod kind) {
-        this.kind = kind;
-    }
+  @Override
+  public String toString() {
+    return "Launcher{" +
+        "version=" + VersionNumber +
+        ",kind=" + kind +
+        '}';
 
 
-    public void setForgeModDownloadInfo(ForgeDownloadInfo forgeModDownloadInfo) {
-        kind = ModUtils.KindOfMod.FORGE;
-        ForgeModDownloadInfo = forgeModDownloadInfo;
-    }
-
-    public GameConfig getGameConfig() {
-        return new GameConfig(this);
-    }
-
-    public void beforLaunchTask() throws IOException {
-        if (SettingManger.getSetting().isChineseLanguage() && FileUtils.isFileNotExists(getGameOptionsFile())) {
-            String Options = IOUtils.toString(Objects.requireNonNull(getClass().getResourceAsStream("/assets/options.txt")));
-            FileUtils.writeStringToFile(getGameOptionsFile(), Options);
-        }
-    }
-
-    public void CleanKind() {
-        kind = ModUtils.KindOfMod.Original;
-    }
-
-    public Accounts getAccounts() {
-        return new Accounts();
-    }
-
-
-    public VersionInfo getVersionInfo() {
-        return new VersionInfo(this);
-    }
-
-    public GameDirectoryManger getGameDirectoryManger() {
-        return this;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Launcher launcher)) return false;
-        if (launcher.getVersionNumber().equals(VersionNumber)) {
-            return launcher.getKind() == kind;
-        }
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return "Launcher{" +
-                "version=" + VersionNumber +
-                ",kind=" + kind +
-                '}';
-
-
-    }
+  }
 }

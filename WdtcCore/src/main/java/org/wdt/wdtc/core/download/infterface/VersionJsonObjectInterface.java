@@ -1,7 +1,7 @@
 package org.wdt.wdtc.core.download.infterface;
 
 public interface VersionJsonObjectInterface {
-    String getVersionNumber();
+  String getVersionNumber();
 
-    boolean isInstanceofThis(Object o);
+  boolean isInstanceofThis(Object o);
 }

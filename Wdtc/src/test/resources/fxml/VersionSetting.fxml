@@ -2,7 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
       prefHeight="489.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/17">
     <ScrollPane layoutX="105.0" layoutY="52.0" prefHeight="438.0" prefWidth="512.0">
         <Pane prefHeight="435.0" prefWidth="510.0">

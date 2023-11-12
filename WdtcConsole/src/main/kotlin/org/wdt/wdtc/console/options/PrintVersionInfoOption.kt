@@ -6,13 +6,13 @@ import org.wdt.wdtc.console.utils.OptionUtils
 import org.wdt.wdtc.core.manger.VMManger
 
 class PrintVersionInfoOption(options: Options) {
-    val option: Option = OptionUtils.getOption("version", "v", "Print version number")
+  val option: Option = OptionUtils.getOption("version", "v", "Print version number")
 
-    init {
-        options.addOption(option)
-    }
+  init {
+    options.addOption(option)
+  }
 
-    fun printInfo() {
-        println("Launcher Version: ${VMManger.getLauncherVersion()}")
-    }
+  fun printInfo() {
+    println("Launcher Version: ${VMManger.getLauncherVersion()}")
+  }
 }

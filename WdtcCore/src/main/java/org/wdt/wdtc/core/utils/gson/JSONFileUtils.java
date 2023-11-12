@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class JSONFileUtils {
-    @SneakyThrows(IOException.class)
-    public static void formatJsonFile(File file) {
-        FileUtils.writeStringToFile(file, JSON.FILE_GSON.toJson(JSONUtils.readJsonFiletoJsonObject(file)));
-    }
+  @SneakyThrows(IOException.class)
+  public static void formatJsonFile(File file) {
+    FileUtils.writeStringToFile(file, JSON.FILE_GSON.toJson(JSONUtils.readJsonFiletoJsonObject(file)));
+  }
 }

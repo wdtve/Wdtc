@@ -16,51 +16,51 @@ import java.io.IOException;
 @Setter
 public class User {
 
-    @SerializedName("UserName")
-    private String UserName;
-    @SerializedName("AccessToken")
-    private String AccessToken;
-    @SerializedName("Type")
-    private Accounts.AccountsType Type;
-    @SerializedName("Uuid")
-    private String Uuid;
-    @SerializedName("MetaAPI")
-    private String API;
-    @SerializedName("MetaAPIBase64")
-    private String APIBase64;
-    @SerializedName("HeadPhotoPath")
-    private File HeadFile;
+  @SerializedName("UserName")
+  private String UserName;
+  @SerializedName("AccessToken")
+  private String AccessToken;
+  @SerializedName("Type")
+  private Accounts.AccountsType Type;
+  @SerializedName("Uuid")
+  private String Uuid;
+  @SerializedName("MetaAPI")
+  private String API;
+  @SerializedName("MetaAPIBase64")
+  private String APIBase64;
+  @SerializedName("HeadPhotoPath")
+  private File HeadFile;
 
-    public User() {
-    }
+  public User() {
+  }
 
-    public static void setUserToJson(User user) {
-        JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
-    }
+  public static void setUserToJson(User user) {
+    JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
+  }
 
-    @SneakyThrows(IOException.class)
-    public static User getUser() {
-        return JSONUtils.readJsonFileToClass(FileManger.getUsersJson(), User.class);
-    }
+  @SneakyThrows(IOException.class)
+  public static User getUser() {
+    return JSONUtils.readJsonFileToClass(FileManger.getUsersJson(), User.class);
+  }
 
-    public static boolean isExistUserJsonFile() {
-        return FileUtils.isFileExists(FileManger.getUsersJson());
-    }
+  public static boolean isExistUserJsonFile() {
+    return FileUtils.isFileExists(FileManger.getUsersJson());
+  }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return UserName.equals(user.getUserName());
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof User user)) return false;
+    return UserName.equals(user.getUserName());
+  }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "UserName='" + UserName + '\'' +
-                ", Type=" + Type +
-                ", HeadFile='" + HeadFile + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "User{" +
+        "UserName='" + UserName + '\'' +
+        ", Type=" + Type +
+        ", HeadFile='" + HeadFile + '\'' +
+        '}';
+  }
 }

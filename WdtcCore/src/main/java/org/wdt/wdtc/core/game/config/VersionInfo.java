@@ -15,32 +15,32 @@ import org.wdt.wdtc.core.utils.ModUtils;
 @Getter
 @ToString
 public class VersionInfo {
-    @SerializedName("GameVersionNumber")
-    private String VersionNumber;
-    @SerializedName("ModKind")
-    private ModUtils.KindOfMod kind;
-    @SerializedName("ModVersionNumber")
-    private String ModVersion;
+  @SerializedName("GameVersionNumber")
+  private String VersionNumber;
+  @SerializedName("ModKind")
+  private ModUtils.KindOfMod kind;
+  @SerializedName("ModVersionNumber")
+  private String ModVersion;
 
-    public VersionInfo(Launcher launcher) {
-        this.VersionNumber = launcher.getVersionNumber();
-        this.kind = launcher.getKind();
-        ModDownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
-        if (info != null) {
-            this.ModVersion = info.getModVersion();
-        } else {
-            this.ModVersion = null;
-        }
+  public VersionInfo(Launcher launcher) {
+    this.VersionNumber = launcher.getVersionNumber();
+    this.kind = launcher.getKind();
+    ModDownloadInfoInterface info = ModUtils.getModDownloadInfo(launcher);
+    if (info != null) {
+      this.ModVersion = info.getModVersion();
+    } else {
+      this.ModVersion = null;
     }
+  }
 
 
-    public Launcher getLauncher() {
-        Launcher launcher = new Launcher(getVersionNumber());
-        switch (getKind()) {
-            case FORGE -> launcher.setForgeModDownloadInfo(new ForgeDownloadInfo(launcher, getModVersion()));
-            case FABRIC -> launcher.setFabricModInstallInfo(new FabricDonwloadInfo(launcher, getVersionNumber()));
-            case QUILT -> launcher.setQuiltModDownloadInfo(new QuiltInstallTask(launcher, getVersionNumber()));
-        }
-        return launcher;
+  public Launcher getLauncher() {
+    Launcher launcher = new Launcher(getVersionNumber());
+    switch (getKind()) {
+      case FORGE -> launcher.setForgeModDownloadInfo(new ForgeDownloadInfo(launcher, getModVersion()));
+      case FABRIC -> launcher.setFabricModInstallInfo(new FabricDonwloadInfo(launcher, getVersionNumber()));
+      case QUILT -> launcher.setQuiltModDownloadInfo(new QuiltInstallTask(launcher, getVersionNumber()));
     }
+    return launcher;
+  }
 }

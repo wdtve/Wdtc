@@ -4,5 +4,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface VersionListInterface {
-    List<VersionJsonObjectInterface> getVersionList() throws IOException;
+  List<VersionJsonObjectInterface> getVersionList() throws IOException;
 }

@@ -12,24 +12,24 @@ import java.util.Arrays;
 
 public class WdtcMain {
 
-    private static final Logger logmaker = WdtcLogger.getLogger(WdtcMain.class);
+  private static final Logger logmaker = WdtcLogger.getLogger(WdtcMain.class);
 
-    static {
-        TaskManger.ckeckVMConfig();
-    }
+  static {
+    TaskManger.ckeckVMConfig();
+  }
 
-    public static void main(String[] args) {
-        try {
-            TaskManger.runStartUpTask();
-            AuthlibInjector.updateAuthlibInjector();
-            GameFileManger.downloadVersionManifestJsonFileTask();
-            Options options = new Options();
-            logmaker.info("Args: " + Arrays.toString(args));
-            CommandTaskManger commandTaskManger = new CommandTaskManger(options, args);
-            commandTaskManger.startTask();
-        } catch (Throwable e) {
-            logmaker.error(WdtcLogger.getExceptionMessage(e));
-            throw new RuntimeException(e);
-        }
+  public static void main(String[] args) {
+    try {
+      TaskManger.runStartUpTask();
+      AuthlibInjector.updateAuthlibInjector();
+      GameFileManger.downloadVersionManifestJsonFileTask();
+      Options options = new Options();
+      logmaker.info("Args: " + Arrays.toString(args));
+      CommandTaskManger commandTaskManger = new CommandTaskManger(options, args);
+      commandTaskManger.startTask();
+    } catch (Throwable e) {
+      logmaker.error(WdtcLogger.getExceptionMessage(e));
+      throw new RuntimeException(e);
     }
+  }
 }

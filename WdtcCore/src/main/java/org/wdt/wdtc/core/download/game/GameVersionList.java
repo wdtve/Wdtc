@@ -21,67 +21,67 @@ import java.util.List;
 import java.util.Objects;
 
 public class GameVersionList implements VersionListInterface {
-    private static final Logger logmaker = WdtcLogger.getLogger(GameVersionList.class);
+  private static final Logger logmaker = WdtcLogger.getLogger(GameVersionList.class);
 
-    @SneakyThrows
-    public GameVersionList() {
-        if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile())) {
-            DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+  @SneakyThrows
+  public GameVersionList() {
+    if (FileUtils.isFileNotExists(FileManger.getVersionManifestFile())) {
+      DownloadVersionGameFile.DownloadVersionManifestJsonFile();
+    }
+  }
+
+
+  public List<VersionJsonObjectInterface> getVersionList() {
+    List<VersionJsonObjectInterface> VersionList = new ArrayList<>();
+    try {
+      JSONArray version_list = JSONUtils.readJsonFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
+      for (int i = 0; i < version_list.size(); i++) {
+        JSONObject VersionObject = version_list.getJSONObject(i);
+        GameVersionJsonObjectImpl versionJsonObject = JSONObject.parseObject(VersionObject, GameVersionJsonObjectImpl.class);
+        if (versionJsonObject.gameType.equals("release")) {
+          VersionList.add(versionJsonObject);
         }
+      }
+    } catch (IOException e) {
+      logmaker.error(WdtcLogger.getExceptionMessage(e));
+    }
+    return VersionList;
+  }
+
+  @Getter
+  public static class GameVersionJsonObjectImpl implements VersionJsonObjectInterface {
+    @SerializedName("id")
+    private String versionNumber;
+    @SerializedName("type")
+    private String gameType;
+    @SerializedName("url")
+    private URL versionJsonURL;
+    @SerializedName("time")
+    private String time;
+    @SerializedName("releaseTime")
+    private String releaseTime;
+
+    @Override
+    public String getVersionNumber() {
+      return versionNumber;
     }
 
-
-    public List<VersionJsonObjectInterface> getVersionList() {
-        List<VersionJsonObjectInterface> VersionList = new ArrayList<>();
-        try {
-            JSONArray version_list = JSONUtils.readJsonFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
-            for (int i = 0; i < version_list.size(); i++) {
-                JSONObject VersionObject = version_list.getJSONObject(i);
-                GameVersionJsonObjectImpl versionJsonObject = JSONObject.parseObject(VersionObject, GameVersionJsonObjectImpl.class);
-                if (versionJsonObject.gameType.equals("release")) {
-                    VersionList.add(versionJsonObject);
-                }
-            }
-        } catch (IOException e) {
-            logmaker.error(WdtcLogger.getExceptionMessage(e));
-        }
-        return VersionList;
+    @Override
+    public boolean isInstanceofThis(Object o) {
+      return o instanceof GameVersionJsonObjectImpl;
     }
 
-    @Getter
-    public static class GameVersionJsonObjectImpl implements VersionJsonObjectInterface {
-        @SerializedName("id")
-        private String versionNumber;
-        @SerializedName("type")
-        private String gameType;
-        @SerializedName("url")
-        private URL versionJsonURL;
-        @SerializedName("time")
-        private String time;
-        @SerializedName("releaseTime")
-        private String releaseTime;
-
-        @Override
-        public String getVersionNumber() {
-            return versionNumber;
-        }
-
-        @Override
-        public boolean isInstanceofThis(Object o) {
-            return o instanceof GameVersionJsonObjectImpl;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            GameVersionJsonObjectImpl that = (GameVersionJsonObjectImpl) o;
-            return Objects.equals(versionNumber, that.versionNumber) && Objects.equals(gameType, that.gameType);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(versionNumber, gameType);
-        }
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      GameVersionJsonObjectImpl that = (GameVersionJsonObjectImpl) o;
+      return Objects.equals(versionNumber, that.versionNumber) && Objects.equals(gameType, that.gameType);
     }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(versionNumber, gameType);
+    }
+  }
 }
