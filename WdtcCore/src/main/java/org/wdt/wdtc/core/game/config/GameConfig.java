@@ -65,7 +65,7 @@ public class GameConfig {
 
   @SneakyThrows(IOException.class)
   public DefaultGameConfig getDefaultGameConfig() {
-    return JSONUtils.readJsonFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
+    return JSONUtils.readFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
   }
 
   public VersionInfo getVersionInfo() {

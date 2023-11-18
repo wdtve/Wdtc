@@ -26,22 +26,22 @@ public class GameClassPath extends AbstractGameCommand {
         if (LibraryFile.isNativesLibrary()) {
           ZipUtils.unzipByFile(gameLibraryData.GetNativesLibraryFile(LibraryFile.getLibraryObject().getDownloads().getClassifiers().getNativesindows()), FileUtils.getCanonicalPath(launcher.getVersionNativesPath()));
         } else {
-          InsertclasspathSeparator(gameLibraryData.GetLibraryFile(LibraryFile.getLibraryObject()));
+          insertclasspathSeparator(gameLibraryData.GetLibraryFile(LibraryFile.getLibraryObject()));
         }
       }
-      Command.append(launcher.getVersionJar());
+      command.append(launcher.getVersionJar());
       String Accounts = launcher.getAccounts().getJvmCommand();
       if (!Accounts.isEmpty()) {
-        Command.append(Accounts);
+        command.append(Accounts);
       }
       if (SettingManger.getSetting().isLlvmpipeLoader()) {
-        Command.append(LlbmpipeLoader());
+        command.append(LlbmpipeLoader());
       }
 
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return Command;
+    return command;
   }
 
 

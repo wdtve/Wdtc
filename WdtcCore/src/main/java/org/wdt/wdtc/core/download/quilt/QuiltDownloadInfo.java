@@ -38,7 +38,7 @@ public class QuiltDownloadInfo implements ModDownloadInfoInterface {
   }
 
   public JSONObject getQuiltGameVersionJsonObject() throws IOException {
-    return JSONUtils.readJsonFiletoJSONObject(getQuiltVersionJson());
+    return JSONUtils.readFiletoJSONObject(getQuiltVersionJson());
   }
 
   @Override

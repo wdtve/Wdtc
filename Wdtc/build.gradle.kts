@@ -34,6 +34,7 @@ tasks.shadowJar {
       exclude(dependency("org.openjfx:$module:${javafx.version}"))
     }
     exclude(dependency("org.jetbrains.kotlin:.*:.*"))
+    exclude(dependency("org.dom4j:.*:.*"))
   }
   manifest.attributes(sameManifest)
 }

@@ -65,7 +65,7 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
   }
 
   public JSONObject getInstallPrefileJSONObject() throws IOException {
-    return JSONUtils.readJsonFiletoJSONObject(getInstallProfilePath());
+    return JSONUtils.readFiletoJSONObject(getInstallProfilePath());
   }
 
 
@@ -79,7 +79,7 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
 
   @SneakyThrows
   public JSONObject getForgeVersionJsonObject() {
-    return JSONUtils.readJsonFiletoJSONObject(getForgeVersionJsonPath());
+    return JSONUtils.readFiletoJSONObject(getForgeVersionJsonPath());
   }
 
 

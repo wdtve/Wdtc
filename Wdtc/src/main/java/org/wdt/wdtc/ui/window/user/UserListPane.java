@@ -82,7 +82,7 @@ public class UserListPane {
           try {
             JsonObject UserListObject = UsersList.UserListObject();
             UserListObject.remove(UserName);
-            JSONUtils.writeObjectToJsonFile(UserListFile, UserListObject);
+            JSONUtils.writeObjectToFile(UserListFile, UserListObject);
             setUserList(pane);
           } catch (IOException e) {
             ExceptionWindow.setErrorWin(e);

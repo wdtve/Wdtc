@@ -65,8 +65,8 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
     List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JSONUtils.readJsonFiletoJsonObject(getFabricVersionJson()));
+    ObjectList.add(JSONUtils.readFiletoJsonObject(launcher.getVersionJson()));
+    ObjectList.add(JSONUtils.readFiletoJsonObject(getFabricVersionJson()));
     Object.setJsonObject(ObjectList);
     launcher.putToVersionJson(Object);
   }

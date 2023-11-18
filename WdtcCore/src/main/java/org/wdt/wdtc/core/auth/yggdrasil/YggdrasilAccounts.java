@@ -81,7 +81,7 @@ public class YggdrasilAccounts extends BaseUser {
     user.setAPIBase64(StringUtils.StringToBase64(user.getAPI()));
     SkinUtils utils = textures.getUtils();
     user.setHeadFile(utils.writeSkinHead());
-    JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
+    JSONUtils.writeObjectToFile(FileManger.getUsersJson(), user);
     logmaker.info(user);
     return user;
   }

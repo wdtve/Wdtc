@@ -1,6 +1,6 @@
 package org.wdt.utils.dependency;
 
-import org.apache.commons.io.FileUtils;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -95,7 +95,9 @@ public class LibraryDependencyDownload extends DefaultDependency {
       }
     }
     if (DeletePom) {
-      FileUtils.delete(PomFile());
+      if (!PomFile().delete()) {
+        throw new RuntimeException();
+      }
     }
     return dependencyList;
   }

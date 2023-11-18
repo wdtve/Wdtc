@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.wdt.utils.io.FileUtils;
 
 import java.io.File;
+import java.util.List;
 
 public class VMManger {
   public static final String LAUNCHER_VERSION = "wdtc.launcher.version";
@@ -11,7 +12,7 @@ public class VMManger {
   public static final String DEBUG = "wdtc.debug.switch";
   public static final String APPLICATION_TYPE = "wtdc.application.type";
   public static final String CLIENT_ID = "wtdc.oauth.clientId";
-  private static final String LAUNCHER_AUTHOR = "Wdt~";
+  private static final List<String> LAUNCHER_AUTHOR = List.of("Wdt~");
   @Getter
   private static final String OS = System.getProperty("os.name");
 

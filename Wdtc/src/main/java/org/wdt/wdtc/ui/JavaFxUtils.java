@@ -53,7 +53,7 @@ public class JavaFxUtils {
           libraryObject.setLibraryName("org.openjfx:" + s + ":win:17.0.6");
           array.add(JSONObject.GSON.toJsonTree(libraryObject, LibraryObject.class));
         }
-        JSONUtils.writeObjectToJsonFile(OpenJfxListFile, array);
+        JSONUtils.writeObjectToFile(OpenJfxListFile, array);
       }
     } catch (IOException e) {
       logmaker.warn(WdtcLogger.getExceptionMessage(e));

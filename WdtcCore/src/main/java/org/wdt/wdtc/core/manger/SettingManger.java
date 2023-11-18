@@ -20,12 +20,12 @@ public class SettingManger {
 
   @SneakyThrows(IOException.class)
   public static Setting getSetting() {
-    return JSONUtils.readJsonFileToClass(FileManger.getSettingFile(), Setting.class);
+    return JSONUtils.readFileToClass(FileManger.getSettingFile(), Setting.class);
   }
 
 
   public static void putSettingToFile(Setting setting) {
-    JSONUtils.writeObjectToJsonFile(FileManger.getSettingFile(), setting);
+    JSONUtils.writeObjectToFile(FileManger.getSettingFile(), setting);
   }
 
   @Data

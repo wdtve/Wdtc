@@ -33,7 +33,7 @@ public class OfflineAccounts extends BaseUser {
     SkinUtils utils = new SkinUtils(getUtils().getSkinFile());
     utils.setUserSkinInput(OfflineAccounts.class.getResourceAsStream("/assets/skin/steve.png"));
     user.setHeadFile(utils.writeSkinHead());
-    JSONUtils.writeObjectToJsonFile(FileManger.getUsersJson(), user);
+    JSONUtils.writeObjectToFile(FileManger.getUsersJson(), user);
     logmaker.info(user);
     return user;
   }

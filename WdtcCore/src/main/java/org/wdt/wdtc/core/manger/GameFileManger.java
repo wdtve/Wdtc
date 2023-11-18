@@ -78,14 +78,14 @@ public class GameFileManger extends GameDirectoryManger {
   }
 
   public void putToVersionJson(GameVersionJsonObject o) {
-    JSONUtils.writeObjectToJsonFile(getVersionJson(), o);
+    JSONUtils.writeObjectToFile(getVersionJson(), o);
   }
 
   public GameVersionJsonObject getGameVersionJsonObject() throws IOException {
     if (FileUtils.isFileNotExists(getVersionJson())) {
       throw new FileNotFoundException(getVersionJson() + " not exists");
     }
-    return JSONUtils.readJsonFileToClass(getVersionJson(), GameVersionJsonObject.class);
+    return JSONUtils.readFileToClass(getVersionJson(), GameVersionJsonObject.class);
   }
 
   public File getLaucnherProfiles() {

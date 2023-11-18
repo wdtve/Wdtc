@@ -27,12 +27,12 @@ public class UsersList {
       UserList.remove(UserName);
     }
     UserList.add(UserName, JSON.GSON.toJsonTree(user, User.class));
-    JSONUtils.writeObjectToJsonFile(UserListFile, UserList);
+    JSONUtils.writeObjectToFile(UserListFile, UserList);
   }
 
 
   public static JsonObject UserListObject() throws IOException {
-    return JSONUtils.readJsonFiletoJsonObject(UserListFile);
+    return JSONUtils.readFiletoJsonObject(UserListFile);
   }
 
   public static User getUser(String UserName) throws IOException {

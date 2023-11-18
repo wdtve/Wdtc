@@ -74,8 +74,8 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
     List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JSONUtils.readJsonFiletoJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JSONUtils.readJsonFiletoJsonObject(getQuiltVersionJson()));
+    ObjectList.add(JSONUtils.readFiletoJsonObject(launcher.getVersionJson()));
+    ObjectList.add(JSONUtils.readFiletoJsonObject(getQuiltVersionJson()));
     Object.setJsonObject(ObjectList);
     launcher.putToVersionJson(Object);
   }

@@ -34,7 +34,7 @@ public class GameVersionList implements VersionListInterface {
   public List<VersionJsonObjectInterface> getVersionList() {
     List<VersionJsonObjectInterface> VersionList = new ArrayList<>();
     try {
-      JSONArray version_list = JSONUtils.readJsonFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
+      JSONArray version_list = JSONUtils.readFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
       for (int i = 0; i < version_list.size(); i++) {
         JSONObject VersionObject = version_list.getJSONObject(i);
         GameVersionJsonObjectImpl versionJsonObject = JSONObject.parseObject(VersionObject, GameVersionJsonObjectImpl.class);

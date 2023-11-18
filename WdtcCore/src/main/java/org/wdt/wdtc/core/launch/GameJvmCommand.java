@@ -22,20 +22,20 @@ public class GameJvmCommand extends AbstractGameCommand {
   public StringBuilder getCommand() throws IOException {
     DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
     GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
-    Command.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
-    NonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
-    NonBreakingSpace("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());
-    NonBreakingSpace("-Xmx" + gameConfig.getMemory(), "M");
-    NonBreakingSpace("-Dminecraft.client.jar=", launcher.getVersionJar());
-    NonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m");
-    NonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
+    command.append("@echo off\n").append("cd ").append(launcher.getVersionPath()).append("\n");
+    nonBreakingSpace("\"" + gameConfig.getJavaPath() + "\"");
+    nonBreakingSpace("-Dlog4j.configurationFile=", launcher.getVersionLog4j2());
+    nonBreakingSpace("-Xmx" + gameConfig.getMemory(), "M");
+    nonBreakingSpace("-Dminecraft.client.jar=", launcher.getVersionJar());
+    nonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m");
+    nonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
     FileUtils.createDirectories(launcher.getVersionNativesPath());
     for (JsonElement Element : VersionJsonObject.getArguments().getJvmList()) {
       if (!Element.isJsonObject()) {
-        NonBreakingSpace(ReplaceData(Element.getAsString()));
+        nonBreakingSpace(ReplaceData(Element.getAsString()));
       }
     }
-    return Command;
+    return command;
   }
 
   private Map<String, String> getDataMap() {

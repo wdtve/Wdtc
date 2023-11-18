@@ -32,10 +32,10 @@ public class TaskManger {
         IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/assets/readme.txt"))));
     FileUtils.createDirectories(FileManger.getWdtcCache());
     if (FileUtils.isFileNotExists(FileManger.getUserListFile())) {
-      JSONUtils.writeObjectToJsonFile(FileManger.getUserListFile(), new JsonObject());
+      JSONUtils.writeObjectToFile(FileManger.getUserListFile(), new JsonObject());
     }
     if (FileUtils.isFileNotExists(FileManger.getSettingFile())) {
-      JSONUtils.writeObjectToJsonFile(FileManger.getSettingFile(), new SettingManger.Setting());
+      JSONUtils.writeObjectToFile(FileManger.getSettingFile(), new SettingManger.Setting());
     }
     String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
     if (FileUtils.isFileNotExists(FileManger.getLlbmpipeLoader())) {

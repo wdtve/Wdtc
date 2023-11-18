@@ -22,17 +22,17 @@ public class GameCLICommand extends AbstractGameCommand {
   public StringBuilder getCommand() throws IOException {
     DefaultGameConfig.Config gameConfig = launcher.getGameConfig().getConfig();
     GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
-    NonBreakingSpace(VersionJsonObject.getMainClass());
+    nonBreakingSpace(VersionJsonObject.getMainClass());
     for (JsonElement Element : VersionJsonObject.getArguments().getGameList()) {
       if (!Element.isJsonObject()) {
-        NonBreakingSpace(ReplaceData(Element.getAsString()));
+        nonBreakingSpace(ReplaceData(Element.getAsString()));
       }
     }
-    NonBreakingSpace("--height");
-    NonBreakingSpace(gameConfig.getHight());
-    NonBreakingSpace("--width");
-    Command.append(gameConfig.getWidth());
-    return Command;
+    nonBreakingSpace("--height");
+    nonBreakingSpace(gameConfig.getHight());
+    nonBreakingSpace("--width");
+    command.append(gameConfig.getWidth());
+    return command;
   }
 
   private Map<String, String> getDataMap() throws IOException {
