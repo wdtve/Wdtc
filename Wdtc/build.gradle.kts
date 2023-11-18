@@ -28,6 +28,7 @@ tasks.shadowJar {
     for (module in moduleList) {
       exclude(dependency("org.openjfx:$module:${javafx.version}"))
     }
+    exclude("org.dom4j:.*:.*")
   }
   manifest.attributes(sameManifest)
 }

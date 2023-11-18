@@ -13,37 +13,37 @@ class GameJvmCommand(private val launcher: Launcher) : AbstractGameCommand() {
     val gameConfig = launcher.gameConfig.config!!
     val versionJsonObject = launcher.gameVersionJsonObject
     commandBuilder.append("@echo off\n").append("cd ").append(launcher.versionDirectory).append("\n")
-    NonBreakingSpace("\"" + gameConfig.javaPath + "\"")
-    NonBreakingSpace("-Dlog4j.configurationFile=", launcher.versionLog4j2)
-    NonBreakingSpace("-Xmx" + gameConfig.memory, "M")
-    NonBreakingSpace("-Dminecraft.client.jar=", launcher.versionJar)
-    NonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m")
-    NonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump")
+    nonBreakingSpace("\"" + gameConfig.javaPath + "\"")
+    nonBreakingSpace("-Dlog4j.configurationFile=", launcher.versionLog4j2)
+    nonBreakingSpace("-Xmx" + gameConfig.memory, "M")
+    nonBreakingSpace("-Dminecraft.client.jar=", launcher.versionJar)
+    nonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m")
+    nonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump")
     FileUtils.createDirectories(launcher.versionNativesPath)
     for (element in versionJsonObject.arguments?.jvmList!!) {
       if (!element.isJsonObject) {
-        NonBreakingSpace(replaceData(element.asString))
+        nonBreakingSpace(replaceData(element.asString))
       }
     }
     return commandBuilder
   }
 
-  private val dataMap: Map<String, String>
-    get() = java.util.Map.of(
-      "\${natives_directory}",
-      launcher.versionNativesPath.canonicalPath,
-      "\${launcher_name}",
-      "Wdtc",
-      "\${launcher_version}",
-      launcherVersion,
-      "\${library_directory}",
-      launcher.gameLibraryDirectory.canonicalPath,
-      "\${classpath_separator}",
-      ";",
-      "\${version_name}",
-      launcher.versionNumber,
-      "\${classpath}",
-      libraryList
+  private val dataMap
+    get() = mutableMapOf(
+      "\${natives_directory}" to
+          launcher.versionNativesPath.canonicalPath,
+      "\${launcher_name}" to
+          "Wdtc",
+      "\${launcher_version}" to
+          launcherVersion,
+      "\${library_directory}" to
+          launcher.gameLibraryDirectory.canonicalPath,
+      "\${classpath_separator}" to
+          ";",
+      "\${version_name}" to
+          launcher.versionNumber,
+      "\${classpath}" to
+          libraryList
     )
 
   private fun replaceData(strs: String): String {

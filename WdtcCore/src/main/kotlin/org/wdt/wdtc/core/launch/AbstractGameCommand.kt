@@ -9,23 +9,23 @@ abstract class AbstractGameCommand {
 
   @Throws(IOException::class)
   abstract fun getCommand(): StringBuilder
-  protected fun NonBreakingSpace(o: Any?) {
+  protected fun nonBreakingSpace(o: Any) {
     commandBuilder.append(o).append(StringUtils.STRING_SPACE)
   }
 
-  protected fun InsertclasspathSeparator(file: File) {
-    InsertclasspathSeparator(file.absolutePath)
+  protected fun insertclasspathSeparator(file: File) {
+    insertclasspathSeparator(file.absolutePath)
   }
 
-  protected fun InsertclasspathSeparator(str: String?) {
+  protected fun insertclasspathSeparator(str: String) {
     commandBuilder.append(str).append(";")
   }
 
-  protected fun InsertSpace(str: String?) {
+  protected fun insertSpace(str: String?) {
     commandBuilder.append(str).append(StringUtils.STRING_SPACE)
   }
 
-  protected fun NonBreakingSpace(str: String, string: Any) {
-    NonBreakingSpace(str + string)
+  protected fun nonBreakingSpace(str: String, string: Any) {
+    nonBreakingSpace(str + string)
   }
 }

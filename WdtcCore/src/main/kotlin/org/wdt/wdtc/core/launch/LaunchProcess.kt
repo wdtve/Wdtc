@@ -3,7 +3,7 @@ package org.wdt.wdtc.core.launch
 import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.utils.ThreadUtils.startThread
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 
 class LaunchProcess(private val process: Process) {
   var setUIText: TextInterface? = null
-  private val logmaker = getLogger(LaunchProcess::class.java)
+  private val logmaker = LaunchProcess::class.java.getWdtcLogger()
 
   @Throws(IOException::class)
   fun startLaunchGame() {
@@ -27,15 +27,15 @@ class LaunchProcess(private val process: Process) {
 
   private fun getRunInfo(inputStream: InputStream) {
     try {
-      val Reader = BufferedReader(InputStreamReader(inputStream, "GBK"))
+      val reader = BufferedReader(InputStreamReader(inputStream, "GBK"))
       var line: String?
-      while (Reader.readLine().also { line = it } != null) {
+      while (reader.readLine().also { line = it } != null) {
         if (Thread.currentThread().isInterrupted) {
           launchErrorTask()
           return
         } else {
-          val ErrorWarn = Pattern.compile("FATAL").matcher(line)
-          if (ErrorWarn.find()) {
+          val errorWarn = Pattern.compile("FATAL").matcher(line)
+          if (errorWarn.find()) {
             println(line)
             Thread.currentThread().interrupt()
           } else {

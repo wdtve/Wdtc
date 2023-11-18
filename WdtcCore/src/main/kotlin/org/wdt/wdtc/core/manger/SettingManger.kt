@@ -4,6 +4,7 @@ import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.io.writeStringToFile
 import org.wdt.wdtc.core.manger.DownloadSourceManger.DownloadSourceList
+import org.wdt.wdtc.core.manger.FileManger.settingFile
 import org.wdt.wdtc.core.utils.JavaUtils
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
@@ -31,11 +32,11 @@ open class SettingManger {
 
     @JvmStatic
     val setting: Setting
-      get() = FileManger.settingFile.readFileToClass()
+      get() = settingFile.readFileToClass()
 
     @JvmStatic
     fun putSettingToFile(setting: Setting) {
-      FileManger.settingFile.writeStringToFile(Json.GSON_BUILDER.setPrettyPrinting().create().toJson(setting))
+      settingFile.writeStringToFile(Json.GSON_BUILDER.setPrettyPrinting().create().toJson(setting))
     }
   }
 }

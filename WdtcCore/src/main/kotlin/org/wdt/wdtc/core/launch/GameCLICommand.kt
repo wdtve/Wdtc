@@ -1,6 +1,6 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.wdtc.core.auth.User
+import org.wdt.wdtc.core.auth.User.Companion.user
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.VMManger.launcherVersion
 import java.io.IOException
@@ -10,52 +10,49 @@ class GameCLICommand(private val launcher: Launcher) : AbstractGameCommand() {
   override fun getCommand(): StringBuilder {
     val gameConfig = launcher.gameConfig.config!!
     val versionJsonObject = launcher.gameVersionJsonObject
-    NonBreakingSpace(versionJsonObject.mainClass)
+    nonBreakingSpace(versionJsonObject.mainClass!!)
     for (element in versionJsonObject.arguments?.gameList!!) {
       if (!element.isJsonObject) {
-        NonBreakingSpace(replaceData(element.asString))
+        nonBreakingSpace(replaceData(element.asString))
       }
     }
-    NonBreakingSpace("--height")
-    NonBreakingSpace(gameConfig.hight)
-    NonBreakingSpace("--width")
+    nonBreakingSpace("--height")
+    nonBreakingSpace(gameConfig.hight)
+    nonBreakingSpace("--width")
     commandBuilder.append(gameConfig.width)
     return commandBuilder
   }
 
-  @get:Throws(IOException::class)
-  private val dataMap: Map<String, String>
-    get() {
-      val user = User.user
-      return java.util.Map.of(
-        "\${auth_player_name}",
-        user.userName,
-        "\${version_name}",
-        launcher.versionNumber,
-        "\${game_directory}",
-        launcher.versionDirectory.canonicalPath,
-        "\${assets_root}",
-        launcher.gameAssetsDirectory.canonicalPath,
-        "\${assets_index_name}",
-        launcher.gameVersionJsonObject.assets,
-        "\${auth_uuid}",
-        user.uuid,
-        "\${auth_access_token}",
-        user.accessToken,
-        "\${user_type}",
-        user.type.toString(),
-        "\${version_type}",
-        "Wdtc-$launcherVersion"
-      )
-    }
+  private val dataMap
+    get() = mutableMapOf(
+      "\${auth_player_name}" to
+          user.userName,
+      "\${version_name}" to
+          launcher.versionNumber,
+      "\${game_directory}" to
+          launcher.versionDirectory.canonicalPath,
+      "\${assets_root}" to
+          launcher.gameAssetsDirectory.canonicalPath,
+      "\${assets_index_name}" to
+          launcher.gameVersionJsonObject.assets,
+      "\${auth_uuid}" to
+          user.uuid,
+      "\${auth_access_token}" to
+          user.accessToken,
+      "\${user_type}" to
+          user.type.toString(),
+      "\${version_type}" to
+          "Wdtc-$launcherVersion"
+    )
+
 
   @Throws(IOException::class)
   private fun replaceData(strs: String): String {
     var str = strs
-    val replaceMap = dataMap
-    for (s in replaceMap.keys) {
-      str = str.replace(s, replaceMap[s]!!)
+    for (s in dataMap.keys) {
+      str = str.replace(s, dataMap[s]!!)
     }
     return str
   }
 }
+
