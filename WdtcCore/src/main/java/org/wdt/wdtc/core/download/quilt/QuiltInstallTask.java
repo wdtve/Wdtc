@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
@@ -13,9 +14,6 @@ import org.wdt.wdtc.core.game.LibraryObject;
 import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,20 +42,20 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
   @Override
   public void overwriteVersionJson() throws IOException {
     GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
-    JSONObject QuiltVersionJsonObject = getQuiltGameVersionJsonObject();
-    JSONObject Arguments = QuiltVersionJsonObject.getJSONObject("arguments");
+    JsonObject QuiltVersionJsonObject = getQuiltGameVersionJsonObject();
+    JsonObject Arguments = QuiltVersionJsonObject.getAsJsonObject("arguments");
     GameVersionJsonObject.Arguments arguments = VersionJsonObject.getArguments();
     JsonArray GameList = arguments.getGameList();
-    VersionJsonObject.setMainClass(QuiltVersionJsonObject.getString("mainClass"));
-    GameList.addAll(Arguments.getJSONArray("game").getJsonArrays());
+    VersionJsonObject.setMainClass(QuiltVersionJsonObject.get("mainClass").getAsString());
+    GameList.addAll(Arguments.getAsJsonArray("game"));
     arguments.setGameList(GameList);
     VersionJsonObject.setArguments(arguments);
-    JSONArray QuiltLibraryList = QuiltVersionJsonObject.getJSONArray("library");
+    JsonArray QuiltLibraryList = QuiltVersionJsonObject.getAsJsonArray("library");
     List<LibraryObject> LibraryList = VersionJsonObject.getLibraries();
     for (int i = 0; i < QuiltLibraryList.size(); i++) {
-      JSONObject QuiltLibraryObject = QuiltLibraryList.getJSONObject(i);
-      DependencyDownload download = new DependencyDownload(QuiltLibraryObject.getString("name"));
-      String LibraryDefaultUrl = QuiltLibraryObject.getString("url");
+      JsonObject QuiltLibraryObject = QuiltLibraryList.get(i).getAsJsonObject();
+      DependencyDownload download = new DependencyDownload(QuiltLibraryObject.get("name").getAsString());
+      String LibraryDefaultUrl = QuiltLibraryObject.get("url").getAsString();
       if (LibraryDefaultUrl.equals("https://maven.fabricmc.net/")) {
         download.setDefaultUrl(source.getFabricLibraryUrl());
       } else if (LibraryDefaultUrl.equals("https://maven.quiltmc.org/repository/release/")) {
@@ -74,8 +72,8 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
     List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JSONUtils.readFiletoJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JSONUtils.readFiletoJsonObject(getQuiltVersionJson()));
+    ObjectList.add(JsonUtils.getJsonObject(launcher.getVersionJson()));
+    ObjectList.add(JsonUtils.getJsonObject(getQuiltVersionJson()));
     Object.setJsonObject(ObjectList);
     launcher.putToVersionJson(Object);
   }

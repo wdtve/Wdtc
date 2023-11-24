@@ -7,9 +7,9 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,12 +44,12 @@ public class LibraryObject {
     return object;
   }
 
-  public static LibraryObject getLibraryObject(JSONObject object) {
-    return JSONObject.parseObject(object, LibraryObject.class);
+  public static LibraryObject getLibraryObject(JsonObject object) {
+    return JsonObjectUtils.parseObject(object, LibraryObject.class);
   }
 
   public static LibraryObject getLibraryObject(String object) {
-    return JSONObject.parseObject(object, LibraryObject.class);
+    return JsonObjectUtils.parseObject(object, LibraryObject.class);
   }
 
 

@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.wdtc.core.utils.JavaUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,17 +21,19 @@ public class SettingManger {
 
   @SneakyThrows(IOException.class)
   public static Setting getSetting() {
-    return JSONUtils.readFileToClass(FileManger.getSettingFile(), Setting.class);
+    return JsonUtils.readFileToClass(FileManger.getSettingFile(), Setting.class);
   }
 
 
+  @SneakyThrows
   public static void putSettingToFile(Setting setting) {
-    JSONUtils.writeObjectToFile(FileManger.getSettingFile(), setting);
+    JsonUtils.writeObjectToFile(FileManger.getSettingFile(), setting, Json.getBuilder().setPrettyPrinting());
   }
 
   @Data
   @Accessors(chain = true)
   public static class Setting {
+    private final boolean isConsole = VMManger.isConsole();
     private DownloadSourceManger.DownloadSourceList DownloadSource = DownloadSourceManger.DownloadSourceList.OFFICIAL;
     private boolean Console = false;
     private boolean LlvmpipeLoader = false;

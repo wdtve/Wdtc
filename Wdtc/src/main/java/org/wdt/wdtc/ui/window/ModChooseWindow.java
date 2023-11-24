@@ -141,7 +141,7 @@ public class ModChooseWindow {
     CancelFabric.setOnAction(event -> {
       try {
         launcher.setKind(ModUtils.KindOfMod.Original);
-        launcher.getFabricModInstallInfo().setAPIDownloadTask(null);
+        launcher.getFabricModInstallInfo().setApiDownloadTask(null);
         DownloadForge.setDisable(false);
         DownloadFabricAPI.setDisable(true);
         Forge.setText(Tips.ForgeNo);
@@ -162,7 +162,7 @@ public class ModChooseWindow {
     });
     CancelFabricAPI.setOnAction(event -> {
       try {
-        launcher.getFabricModInstallInfo().setAPIDownloadTask(null);
+        launcher.getFabricModInstallInfo().setApiDownloadTask(null);
         FabricAPI.setText(Tips.FabricAPINo);
       } catch (NullPointerException e) {
         logmaker.warn("warn:", e);
@@ -200,7 +200,7 @@ public class ModChooseWindow {
       DownloadFabricAPI.setDisable(false);
       DownloadForge.setDisable(true);
       if (launcher.getFabricModInstallInfo().isAPIDownloadTaskNoNull()) {
-        FabricAPI.setText(launcher.getFabricModInstallInfo().getAPIDownloadTask().getFabricAPIVersionNumber());
+        FabricAPI.setText(launcher.getFabricModInstallInfo().getApiDownloadTask().getFabricAPIVersionNumber());
       }
     } else {
       Fabric.setText(Tips.FabricNo);

@@ -1,8 +1,8 @@
 package org.wdt.wdtc.core.game;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.Getter;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,16 +21,16 @@ public class GetGameNeedLibraryFile {
     GameVersionJsonObject VersionJsonObject = launcher.getGameVersionJsonObject();
     for (LibraryObject LibraryObject : VersionJsonObject.getLibraries()) {
       if (LibraryObject.getNatives() != null) {
-        JSONObject NativesJson = new JSONObject(LibraryObject.getNatives());
+        JsonObject NativesJson = LibraryObject.getNatives();
         if (NativesJson.has("windows")) {
           FileList.add(new LibraryFile(LibraryObject, true));
         }
       } else {
-        JSONArray rules = new JSONArray(LibraryObject.getRules());
-        if (LibraryObject.getRules() != null) {
-          JSONObject ActionObject = rules.getJSONObject(rules.size() - 1);
-          String action = ActionObject.getString("action");
-          String OsName = ActionObject.getJSONObject("os").getString("name");
+        JsonArray rules = LibraryObject.getRules();
+        if (rules != null) {
+          JsonObject ActionObject = rules.get(rules.size() - 1).getAsJsonObject();
+          String action = ActionObject.get("action").getAsString();
+          String OsName = ActionObject.getAsJsonObject("os").get("name").getAsString();
           if (Objects.equals(action, "disallow") && Objects.equals(OsName, "osx")) {
             FileList.add(new LibraryFile(LibraryObject));
           } else if (Objects.equals(action, "allow") && Objects.equals(OsName, "windows")) {

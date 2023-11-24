@@ -19,12 +19,12 @@ import java.util.List;
 public class DownloadVersionGameFile {
   public final Launcher launcher;
   public final DownloadSourceInterface source;
-  public final boolean Install;
+  public final boolean install;
 
-  public DownloadVersionGameFile(Launcher launcher, boolean Install) {
+  public DownloadVersionGameFile(Launcher launcher, boolean install) {
     this.launcher = launcher;
     this.source = DownloadSourceManger.getDownloadSource();
-    this.Install = Install;
+    this.install = install;
   }
 
   public static void DownloadVersionManifestJsonFile() {
@@ -32,14 +32,13 @@ public class DownloadVersionGameFile {
   }
 
   public void DownloadGameVersionJson() {
-    if (!Install) {
+    if (!install) {
       return;
     }
     if (DownloadSourceManger.isOfficialDownloadSource()) {
       List<VersionJsonObjectInterface> versionJsonObjectList = new GameVersionList().getVersionList();
       for (VersionJsonObjectInterface versionJsonObjectInterface : versionJsonObjectList) {
-        if (versionJsonObjectInterface.isInstanceofThis(new GameVersionList.GameVersionJsonObjectImpl())) {
-          GameVersionList.GameVersionJsonObjectImpl versionJsonObject = (GameVersionList.GameVersionJsonObjectImpl) versionJsonObjectInterface;
+        if (versionJsonObjectInterface instanceof GameVersionList.GameVersionJsonObjectImpl versionJsonObject) {
           if (versionJsonObject.getVersionNumber().equals(launcher.getVersionNumber())) {
             DownloadUtils.StartDownloadTask(versionJsonObject.getVersionJsonURL(), launcher.getVersionJson());
           }

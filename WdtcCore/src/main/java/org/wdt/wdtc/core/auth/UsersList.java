@@ -3,11 +3,11 @@ package org.wdt.wdtc.core.auth;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonObjectUtils;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSON;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,34 +16,33 @@ import java.util.List;
 import java.util.Map;
 
 public class UsersList {
-  private static final File UserListFile = FileManger.getUserListFile();
+  private static final File usersListFile = FileManger.getUserListFile();
   private static final Logger logmaker = WdtcLogger.getLogger(UsersList.class);
 
   public static void addUser(User user) throws IOException {
-    JsonObject UserList = UserListObject();
-    String UserName = user.getUserName();
-    if (UserList.has(UserName)) {
-      logmaker.warn(UserName + " Remove");
-      UserList.remove(UserName);
+    JsonObject usersList = getUserListObject();
+    String userName = user.getUserName();
+    if (usersList.has(userName)) {
+      logmaker.warn(userName + " Remove");
+      usersList.remove(userName);
     }
-    UserList.add(UserName, JSON.GSON.toJsonTree(user, User.class));
-    JSONUtils.writeObjectToFile(UserListFile, UserList);
+    usersList.add(userName, Json.GSON.toJsonTree(user, User.class));
+    JsonUtils.writeObjectToFile(usersListFile, usersList, Json.getBuilder().setPrettyPrinting());
   }
 
 
-  public static JsonObject UserListObject() throws IOException {
-    return JSONUtils.readFiletoJsonObject(UserListFile);
+  public static JsonObject getUserListObject() throws IOException {
+    return JsonUtils.getJsonObject(usersListFile);
   }
 
   public static User getUser(String UserName) throws IOException {
-    return JSONObject.parseObject(UserListObject().getAsJsonObject(UserName), User.class);
+    return JsonObjectUtils.parseObject(getUserListObject().getAsJsonObject(UserName), User.class);
   }
 
   public static List<User> getUserList() {
     List<User> userList = new ArrayList<>();
     try {
-      JsonObject UserList = UserListObject();
-      Map<String, JsonElement> UserListMap = UserList.asMap();
+      Map<String, JsonElement> UserListMap = getUserListObject().asMap();
       if (!UserListMap.keySet().isEmpty()) {
         for (String s : UserListMap.keySet()) {
           userList.add(getUser(s));

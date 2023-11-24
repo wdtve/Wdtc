@@ -1,14 +1,14 @@
 package org.wdt.wdtc.core.download.quilt;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.ModUtils;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,8 +37,8 @@ public class QuiltDownloadInfo implements ModDownloadInfoInterface {
     return String.format(LibraryListUrl, launcher.getVersionNumber(), QuiltVersionNumber);
   }
 
-  public JSONObject getQuiltGameVersionJsonObject() throws IOException {
-    return JSONUtils.readFiletoJSONObject(getQuiltVersionJson());
+  public JsonObject getQuiltGameVersionJsonObject() throws IOException {
+    return JsonUtils.getJsonObject(getQuiltVersionJson());
   }
 
   @Override

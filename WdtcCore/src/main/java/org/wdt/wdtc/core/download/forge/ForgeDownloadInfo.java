@@ -1,9 +1,12 @@
 package org.wdt.wdtc.core.download.forge;
 
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.JsonUtils;
+import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
@@ -15,9 +18,8 @@ import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.ModUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
 import org.wdt.wdtc.core.utils.ZipUtils;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ForgeDownloadInfo implements ModDownloadInfoInterface {
@@ -46,8 +48,8 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
     return source.getForgeLibraryMavenUrl() + "net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar";
   }
 
-  public String getForgeInstallJarPath() {
-    return FileManger.getWdtcCache() + "/" + ForgeVersionNumber + "-installer.jar";
+  public File getForgeInstallJarPath() {
+    return new File(FileManger.getWdtcCache(), ForgeVersionNumber + "-installer.jar");
   }
 
   public String getForgeInstallJarUrl() {
@@ -60,17 +62,17 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
   }
 
 
-  public String getInstallProfilePath() {
-    return FileManger.getWdtcCache() + "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
+  public File getInstallProfilePath() {
+    return FileUtils.toFile(FileManger.getWdtcCache(), "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json");
   }
 
-  public JSONObject getInstallPrefileJSONObject() throws IOException {
-    return JSONUtils.readFiletoJSONObject(getInstallProfilePath());
+  public JsonObject getInstallPrefileJSONObject() throws IOException {
+    return JsonUtils.getJsonObject(getInstallProfilePath());
   }
 
 
-  public String getForgeVersionJsonPath() {
-    return FileManger.getWdtcCache() + "/version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json";
+  public File getForgeVersionJsonPath() {
+    return new File(FileManger.getWdtcCache(), "version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json");
   }
 
   public void getForgeVersionJson() {
@@ -78,8 +80,8 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
   }
 
   @SneakyThrows
-  public JSONObject getForgeVersionJsonObject() {
-    return JSONUtils.readFiletoJSONObject(getForgeVersionJsonPath());
+  public JsonObject getForgeVersionJsonObject() {
+    return JsonUtils.getJsonObject(getForgeVersionJsonPath());
   }
 
 

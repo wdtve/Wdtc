@@ -102,11 +102,13 @@ public class Launcher extends GameFileManger {
   }
 
   @Override
+  public int hashCode() {
+    return Objects.hash(VersionNumber, kind);
+  }
+
+  @Override
   public String toString() {
-    return "Launcher{" +
-        "version=" + VersionNumber +
-        ",kind=" + kind +
-        '}';
+    return "Launcher(version=" + VersionNumber + ", kind=" + kind + ")";
 
 
   }

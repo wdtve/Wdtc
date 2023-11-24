@@ -5,18 +5,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonObjectUtils;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.core.auth.BaseUser;
 import org.wdt.wdtc.core.auth.User;
 import org.wdt.wdtc.core.auth.accounts.Accounts;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.manger.URLManger;
-import org.wdt.wdtc.core.utils.SkinUtils;
 import org.wdt.wdtc.core.utils.StringUtils;
 import org.wdt.wdtc.core.utils.URLUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,13 +27,16 @@ import java.net.URLConnection;
 @Getter
 public class YggdrasilAccounts extends BaseUser {
   private static final Logger logmaker = WdtcLogger.getLogger(YggdrasilAccounts.class);
+  @NotNull
   private final String url;
-  private final String username;
-  private final String password;
+  @NotNull
+  private final String userName;
+  @NotNull
+  private final String pwd;
 
-  public YggdrasilAccounts(String url, String username, String password) {
-    this.password = password;
-    this.username = username;
+  public YggdrasilAccounts(@NotNull String url, @NotNull String userName, @NotNull String password) {
+    this.pwd = password;
+    this.userName = userName;
     this.url = url;
   }
 
@@ -47,8 +51,7 @@ public class YggdrasilAccounts extends BaseUser {
 //                "\"version\":1" +
 //                "}" +
 //                "}";
-    PostJsonObject jsonObject = new PostJsonObject(username, password);
-    String jsonStr = JSONObject.toJSONString(jsonObject);
+    String jsonStr = Json.toJsonString(new PostJsonObject(userName, pwd));
     URLConnection conn = requestUrl.openConnection();
     conn.setRequestProperty("content-type", "application/json");
     conn.setDoOutput(true);
@@ -60,7 +63,7 @@ public class YggdrasilAccounts extends BaseUser {
   }
 
   public UserInformation getUserInformation() throws IOException {
-    return JSONObject.parseObject(sendPostWithJson(), UserInformation.class);
+    return JsonObjectUtils.parseObject(sendPostWithJson(), UserInformation.class);
   }
 
   public YggdrasilTextures getYggdrasilTextures() {
@@ -69,19 +72,19 @@ public class YggdrasilAccounts extends BaseUser {
 
   @Override
   public User getUser() throws IOException {
-    UserInformation UserInfo = getUserInformation();
+    UserInformation userInfo = getUserInformation();
     YggdrasilTextures textures = getYggdrasilTextures();
-    User user = new User();
-    user.setType(Accounts.AccountsType.Yggdrasil);
-    JSONObject selectedProfile = new JSONObject(UserInfo.getSelectedProfile());
-    user.setUserName(selectedProfile.getString("name"));
-    user.setUuid(selectedProfile.getString("id"));
-    user.setAccessToken(UserInfo.getAccessToken());
-    user.setAPI(URLUtils.getURLToString(URLManger.getLittleskinApi()));
-    user.setAPIBase64(StringUtils.StringToBase64(user.getAPI()));
-    SkinUtils utils = textures.getUtils();
-    user.setHeadFile(utils.writeSkinHead());
-    JSONUtils.writeObjectToFile(FileManger.getUsersJson(), user);
+    JsonObject selectedProfile = userInfo.getSelectedProfile();
+    String api = URLUtils.getURLToString(URLManger.getLittleskinApi());
+    User user = new User(
+        selectedProfile.get("name").getAsString(),
+        userInfo.accessToken,
+        Accounts.AccountsType.Yggdrasil,
+        selectedProfile.get("id").getAsString(),
+        api,
+        StringUtils.StringToBase64(api),
+        textures.getUtils().getSkinFile());
+    JsonUtils.writeObjectToFile(FileManger.getUsersJson(), user, Json.getBuilder().setPrettyPrinting());
     logmaker.info(user);
     return user;
   }

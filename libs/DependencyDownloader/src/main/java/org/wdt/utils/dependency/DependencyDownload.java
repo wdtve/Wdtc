@@ -48,7 +48,7 @@ public class DependencyDownload extends DefaultDependency {
   }
 
   public LibraryDependencyDownload getLibraryDependencyDownload() {
-    LibraryDependencyDownload libraryDependencyDownload = GetLibraryDependencyDownload();
+    LibraryDependencyDownload libraryDependencyDownload = super.getLibraryDependencyDownload();
     libraryDependencyDownload.setDefaultUrl(DefaultUrl);
     return libraryDependencyDownload;
   }

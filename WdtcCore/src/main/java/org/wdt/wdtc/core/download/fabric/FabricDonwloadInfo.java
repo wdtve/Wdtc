@@ -1,9 +1,11 @@
 package org.wdt.wdtc.core.download.fabric;
 
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface;
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
@@ -13,8 +15,6 @@ import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.ModUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class FabricDonwloadInfo implements ModDownloadInfoInterface {
   protected final Launcher launcher;
   @Getter
   @Setter
-  private FabricAPIDownloadTask APIDownloadTask;
+  private FabricAPIDownloadTask ApiDownloadTask;
 
 
   public FabricDonwloadInfo(Launcher launcher, String FabricVersionNumber) {
@@ -67,13 +67,13 @@ public class FabricDonwloadInfo implements ModDownloadInfoInterface {
     return new File(String.format(FileManger.getWdtcCache() + "/%s-fabric-%s.json", launcher.getVersionNumber(), FabricVersionNumber));
   }
 
-  public JSONObject getFabricVersionJsonObject() throws IOException {
-    return JSONUtils.readFiletoJSONObject(getFabricVersionJson());
+  public JsonObject getFabricVersionJsonObject() throws IOException {
+    return JsonUtils.getJsonObject(getFabricVersionJson());
   }
 
 
   public boolean isAPIDownloadTaskNoNull() {
-    return APIDownloadTask != null;
+    return ApiDownloadTask != null;
   }
 
   @Override

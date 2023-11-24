@@ -1,18 +1,19 @@
 package org.wdt.wdtc.core.download.game;
 
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.JsonObjectUtils;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,10 +35,10 @@ public class GameVersionList implements VersionListInterface {
   public List<VersionJsonObjectInterface> getVersionList() {
     List<VersionJsonObjectInterface> VersionList = new ArrayList<>();
     try {
-      JSONArray version_list = JSONUtils.readFiletoJSONObject(FileManger.getVersionManifestFile()).getJSONArray("versions");
-      for (int i = 0; i < version_list.size(); i++) {
-        JSONObject VersionObject = version_list.getJSONObject(i);
-        GameVersionJsonObjectImpl versionJsonObject = JSONObject.parseObject(VersionObject, GameVersionJsonObjectImpl.class);
+      JsonArray versionList = JsonUtils.getJsonObject(FileManger.getVersionManifestFile()).getAsJsonArray("versions");
+      for (int i = 0; i < versionList.size(); i++) {
+        JsonObject VersionObject = versionList.get(i).getAsJsonObject();
+        GameVersionJsonObjectImpl versionJsonObject = JsonObjectUtils.parseObject(VersionObject, GameVersionJsonObjectImpl.class);
         if (versionJsonObject.gameType.equals("release")) {
           VersionList.add(versionJsonObject);
         }
@@ -64,11 +65,6 @@ public class GameVersionList implements VersionListInterface {
     @Override
     public String getVersionNumber() {
       return versionNumber;
-    }
-
-    @Override
-    public boolean isInstanceofThis(Object o) {
-      return o instanceof GameVersionJsonObjectImpl;
     }
 
     @Override

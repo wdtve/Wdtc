@@ -1,13 +1,15 @@
 package org.wdt.wdtc.core.download.fabric;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.wdt.utils.gson.JsonArrayUtils;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.URLUtils;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,10 +28,10 @@ public class FabricAPIVersionList implements VersionListInterface {
   @Override
   public List<VersionJsonObjectInterface> getVersionList() throws IOException {
     List<VersionJsonObjectInterface> VersionList = new ArrayList<>();
-    JSONArray VersionListArray = JSONArray.parseJSONArray(URLUtils.getURLToString(VersionListUrl));
+    JsonArray VersionListArray = JsonArrayUtils.parseJsonArray(URLUtils.getURLToString(VersionListUrl));
     for (int i = 0; i < VersionListArray.size(); i++) {
-      JSONObject VersionObject = VersionListArray.getJSONObject(i);
-      FabricAPIVersionJsonObjectImpl versionJsonObject = JSONObject.parseObject(VersionObject, FabricAPIVersionJsonObjectImpl.class);
+      JsonObject VersionObject = VersionListArray.get(i).getAsJsonObject();
+      FabricAPIVersionJsonObjectImpl versionJsonObject = JsonObjectUtils.parseObject(VersionObject, FabricAPIVersionJsonObjectImpl.class);
       if (launcher.getVersionNumber().equals(versionJsonObject.gameVersion.get(0))) {
         VersionList.add(versionJsonObject);
       }
@@ -49,11 +51,6 @@ public class FabricAPIVersionList implements VersionListInterface {
     @Override
     public String getVersionNumber() {
       return versionNumber;
-    }
-
-    @Override
-    public boolean isInstanceofThis(Object o) {
-      return o instanceof FabricAPIVersionJsonObjectImpl;
     }
 
     @Override

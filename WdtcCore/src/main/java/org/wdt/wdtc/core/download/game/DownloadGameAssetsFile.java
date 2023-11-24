@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.JsonObjectUtils;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.SpeedOfProgress;
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface;
@@ -14,7 +16,6 @@ import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.ThreadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,11 +32,10 @@ public class DownloadGameAssetsFile {
 
   @SneakyThrows(IOException.class)
   public void DownloadAssetsFiles() {
-    Map<String, JsonElement> list = JSONUtils.readFiletoJSONObject(launcher.getGameAssetsListJson())
-        .getJSONObject("objects").getJsonObjects().asMap();
+    Map<String, JsonElement> list = JsonUtils.getJsonObject(launcher.getGameAssetsListJson()).getAsJsonObject("objects").asMap();
     SpeedOfProgress progress = new SpeedOfProgress(list.size());
     for (String key : list.keySet()) {
-      AssetsFileData data = JSONUtils.parseObject(list.get(key).getAsJsonObject(), AssetsFileData.class);
+      AssetsFileData data = JsonObjectUtils.parseObject(list.get(key).getAsJsonObject(), AssetsFileData.class);
       if (DownloadUtils.isDownloadProcess()) return;
       if (FileUtils.isFileNotExistsAndIsNotSameSize(new File(launcher.getGameObjects(), data.getHashSplicing()), data.getSize())) {
         DownloadGameAssetsFileTask task = new DownloadGameAssetsFileTask(launcher, data, progress);

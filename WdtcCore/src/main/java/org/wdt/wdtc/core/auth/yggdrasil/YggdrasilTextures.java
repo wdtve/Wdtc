@@ -2,39 +2,34 @@ package org.wdt.wdtc.core.auth.yggdrasil;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.SkinUtils;
 import org.wdt.wdtc.core.utils.URLUtils;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 
 public class YggdrasilTextures {
   private final String username;
   private String url;
 
   public YggdrasilTextures(YggdrasilAccounts yggdrasilAccounts) {
-    username = yggdrasilAccounts.getUsername();
-    if (Objects.nonNull(yggdrasilAccounts.getUrl())) {
-      url = yggdrasilAccounts.getUrl();
-    } else {
-      throw new NullPointerException("URL为空");
-    }
+    username = yggdrasilAccounts.getUserName();
+    url = yggdrasilAccounts.getUrl();
   }
 
   public void setUrl(String url) {
     this.url = url;
   }
 
-  public String GetUserJson() {
+  public String getUserJsonUrl() {
     return url + "/csl/" + username + ".json";
   }
 
-  public String GetUserSkinHash() throws IOException {
+  public String getUserSkinHash() throws IOException {
     Csl csl = getCsl();
     Skins skins = csl.getSkins();
     return skins.getSkinKind();
@@ -45,17 +40,17 @@ public class YggdrasilTextures {
   }
 
   public void DownloadUserSkin() throws IOException {
-    String UserSkinHash = GetUserSkinHash();
+    String UserSkinHash = getUserSkinHash();
     File SkinPath = new File(FileManger.getMinecraftComSkin(), UserSkinHash.substring(0, 2) + "/" + UserSkinHash);
     DownloadUtils.StartDownloadTask(getSkinUrl(), SkinPath);
   }
 
   public URL getSkinUrl() throws IOException {
-    return new URL(url + "/textures/" + GetUserSkinHash());
+    return new URL(url + "/textures/" + getUserSkinHash());
   }
 
   public Csl getCsl() throws IOException {
-    return JSONObject.parseObject(URLUtils.getURLToString(GetUserJson()), Csl.class);
+    return JsonObjectUtils.parseObject(URLUtils.getURLToString(getUserJsonUrl()), Csl.class);
   }
 
   public SkinUtils getUtils() throws IOException {

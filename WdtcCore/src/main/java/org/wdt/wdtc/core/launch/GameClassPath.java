@@ -1,16 +1,19 @@
 package org.wdt.wdtc.core.launch;
 
 
+import org.apache.log4j.Logger;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.game.GetGameNeedLibraryFile;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.manger.SettingManger;
+import org.wdt.wdtc.core.utils.WdtcLogger;
 import org.wdt.wdtc.core.utils.ZipUtils;
 
 import java.io.IOException;
 
 public class GameClassPath extends AbstractGameCommand {
+  private static final Logger logmaker = WdtcLogger.getLogger(GameClassPath.class);
   private final Launcher launcher;
 
   public GameClassPath(Launcher launcher) {
@@ -39,7 +42,7 @@ public class GameClassPath extends AbstractGameCommand {
       }
 
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      logmaker.error(WdtcLogger.getExceptionMessage(e));
     }
     return command;
   }

@@ -1,14 +1,15 @@
 package org.wdt.wdtc.core.download.forge;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.wdt.utils.gson.JsonArrayUtils;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.URLUtils;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,10 +31,9 @@ public class ForgeVersionList implements VersionListInterface {
   @Override
   public List<VersionJsonObjectInterface> getVersionList() throws IOException {
     List<VersionJsonObjectInterface> VersionName = new ArrayList<>();
-    JSONArray VersionList = JSONArray.parseJSONArray(URLUtils.getURLToString(getForgeListUrl()));
+    JsonArray VersionList = JsonArrayUtils.parseJsonArray(URLUtils.getURLToString(getForgeListUrl()));
     for (int i = 0; i < VersionList.size(); i++) {
-      JSONObject VersionObject = VersionList.getJSONObject(i);
-      VersionName.add(JSONObject.parseObject(VersionObject, ForgeVersionJsonObjectImpl.class));
+      VersionName.add(JsonObjectUtils.parseObject(VersionList.get(i).getAsJsonObject(), ForgeVersionJsonObjectImpl.class));
     }
     return VersionName;
   }
@@ -50,11 +50,6 @@ public class ForgeVersionList implements VersionListInterface {
     @Override
     public String getVersionNumber() {
       return versionNumber;
-    }
-
-    @Override
-    public boolean isInstanceofThis(Object o) {
-      return o instanceof ForgeVersionJsonObjectImpl;
     }
 
     @Override

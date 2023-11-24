@@ -40,11 +40,11 @@ public class LibraryDependencyDownload extends DefaultDependency {
     this.DeletePom = deletePom;
   }
 
-  public String PomFilePath() throws IOException {
-    return PomFile().getCanonicalPath();
+  public String getPomFilePath() throws IOException {
+    return getPomFile().getCanonicalPath();
   }
 
-  public File PomFile() {
+  public File getPomFile() {
     return new File(aboutPath(path) + "/" + formPom());
   }
 
@@ -72,12 +72,12 @@ public class LibraryDependencyDownload extends DefaultDependency {
 
 
   public List<DependencyDownload> downloadDependency() throws DocumentException, IOException {
-    if (!PomFile().exists()) {
+    if (!getPomFile().exists()) {
       throw new IOException("The POM file not exists!");
     }
     List<DependencyDownload> dependencyList = new ArrayList<>();
     SAXReader saxReader = new SAXReader();
-    Document document = saxReader.read(PomFile());
+    Document document = saxReader.read(getPomFile());
     if (Objects.nonNull(document)) {
       Element element = document.getRootElement();
       Element dependencies = element.element("dependencies");
@@ -95,7 +95,7 @@ public class LibraryDependencyDownload extends DefaultDependency {
       }
     }
     if (DeletePom) {
-      if (!PomFile().delete()) {
+      if (!getPomFile().delete()) {
         throw new RuntimeException();
       }
     }

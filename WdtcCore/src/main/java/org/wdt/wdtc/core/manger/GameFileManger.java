@@ -2,10 +2,11 @@ package org.wdt.wdtc.core.manger;
 
 
 import lombok.Getter;
+import lombok.SneakyThrows;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.core.game.GameVersionJsonObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,15 +78,16 @@ public class GameFileManger extends GameDirectoryManger {
     return new File(getVersionPath(), "logs");
   }
 
+  @SneakyThrows
   public void putToVersionJson(GameVersionJsonObject o) {
-    JSONUtils.writeObjectToFile(getVersionJson(), o);
+    JsonUtils.writeObjectToFile(getVersionJson(), o);
   }
 
   public GameVersionJsonObject getGameVersionJsonObject() throws IOException {
     if (FileUtils.isFileNotExists(getVersionJson())) {
       throw new FileNotFoundException(getVersionJson() + " not exists");
     }
-    return JSONUtils.readFileToClass(getVersionJson(), GameVersionJsonObject.class);
+    return JsonUtils.readFileToClass(getVersionJson(), GameVersionJsonObject.class);
   }
 
   public File getLaucnherProfiles() {

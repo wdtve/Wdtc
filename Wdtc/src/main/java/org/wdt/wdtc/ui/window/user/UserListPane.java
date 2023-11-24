@@ -10,11 +10,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.auth.User;
 import org.wdt.wdtc.core.auth.UsersList;
 import org.wdt.wdtc.core.manger.FileManger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 import org.wdt.wdtc.ui.window.Consoler;
 import org.wdt.wdtc.ui.window.ExceptionWindow;
 
@@ -80,9 +81,9 @@ public class UserListPane {
         AnchorPane.setLeftAnchor(detele, 530.0);
         detele.setOnAction(event -> {
           try {
-            JsonObject UserListObject = UsersList.UserListObject();
+            JsonObject UserListObject = UsersList.getUserListObject();
             UserListObject.remove(UserName);
-            JSONUtils.writeObjectToFile(UserListFile, UserListObject);
+            JsonUtils.writeObjectToFile(UserListFile, UserListObject, Json.getBuilder().setPrettyPrinting());
             setUserList(pane);
           } catch (IOException e) {
             ExceptionWindow.setErrorWin(e);

@@ -1,13 +1,15 @@
 package org.wdt.wdtc.core.download.fabric;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.Getter;
+import org.wdt.utils.gson.JsonArrayUtils;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.URLUtils;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 
@@ -32,10 +34,11 @@ public class FabricAPIDownloadTask {
   public void startDownloadFabricAPI() throws IOException {
     FabricAPIVersionList.FabricAPIVersionJsonObjectImpl versionJsonObject = (FabricAPIVersionList.FabricAPIVersionJsonObjectImpl) versionJsonObjectInterface;
     if (versionJsonObject == null) {
-      JSONArray VersionListArray = JSONArray.parseJSONArray(URLUtils.getURLToString(VersionListUrl));
+      JsonArray VersionListArray = JsonArrayUtils.parseJsonArray(URLUtils.getURLToString(VersionListUrl));
       for (int i = 0; i < VersionListArray.size(); i++) {
-        JSONObject VersionObject = VersionListArray.getJSONObject(i);
-        FabricAPIVersionList.FabricAPIVersionJsonObjectImpl newVersionJsonObject = JSONObject.parseObject(VersionObject, FabricAPIVersionList.FabricAPIVersionJsonObjectImpl.class);
+        JsonObject VersionObject = VersionListArray.get(i).getAsJsonObject();
+        FabricAPIVersionList.FabricAPIVersionJsonObjectImpl newVersionJsonObject =
+            JsonObjectUtils.parseObject(VersionObject, FabricAPIVersionList.FabricAPIVersionJsonObjectImpl.class);
         if (newVersionJsonObject.getVersionNumber().equals(FabricAPIVersionNumber)) {
           downloadFabricAPITask(newVersionJsonObject.getFilesObjectList().get(0));
         }

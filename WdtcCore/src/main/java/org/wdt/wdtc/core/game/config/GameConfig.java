@@ -2,13 +2,13 @@ package org.wdt.wdtc.core.game.config;
 
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.game.DownloadedGameVersion;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.manger.GameDirectoryManger;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSON;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +45,7 @@ public class GameConfig {
   public static void writeConfigJson(Launcher launcher) {
     try {
       DefaultGameConfig config = new DefaultGameConfig(launcher);
-      FileUtils.writeStringToFile(launcher.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
+      JsonUtils.writeObjectToFile(launcher.getVersionConfigFile(), config, Json.getBuilder().setPrettyPrinting());
       logmaker.info(launcher.getVersionNumber() + " " + config);
     } catch (IOException e) {
       logmaker.error(WdtcLogger.getExceptionMessage(e));
@@ -55,7 +55,7 @@ public class GameConfig {
   public static void ckeckVersionInfo(Launcher launcher) throws IOException {
     DefaultGameConfig config = launcher.getGameConfig().getDefaultGameConfig();
     config.setInfo(launcher.getVersionInfo());
-    FileUtils.writeStringToFile(launcher.getVersionConfigFile(), JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
+    JsonUtils.writeObjectToFile(launcher.getVersionConfigFile(), config, Json.getBuilder().setPrettyPrinting());
     logmaker.info(launcher.getVersionNumber() + " " + config);
   }
 
@@ -65,7 +65,7 @@ public class GameConfig {
 
   @SneakyThrows(IOException.class)
   public DefaultGameConfig getDefaultGameConfig() {
-    return JSONUtils.readFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
+    return JsonUtils.readFileToClass(launcher.getVersionConfigFile(), DefaultGameConfig.class);
   }
 
   public VersionInfo getVersionInfo() {
@@ -74,7 +74,6 @@ public class GameConfig {
   }
 
   public void putConfigToFile(DefaultGameConfig config) throws IOException {
-    FileUtils.writeStringToFile(launcher.getVersionConfigFile(),
-        JSON.GSONBUILDER.serializeNulls().setPrettyPrinting().create().toJson(config));
+    JsonUtils.writeObjectToFile(launcher.getVersionConfigFile(), config, Json.getBuilder().setPrettyPrinting());
   }
 }

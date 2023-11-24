@@ -3,6 +3,9 @@ package org.wdt.wdtc.ui;
 import com.google.gson.JsonArray;
 import org.apache.log4j.Logger;
 import org.wdt.utils.dependency.DependencyDownload;
+import org.wdt.utils.gson.Json;
+import org.wdt.utils.gson.JsonArrayUtils;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.FilenameUtils;
 import org.wdt.utils.io.IOUtils;
@@ -12,9 +15,6 @@ import org.wdt.wdtc.core.manger.FileManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.ThreadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,9 +51,9 @@ public class JavaFxUtils {
           LibraryObject libraryObject = new LibraryObject();
           libraryObject.setDownloads(downloads);
           libraryObject.setLibraryName("org.openjfx:" + s + ":win:17.0.6");
-          array.add(JSONObject.GSON.toJsonTree(libraryObject, LibraryObject.class));
+          array.add(Json.GSON.toJsonTree(libraryObject, LibraryObject.class));
         }
-        JSONUtils.writeObjectToFile(OpenJfxListFile, array);
+        JsonUtils.writeObjectToFile(OpenJfxListFile, array, Json.getBuilder().setPrettyPrinting());
       }
     } catch (IOException e) {
       logmaker.warn(WdtcLogger.getExceptionMessage(e));
@@ -61,10 +61,10 @@ public class JavaFxUtils {
   }
 
   public static void downloadDependencies() throws IOException {
-    JSONArray array = getArrayObject();
+    JsonArray array = getArrayObject();
     SpeedOfProgress speed = new SpeedOfProgress(array.size());
     for (int i = 0; i < array.size(); i++) {
-      LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
+      LibraryObject libraryObject = LibraryObject.getLibraryObject(array.get(i).getAsJsonObject());
       LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
       File Library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
       ThreadUtils.startThread(() -> {
@@ -81,8 +81,8 @@ public class JavaFxUtils {
     speed.await();
   }
 
-  private static JSONArray getArrayObject() throws IOException {
-    return JSONArray.parseJSONArray(IOUtils.toString(Objects.requireNonNull(JavaFxUtils.class.getResourceAsStream("/openjfx-list.json"))));
+  private static JsonArray getArrayObject() throws IOException {
+    return JsonArrayUtils.parseJsonArray(IOUtils.toString(Objects.requireNonNull(JavaFxUtils.class.getResourceAsStream("/openjfx-list.json"))));
   }
 
   public static void loadJavaFXPatch() {
@@ -91,11 +91,11 @@ public class JavaFxUtils {
     } catch (ClassNotFoundException e) {
       try {
         logmaker.info("Load JavaFX Dependencies");
-        JSONArray array = getArrayObject();
+        JsonArray array = getArrayObject();
         Set<Path> jarPaths = new HashSet<>();
         Set<String> modules = new HashSet<>();
         for (int i = 0; i < array.size(); i++) {
-          LibraryObject libraryObject = LibraryObject.getLibraryObject(array.getJSONObject(i));
+          LibraryObject libraryObject = LibraryObject.getLibraryObject(array.get(i).getAsJsonObject());
           LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
           File library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
           jarPaths.add(library.toPath());

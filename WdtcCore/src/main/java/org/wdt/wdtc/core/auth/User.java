@@ -1,46 +1,75 @@
 package org.wdt.wdtc.core.auth;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
+import lombok.ToString;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.wdtc.core.auth.accounts.Accounts;
 import org.wdt.wdtc.core.manger.FileManger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
 
-@Getter
-@Setter
+@Data
 public class User {
-
-  @SerializedName("UserName")
+  @EqualsAndHashCode.Include
+  @SerializedName("userName")
   private String UserName;
-  @SerializedName("AccessToken")
+
+  @ToString.Exclude
+  @SerializedName("accessToken")
   private String AccessToken;
-  @SerializedName("Type")
+
+  @EqualsAndHashCode.Include
+  @SerializedName("type")
   private Accounts.AccountsType Type;
-  @SerializedName("Uuid")
+
+  @ToString.Exclude
+  @SerializedName("uuid")
   private String Uuid;
-  @SerializedName("MetaAPI")
+
+  @ToString.Exclude
+  @SerializedName("metaData")
   private String API;
-  @SerializedName("MetaAPIBase64")
+
+  @ToString.Exclude
+  @SerializedName("base64Data")
   private String APIBase64;
-  @SerializedName("HeadPhotoPath")
+
+  @SerializedName("headFile")
   private File HeadFile;
 
   public User() {
   }
 
+  public User(String userName, String accessToken, Accounts.AccountsType type, String uuid, String API, String APIBase64, File headFile) {
+    UserName = userName;
+    AccessToken = accessToken;
+    Type = type;
+    Uuid = uuid;
+    this.API = API;
+    this.APIBase64 = APIBase64;
+    HeadFile = headFile;
+  }
+
+  public User(String userName, String accessToken, Accounts.AccountsType type, String uuid) {
+    UserName = userName;
+    AccessToken = accessToken;
+    Type = type;
+    Uuid = uuid;
+  }
+
+  @SneakyThrows
   public static void setUserToJson(User user) {
-    JSONUtils.writeObjectToFile(FileManger.getUsersJson(), user);
+    JsonUtils.writeObjectToFile(FileManger.getUsersJson(), user);
   }
 
   @SneakyThrows(IOException.class)
   public static User getUser() {
-    return JSONUtils.readFileToClass(FileManger.getUsersJson(), User.class);
+    return JsonUtils.readFileToClass(FileManger.getUsersJson(), User.class);
   }
 
   public static boolean isExistUserJsonFile() {
@@ -48,19 +77,4 @@ public class User {
   }
 
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof User user)) return false;
-    return UserName.equals(user.getUserName());
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "UserName='" + UserName + '\'' +
-        ", Type=" + Type +
-        ", HeadFile='" + HeadFile + '\'' +
-        '}';
-  }
 }

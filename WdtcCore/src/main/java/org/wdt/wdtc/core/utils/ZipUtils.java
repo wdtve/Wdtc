@@ -42,18 +42,16 @@ public class ZipUtils {
     }
   }
 
-  public static void unZipBySpecifyFile(String ZipFile, String unFilePath) {
+  public static void unZipBySpecifyFile(File zipFile, File unFilePath) {
     try {
-      File unZipPath = new File(unFilePath);
-      ZipFile zip = new ZipFile(new File(FilenameUtils.separatorsToWindows(ZipFile)));
+      ZipFile zip = new ZipFile(zipFile);
       for (ZipEntry entry : zip.stream().toList()) {
         String name = entry.getName();
-        if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
-          logmaker.info("提取 " + unZipPath + " 中");
-          File unfile = new File(FilenameUtils.separatorsToWindows(unFilePath));
-          FileUtils.touch(unZipPath);
+        if (Pattern.compile(unFilePath.getName()).matcher(name).find()) {
+          logmaker.info("提取 " + unFilePath + " 中");
+          FileUtils.touch(unFilePath);
           InputStream in = zip.getInputStream(entry);
-          FileOutputStream fos = new FileOutputStream(unfile);
+          FileOutputStream fos = new FileOutputStream(unFilePath);
           IOUtils.copy(in, fos);
         }
       }
@@ -63,10 +61,10 @@ public class ZipUtils {
     }
   }
 
-  public static void unZipToFile(String ZipPath, String unFilePath, String unFileName) {
+  public static void unZipToFile(File ZipPath, File unFile, String unFileName) {
     try {
-      ZipFile zipFile = new ZipFile(FileUtils.toFile(ZipPath));
-      FileOutputStream outputStream = new FileOutputStream(unFilePath);
+      ZipFile zipFile = new ZipFile(ZipPath);
+      FileOutputStream outputStream = new FileOutputStream(unFile);
       InputStream stream = zipFile.getInputStream(zipFile.getEntry(unFileName));
       IOUtils.copy(stream, outputStream);
     } catch (IOException e) {

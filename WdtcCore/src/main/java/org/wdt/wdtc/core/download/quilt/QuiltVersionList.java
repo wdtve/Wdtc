@@ -1,12 +1,14 @@
 package org.wdt.wdtc.core.download.quilt;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import org.wdt.utils.gson.JsonArrayUtils;
+import org.wdt.utils.gson.JsonObjectUtils;
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface;
 import org.wdt.wdtc.core.download.infterface.VersionListInterface;
 import org.wdt.wdtc.core.game.Launcher;
 import org.wdt.wdtc.core.utils.URLUtils;
-import org.wdt.wdtc.core.utils.gson.JSONArray;
-import org.wdt.wdtc.core.utils.gson.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,10 +26,10 @@ public class QuiltVersionList implements VersionListInterface {
   @Override
   public List<VersionJsonObjectInterface> getVersionList() throws IOException {
     List<VersionJsonObjectInterface> List = new ArrayList<>();
-    JSONArray VersionArray = JSONArray.parseJSONArray(URLUtils.getURLToString(String.format(QuiltVersionListUrl, launcher.getVersionNumber())));
+    JsonArray VersionArray = JsonArrayUtils.parseJsonArray(URLUtils.getURLToString(String.format(QuiltVersionListUrl, launcher.getVersionNumber())));
     for (int i = 0; i < VersionArray.size(); i++) {
-      JSONObject VersionObject = VersionArray.getJSONObject(i);
-      List.add(JSONObject.parseObject(VersionObject.getJSONObject("loader"), QuiltVersionJsonObjectImpl.class));
+      JsonObject VersionObject = VersionArray.get(i).getAsJsonObject();
+      List.add(JsonObjectUtils.parseObject(VersionObject.getAsJsonObject("loader"), QuiltVersionJsonObjectImpl.class));
     }
     return List;
   }
@@ -56,9 +58,5 @@ public class QuiltVersionList implements VersionListInterface {
       return versionNumber;
     }
 
-    @Override
-    public boolean isInstanceofThis(Object o) {
-      return o instanceof QuiltVersionJsonObjectImpl;
-    }
   }
 }

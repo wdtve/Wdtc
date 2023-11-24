@@ -2,14 +2,13 @@ package org.wdt.wdtc.core.manger;
 
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
+import org.wdt.utils.gson.JsonUtils;
 import org.wdt.utils.io.FileUtils;
 import org.wdt.utils.io.IOUtils;
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
-import org.wdt.wdtc.core.utils.gson.JSONUtils;
 
-import java.io.File;
 import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
@@ -28,14 +27,14 @@ public class TaskManger {
 
   public static void runStartUpTask() throws IOException {
     FileUtils.delete(DownloadUtils.StopProcess);
-    FileUtils.writeStringToFile(new File(FileManger.getWdtcConfig(), "assets/readme.txt"),
+    FileUtils.writeStringToFile(FileUtils.toFile(FileManger.getWdtcConfig(), "readme.txt"),
         IOUtils.toString(requireNonNull(SettingManger.class.getResourceAsStream("/assets/readme.txt"))));
     FileUtils.createDirectories(FileManger.getWdtcCache());
     if (FileUtils.isFileNotExists(FileManger.getUserListFile())) {
-      JSONUtils.writeObjectToFile(FileManger.getUserListFile(), new JsonObject());
+      JsonUtils.writeObjectToFile(FileManger.getUserListFile(), new JsonObject());
     }
     if (FileUtils.isFileNotExists(FileManger.getSettingFile())) {
-      JSONUtils.writeObjectToFile(FileManger.getSettingFile(), new SettingManger.Setting());
+      JsonUtils.writeObjectToFile(FileManger.getSettingFile(), new SettingManger.Setting());
     }
     String LlbmpipeLoader = "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar";
     if (FileUtils.isFileNotExists(FileManger.getLlbmpipeLoader())) {

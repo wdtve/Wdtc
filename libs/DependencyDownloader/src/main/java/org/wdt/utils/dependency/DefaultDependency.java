@@ -100,11 +100,11 @@ public class DefaultDependency {
     this.spaec = spaec;
   }
 
-  public DependencyDownload GetDependencyDownload() {
+  public DependencyDownload getDependencyDownload() {
     return new DependencyDownload(LibraryName);
   }
 
-  public LibraryDependencyDownload GetLibraryDependencyDownload() {
+  public LibraryDependencyDownload getLibraryDependencyDownload() {
     return new LibraryDependencyDownload(LibraryName);
   }
 
