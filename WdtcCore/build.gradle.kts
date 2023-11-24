@@ -6,13 +6,13 @@ group = "org.wdt.wdtc.core"
 version = rootProject.version
 
 dependencies {
-  implementation("com.github.wd-t.utils:utils-gson:1.2.2")
-  implementation("com.github.wd-t.utils:utils-io:1.2.2")
+  implementation("com.github.wd-t.utils:utils-gson:1.2.3")
+  implementation("com.github.wd-t.utils:utils-io:1.2.3")
   implementation(project(":DependencyDownloader"))
   implementation("org.dom4j:dom4j:2.1.4")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
-  implementation(kotlin("stdlib"))
+  implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
   testImplementation(platform("org.junit:junit-bom:5.10.0"))
   testImplementation("org.junit.jupiter:junit-jupiter")

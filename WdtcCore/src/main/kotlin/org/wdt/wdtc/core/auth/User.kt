@@ -1,5 +1,6 @@
 package org.wdt.wdtc.core.auth
 
+import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileExists
@@ -8,20 +9,21 @@ import org.wdt.wdtc.core.manger.FileManger.userJson
 import java.io.File
 import java.util.*
 
-class User {
-  var userName: String? = null
+class User @JvmOverloads constructor(
+  var userName: String? = null,
 
-  var accessToken: String? = null
+  var accessToken: String? = null,
 
-  var type: AccountsType? = null
+  var type: AccountsType? = null,
 
-  var uuid: String? = null
+  var uuid: String? = null,
 
-  var metaData: String? = null
+  var metaData: String? = null,
 
-  var base64Data: String? = null
+  var base64Data: String? = null,
 
   var headFile: File? = null
+) {
 
 
   override fun hashCode(): Int {
@@ -49,7 +51,7 @@ class User {
   companion object {
     @JvmStatic
     fun setUserToJson(user: User) {
-      userJson.writeObjectToFile(user)
+      userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
     }
 
     @JvmStatic

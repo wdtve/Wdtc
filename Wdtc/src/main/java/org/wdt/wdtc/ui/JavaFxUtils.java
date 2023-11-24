@@ -99,7 +99,7 @@ public class JavaFxUtils {
           LibraryObject.Artifact artifact = libraryObject.getDownloads().getArtifact();
           File library = new File(FileManger.getWtdcOpenJFXPath(), artifact.getPath());
           jarPaths.add(library.toPath());
-          modules.add(new DependencyDownload(libraryObject.getLibraryName()).getArtifactId());
+          modules.add(new DependencyDownload(libraryObject.getLibraryName()).artifactId);
         }
         // Form : HMCL3
         ModuleFinder finder = ModuleFinder.of(jarPaths.toArray(Path[]::new));

@@ -59,8 +59,8 @@ tasks.compileJava<JavaCompile> {
 dependencies {
   implementation(project(":WdtcCore"))
   implementation(project(":DependencyDownloader"))
-  implementation("com.github.wd-t.utils:utils-gson:1.2.2")
-  implementation("com.github.wd-t.utils:utils-io:1.2.2")
+  implementation("com.github.wd-t.utils:utils-gson:1.2.3")
+  implementation("com.github.wd-t.utils:utils-io:1.2.3")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.jfoenix:jfoenix:9.0.10")
@@ -70,7 +70,7 @@ dependencies {
 
 fun getJvmArgs(debug: Boolean): MutableList<String> {
   val jvmList = mutableListOf(
-    "-Dwtdc.application.type=console",
+    "-Dwtdc.application.type=ui",
     "-Dwdtc.launcher.version=${project.version}"
   )
   return if (debug) {

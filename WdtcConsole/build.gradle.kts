@@ -8,12 +8,12 @@ version = rootProject.version
 
 dependencies {
     implementation(project(":WdtcCore"))
-    implementation("com.github.wd-t.utils:utils-gson:1.2.2")
-    implementation("com.github.wd-t.utils:utils-io:1.2.2")
+    implementation("com.github.wd-t.utils:utils-gson:1.2.3")
+    implementation("com.github.wd-t.utils:utils-io:1.2.3")
     implementation("log4j:log4j:1.2.17")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("commons-cli:commons-cli:1.6.0")
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

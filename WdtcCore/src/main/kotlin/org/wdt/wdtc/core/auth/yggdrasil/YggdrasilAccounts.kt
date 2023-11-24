@@ -3,10 +3,7 @@ package org.wdt.wdtc.core.auth.yggdrasil
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import org.wdt.utils.gson.getString
-import org.wdt.utils.gson.parseObject
-import org.wdt.utils.gson.toJsonString
-import org.wdt.utils.gson.writeObjectToFile
+import org.wdt.utils.gson.*
 import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.auth.BaseUser
 import org.wdt.wdtc.core.auth.User
@@ -48,17 +45,18 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
     get() {
       val userInfo = userInformation
       val textures = yggdrasilTextures
-      val user = User()
-      user.type = AccountsType.Yggdrasil
       val selectedProfile = userInfo.selectedProfile!!
-      user.userName = selectedProfile.getString("name")
-      user.uuid = selectedProfile.getString("id")
-      user.accessToken = userInfo.accessToken
-      user.metaData = getURLToString(littleskinApi)
-      user.base64Data = user.metaData!!.toBase64()
-      val utils = textures.utils
-      user.headFile = utils.writeSkinHead()
-      userJson.writeObjectToFile(user)
+      val api = getURLToString(littleskinApi)
+      val user = User(
+        username,
+        userInfo.accessToken,
+        AccountsType.Yggdrasil,
+        selectedProfile.getString("id"),
+        api,
+        api.toBase64(),
+        textures.utils.writeSkinHead()
+      )
+      userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
       logmaker.info(user)
       return user
     }

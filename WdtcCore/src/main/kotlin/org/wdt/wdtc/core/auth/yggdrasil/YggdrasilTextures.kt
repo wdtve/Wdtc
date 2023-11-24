@@ -20,11 +20,7 @@ class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
 
   init {
     username = yggdrasilAccounts.username
-    url = if (Objects.nonNull(yggdrasilAccounts.url)) {
-      yggdrasilAccounts.url
-    } else {
-      throw NullPointerException("URL为空")
-    }
+    url = yggdrasilAccounts.url
   }
 
   val userJsonUrl: String
@@ -33,7 +29,6 @@ class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
 
   @Throws(IOException::class)
   fun getUserSkinHash(): String {
-    val csl = csl
     val skins: Skins = csl.skins!!
     return skins.skinKind!!
   }

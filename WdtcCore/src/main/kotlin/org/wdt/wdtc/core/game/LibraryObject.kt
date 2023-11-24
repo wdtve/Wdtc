@@ -57,7 +57,7 @@ class LibraryObject {
 
   companion object {
     private val logger = getLogger(LibraryObject::class.java)
-    fun getLibraryObject(dependency: DependencyDownload, defaultUrl: String?): LibraryObject {
+    fun getLibraryObject(dependency: DependencyDownload, defaultUrl: String): LibraryObject {
       val artifact = Artifact()
       val url = dependency.libraryUrl
       artifact.sha1 = IOUtils.getInputStreamSha1(url.openStream())

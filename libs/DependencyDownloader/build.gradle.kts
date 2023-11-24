@@ -1,5 +1,6 @@
 plugins {
   id("java")
+  kotlin("jvm") version "1.9.20"
 }
 
 group = "org.wdt.utils.dependency"
@@ -13,6 +14,7 @@ repositories {
 
 dependencies {
   implementation("org.dom4j:dom4j:2.1.4")
+  implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {

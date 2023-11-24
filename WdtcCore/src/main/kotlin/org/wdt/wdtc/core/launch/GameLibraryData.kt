@@ -24,14 +24,14 @@ open class GameLibraryData(private val launcher: Launcher) {
 
   fun getLibraryFile(libraryObject: LibraryObject): File {
     val libraryPath = launcher.gameLibraryDirectory
-    val dependency = DependencyDownload(libraryObject.libraryName)
+    val dependency = DependencyDownload(libraryObject.libraryName!!)
     dependency.downloadPath = libraryPath
     return dependency.libraryFile
   }
 
   fun getLibraryUrl(libraryObject: LibraryObject): URL {
     return if (isNotOfficialDownloadSource) {
-      val dependency = DependencyDownload(libraryObject.libraryName)
+      val dependency = DependencyDownload(libraryObject.libraryName!!)
       dependency.defaultUrl = source.libraryUrl
       dependency.libraryUrl
     } else {

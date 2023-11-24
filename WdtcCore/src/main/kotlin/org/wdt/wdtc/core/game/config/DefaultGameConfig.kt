@@ -22,28 +22,16 @@ class DefaultGameConfig(launcher: Launcher) {
     return "DefaultGameConfig(info=$info, config=$config)"
   }
 
-  class Config {
-    var memory: Int
+  class Config @JvmOverloads constructor(
+    var memory: Int = 1024,
 
-    var javaPath: String
+    var javaPath: String = runJavaHome,
 
-    var width: Int
+    var width: Int = 1000,
 
-    var hight: Int
+    var hight: Int = 618
+  ) {
 
-    constructor() {
-      memory = 1024
-      javaPath = runJavaHome
-      width = 1000
-      hight = 618
-    }
-
-    constructor(memory: Int, javaPath: String, width: Int, hight: Int) {
-      this.memory = memory
-      this.javaPath = javaPath
-      this.width = width
-      this.hight = hight
-    }
 
     override fun toString(): String {
       return "Config(Memory=$memory, JavaPath='$javaPath', width=$width, hight=$hight)"
