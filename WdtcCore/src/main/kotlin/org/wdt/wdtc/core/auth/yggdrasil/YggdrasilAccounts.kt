@@ -69,19 +69,16 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
     private val requestUser = true
 
     @SerializedName("agent")
-    private val agent: Agent
+    private val agent: Agent = Agent()
 
-    init {
-      agent = Agent()
-    }
+    class Agent @JvmOverloads constructor(
+      @field:SerializedName("name")
+      private val name: String = "Minecraft",
 
-    class Agent {
-      @SerializedName("name")
-      private val name = "Minecraft"
+      @field:SerializedName("version")
+      private val version: Int = 1
+    )
 
-      @SerializedName("version")
-      private val version = 1
-    }
   }
 
   class UserInformation {

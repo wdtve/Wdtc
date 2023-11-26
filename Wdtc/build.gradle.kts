@@ -1,6 +1,7 @@
 plugins {
   id("org.openjfx.javafxplugin") version "0.1.0"
   id("com.github.johnrengelman.shadow") version "8.1.1"
+  kotlin("jvm") version "1.9.20"
 }
 val moduleList = listOf("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 javafx {
@@ -28,7 +29,8 @@ tasks.shadowJar {
     for (module in moduleList) {
       exclude(dependency("org.openjfx:$module:${javafx.version}"))
     }
-    exclude("org.dom4j:.*:.*")
+    exclude("org.dom4j:dom4j:.*")
+    exclude("jaxen:jaxen:.*")
   }
   manifest.attributes(sameManifest)
 }
@@ -59,13 +61,15 @@ tasks.compileJava<JavaCompile> {
 dependencies {
   implementation(project(":WdtcCore"))
   implementation(project(":DependencyDownloader"))
-  implementation("com.github.wd-t.utils:utils-gson:1.2.3")
-  implementation("com.github.wd-t.utils:utils-io:1.2.3")
+  implementation("com.github.wd-t.utils:utils-gson:1.2.4")
+  implementation("com.github.wd-t.utils:utils-io:1.2.4")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.jfoenix:jfoenix:9.0.10")
   implementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+  implementation(kotlin("stdlib-jdk8"))
+  implementation(kotlin("test"))
 }
 
 fun getJvmArgs(debug: Boolean): MutableList<String> {
@@ -86,5 +90,3 @@ tasks.test {
   jvmArgs = getJvmArgs(true)
   useJUnitPlatform()
 }
-
-

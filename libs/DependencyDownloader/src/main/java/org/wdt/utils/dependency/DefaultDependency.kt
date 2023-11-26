@@ -31,7 +31,7 @@ open class DefaultDependency(libraryName: String) {
 
   fun formPom(): String {
     return groupId.replace(
-      "\\.".toRegex(),
+      ".",
       "/"
     ) + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".pom"
   }
@@ -40,22 +40,22 @@ open class DefaultDependency(libraryName: String) {
     val p = Pattern.compile("@")
     val m = p.matcher(version)
     //net.minecraft:client:1.19.4-20230314.122934:slim net\minecraft\client\1.19.4-20230314.122934\client-1.19.4-20230314.122934-srg.jar
-    val artifactid = artifactId.replace("\\.".toRegex(), "-")
+    val artifactid = artifactId.replace(".", "-")
     return if (Objects.isNull(spaec)) {
       if (m.find()) {
-        (groupId.replace("\\.".toRegex(), "/") + "/" +
+        (groupId.replace(".", "/") + "/" +
             artifactid + "/" + version.substring(0, version.indexOf("@"))
-            + "/" + artifactid + "-" + version.replace("@".toRegex(), "."))
+            + "/" + artifactid + "-" + version.replace("@", "."))
       } else {
-        (groupId.replace("\\.".toRegex(), "/") + "/"
+        (groupId.replace(".", "/") + "/"
             + artifactid + "/" + version + "/" + artifactid + "-" + version + ".jar")
       }
     } else {
       if (m.find()) {
-        (groupId.replace("\\.".toRegex(), "/") + "/" + artifactId
-            + "/" + spaec + "/" + artifactid + "-" + spaec + "-" + version.replace("@".toRegex(), "."))
+        (groupId.replace(".", "/") + "/" + artifactId
+            + "/" + spaec + "/" + artifactid + "-" + spaec + "-" + version.replace("@", "."))
       } else {
-        (groupId.replace("\\.".toRegex(), "/") + "/" + artifactid
+        (groupId.replace(".", "/") + "/" + artifactid
             + "/" + spaec + "/" + artifactid + "-" + spaec + "-" + version + ".jar")
       }
     }

@@ -3,24 +3,26 @@ package org.wdt.wdtc.core.download
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.GameConfig
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.ckeckVersionInfo
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.writeConfigJson
 import org.wdt.wdtc.core.utils.ModUtils.getModInstallTask
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.IOException
 
 // TODO Optimize download speed
-class InstallGameVersion @JvmOverloads constructor(launcher: Launcher, install: Boolean = false) :
-  DownloadGameVersion(launcher, install) {
-
+class InstallGameVersion @JvmOverloads constructor(
+  launcher: Launcher, install: Boolean = false,
   var setTextFieldText: TextInterface? = null
+) : DownloadGameVersion(launcher, install) {
+
   private val logmaker = InstallGameVersion::class.java.getWdtcLogger()
   fun startInstallGame() {
     try {
       val startTime = System.currentTimeMillis()
       if (launcher.versionConfigFile.isFileNotExists()) {
-        GameConfig.writeConfigJson(launcher)
+        writeConfigJson(launcher)
       } else {
-        GameConfig.ckeckVersionInfo(launcher)
+        ckeckVersionInfo(launcher)
       }
       downloadGameFileTask()
       val task = getModInstallTask(launcher)

@@ -2,7 +2,7 @@ package org.wdt.wdtc.core.manger
 
 import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
-import org.wdt.utils.io.writeStringToFile
+import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.wdtc.core.manger.DownloadSourceManger.DownloadSourceList
 import org.wdt.wdtc.core.manger.FileManger.settingFile
 import org.wdt.wdtc.core.utils.JavaUtils
@@ -11,21 +11,17 @@ import java.io.File
 
 // TODO Remove SettingManger class
 open class SettingManger {
-  class Setting {
-    var downloadSource = DownloadSourceList.OFFICIAL
-    var console = false
-    var llvmpipeLoader = false
-    var defaultGamePath = File(System.getProperty("user.dir"))
-    var javaPath: MutableList<JavaUtils.JavaInfo> = ArrayList()
-    var chineseLanguage = true
-    var windowsWidth = 616.0
-    var windowsHeight = 489.0
+  data class Setting @JvmOverloads constructor(
+    var downloadSource: DownloadSourceList = DownloadSourceList.OFFICIAL,
+    var console: Boolean = false,
+    var llvmpipeLoader: Boolean = false,
+    var defaultGamePath: File = File(System.getProperty("user.dir")),
+    var javaPath: MutableList<JavaUtils.JavaInfo> = ArrayList(),
+    var chineseLanguage: Boolean = true,
+    var windowsWidth: Double = 616.0,
+    var windowsHeight: Double = 489.0,
     var preferredVersion: String? = null
-    override fun toString(): String {
-      return "Setting(downloadSource=$downloadSource, console=$console, llvmpipeLoader=$llvmpipeLoader, defaultGamePath=$defaultGamePath, javaPath=$javaPath, chineseLanguage=$chineseLanguage, windowsWidth=$windowsWidth, windowsHeight=$windowsHeight, preferredVersion=$preferredVersion)"
-    }
-
-  }
+  )
 
   companion object {
     private val logmaker = SettingManger::class.java.getWdtcLogger()
@@ -36,7 +32,7 @@ open class SettingManger {
 
     @JvmStatic
     fun putSettingToFile(setting: Setting) {
-      settingFile.writeStringToFile(Json.GSON_BUILDER.setPrettyPrinting().create().toJson(setting))
+      settingFile.writeObjectToFile(setting, Json.getBuilder().setPrettyPrinting())
     }
   }
 }

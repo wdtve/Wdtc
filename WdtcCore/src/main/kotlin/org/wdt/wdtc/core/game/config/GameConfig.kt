@@ -2,8 +2,8 @@ package org.wdt.wdtc.core.game.config
 
 import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
+import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
-import org.wdt.utils.io.writeStringToFile
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.utils.WdtcLogger
@@ -22,8 +22,8 @@ class GameConfig(private val launcher: Launcher) {
 
   @Throws(IOException::class)
   fun putConfigToFile(config: DefaultGameConfig) {
-    launcher.versionConfigFile.writeStringToFile(
-      Json.GSON_BUILDER.serializeNulls().setPrettyPrinting().create().toJson(config)
+    launcher.versionConfigFile.writeObjectToFile(
+      config, Json.getBuilder().setPrettyPrinting()
     )
   }
 
@@ -55,8 +55,8 @@ class GameConfig(private val launcher: Launcher) {
     fun writeConfigJson(launcher: Launcher) {
       try {
         val config = DefaultGameConfig(launcher)
-        launcher.versionConfigFile.writeStringToFile(
-          Json.GSON_BUILDER.serializeNulls().setPrettyPrinting().create().toJson(config)
+        launcher.versionConfigFile.writeObjectToFile(
+          config, Json.getBuilder().setPrettyPrinting()
         )
         logmaker.info("${launcher.versionNumber} $config")
       } catch (e: IOException) {
@@ -68,8 +68,8 @@ class GameConfig(private val launcher: Launcher) {
     fun ckeckVersionInfo(launcher: Launcher) {
       val config = launcher.gameConfig.defaultGameConfig
       config.info = launcher.versionInfo
-      launcher.versionConfigFile.writeStringToFile(
-        Json.GSON_BUILDER.serializeNulls().setPrettyPrinting().create().toJson(config)
+      launcher.versionConfigFile.writeObjectToFile(
+        config, Json.getBuilder().setPrettyPrinting()
       )
       logmaker.info("${launcher.versionNumber} $config")
     }

@@ -8,19 +8,19 @@ import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
 import org.wdt.wdtc.core.utils.ModUtils.getModDownloadInfo
 
-class VersionInfo(launcher: Launcher) {
-  val versionNumber: String
+data class VersionInfo @JvmOverloads constructor(
+  val versionNumber: String,
 
-  val kind: KindOfMod
+  val kind: KindOfMod,
 
   var modVersion: String? = null
+) {
 
-
-  init {
-    versionNumber = launcher.versionNumber
-    kind = launcher.kind
-    modVersion = getModDownloadInfo(launcher)?.modVersion
-  }
+  constructor(launcher: Launcher) : this(
+    launcher.versionNumber,
+    launcher.kind,
+    getModDownloadInfo(launcher)?.modVersion
+  )
 
   val launcher: Launcher
     get() {
@@ -36,7 +36,4 @@ class VersionInfo(launcher: Launcher) {
       return launcher
     }
 
-  override fun toString(): String {
-    return "VersionInfo(versionNumber='$versionNumber', kind=$kind, modVersion=$modVersion)"
-  }
 }

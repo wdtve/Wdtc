@@ -5,24 +5,17 @@ import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.utils.JavaUtils.runJavaHome
 
 
-class DefaultGameConfig(launcher: Launcher) {
-  @SerializedName("info")
-  var info: VersionInfo? = null
+data class DefaultGameConfig @JvmOverloads constructor(
+  @field:SerializedName("info")
+  var info: VersionInfo? = null,
 
-  @SerializedName("config")
+  @field:SerializedName("config")
   var config: Config? = null
 
-  init {
-    info = launcher.versionInfo
-    config = Config()
-  }
+) {
+  constructor(launcher: Launcher) : this(launcher.versionInfo, Config())
 
-
-  override fun toString(): String {
-    return "DefaultGameConfig(info=$info, config=$config)"
-  }
-
-  class Config @JvmOverloads constructor(
+  data class Config @JvmOverloads constructor(
     var memory: Int = 1024,
 
     var javaPath: String = runJavaHome,
@@ -30,13 +23,5 @@ class DefaultGameConfig(launcher: Launcher) {
     var width: Int = 1000,
 
     var hight: Int = 618
-  ) {
-
-
-    override fun toString(): String {
-      return "Config(Memory=$memory, JavaPath='$javaPath', width=$width, hight=$hight)"
-    }
-
-  }
-
+  )
 }
