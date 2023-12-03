@@ -1,11 +1,7 @@
 package org.wdt.wdtc.core.download.quilt
 
-import com.google.gson.JsonObject
 import org.wdt.utils.dependency.DependencyDownload
-import org.wdt.utils.gson.JsonUtils
-import org.wdt.utils.gson.getJsonArray
-import org.wdt.utils.gson.getJsonObject
-import org.wdt.utils.gson.getString
+import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
@@ -66,10 +62,10 @@ class QuiltInstallTask : QuiltDownloadInfo, InstallTaskInterface {
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
     val versionJsonObject = launcher.gameVersionJsonObject
-    val patches: MutableList<JsonObject> = ArrayList()
-    patches.add(JsonUtils.getJsonObject(launcher.versionJson))
-    patches.add(JsonUtils.getJsonObject(quiltVersionJson))
-    versionJsonObject.patches = patches
+    versionJsonObject.patches = mutableListOf(
+      launcher.versionJson.readFileToJsonObject(),
+      quiltVersionJson.readFileToJsonObject()
+    )
     launcher.putToVersionJson(versionJsonObject)
   }
 

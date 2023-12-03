@@ -19,7 +19,7 @@ class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterfac
   override val versionList: List<VersionJsonObjectInterface>
     get() {
       val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
-      val versionListArray = getURLToString(versionListUrl).parseJsonArray()
+      val versionListArray = versionListUrl.getURLToString().parseJsonArray()
       for (i in 0 until versionListArray.size()) {
         val versionObject = versionListArray.getJsonObject(i)
         val versionJsonObject: FabricAPIVersionJsonObjectImpl = versionObject.parseObject()
@@ -39,9 +39,6 @@ class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterfac
 
     @SerializedName("game_versions")
     val gameVersion: List<String>? = null
-    override fun isInstanceofThis(o: Any?): Boolean {
-      return o is FabricAPIVersionJsonObjectImpl
-    }
 
     override fun equals(o: Any?): Boolean {
       if (this === o) return true

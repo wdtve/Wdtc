@@ -55,11 +55,9 @@ class User @JvmOverloads constructor(
     }
 
     @JvmStatic
-    val user: User
-      get() = userJson.readFileToClass()
+    val user: User = userJson.readFileToClass()
 
     @JvmStatic
-    val isExistUserJsonFile: Boolean
-      get() = userJson.isFileExists()
+    val isExistUserJsonFile: Boolean = userJson.isFileExists()
   }
 }

@@ -1,11 +1,7 @@
 package org.wdt.wdtc.core.download.fabric
 
-import com.google.gson.JsonObject
 import org.wdt.utils.dependency.DependencyDownload
-import org.wdt.utils.gson.JsonUtils
-import org.wdt.utils.gson.getJsonArray
-import org.wdt.utils.gson.getJsonObject
-import org.wdt.utils.gson.getString
+import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
@@ -54,10 +50,10 @@ class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String?) :
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
     val gameVersionJsonObject = launcher.gameVersionJsonObject
-    val patches: MutableList<JsonObject> = ArrayList()
-    patches.add(JsonUtils.getJsonObject(launcher.versionJson))
-    patches.add(JsonUtils.getJsonObject(fabricVersionJson))
-    gameVersionJsonObject.patches = patches
+    gameVersionJsonObject.patches = mutableListOf(
+      launcher.versionJson.readFileToJsonObject(),
+      fabricVersionJson.readFileToJsonObject()
+    )
     launcher.putToVersionJson(gameVersionJsonObject)
   }
 

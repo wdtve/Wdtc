@@ -1,6 +1,6 @@
 package org.wdt.wdtc.core.auth.accounts
 
-import org.wdt.wdtc.core.auth.User
+import org.wdt.wdtc.core.auth.User.Companion.user
 import org.wdt.wdtc.core.manger.FileManger.authlibInjector
 import org.wdt.wdtc.core.manger.URLManger.littleskinApi
 import org.wdt.wdtc.core.utils.StringUtils
@@ -10,15 +10,13 @@ class Accounts {
   private val type: AccountsType
 
   init {
-    type = if (User.user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
+    type = if (user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
   }
 
-  fun ifAccountsIsOffline(): Boolean {
-    return type != AccountsType.Yggdrasil
-  }
+  val ifAccountsIsOffline = type != AccountsType.Yggdrasil
 
   val jvmCommand: String
-    get() = if (ifAccountsIsOffline())
+    get() = if (ifAccountsIsOffline)
       StringUtils.STRING_EMPTY
     else StringUtils.STRING_SPACE.appendForString(
       "-javaagent:",
@@ -27,7 +25,7 @@ class Accounts {
       littleskinApi,
       StringUtils.STRING_SPACE,
       "-Dauthlibinjector.yggdrasil.prefetched=",
-      User.user.base64Data
+      user.base64Data
     )
 
   enum class AccountsType {

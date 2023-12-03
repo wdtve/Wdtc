@@ -29,9 +29,9 @@ object UsersList {
   }
 
   @JvmStatic
-  val userList: List<User>
+  val userList: HashSet<User>
     get() {
-      val userList = ArrayList<User>()
+      val userList = HashSet<User>()
       try {
         val userListMap = userListFile.readFileToJsonObject().asMap()
         if (userListMap.keys.isNotEmpty()) {
@@ -47,8 +47,6 @@ object UsersList {
 
   @JvmStatic
   fun printUserList() {
-    for (user in userList) {
-      logmaker.info(user)
-    }
+    userList.forEach { logmaker.info(it) }
   }
 }

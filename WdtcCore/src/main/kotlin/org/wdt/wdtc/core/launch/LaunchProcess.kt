@@ -2,23 +2,21 @@ package org.wdt.wdtc.core.launch
 
 import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.download.infterface.TextInterface
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.regex.Pattern
+import kotlin.concurrent.thread
 
 class LaunchProcess(private val process: Process) {
   var setUIText: TextInterface? = null
   private val logmaker = LaunchProcess::class.java.getWdtcLogger()
-
-  @Throws(IOException::class)
   fun startLaunchGame() {
     try {
-      Runnable { getRunInfo(process.inputStream) }.startThread()
-      Runnable { getRunInfo(process.errorStream) }.startThread().join()
+      thread(name = "Read info inputStream") { getRunInfo(process.inputStream) }
+      thread(name = "Read error inputStream") { getRunInfo(process.errorStream) }.join()
       logmaker.info("Game stop")
     } catch (e: InterruptedException) {
       logmaker.error("Run command error,", e)
@@ -27,17 +25,18 @@ class LaunchProcess(private val process: Process) {
 
   private fun getRunInfo(inputStream: InputStream) {
     try {
+      val thread = Thread.currentThread()
       val reader = BufferedReader(InputStreamReader(inputStream, "GBK"))
       var line: String?
       while (reader.readLine().also { line = it } != null) {
-        if (Thread.currentThread().isInterrupted) {
+        if (thread.isInterrupted) {
           launchErrorTask()
           return
         } else {
           val errorWarn = Pattern.compile("FATAL").matcher(line)
           if (errorWarn.find()) {
             println(line)
-            Thread.currentThread().interrupt()
+            thread.interrupt()
           } else {
             println(line)
           }
@@ -51,7 +50,7 @@ class LaunchProcess(private val process: Process) {
   // TODO Optimize error display
   @Throws(IOException::class)
   private fun launchErrorTask() {
-    setUIText!!.setControl("启动失败:${IOUtils.toString(process.errorStream)}${IOUtils.toString(process.inputStream)}")
+    setUIText?.setControl("启动失败:${IOUtils.toString(process.errorStream)}${IOUtils.toString(process.inputStream)}")
   }
 
 }

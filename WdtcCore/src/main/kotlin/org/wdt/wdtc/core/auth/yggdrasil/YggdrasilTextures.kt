@@ -49,7 +49,7 @@ class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
 
   @get:Throws(IOException::class)
   val csl: Csl
-    get() = getURLToString(userJsonUrl).parseObject()
+    get() = userJsonUrl.getURLToString().parseObject()
 
   @get:Throws(IOException::class)
   val utils: SkinUtils

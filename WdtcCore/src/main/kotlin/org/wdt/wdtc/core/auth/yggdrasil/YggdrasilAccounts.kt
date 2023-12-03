@@ -46,7 +46,7 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
       val userInfo = userInformation
       val textures = yggdrasilTextures
       val selectedProfile = userInfo.selectedProfile!!
-      val api = getURLToString(littleskinApi)
+      val api = littleskinApi.getURLToString()
       val user = User(
         username,
         userInfo.accessToken,

@@ -57,9 +57,6 @@ class GameVersionList : VersionListInterface {
 
     @SerializedName("releaseTime")
     val releaseTime: String? = null
-    override fun isInstanceofThis(o: Any?): Boolean {
-      return o is GameVersionJsonObjectImpl
-    }
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

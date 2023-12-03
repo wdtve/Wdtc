@@ -1,7 +1,6 @@
 package org.wdt.wdtc.core.download.fabric
 
 import com.google.gson.annotations.SerializedName
-import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
@@ -16,11 +15,8 @@ class FabricVersionList : VersionListInterface {
   override val versionList: List<VersionJsonObjectInterface>
     get() {
       val fabricVersionList: MutableList<VersionJsonObjectInterface> = ArrayList()
-      val list = getURLToString(downloadSource.fabricMetaUrl + "v2/versions/loader").parseJsonArray()
-      for (i in 0 until list.size()) {
-        val fabricObject = list.getJsonObject(i)
-        fabricVersionList.add(fabricObject.parseObject())
-      }
+      val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".getURLToString().parseJsonArray()
+      versionArray.forEach { fabricVersionList.add(it.asJsonObject.parseObject()) }
       return fabricVersionList
     }
 
@@ -30,9 +26,6 @@ class FabricVersionList : VersionListInterface {
 
     @SerializedName("build")
     var buildNumber = 0
-    override fun isInstanceofThis(o: Any?): Boolean {
-      return o is FabricVersionJsonObjectImpl
-    }
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

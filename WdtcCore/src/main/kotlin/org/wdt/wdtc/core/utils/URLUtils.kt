@@ -1,7 +1,6 @@
 package org.wdt.wdtc.core.utils
 
 import org.wdt.utils.io.IOUtils
-import org.wdt.wdtc.core.utils.StringUtils.appendForString
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -26,7 +25,7 @@ object URLUtils {
   @JvmStatic
   @Throws(IOException::class)
   fun getRedirectUrl(path: String): String {
-    val conn = toURL(path).openConnection() as HttpURLConnection
+    val conn = path.toURL().openConnection() as HttpURLConnection
     conn.instanceFollowRedirects = false
     conn.setConnectTimeout(5000)
     return conn.getHeaderField("Location")
@@ -34,12 +33,11 @@ object URLUtils {
 
   @JvmStatic
   val isOnline: Boolean
-    get() = isNetworkHasThisFile(toURL("https://www.bilibili.com"))
+    get() = isNetworkHasThisFile("https://www.bilibili.com".toURL())
 
-  @JvmStatic
   @Throws(IOException::class)
-  fun getURLToString(urlPath: String): String {
-    return IOUtils.toString(toURL(urlPath))
+  fun String.getURLToString(): String {
+    return IOUtils.toString(this.toURL())
   }
 
   @JvmStatic
@@ -49,28 +47,19 @@ object URLUtils {
   }
 
   @Throws(IOException::class)
-  fun newInputStream(url: URL): InputStream {
-    val connection = toHttpsURLConnection(url)
+  fun URL.newInputStream(): InputStream {
+    val connection = this.toHttpsURLConnection()
     connection.setConnectTimeout(5000)
     connection.setReadTimeout(5000)
     return connection.inputStream
   }
 
   @Throws(IOException::class)
-  fun toHttpsURLConnection(url: URL): HttpsURLConnection {
-    return url.openConnection() as HttpsURLConnection
+  fun URL.toHttpsURLConnection(): HttpsURLConnection {
+    return this.openConnection() as HttpsURLConnection
   }
 
-  @JvmStatic
-  fun toURL(url: String): URL {
-    return URL(url)
-  }
-
-  fun toURL(url: String, url1: String): URL {
-    return toURL(url.appendForString(url1))
-  }
-
-  fun toURL(url: URL, url1: String): URL {
-    return toURL(url.toString().appendForString(url1))
+  fun String.toURL(): URL {
+    return URL(this)
   }
 }

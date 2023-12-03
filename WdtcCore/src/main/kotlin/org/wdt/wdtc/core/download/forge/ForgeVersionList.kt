@@ -1,7 +1,6 @@
 package org.wdt.wdtc.core.download.forge
 
 import com.google.gson.annotations.SerializedName
-import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
@@ -19,11 +18,8 @@ class ForgeVersionList(private val launcher: Launcher) : VersionListInterface {
   override val versionList: List<VersionJsonObjectInterface>
     get() {
       val versionObjects: MutableList<VersionJsonObjectInterface> = ArrayList()
-      val versionList = getURLToString(forgeListUrl).parseJsonArray()
-      for (i in 0 until versionList.size()) {
-        val versionObject = versionList.getJsonObject(i)
-        versionObjects.add(versionObject.parseObject())
-      }
+      val versionList = forgeListUrl.getURLToString().parseJsonArray()
+      versionList.forEach { versionObjects.add(it.asJsonObject.parseObject()) }
       return versionObjects
     }
 
@@ -36,9 +32,6 @@ class ForgeVersionList(private val launcher: Launcher) : VersionListInterface {
 
     @SerializedName("mcversion")
     val mcversion: String? = null
-    override fun isInstanceofThis(o: Any?): Boolean {
-      return o is ForgeVersionJsonObjectImpl
-    }
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

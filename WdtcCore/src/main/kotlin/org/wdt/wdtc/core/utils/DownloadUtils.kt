@@ -1,8 +1,12 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.FileUtils
+import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.newOutputStream
+import org.wdt.utils.io.toFile
+import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.manger.FileManger
+import org.wdt.wdtc.core.utils.URLUtils.newInputStream
+import org.wdt.wdtc.core.utils.URLUtils.toURL
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
 import java.io.IOException
@@ -20,15 +24,15 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
       }
     }
     if (exception != null) {
-      logmaker.warn("Thread " + Thread.currentThread().name + " Error,", exception)
+      logmaker.warn("Thread ${Thread.currentThread().name} Error,", exception)
     }
   }
 
   @Throws(IOException::class)
   fun startDownloadFile() {
-    FileUtils.touch(downloadFile)
+    downloadFile.touch()
     val downloadFileOutput = downloadFile.newOutputStream()
-    val urlFileInput = URLUtils.newInputStream(srcousFileURL)
+    val urlFileInput = srcousFileURL.newInputStream()
     var donwloaded: Double
     Thread.currentThread().setName(downloadFile.getName())
     val data = ByteArray(1024)
@@ -53,16 +57,16 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
     @JvmStatic
     @get:Throws(IOException::class)
     val isDownloadProcess: Boolean
-      get() = FileUtils.isFileExists(StopProcess)
+      get() = StopProcess.isFileExists()
 
     @JvmStatic
     fun startDownloadTask(url: String, path: String) {
-      startDownloadTask(URLUtils.toURL(url), FileUtils.toFile(path))
+      startDownloadTask(url.toURL(), path.toFile())
     }
 
     @JvmStatic
     fun startDownloadTask(url: String, file: File) {
-      startDownloadTask(URLUtils.toURL(url), file)
+      startDownloadTask(url.toURL(), file)
     }
 
     @JvmStatic

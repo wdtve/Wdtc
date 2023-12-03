@@ -5,7 +5,7 @@ import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.wdtc.core.manger.DownloadSourceManger.DownloadSourceList
 import org.wdt.wdtc.core.manger.FileManger.settingFile
-import org.wdt.wdtc.core.utils.JavaUtils
+import org.wdt.wdtc.core.utils.JavaUtils.JavaInfo
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
 
@@ -16,7 +16,7 @@ open class SettingManger {
     var console: Boolean = false,
     var llvmpipeLoader: Boolean = false,
     var defaultGamePath: File = File(System.getProperty("user.dir")),
-    var javaPath: MutableList<JavaUtils.JavaInfo> = ArrayList(),
+    var javaPath: MutableSet<JavaInfo> = HashSet(),
     var chineseLanguage: Boolean = true,
     var windowsWidth: Double = 616.0,
     var windowsHeight: Double = 489.0,
@@ -27,12 +27,11 @@ open class SettingManger {
     private val logmaker = SettingManger::class.java.getWdtcLogger()
 
     @JvmStatic
-    val setting: Setting
-      get() = settingFile.readFileToClass()
+    val setting: Setting = settingFile.readFileToClass()
 
     @JvmStatic
-    fun putSettingToFile(setting: Setting) {
+    fun putSettingToFile(setting: Setting) =
       settingFile.writeObjectToFile(setting, Json.getBuilder().setPrettyPrinting())
-    }
+
   }
 }

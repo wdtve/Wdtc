@@ -17,7 +17,6 @@ import org.wdt.wdtc.core.game.LibraryObject.Companion.getLibraryObject
 import org.wdt.wdtc.core.manger.FileManger.wdtcImplementationPath
 import org.wdt.wdtc.core.manger.FileManger.wtdcOpenJFXPath
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
@@ -27,6 +26,7 @@ import java.lang.module.ModuleFinder
 import java.net.URL
 import java.nio.file.Path
 import java.util.*
+import kotlin.concurrent.thread
 
 object JavaFxUtils {
   private val logmaker = JavaFxUtils::class.java.getWdtcLogger()
@@ -68,7 +68,7 @@ object JavaFxUtils {
       val libraryObject = getLibraryObject(array[i].getAsJsonObject())
       val artifact = libraryObject.downloads?.artifact
       val library = File(wtdcOpenJFXPath, artifact!!.path)
-      Runnable {
+      thread(name = library.name) {
         try {
           if (library.isFileNotExistsAndIsNotSameSize(artifact.size)) {
             startDownloadTask(artifact.url!!, library)
@@ -77,7 +77,7 @@ object JavaFxUtils {
         } catch (e: IOException) {
           throw RuntimeException(e)
         }
-      }.startThread()
+      }
     }
     speed.await()
   }

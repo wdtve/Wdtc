@@ -1,7 +1,6 @@
 package org.wdt.wdtc.ui.window
 
 import com.jfoenix.controls.JFXButton
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -18,7 +17,6 @@ import org.wdt.wdtc.core.launch.LaunchGame.Companion.create
 import org.wdt.wdtc.core.manger.FileManger.wdtcCache
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.manger.VMManger.launcherVersion
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.URLUtils.isOnline
 import org.wdt.wdtc.core.utils.URLUtils.openSomething
 import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
@@ -26,6 +24,7 @@ import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 import java.io.IOException
 import java.util.*
+import kotlin.concurrent.thread
 
 class HomeWindow {
   private var launcher = preferredLauncher
@@ -36,10 +35,10 @@ class HomeWindow {
 
   constructor()
 
-  fun setHome(MainStage: Stage) {
+  fun setHome(mainStage: Stage) {
     val pane = AnchorPane()
-    val windwosSizeManger = WindwosSizeManger(MainStage)
-    MainStage.title = Consoler.windowsTitle
+    val windwosSizeManger = WindwosSizeManger(mainStage)
+    mainStage.title = Consoler.windowsTitle
     val Menu = VBox()
     Menu.setPrefSize(128.0, 450.0)
     val home = JFXButton("首页")
@@ -47,31 +46,31 @@ class HomeWindow {
     val UserWindow = JFXButton("修改账户")
     UserWindow.setPrefSize(128.0, 46.0)
     UserWindow.onAction = EventHandler {
-      val windows = NewUserWindows(MainStage)
+      val windows = NewUserWindows(mainStage)
       windows.title = "注册账户"
       windows.show()
     }
     val downgame = JFXButton("下载游戏")
     downgame.isDisable = !isOnline
     downgame.setPrefSize(128.0, 46.0)
-    downgame.onAction = EventHandler { GameVersionListWindow.setWindowScene(MainStage) }
+    downgame.onAction = EventHandler { GameVersionListWindow.setWindowScene(mainStage) }
     val startgame = JFXButton("选择版本")
     startgame.layoutY = 69.0
     startgame.setPrefSize(128.0, 46.0)
     startgame.onAction = EventHandler {
       val choose = VersionChooseWindow(Objects.requireNonNullElseGet(launcher) { GameDirectoryManger() })
-      choose.setWindow(MainStage)
+      choose.setWindow(mainStage)
     }
     val VersionSetting = JFXButton("版本设置")
     VersionSetting.setPrefSize(128.0, 46.0)
     if (launcher != null) {
       VersionSetting.isDisable = false
-      val windows = VersionSettingWindow(launcher!!, MainStage)
+      val windows = VersionSettingWindow(launcher!!, mainStage)
       VersionSetting.onAction = EventHandler { windows.setWindow() }
     } else {
       VersionSetting.isDisable = true
     }
-    val setting = getSettingButton(MainStage)
+    val setting = getSettingButton(mainStage)
     val github = JFXButton("GitHub")
     github.setPrefSize(128.0, 46.0)
     github.onAction = EventHandler { openSomething("https://github.com/Wd-t/Wdtc") }
@@ -102,25 +101,24 @@ class HomeWindow {
     LaunchGameButton.styleClass.add("BackGroundWriteButton")
     AnchorPane.setBottomAnchor(LaunchGameButton, 30.0)
     AnchorPane.setRightAnchor(LaunchGameButton, 30.0)
-    LaunchGameButton.onAction = EventHandler { event: ActionEvent? ->
+    LaunchGameButton.onAction = EventHandler {
       if (launcher != null) {
         if (isExistUserJsonFile) {
-          Runnable {
+          thread(name = "Launch game") {
             try {
-              val launch = create(launcher!!)
-              val launchProcess = launch.launchProcess
+              val launchProcess = create(launcher!!).launchProcess
               launchProcess.setUIText =
                 TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
               launchProcess.startLaunchGame()
             } catch (e: IOException) {
               ExceptionWindow.setErrorWin(e)
             }
-          }.startThread().setName("Launch Game")
+          }
         } else {
-          noUser(MainStage)
+          noUser(mainStage)
         }
       } else {
-        GameVersionListWindow.setWindowScene(MainStage)
+        GameVersionListWindow.setWindowScene(mainStage)
       }
     }
     Menu.children.addAll(home, UserWindow, downgame, startgame, VersionSetting, setting, github)
@@ -133,9 +131,9 @@ class HomeWindow {
     pane.setStylesheets()
     pane.background = Consoler.background
     val scene = Scene(pane, 600.0, 450.0)
-    MainStage.setScene(scene)
+    mainStage.setScene(scene)
     if (!isExistUserJsonFile) {
-      noUser(MainStage)
+      noUser(mainStage)
     }
   }
 

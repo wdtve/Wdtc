@@ -18,10 +18,9 @@ class QuiltVersionList(private val launcher: Launcher) : VersionListInterface {
   override val versionList: List<VersionJsonObjectInterface>
     get() {
       val list: MutableList<VersionJsonObjectInterface> = ArrayList()
-      val versionArray = getURLToString(quiltquVersionListUrl.format(launcher.versionNumber)).parseJsonArray()
-      for (i in 0 until versionArray.size()) {
-        val versionObject = versionArray.getJsonObject(i)
-        list.add(versionObject.getJsonObject("loader").parseObject())
+      val versionArray = quiltquVersionListUrl.format(launcher.versionNumber).getURLToString().parseJsonArray()
+      versionArray.forEach {
+        list.add(it.asJsonObject.getJsonObject("loader").parseObject())
       }
       return list
     }
@@ -43,9 +42,6 @@ class QuiltVersionList(private val launcher: Launcher) : VersionListInterface {
       return Objects.hash(versionNumber, buildNumber)
     }
 
-    override fun isInstanceofThis(o: Any?): Boolean {
-      return o is QuiltVersionJsonObjectImpl
-    }
   }
 
 }

@@ -1,7 +1,6 @@
 package org.wdt.wdtc.ui.window.user
 
 import com.jfoenix.controls.JFXButton
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.Label
 import javafx.scene.control.RadioButton
@@ -11,15 +10,16 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import org.wdt.utils.gson.JsonUtils
-import org.wdt.utils.io.FileUtils
+import org.wdt.utils.gson.Json
+import org.wdt.utils.gson.readFileToJsonObject
+import org.wdt.utils.gson.writeObjectToFile
+import org.wdt.utils.io.newInputStream
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.User.Companion.setUserToJson
 import org.wdt.wdtc.core.auth.UsersList.getUser
 import org.wdt.wdtc.core.auth.UsersList.userList
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Offline
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Yggdrasil
-import org.wdt.wdtc.core.manger.FileManger.userJson
 import org.wdt.wdtc.core.manger.FileManger.userListFile
 import org.wdt.wdtc.ui.window.Consoler
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
@@ -27,8 +27,6 @@ import org.wdt.wdtc.ui.window.ExceptionWindow
 import java.io.IOException
 
 object UserListPane {
-  private val UserFile = userJson
-  private val UserListFile = userListFile
   fun setUserList(pane: Pane) {
     pane.children.clear()
     val scrollPane = ScrollPane()
@@ -45,20 +43,20 @@ object UserListPane {
         AnchorPane.setTopAnchor(enter, 15.0)
         AnchorPane.setBottomAnchor(enter, 15.0)
         AnchorPane.setLeftAnchor(enter, 15.0)
-        enter.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+        enter.onAction = EventHandler {
           setUserToJson(getUser(userName!!))
           setUserList(pane)
         }
-        if (user.equals(User.user)) {
+        if (user == User.user) {
           enter.isSelected = true
         }
-        var image: Image? = null
-        try {
-          image = Image(FileUtils.newInputStream(user.headFile))
+        val image: Image? = try {
+          Image(user.headFile?.newInputStream())
         } catch (e: IOException) {
           ExceptionWindow.setErrorWin(e)
+          null
         }
-        val head = ImageView(image)
+        val head = ImageView(image ?: throw RuntimeException())
         head.fitHeight = 32.0
         head.fitWidth = 32.0
         AnchorPane.setTopAnchor(head, 15.0)
@@ -80,9 +78,9 @@ object UserListPane {
         AnchorPane.setLeftAnchor(detele, 530.0)
         detele.onAction = EventHandler {
           try {
-            val userListObject = JsonUtils.getJsonObject(userListFile)
+            val userListObject = userListFile.readFileToJsonObject()
             userListObject.remove(userName)
-            JsonUtils.writeObjectToFile(UserListFile, userListObject)
+            userListFile.writeObjectToFile(userListObject, Json.getBuilder().setPrettyPrinting())
             setUserList(pane)
           } catch (e: IOException) {
             ExceptionWindow.setErrorWin(e)

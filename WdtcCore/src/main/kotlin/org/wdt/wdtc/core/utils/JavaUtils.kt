@@ -1,15 +1,11 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.FileUtils
-import org.wdt.utils.io.IOUtils
-import org.wdt.utils.io.isFileNotExists
+import org.wdt.utils.io.*
 import org.wdt.wdtc.core.manger.SettingManger
 import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.regex.Pattern
 
 object JavaUtils {
@@ -38,22 +34,13 @@ object JavaUtils {
   private fun getPotentialJava(key: String) {
     val process = ProcessBuilder("reg", "query", key).start()
     val setting = SettingManger.setting
-    val newJavaList: MutableList<JavaInfo> = setting.javaPath
+    val newJavaList: MutableSet<JavaInfo> = setting.javaPath
     for (s in IOUtils.readLines(process.inputStream)) {
       if (s.startsWith(key)) {
         for (map in getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
           if (DownloadUtils.isDownloadProcess) return
           val newInfo = JavaInfo(File(map["JavaPath"]))
-          var addList = true
-          for (info in newJavaList) {
-            if (addList) {
-              if (newInfo == info) {
-                addList = false
-              }
-            }
-          }
-          if (addList) {
-            newJavaList.add(newInfo)
+          if (newJavaList.add(newInfo)) {
             logmaker.info("Find Java : ${newInfo.javaExeFile}, Version : ${newInfo.versionNumber}")
           }
         }
@@ -99,10 +86,10 @@ object JavaUtils {
     val javaList: MutableList<Map<String, String?>> = ArrayList()
     for (path in list) {
       val javaPath = getJavaExePath(File(path))
-      if (!Files.exists(Paths.get(path))) {
+      if (path.toFile().isFileNotExists()) {
         logmaker.warn("warn : ", IOException("$path isn't exists"))
       } else {
-        if (FileUtils.isFileExists(FileUtils.toFile(javaPath))) {
+        if (javaPath.toFile().isFileExists()) {
           val javaExeAndVersion: MutableMap<String, String?> = HashMap()
           javaExeAndVersion["JavaPath"] = path
           javaExeAndVersion["JavaVersion"] = getJavaVersion(javaPath)
@@ -157,12 +144,12 @@ object JavaUtils {
 
     companion object {
       fun isJRE(javaHome: File): Boolean {
-        try {
-          return File(javaHome, "bin/javac.exe").isFileNotExists()
+        return try {
+          File(javaHome, "bin/javac.exe").isFileNotExists()
         } catch (e: IOException) {
           logmaker.error(e.getExceptionMessage())
+          false
         }
-        return false
       }
 
       fun getJavaTips(javaHomeFile: File): JavaTips {
@@ -171,33 +158,10 @@ object JavaUtils {
     }
   }
 
-  class JavaInfo @JvmOverloads constructor(
+  data class JavaInfo @JvmOverloads constructor(
     val javaHomeFile: File,
     val javaExeFile: File = getJavaExeFile(javaHomeFile),
     val versionNumber: String? = getJavaVersion(getJavaExePath(javaHomeFile)),
     val tips: JavaTips = JavaTips.getJavaTips(javaHomeFile)
-
-  ) {
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (javaClass != other?.javaClass) return false
-
-      other as JavaInfo
-
-      if (javaHomeFile != other.javaHomeFile) return false
-      if (javaExeFile != other.javaExeFile) return false
-      if (versionNumber != other.versionNumber) return false
-      if (tips != other.tips) return false
-
-      return true
-    }
-
-    override fun hashCode(): Int {
-      var result = javaHomeFile.hashCode()
-      result = 31 * result + javaExeFile.hashCode()
-      result = 31 * result + (versionNumber?.hashCode() ?: 0)
-      result = 31 * result + tips.hashCode()
-      return result
-    }
-  }
+  )
 }

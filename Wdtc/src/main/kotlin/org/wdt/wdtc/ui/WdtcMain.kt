@@ -1,6 +1,5 @@
 package org.wdt.wdtc.ui
 
-import javafx.application.Application
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.auth.UsersList.printUserList
 import org.wdt.wdtc.core.auth.yggdrasil.AuthlibInjector.updateAuthlibInjector
@@ -19,11 +18,11 @@ import org.wdt.wdtc.core.manger.VMManger.applicationType
 import org.wdt.wdtc.core.manger.VMManger.isDebug
 import org.wdt.wdtc.core.manger.VMManger.launcherVersion
 import org.wdt.wdtc.core.utils.JavaUtils
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import org.wdt.wdtc.ui.JavaFxUtils.ckeckJavaFX
 import org.wdt.wdtc.ui.window.ExceptionWindow
 import java.util.*
+import kotlin.concurrent.thread
 
 object WdtcMain {
   private val logmaker = WdtcMain::class.java.getWdtcLogger()
@@ -51,8 +50,8 @@ object WdtcMain {
       printUserList()
       updateAuthlibInjector()
       writeConfigJsonToAllVersion()
-      Runnable { JavaUtils.main(registryKey) }.startThread().setName("Found Java")
-      Application.launch(AppMain::class.java, *args)
+      thread(name = "Found Java") { JavaUtils.main(registryKey) }
+      javafx.application.Application.launch(AppMain::class.java, *args)
     } catch (e: Throwable) {
       ExceptionWindow.setErrorWin(e)
     }

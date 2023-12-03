@@ -23,7 +23,7 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
   GameFileManger(version, here) {
   @JvmField
   var fabricModInstallInfo: FabricDonwloadInfo? = null
-  var kind = KindOfMod.Original
+  var kind = KindOfMod.ORIGINAL
 
   @JvmField
   var forgeModDownloadInfo: ForgeDownloadInfo? = null
@@ -57,7 +57,7 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
   }
 
   fun cleanKind() {
-    kind = KindOfMod.Original
+    kind = KindOfMod.ORIGINAL
   }
 
   val accounts: Accounts

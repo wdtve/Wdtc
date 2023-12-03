@@ -22,7 +22,13 @@ class OfflineAccounts(private val username: String) : BaseUser() {
       val utils = SkinUtils(SkinUtils(username).getSkinFile())
       utils.userSkinInput = OfflineAccounts::class.java.getResourceAsStream("/assets/skin/steve.png")
       val user =
-        User(username, "\${auth_access_token}", AccountsType.Offline, userUuid, headFile = utils.writeSkinHead())
+        User(
+          username,
+          "\${auth_access_token}",
+          AccountsType.Offline,
+          userUuid,
+          headFile = utils.writeSkinHead()
+        )
       userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
       logmaker.info(user)
       return user

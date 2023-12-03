@@ -10,12 +10,12 @@ import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
 
 class LaunchGame private constructor(private val launcher: Launcher) {
 
-  val process: Process
+  val launchTaskProcess: Process
     get() = if (setting.console)
       Runtime.getRuntime().exec(arrayOf<String>("cmd.exe", "/C", "start", starterBat.getCanonicalPath()))
-    else ProcessBuilder(starterBat.getCanonicalPath()).directory(launcher.versionDirectory).start()
-  val launchProcess: LaunchProcess
-    get() = LaunchProcess(process)
+    else ProcessBuilder(starterBat.canonicalPath).directory(launcher.versionDirectory).start()
+
+  val launchProcess: LaunchProcess = LaunchProcess(launchTaskProcess)
 
   companion object {
     private val logmaker = getLogger(LaunchGame::class.java)

@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.download.forge
 
-import com.google.gson.JsonObject
 import org.wdt.utils.dependency.DefaultDependency
 import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.*
@@ -29,13 +28,9 @@ import java.util.regex.Pattern
 class ForgeInstallTask(launcher: Launcher, forgeVersion: String?) :
   ForgeDownloadInfo(launcher, forgeVersion), InstallTaskInterface {
 
-
-  private val config: DefaultGameConfig.Config
+  private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
   private val logmaker = ForgeInstallTask::class.java.getWdtcLogger()
 
-  init {
-    config = launcher.gameConfig.config!!
-  }
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
     launcher,
@@ -192,10 +187,10 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String?) :
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
     val versionJsonObject = launcher.gameVersionJsonObject
-    val patches: MutableList<JsonObject> = ArrayList()
-    patches.add(JsonUtils.getJsonObject(launcher.versionJson))
-    patches.add(JsonUtils.getJsonObject(forgeVersionJsonFile))
-    versionJsonObject.patches = patches
+    versionJsonObject.patches = mutableListOf(
+      launcher.versionJson.readFileToJsonObject(),
+      forgeVersionJsonFile.readFileToJsonObject()
+    )
     launcher.putToVersionJson(versionJsonObject)
   }
 

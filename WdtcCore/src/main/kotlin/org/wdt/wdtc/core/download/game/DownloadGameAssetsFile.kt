@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.download.game
 
-import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseObject
@@ -13,18 +12,17 @@ import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.isDownloadProcess
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
 import org.wdt.wdtc.core.utils.ThreadUtils.startThread
+import org.wdt.wdtc.core.utils.URLUtils.toURL
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
-import java.net.URL
 
 open class DownloadGameAssetsFile(val launcher: Launcher) {
   private val logmaker = DownloadGameAssetsFile::class.java.getWdtcLogger()
   fun startDownloadAssetsFiles() {
-    val list: Map<String, JsonElement> =
-      launcher.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap()
-    val progress = SpeedOfProgress(list.size)
-    for (key in list.keys) {
-      val data: AssetsFileData = list[key]!!.asJsonObject.parseObject()
+    val maps = launcher.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap()
+    val progress = SpeedOfProgress(maps.size)
+    for (key in maps.keys) {
+      val data: AssetsFileData = maps[key]?.asJsonObject?.parseObject()!!
       if (isDownloadProcess) return
       if (File(launcher.gameObjects, data.hashSplicing).isFileNotExistsAndIsNotSameSize(data.size.toLong())) {
         val task = DownloadGameAssetsFileTask(launcher, data, progress)
@@ -57,7 +55,7 @@ open class DownloadGameAssetsFile(val launcher: Launcher) {
 
     override fun run() {
       val hashFile = File(launcher.gameObjects, data.hashSplicing)
-      val hashUrl = URL(source.assetsUrl + data.hashSplicing)
+      val hashUrl = (source.assetsUrl + data.hashSplicing).toURL()
       startDownloadTask(hashUrl, hashFile)
       synchronized(this) { progress.countDown() }
     }

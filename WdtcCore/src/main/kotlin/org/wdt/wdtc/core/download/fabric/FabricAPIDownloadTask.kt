@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.download.fabric
 
-import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList.FabricAPIVersionJsonObjectImpl
@@ -27,10 +26,8 @@ class FabricAPIDownloadTask(private val launcher: Launcher, val fabricAPIVersion
   fun startDownloadFabricAPI() {
     val versionJsonObject = versionJsonObjectInterface as FabricAPIVersionJsonObjectImpl?
     if (versionJsonObject == null) {
-      val versionListArray = getURLToString(versionListUrl).parseJsonArray()
-      for (i in 0 until versionListArray.size()) {
-        val versionObject = versionListArray.getJsonObject(i)
-        val newVersionJsonObject: FabricAPIVersionJsonObjectImpl = versionObject.parseObject()
+      versionListUrl.getURLToString().parseJsonArray().forEach {
+        val newVersionJsonObject: FabricAPIVersionJsonObjectImpl = it.asJsonObject.parseObject()
         if (newVersionJsonObject.versionNumber == fabricAPIVersionNumber) {
           downloadFabricAPITask(newVersionJsonObject.filesObjectList!![0])
         }

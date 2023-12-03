@@ -67,14 +67,22 @@ object ModUtils {
 
   @JvmStatic
   fun getVersionModInstall(launcher: Launcher, kind: KindOfMod): ModDownloadInfoInterface? {
-    return if (kind == KindOfMod.QUILT) {
-      launcher.quiltModDownloadInfo
-    } else if (kind == KindOfMod.FORGE) {
-      launcher.forgeModDownloadInfo
-    } else if (kind == KindOfMod.FABRIC) {
-      launcher.fabricModInstallInfo
-    } else {
-      null
+    return when (kind) {
+      KindOfMod.QUILT -> {
+        launcher.quiltModDownloadInfo
+      }
+
+      KindOfMod.FORGE -> {
+        launcher.forgeModDownloadInfo
+      }
+
+      KindOfMod.FABRIC -> {
+        launcher.fabricModInstallInfo
+      }
+
+      else -> {
+        null
+      }
     }
   }
 
@@ -85,7 +93,7 @@ object ModUtils {
   }
 
   enum class KindOfMod {
-    Original,
+    ORIGINAL,
     FABRIC,
     FABRICAPI,
     FORGE,

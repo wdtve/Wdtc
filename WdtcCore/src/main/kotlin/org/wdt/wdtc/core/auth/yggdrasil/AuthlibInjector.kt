@@ -25,8 +25,10 @@ object AuthlibInjector {
   fun updateAuthlibInjector() {
     if (FileUtils.isFileExists(authlibInjector)) {
       val latestVersionNumber = bmclAuthlibInjectorLatestJsonObject.getString("version")
+
       val presentVersionNumber = JarInputStream(authlibInjector.newInputStream())
         .manifest.mainAttributes.getValue("Implementation-Version")
+
       if (latestVersionNumber != presentVersionNumber) {
         downloadauthlibInjector()
       }
@@ -37,5 +39,5 @@ object AuthlibInjector {
 
   @get:Throws(IOException::class)
   private val bmclAuthlibInjectorLatestJsonObject
-    get() = getURLToString(BMCL_AUTHLIB_INJECTOR_LATEST_JSON).parseJsonObject()
+    get() = BMCL_AUTHLIB_INJECTOR_LATEST_JSON.getURLToString().parseJsonObject()
 }

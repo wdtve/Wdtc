@@ -54,7 +54,7 @@ class VersionChooseWindow(private val path: GameDirectoryManger?) {
         VersionId.layoutY = 12.0
         getModTask(GameVersion)
         val ModKind = Label()
-        if (GameVersion.kind != KindOfMod.Original) {
+        if (GameVersion.kind != KindOfMod.ORIGINAL) {
           ModKind.text = "Mod : " + GameVersion.kind.toString()
         } else {
           ModKind.text = "Mod : 无"

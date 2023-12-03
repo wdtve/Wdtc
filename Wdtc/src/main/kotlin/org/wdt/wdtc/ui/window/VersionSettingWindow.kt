@@ -250,7 +250,7 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
         )
       )
 
-      KindOfMod.Original -> ModIcon.image = Image(
+      KindOfMod.ORIGINAL -> ModIcon.image = Image(
         Objects.requireNonNull(
           VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/ico.jpg")
         )

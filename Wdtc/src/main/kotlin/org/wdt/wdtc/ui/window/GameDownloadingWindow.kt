@@ -13,8 +13,8 @@ import org.wdt.wdtc.core.download.InstallGameVersion
 import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSourceKind
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.URLUtils.openSomething
+import kotlin.concurrent.thread
 
 class GameDownloadingWindow(private val launcher: Launcher) {
   fun setDownGameWin(MainStage: Stage) {
@@ -46,11 +46,11 @@ class GameDownloadingWindow(private val launcher: Launcher) {
     AnchorPane.setRightAnchor(read_bmcl, 70.0)
     AnchorPane.setTopAnchor(read_bmcl, 4.0)
     textField.text = launcher.versionNumber + "开始下载,下载源: " + downloadSourceKind
-    Runnable {
+    thread(name = "Download ${launcher.versionNumber} task") {
       val installGameVersion = InstallGameVersion(launcher, true)
       installGameVersion.setTextFieldText = TextInterface { value: String? -> textField.text = value }
       installGameVersion.startInstallGame()
-    }.startThread().setName("Download Game")
+    }
     pane.background = Consoler.background
     size.modifyWindwosSize(pane, back, time, status_bar, bmclHome, read_bmcl, textField)
     val downScene = Scene(pane)

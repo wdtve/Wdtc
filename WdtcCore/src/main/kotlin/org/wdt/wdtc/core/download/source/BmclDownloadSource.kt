@@ -23,4 +23,5 @@ class BmclDownloadSource : DownloadSourceInterface {
     get() = "https://bmclapi2.bangbang93.com/version/%s/%s"
   override val officialUrl: String
     get() = "https://bmclapi2.bangbang93.com/"
+
 }
