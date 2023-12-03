@@ -72,8 +72,8 @@ tasks.compileJava<JavaCompile> {
 dependencies {
   implementation(project(":WdtcCore"))
   implementation(project(":DependencyDownloader"))
-  implementation("com.github.wd-t.utils:utils-io:1.2.3")
-  implementation("com.github.wd-t.utils:utils-gson:1.2.3")
+  implementation("com.github.wd-t.utils:utils-io:1.2.5")
+  implementation("com.github.wd-t.utils:utils-gson:1.2.5")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.jfoenix:jfoenix:9.0.10")

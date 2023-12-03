@@ -11,5 +11,5 @@ subprojects {
 }
 
 group = "org.wdt.wdtc"
-val versionNumber = "0.0.1.16"
+val versionNumber = "0.0.1.17"
 version = "$versionNumber-java"

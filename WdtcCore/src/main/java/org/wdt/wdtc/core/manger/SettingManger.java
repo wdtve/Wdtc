@@ -12,8 +12,8 @@ import org.wdt.wdtc.core.utils.WdtcLogger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingManger {
   private static final Logger logmaker = WdtcLogger.getLogger(SettingManger.class);
@@ -38,7 +38,7 @@ public class SettingManger {
     private boolean Console = false;
     private boolean LlvmpipeLoader = false;
     private File DefaultGamePath = new File(System.getProperty("user.dir"));
-    private List<JavaUtils.JavaInfo> JavaPath = new ArrayList<>();
+    private Set<JavaUtils.JavaInfo> JavaPath = new HashSet<>();
     private boolean ChineseLanguage = true;
     private double WindowsWidth = 616.0;
     private double WindowsHeight = 489.0;

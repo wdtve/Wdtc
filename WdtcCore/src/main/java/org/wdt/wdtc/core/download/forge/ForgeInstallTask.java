@@ -23,7 +23,6 @@ import org.wdt.wdtc.core.manger.URLManger;
 import org.wdt.wdtc.core.utils.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
@@ -43,7 +42,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
   }
 
   public String CommandLine(int index) throws IOException {
-    JsonObject JsonObject = getInstallPrefileJSONObject().getAsJsonArray("processors").get(index).getAsJsonObject();
+    JsonObject JsonObject = getInstallPrefileJsonObject().getAsJsonArray("processors").get(index).getAsJsonObject();
     StringBuilder CommandLine = new StringBuilder();
     CommandLine.append(config.getJavaPath()).append(" -cp ");
     JsonArray JarList = JsonObject.getAsJsonArray("classpath");
@@ -72,7 +71,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
         } else if (ArgeStr.equals("{SIDE}")) {
           CommandLine.append("client").append(" ");
         } else if (Large.find()) {
-          DependencyDownload client = new DependencyDownload(Clean(getInstallPrefileJSONObject().getAsJsonObject("data")
+          DependencyDownload client = new DependencyDownload(Clean(getInstallPrefileJsonObject().getAsJsonObject("data")
               .getAsJsonObject(Large.group(1)).get("client").getAsString()));
           client.setDownloadPath(launcher.getGameLibraryDirectory());
           CommandLine.append(client.getLibraryFilePath()).append(" ");
@@ -90,7 +89,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
 
   public void DownloadClientText() throws IOException {
     DefaultDependency TxtPath = null;
-    JsonObject DataObject = getInstallPrefileJSONObject().getAsJsonObject("data");
+    JsonObject DataObject = getInstallPrefileJsonObject().getAsJsonObject("data");
     if (DataObject.has("MOJMAPS")) {
       Matcher matcher = getMiddleBracket(DataObject.getAsJsonObject("MOJMAPS").get("client").getAsString());
       if (matcher.find()) {
@@ -102,7 +101,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
         TxtPath = new DefaultDependency(matcher.group(1));
       }
     }
-    String TxtUrl = JsonUtils.getJsonObject(launcher.getVersionJson()).getAsJsonObject("downloads")
+    String TxtUrl = JsonUtils.readFileToJsonObject(launcher.getVersionJson()).getAsJsonObject("downloads")
         .getAsJsonObject("client_mappings").get("url").getAsString();
     if (DownloadSourceManger.isNotOfficialDownloadSource()) {
       TxtUrl = URLUtils.getRedirectUrl(TxtUrl.replaceAll(URLManger.getPistonDataMojang(), source.getDataUrl()));
@@ -114,7 +113,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
   }
 
   public void InstallForge() throws IOException {
-    JsonArray objects = getInstallPrefileJSONObject().getAsJsonArray("processors");
+    JsonArray objects = getInstallPrefileJsonObject().getAsJsonArray("processors");
     for (int i = 0; i < objects.size(); i++) {
       JsonObject TaskJson = objects.get(i).getAsJsonObject();
       if (TaskJson.has("sides")) {
@@ -185,16 +184,13 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
   @Override
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
-    List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JsonUtils.getJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JsonUtils.getJsonObject(getForgeVersionJsonPath()));
-    Object.setJsonObject(ObjectList);
+    Object.setJsonObject(List.of(JsonUtils.readFileToJsonObject(launcher.getVersionJson()), JsonUtils.readFileToJsonObject(getForgeVersionJsonFile())));
     launcher.putToVersionJson(Object);
   }
 
   @Override
   public void afterDownloadTask() throws IOException {
-    DownloadForgeLibraryFile(getInstallProfilePath());
+    DownloadForgeLibraryFile(getInstallProfileFile());
     DownloadClientText();
     InstallForge();
   }
@@ -207,7 +203,7 @@ public class ForgeInstallTask extends ForgeDownloadInfo implements InstallTaskIn
   }
 
   public void DownloadForgeLibraryFile(File file) throws IOException {
-    JsonArray LibraryList = JsonUtils.getJsonObject(file).getAsJsonArray("libraries");
+    JsonArray LibraryList = JsonUtils.readFileToJsonObject(file).getAsJsonArray("libraries");
     SpeedOfProgress speed = new SpeedOfProgress(LibraryList.size());
     for (int i = 0; i < LibraryList.size(); i++) {
       LibraryObject object = LibraryObject.getLibraryObject(LibraryList.get(i).getAsJsonObject());

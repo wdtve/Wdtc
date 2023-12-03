@@ -32,7 +32,7 @@ public class UsersList {
 
 
   public static JsonObject getUserListObject() throws IOException {
-    return JsonUtils.getJsonObject(usersListFile);
+    return JsonUtils.readFileToJsonObject(usersListFile);
   }
 
   public static User getUser(String UserName) throws IOException {

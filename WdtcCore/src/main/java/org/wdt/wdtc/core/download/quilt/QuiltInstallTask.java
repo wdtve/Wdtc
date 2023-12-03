@@ -16,7 +16,6 @@ import org.wdt.wdtc.core.utils.DownloadUtils;
 import org.wdt.wdtc.core.utils.WdtcLogger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskInterface {
@@ -71,10 +70,10 @@ public class QuiltInstallTask extends QuiltDownloadInfo implements InstallTaskIn
   @Override
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
-    List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JsonUtils.getJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JsonUtils.getJsonObject(getQuiltVersionJson()));
-    Object.setJsonObject(ObjectList);
+    Object.setJsonObject(List.of(
+        JsonUtils.readFileToJsonObject(launcher.getVersionJson()),
+        JsonUtils.readFileToJsonObject(getQuiltVersionJson())
+    ));
     launcher.putToVersionJson(Object);
   }
 

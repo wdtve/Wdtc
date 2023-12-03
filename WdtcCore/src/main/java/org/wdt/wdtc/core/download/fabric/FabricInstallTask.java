@@ -14,7 +14,6 @@ import org.wdt.wdtc.core.manger.DownloadSourceManger;
 import org.wdt.wdtc.core.utils.DownloadUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FabricInstallTask extends FabricDonwloadInfo implements InstallTaskInterface {
@@ -62,10 +61,10 @@ public class FabricInstallTask extends FabricDonwloadInfo implements InstallTask
   @Override
   public void writeVersionJsonPatches() throws IOException {
     GameVersionJsonObject Object = launcher.getGameVersionJsonObject();
-    List<JsonObject> ObjectList = new ArrayList<>();
-    ObjectList.add(JsonUtils.getJsonObject(launcher.getVersionJson()));
-    ObjectList.add(JsonUtils.getJsonObject(getFabricVersionJson()));
-    Object.setJsonObject(ObjectList);
+    Object.setJsonObject(List.of(
+        JsonUtils.readFileToJsonObject(launcher.getVersionJson()),
+        JsonUtils.readFileToJsonObject(getFabricVersionJson())
+    ));
     launcher.putToVersionJson(Object);
   }
 

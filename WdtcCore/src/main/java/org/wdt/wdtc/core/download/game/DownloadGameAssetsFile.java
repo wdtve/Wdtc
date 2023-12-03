@@ -32,7 +32,7 @@ public class DownloadGameAssetsFile {
 
   @SneakyThrows(IOException.class)
   public void DownloadAssetsFiles() {
-    Map<String, JsonElement> list = JsonUtils.getJsonObject(launcher.getGameAssetsListJson()).getAsJsonObject("objects").asMap();
+    Map<String, JsonElement> list = JsonUtils.readFileToJsonObject(launcher.getGameAssetsListJson()).getAsJsonObject("objects").asMap();
     SpeedOfProgress progress = new SpeedOfProgress(list.size());
     for (String key : list.keySet()) {
       AssetsFileData data = JsonObjectUtils.parseObject(list.get(key).getAsJsonObject(), AssetsFileData.class);

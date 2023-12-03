@@ -10,10 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,27 +38,19 @@ public class JavaUtils {
   private static void getPotentialJava(String key) throws IOException {
     Process process = new ProcessBuilder("reg", "query", key).start();
     SettingManger.Setting setting = SettingManger.getSetting();
-    List<JavaInfo> NewJavaList = new ArrayList<>();
+    Set<JavaInfo> newJavaList = setting.getJavaPath();
     for (String s : IOUtils.readLines(process.getInputStream())) {
       if (s.startsWith(key)) {
         for (Map<String, String> map : getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
-          JavaInfo NewInfo = new JavaUtils.JavaInfo(new File(map.get("JavaPath")));
-          boolean AddPath = true;
-          for (JavaInfo info : NewJavaList) {
-            if (AddPath) {
-              if (NewInfo.equals(info)) {
-                AddPath = false;
-              }
-            }
+          JavaInfo newInfo = new JavaUtils.JavaInfo(new File(map.get("JavaPath")));
+          if (newJavaList.add(newInfo)) {
+            logmaker.info("Find Java : " + newInfo.getJavaExeFile() + ", Version : " + newInfo.getVersionNumber());
           }
-          if (AddPath) {
-            NewJavaList.add(NewInfo);
-            logmaker.info("Find Java : " + NewInfo.getJavaExeFile() + ", Version : " + NewInfo.getVersionNumber());
-          }
+
         }
       }
     }
-    setting.setJavaPath(NewJavaList);
+    setting.setJavaPath(newJavaList);
     SettingManger.putSettingToFile(setting);
   }
 

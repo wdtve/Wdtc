@@ -57,31 +57,31 @@ public class ForgeDownloadInfo implements ModDownloadInfoInterface {
   }
 
   public void getInstallProfile() {
-    ZipUtils.unZipToFile(getForgeInstallJarPath(), getInstallProfilePath(), "install_profile.json");
+    ZipUtils.unZipToFile(getForgeInstallJarPath(), getInstallProfileFile(), "install_profile.json");
 
   }
 
 
-  public File getInstallProfilePath() {
+  public File getInstallProfileFile() {
     return FileUtils.toFile(FileManger.getWdtcCache(), "/install_profile" + "-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json");
   }
 
-  public JsonObject getInstallPrefileJSONObject() throws IOException {
-    return JsonUtils.getJsonObject(getInstallProfilePath());
+  public JsonObject getInstallPrefileJsonObject() throws IOException {
+    return JsonUtils.readFileToJsonObject(getInstallProfileFile());
   }
 
 
-  public File getForgeVersionJsonPath() {
+  public File getForgeVersionJsonFile() {
     return new File(FileManger.getWdtcCache(), "version-" + launcher.getVersionNumber() + "-" + ForgeVersionNumber + ".json");
   }
 
   public void getForgeVersionJson() {
-    ZipUtils.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonPath(), "version.json");
+    ZipUtils.unZipToFile(getForgeInstallJarPath(), getForgeVersionJsonFile(), "version.json");
   }
 
   @SneakyThrows
   public JsonObject getForgeVersionJsonObject() {
-    return JsonUtils.getJsonObject(getForgeVersionJsonPath());
+    return JsonUtils.readFileToJsonObject(getForgeVersionJsonFile());
   }
 
 

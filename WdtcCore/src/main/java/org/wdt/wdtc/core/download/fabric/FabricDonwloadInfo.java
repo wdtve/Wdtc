@@ -68,7 +68,7 @@ public class FabricDonwloadInfo implements ModDownloadInfoInterface {
   }
 
   public JsonObject getFabricVersionJsonObject() throws IOException {
-    return JsonUtils.getJsonObject(getFabricVersionJson());
+    return JsonUtils.readFileToJsonObject(getFabricVersionJson());
   }
 
 
