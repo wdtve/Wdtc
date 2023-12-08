@@ -2,18 +2,17 @@ package org.wdt.wdtc.core.game
 
 import org.wdt.utils.io.isFileExists
 import org.wdt.wdtc.core.manger.GameDirectoryManger
-import org.wdt.wdtc.core.utils.ModUtils.getModTask
+import org.wdt.wdtc.core.utils.ModUtils.setModTask
 
 object DownloadedGameVersion {
-  @JvmStatic
-  fun getGameVersionList(path: GameDirectoryManger): MutableList<Launcher>? {
+  fun GameDirectoryManger.getGameVersionList(): MutableList<Launcher>? {
     val gameVersionList: MutableList<Launcher> = ArrayList()
-    val versionList = path.gameVersionsDirectory.listFiles()
+    val versionList = this.gameVersionsDirectory.listFiles()
     return if (versionList != null && versionList.isNotEmpty()) {
       for (versionFolder in versionList) {
         val launcher = Launcher(versionFolder.getName())
         if (launcher.versionJson.isFileExists()) {
-          val child = getModTask(launcher)
+          val child = launcher.setModTask()
           if (child != null) {
             gameVersionList.add(child)
           }
@@ -26,8 +25,6 @@ object DownloadedGameVersion {
   }
 
   @JvmStatic
-  fun isDownloadedGame(path: GameDirectoryManger): Boolean {
-    val list = getGameVersionList(path)
-    return list?.isNotEmpty() ?: false
-  }
+  val GameDirectoryManger.isDownloadedGame: Boolean
+    get() = this.getGameVersionList()?.isNotEmpty() ?: false
 }

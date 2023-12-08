@@ -12,9 +12,9 @@ import java.util.*
 
 class FabricVersionList : VersionListInterface {
   @get:Throws(IOException::class)
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: Set<VersionJsonObjectInterface>
     get() {
-      val fabricVersionList: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val fabricVersionList: MutableSet<VersionJsonObjectInterface> = HashSet()
       val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".getURLToString().parseJsonArray()
       versionArray.forEach { fabricVersionList.add(it.asJsonObject.parseObject()) }
       return fabricVersionList

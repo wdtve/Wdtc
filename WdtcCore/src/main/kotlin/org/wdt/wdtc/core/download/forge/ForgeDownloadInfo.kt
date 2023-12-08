@@ -15,14 +15,14 @@ import org.wdt.wdtc.core.utils.ZipUtils.unZipToFile
 import java.io.File
 
 // TODO Using 'Url' class
-open class ForgeDownloadInfo(protected val launcher: Launcher, override val modVersion: String?) :
+open class ForgeDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
   protected val source: DownloadSourceInterface = downloadSource
   private val logmaker = ForgeDownloadInfo::class.java.getWdtcLogger()
 
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
-      this(launcher, versionJsonObjectInterface.versionNumber)
+      this(launcher, versionJsonObjectInterface.versionNumber!!)
 
   fun startDownloadInstallJar() {
     startDownloadTask(forgeInstallJarUrl, forgeInstallJarFile)
@@ -56,6 +56,6 @@ open class ForgeDownloadInfo(protected val launcher: Launcher, override val modV
     get() = forgeVersionJsonFile.readFileToJsonObject()
   override val modInstallTask: InstallTaskInterface
     get() = ForgeInstallTask(launcher, modVersion)
-  override val modKind: KindOfMod?
+  override val modKind: KindOfMod
     get() = KindOfMod.FORGE
 }

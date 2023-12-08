@@ -15,9 +15,9 @@ class QuiltVersionList(private val launcher: Launcher) : VersionListInterface {
   private val quiltquVersionListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s"
 
   @get:Throws(IOException::class)
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: Set<VersionJsonObjectInterface>
     get() {
-      val list: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val list: MutableSet<VersionJsonObjectInterface> = HashSet()
       val versionArray = quiltquVersionListUrl.format(launcher.versionNumber).getURLToString().parseJsonArray()
       versionArray.forEach {
         list.add(it.asJsonObject.getJsonObject("loader").parseObject())

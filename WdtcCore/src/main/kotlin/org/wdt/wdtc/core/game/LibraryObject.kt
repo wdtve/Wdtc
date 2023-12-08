@@ -3,10 +3,10 @@ package org.wdt.wdtc.core.game
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.net.URL
 
 class LibraryObject {

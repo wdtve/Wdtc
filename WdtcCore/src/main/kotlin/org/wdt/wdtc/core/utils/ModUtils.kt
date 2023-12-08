@@ -14,83 +14,57 @@ object ModUtils {
   private val logmaker = WdtcLogger.getLogger(ModUtils::class.java)
 
   @JvmStatic
-  fun getModTask(launcher: Launcher): Launcher? {
+  fun Launcher.setModTask(): Launcher? {
     return try {
-      if (launcher.versionJson.isFileNotExists()) {
+      if (this.versionJson.isFileNotExists()) {
         return null
       }
-      val r = Pattern.compile("(.+?)-(.+?)-(.+)")
-      val m = r.matcher(launcher.gameVersionJsonObject.id)
+      val m = Pattern.compile("(.+?)-(.+?)-(.+)").matcher(this.gameVersionJsonObject.id)
       if (m.find()) {
         val modName = m.group(2)
         val modVersion = m.group(3)
         when (modName) {
-          "forge" -> launcher.setForgeModDownloadInfo(ForgeDownloadInfo(launcher, modVersion))
-          "fabric" -> launcher.setFabricModInstallInfo(FabricDonwloadInfo(launcher, modVersion))
-          "quilt" -> launcher.setQuiltModDownloadInfo(QuiltInstallTask(launcher, modVersion))
+          "forge" -> this.forgeModDownloadInfo = ForgeDownloadInfo(this, modVersion)
+          "fabric" -> this.fabricModInstallInfo = FabricDonwloadInfo(this, modVersion)
+          "quilt" -> this.quiltModDownloadInfo = QuiltInstallTask(this, modVersion)
         }
       }
-      launcher
+      this
     } catch (e: IOException) {
       logmaker.error(e)
       null
     }
   }
 
-  @JvmStatic
-  fun gameModIsForge(launcher: Launcher): Boolean {
-    return launcher.kind == KindOfMod.FORGE
-  }
+  val Launcher.isForge: Boolean
+    get() = this.kind == KindOfMod.FORGE
+
+
+  val Launcher.isFabric: Boolean
+    get() = this.kind == KindOfMod.FABRIC
+
+
+  val Launcher.isQuilt
+    get() = this.kind == KindOfMod.QUILT
+
 
   @JvmStatic
-  fun gameModIsFabric(launcher: Launcher): Boolean {
-    return launcher.kind == KindOfMod.FABRIC
-  }
-
-  @JvmStatic
-  fun gameModIsQuilt(launcher: Launcher): Boolean {
-    return launcher.kind == KindOfMod.QUILT
-  }
-
-  @JvmStatic
-  fun getModDownloadInfo(launcher: Launcher): ModDownloadInfoInterface? {
-    return if (gameModIsFabric(launcher)) {
-      launcher.fabricModInstallInfo
-    } else if (gameModIsForge(launcher)) {
-      launcher.forgeModDownloadInfo
-    } else if (gameModIsQuilt(launcher)) {
-      launcher.quiltModDownloadInfo
-    } else {
-      null
-    }
-  }
-
-  @JvmStatic
-  fun getVersionModInstall(launcher: Launcher, kind: KindOfMod): ModDownloadInfoInterface? {
-    return when (kind) {
-      KindOfMod.QUILT -> {
-        launcher.quiltModDownloadInfo
-      }
-
-      KindOfMod.FORGE -> {
-        launcher.forgeModDownloadInfo
-      }
-
-      KindOfMod.FABRIC -> {
-        launcher.fabricModInstallInfo
-      }
-
-      else -> {
+  val Launcher.modDownloadInfo: ModDownloadInfoInterface?
+    get() {
+      return if (this.isFabric) {
+        this.fabricModInstallInfo
+      } else if (this.isForge) {
+        this.forgeModDownloadInfo
+      } else if (this.isQuilt) {
+        this.quiltModDownloadInfo
+      } else {
         null
       }
     }
-  }
 
-  @JvmStatic
-  fun getModInstallTask(launcher: Launcher): InstallTaskInterface? {
-    val info = getModDownloadInfo(launcher)
-    return info?.modInstallTask
-  }
+  val Launcher.modInstallTask: InstallTaskInterface?
+    get() = this.modDownloadInfo?.modInstallTask
+
 
   enum class KindOfMod {
     ORIGINAL,

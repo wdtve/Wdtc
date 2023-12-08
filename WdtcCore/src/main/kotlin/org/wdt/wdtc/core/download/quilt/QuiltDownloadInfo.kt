@@ -10,12 +10,12 @@ import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
 import java.io.File
 import java.io.IOException
 
-open class QuiltDownloadInfo(protected val launcher: Launcher, override val modVersion: String?) :
+open class QuiltDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
   private val libraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json"
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
-      this(launcher, versionJsonObjectInterface.versionNumber)
+      this(launcher, versionJsonObjectInterface.versionNumber!!)
 
   val quiltVersionJson: File
     get() = File(wdtcCache, "${launcher.versionNumber}-quilt-$modVersion.json")
@@ -27,7 +27,7 @@ open class QuiltDownloadInfo(protected val launcher: Launcher, override val modV
     get() = quiltVersionJson.readFileToJsonObject()
   override val modInstallTask: InstallTaskInterface
     get() = QuiltInstallTask(launcher, modVersion)
-  override val modKind: KindOfMod?
+  override val modKind: KindOfMod
     get() = KindOfMod.QUILT
 
 }

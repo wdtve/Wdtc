@@ -2,7 +2,6 @@ package org.wdt.wdtc.ui
 
 import com.google.gson.JsonArray
 import jdk.internal.loader.BuiltinClassLoader
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.JsonUtils
 import org.wdt.utils.gson.getJsonObject
@@ -19,6 +18,7 @@ import org.wdt.wdtc.core.manger.FileManger.wtdcOpenJFXPath
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.File
 import java.io.IOException
 import java.lang.module.Configuration

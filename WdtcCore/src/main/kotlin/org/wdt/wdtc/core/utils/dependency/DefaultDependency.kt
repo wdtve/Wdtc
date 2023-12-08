@@ -1,4 +1,4 @@
-package org.wdt.utils.dependency
+package org.wdt.wdtc.core.utils.dependency
 
 import java.util.*
 import java.util.regex.Pattern
@@ -63,10 +63,6 @@ open class DefaultDependency(libraryName: String) {
 
   fun getDependencyDownload(): DependencyDownload {
     return DependencyDownload(libraryName)
-  }
-
-  open fun getLibraryDependencyDownload(): LibraryDependencyDownload {
-    return LibraryDependencyDownload(libraryName)
   }
 
   fun cleanString(str: String): String {

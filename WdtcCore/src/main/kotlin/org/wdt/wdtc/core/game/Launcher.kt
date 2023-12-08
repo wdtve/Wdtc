@@ -3,50 +3,42 @@ package org.wdt.wdtc.core.game
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.IOUtils
 import org.wdt.utils.io.writeStringToFile
-import org.wdt.wdtc.core.auth.accounts.Accounts
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
-import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
-import org.wdt.wdtc.core.game.config.GameConfig
-import org.wdt.wdtc.core.game.config.VersionInfo
-import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.manger.GameFileManger
 import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
 import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.getModTask
+import org.wdt.wdtc.core.utils.ModUtils.setModTask
 import java.io.File
 import java.io.IOException
 import java.util.*
 
 class Launcher @JvmOverloads constructor(version: String, here: File = setting.defaultGamePath) :
   GameFileManger(version, here) {
-  @JvmField
+
   var fabricModInstallInfo: FabricDonwloadInfo? = null
+    set(value) {
+      kind = KindOfMod.FABRIC
+      field = value
+    }
+
+  var forgeModDownloadInfo: ForgeDownloadInfo? = null
+    set(value) {
+      kind = KindOfMod.FORGE
+      field = value
+    }
+
+
+  var quiltModDownloadInfo: QuiltDownloadInfo? = null
+    set(value) {
+      kind = KindOfMod.FABRIC
+      field = value
+    }
+
+
   var kind = KindOfMod.ORIGINAL
 
-  @JvmField
-  var forgeModDownloadInfo: ForgeDownloadInfo? = null
-
-  @JvmField
-  var quiltModDownloadInfo: QuiltDownloadInfo? = null
-  fun setQuiltModDownloadInfo(quiltModDownloadInfo: QuiltInstallTask?) {
-    kind = KindOfMod.QUILT
-    this.quiltModDownloadInfo = quiltModDownloadInfo
-  }
-
-  fun setFabricModInstallInfo(fabricModInstallInfo: FabricDonwloadInfo?) {
-    kind = KindOfMod.FABRIC
-    this.fabricModInstallInfo = fabricModInstallInfo
-  }
-
-  fun setForgeModDownloadInfo(forgeModDownloadInfo: ForgeDownloadInfo?) {
-    kind = KindOfMod.FORGE
-    this.forgeModDownloadInfo = forgeModDownloadInfo
-  }
-
-  val gameConfig: GameConfig
-    get() = GameConfig(this)
 
   @Throws(IOException::class)
   fun beforLaunchTask() {
@@ -59,13 +51,6 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
   fun cleanKind() {
     kind = KindOfMod.ORIGINAL
   }
-
-  val accounts: Accounts
-    get() = Accounts()
-  val versionInfo: VersionInfo
-    get() = VersionInfo(this)
-  val gameDirectoryManger: GameDirectoryManger
-    get() = this
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -85,11 +70,8 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
 
 
   companion object {
-    @JvmStatic
     val preferredLauncher: Launcher?
-      get() {
-        val setting = setting
-        return if (setting.preferredVersion != null) getModTask(Launcher(setting.preferredVersion!!)) else null
-      }
+      get() = if (setting.preferredVersion != null) Launcher(setting.preferredVersion!!).setModTask() else null
+
   }
 }

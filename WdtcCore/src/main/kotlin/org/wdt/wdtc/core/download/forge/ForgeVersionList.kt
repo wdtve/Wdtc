@@ -15,9 +15,9 @@ class ForgeVersionList(private val launcher: Launcher) : VersionListInterface {
     get() = "https://bmclapi2.bangbang93.com/forge/minecraft/${launcher.versionNumber}"
 
   @get:Throws(IOException::class)
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: Set<VersionJsonObjectInterface>
     get() {
-      val versionObjects: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val versionObjects: MutableSet<VersionJsonObjectInterface> = HashSet()
       val versionList = forgeListUrl.getURLToString().parseJsonArray()
       versionList.forEach { versionObjects.add(it.asJsonObject.parseObject()) }
       return versionObjects

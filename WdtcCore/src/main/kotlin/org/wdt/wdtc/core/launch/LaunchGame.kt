@@ -3,6 +3,7 @@ package org.wdt.wdtc.core.launch
 import org.wdt.utils.io.writeStringToFile
 import org.wdt.wdtc.core.download.DownloadGameVersion
 import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
 import org.wdt.wdtc.core.manger.FileManger.starterBat
 import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
@@ -12,7 +13,7 @@ class LaunchGame private constructor(private val launcher: Launcher) {
 
   val launchTaskProcess: Process
     get() = if (setting.console)
-      Runtime.getRuntime().exec(arrayOf<String>("cmd.exe", "/C", "start", starterBat.getCanonicalPath()))
+      Runtime.getRuntime().exec(arrayOf<String>("cmd.exe", "/C", "start", starterBat.canonicalPath))
     else ProcessBuilder(starterBat.canonicalPath).directory(launcher.versionDirectory).start()
 
   val launchProcess: LaunchProcess = LaunchProcess(launchTaskProcess)

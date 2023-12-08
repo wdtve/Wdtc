@@ -2,7 +2,6 @@ package org.wdt.wdtc.core.download.game
 
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.getJsonArray
-import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.io.isFileNotExists
@@ -24,14 +23,13 @@ class GameVersionList : VersionListInterface {
     }
   }
 
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: Set<VersionJsonObjectInterface>
     get() {
-      val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val versionList: MutableSet<VersionJsonObjectInterface> = HashSet()
       try {
         val versionJsonArray = versionManifestFile.readFileToJsonObject().getJsonArray("versions")
-        for (i in 0 until versionJsonArray.size()) {
-          val versionObject = versionJsonArray.getJsonObject(i)
-          val versionJsonObject: GameVersionJsonObjectImpl = versionObject.parseObject()
+        versionJsonArray.forEach {
+          val versionJsonObject: GameVersionJsonObjectImpl = it.asJsonObject.parseObject()
           if (versionJsonObject.gameType == "release") {
             versionList.add(versionJsonObject)
           }

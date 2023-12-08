@@ -1,7 +1,7 @@
 package org.wdt.wdtc.core.utils
 
 import org.wdt.utils.io.*
-import org.wdt.wdtc.core.manger.FileManger
+import org.wdt.wdtc.core.manger.FileManger.userAsste
 import org.wdt.wdtc.core.utils.StringUtils.appendForString
 import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
 import java.io.File
@@ -32,8 +32,7 @@ class SkinUtils {
     val extension = skinFile?.extension
     val image1 = image.getSubimage(8, 8, 8, 8)
     val file = File(
-      FileManger.userAsste,
-      skinFile!!.getName().cleanStrInString(".$extension").appendForString("-head.", extension)
+      userAsste, skinFile?.name?.cleanStrInString(".$extension")?.appendForString("-head.", extension)
     )
     file.touch()
     ImageIO.write(image1, extension, file.newOutputStream())
@@ -41,7 +40,7 @@ class SkinUtils {
   }
 
   fun getSkinFile(): File {
-    return File(FileManger.userAsste, "$userName.png")
+    return File(userAsste, "$userName.png")
   }
 
   @Throws(IOException::class)

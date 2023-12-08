@@ -1,7 +1,6 @@
 package org.wdt.wdtc.core.download.fabric
 
 import com.google.gson.annotations.SerializedName
-import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
@@ -16,13 +15,12 @@ class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterfac
   private val versionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version"
 
   @get:Throws(IOException::class)
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: Set<VersionJsonObjectInterface>
     get() {
-      val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
+      val versionList: MutableSet<VersionJsonObjectInterface> = HashSet()
       val versionListArray = versionListUrl.getURLToString().parseJsonArray()
-      for (i in 0 until versionListArray.size()) {
-        val versionObject = versionListArray.getJsonObject(i)
-        val versionJsonObject: FabricAPIVersionJsonObjectImpl = versionObject.parseObject()
+      versionListArray.forEach {
+        val versionJsonObject: FabricAPIVersionJsonObjectImpl = it.asJsonObject.parseObject()
         if (launcher.versionNumber == versionJsonObject.gameVersion!![0]) {
           versionList.add(versionJsonObject)
         }
@@ -40,10 +38,10 @@ class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterfac
     @SerializedName("game_versions")
     val gameVersion: List<String>? = null
 
-    override fun equals(o: Any?): Boolean {
-      if (this === o) return true
-      if (o == null || javaClass != o.javaClass) return false
-      val that = o as FabricAPIVersionJsonObjectImpl
+    override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other == null || javaClass != other.javaClass) return false
+      val that = other as FabricAPIVersionJsonObjectImpl
       return versionNumber == that.versionNumber
     }
 

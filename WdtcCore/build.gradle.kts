@@ -8,8 +8,6 @@ version = rootProject.version
 dependencies {
   implementation("com.github.wd-t.utils:utils-gson:1.2.5")
   implementation("com.github.wd-t.utils:utils-io:1.2.5")
-  implementation(project(":DependencyDownloader"))
-  implementation("org.dom4j:dom4j:2.1.4")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation(kotlin("stdlib-jdk8"))

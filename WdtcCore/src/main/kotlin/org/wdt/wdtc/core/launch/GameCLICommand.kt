@@ -2,6 +2,7 @@ package org.wdt.wdtc.core.launch
 
 import org.wdt.wdtc.core.auth.User.Companion.user
 import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
 import org.wdt.wdtc.core.manger.VMManger.launcherVersion
 import java.io.IOException
 

@@ -2,7 +2,6 @@ package org.wdt.wdtc.ui.window
 
 import com.jfoenix.controls.JFXButton
 import javafx.application.Platform
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -58,7 +57,7 @@ class ModChooseVersionWindow(
     val back = JFXButton("返回")
     back.styleClass.add("BlackBorder")
     val pane = Pane()
-    val ButtonList = VBox()
+    val buttonList = VBox()
     val list = ScrollPane()
     val tips = Label("选择一个Mod版本:")
     tips.layoutX = 149.0
@@ -68,14 +67,14 @@ class ModChooseVersionWindow(
     Platform.runLater {
       try {
         for (versionJsonObject in modVersionList.versionList) {
-          val versionButton = getVersionButton(versionJsonObject, ButtonList)
-          size.modifyWindwosSize(ButtonList, versionButton)
+          val versionButton = getVersionButton(versionJsonObject, buttonList)
+          size.modifyWindwosSize(buttonList, versionButton)
         }
       } catch (e: IOException) {
         ExceptionWindow.setErrorWin(e)
       }
     }
-    list.content = ButtonList
+    list.content = buttonList
     size.modifyWindwosSize(pane, list, back, tips)
     pane.background = Consoler.background
     pane.setStylesheets()
@@ -90,15 +89,13 @@ class ModChooseVersionWindow(
     val versionButton = JFXButton(versionJsonObject.versionNumber)
     versionButton.style = "-fx-border-color: #000000"
     versionButton.prefWidth = 600.0
-    versionButton.onAction = EventHandler { event: ActionEvent? ->
+    versionButton.onAction = EventHandler {
       when (kind) {
-        KindOfMod.FORGE -> launcher.setForgeModDownloadInfo(ForgeDownloadInfo(launcher, versionJsonObject))
-        KindOfMod.FABRIC -> launcher.setFabricModInstallInfo(FabricDonwloadInfo(launcher, versionJsonObject))
-        KindOfMod.QUILT -> launcher.setQuiltModDownloadInfo(QuiltInstallTask(launcher, versionJsonObject))
-        KindOfMod.FABRICAPI -> {
-          launcher.fabricModInstallInfo?.apiDownloadTask = FabricAPIDownloadTask(launcher, versionJsonObject)
-        }
-
+        KindOfMod.FORGE -> launcher.forgeModDownloadInfo = ForgeDownloadInfo(launcher, versionJsonObject)
+        KindOfMod.FABRIC -> launcher.fabricModInstallInfo = FabricDonwloadInfo(launcher, versionJsonObject)
+        KindOfMod.QUILT -> launcher.quiltModDownloadInfo = QuiltInstallTask(launcher, versionJsonObject)
+        KindOfMod.FABRICAPI -> launcher.fabricModInstallInfo?.apiDownloadTask =
+          FabricAPIDownloadTask(launcher, versionJsonObject)
         else -> {}
       }
       val choose = ModChooseWindow(launcher, mainStage)

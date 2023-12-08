@@ -1,4 +1,4 @@
-package org.wdt.utils.dependency
+package org.wdt.wdtc.core.utils.dependency
 
 import java.io.File
 import java.io.IOException
@@ -21,11 +21,4 @@ class DependencyDownload : DefaultDependency {
   @get:Throws(MalformedURLException::class)
   val libraryUrl: URL
     get() = URL(defaultUrl + formJar())
-
-  override fun getLibraryDependencyDownload(): LibraryDependencyDownload {
-    val libraryDependencyDownload = super.getLibraryDependencyDownload()
-    libraryDependencyDownload.defaultUrl = defaultUrl
-    return libraryDependencyDownload
-  }
-
 }

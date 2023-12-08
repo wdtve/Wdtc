@@ -5,6 +5,9 @@ import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.game.*
+import org.wdt.wdtc.core.game.DownloadedGameVersion.getGameVersionList
+import org.wdt.wdtc.core.game.DownloadedGameVersion.isDownloadedGame
+import org.wdt.wdtc.core.game.config.VersionInfo.Companion.versionInfo
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.utils.WdtcLogger
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
@@ -34,12 +37,11 @@ class GameConfig(private val launcher: Launcher) {
     @Throws(IOException::class)
     fun writeConfigJsonToAllVersion() {
       val gameDirectoryManger = GameDirectoryManger()
-      if (DownloadedGameVersion.isDownloadedGame(gameDirectoryManger)) {
-        val list = DownloadedGameVersion.getGameVersionList(gameDirectoryManger)
-        for (child in list!!) {
-          val config = child.gameConfig
-          if (child.versionConfigFile.isFileNotExists()) {
-            writeConfigJson(child)
+      if (gameDirectoryManger.isDownloadedGame) {
+        gameDirectoryManger.getGameVersionList()?.forEach {
+          val config = it.gameConfig
+          if (it.versionConfigFile.isFileNotExists()) {
+            it.writeConfigJson()
           } else {
             val gameConfig = config.defaultGameConfig
             gameConfig.info = config.versionInfo
@@ -52,26 +54,29 @@ class GameConfig(private val launcher: Launcher) {
       }
     }
 
-    fun writeConfigJson(launcher: Launcher) {
+    fun Launcher.writeConfigJson() {
       try {
-        val config = DefaultGameConfig(launcher)
-        launcher.versionConfigFile.writeObjectToFile(
+        val config = DefaultGameConfig(this)
+        this.versionConfigFile.writeObjectToFile(
           config, Json.getBuilder().setPrettyPrinting()
         )
-        logmaker.info("${launcher.versionNumber} $config")
+        logmaker.info("${this.versionNumber} $config")
       } catch (e: IOException) {
         logmaker.error(e.getExceptionMessage())
       }
     }
 
     @Throws(IOException::class)
-    fun ckeckVersionInfo(launcher: Launcher) {
-      val config = launcher.gameConfig.defaultGameConfig
-      config.info = launcher.versionInfo
-      launcher.versionConfigFile.writeObjectToFile(
+    fun Launcher.ckeckVersionInfo() {
+      val config = this.gameConfig.defaultGameConfig
+      config.info = this.versionInfo
+      this.versionConfigFile.writeObjectToFile(
         config, Json.getBuilder().setPrettyPrinting()
       )
-      logmaker.info("${launcher.versionNumber} $config")
+      logmaker.info("${this.versionNumber} $config")
     }
+
+    val Launcher.gameConfig: GameConfig
+      get() = GameConfig(this)
   }
 }

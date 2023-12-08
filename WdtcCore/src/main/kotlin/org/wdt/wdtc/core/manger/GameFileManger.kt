@@ -6,6 +6,7 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.isFileOlder
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
 import org.wdt.wdtc.core.game.GameVersionJsonObject
+import org.wdt.wdtc.core.manger.FileManger.versionManifestFile
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -68,8 +69,8 @@ open class GameFileManger : GameDirectoryManger {
       calendar.setTime(Date())
       calendar.add(Calendar.DATE, -7)
       try {
-        if (FileManger.versionManifestFile.isFileNotExists() ||
-          FileManger.versionManifestFile.isFileOlder(calendar.time)
+        if (versionManifestFile.isFileNotExists() ||
+          versionManifestFile.isFileOlder(calendar.time)
         ) {
           DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
         }

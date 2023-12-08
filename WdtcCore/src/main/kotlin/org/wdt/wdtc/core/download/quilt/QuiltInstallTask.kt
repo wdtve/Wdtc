@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.download.quilt
 
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
@@ -9,23 +8,19 @@ import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.IOException
 
 class QuiltInstallTask : QuiltDownloadInfo, InstallTaskInterface {
-  private val source: DownloadSourceInterface
+  private val source: DownloadSourceInterface = downloadSource
   private val logmaker = QuiltInstallTask::class.java.getWdtcLogger()
 
-  constructor(launcher: Launcher, quiltVersionNumber: String?) : super(launcher, quiltVersionNumber) {
-    source = downloadSource
-  }
+  constructor(launcher: Launcher, quiltVersionNumber: String) : super(launcher, quiltVersionNumber)
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : super(
     launcher,
     versionJsonObjectInterface
-  ) {
-    source = downloadSource
-  }
-
+  )
   fun startDownloadQuiltGameVersionJson() {
     startDownloadTask(quiltVersionJsonUrl, quiltVersionJson)
   }

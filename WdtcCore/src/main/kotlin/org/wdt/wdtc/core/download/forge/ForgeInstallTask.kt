@@ -1,7 +1,5 @@
 package org.wdt.wdtc.core.download.forge
 
-import org.wdt.utils.dependency.DefaultDependency
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.*
 import org.wdt.utils.io.FilenameUtils
 import org.wdt.utils.io.newInputStream
@@ -11,6 +9,7 @@ import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
 import org.wdt.wdtc.core.manger.DownloadSourceManger.isNotOfficialDownloadSource
 import org.wdt.wdtc.core.manger.FileManger.wdtcCache
 import org.wdt.wdtc.core.manger.URLManger.pistonDataMojang
@@ -19,13 +18,15 @@ import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
 import org.wdt.wdtc.core.utils.URLUtils.getRedirectUrl
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import org.wdt.wdtc.core.utils.ZipUtils.unZipBySpecifyFile
+import org.wdt.wdtc.core.utils.dependency.DefaultDependency
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.*
 import java.util.jar.JarInputStream
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 // TODO Repair and optimization Forge install
-class ForgeInstallTask(launcher: Launcher, forgeVersion: String?) :
+class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
   ForgeDownloadInfo(launcher, forgeVersion), InstallTaskInterface {
 
   private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
@@ -34,7 +35,7 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String?) :
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
     launcher,
-    versionJsonObjectInterface.versionNumber
+    versionJsonObjectInterface.versionNumber!!
   )
 
   @Throws(IOException::class)

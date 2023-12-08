@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.download.fabric
 
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
@@ -8,15 +7,16 @@ import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.IOException
 
-class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String?) :
+class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String) :
   FabricDonwloadInfo(launcher, fabricVersionNumber), InstallTaskInterface {
   private val source: DownloadSourceInterface = downloadSource
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
     launcher,
-    versionJsonObjectInterface.versionNumber
+    versionJsonObjectInterface.versionNumber!!
   )
 
   @Throws(IOException::class)

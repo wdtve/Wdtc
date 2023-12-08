@@ -13,7 +13,7 @@ import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.File
 import java.io.IOException
 
-open class FabricDonwloadInfo(protected val launcher: Launcher, override val modVersion: String?) :
+open class FabricDonwloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
   var apiDownloadTask: FabricAPIDownloadTask? = null
   private val logmaker = FabricDonwloadInfo::class.java.getWdtcLogger()
@@ -21,7 +21,7 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
     launcher,
-    versionJsonObjectInterface.versionNumber
+    versionJsonObjectInterface.versionNumber!!
   )
 
   val fabricVersionFileUrl: String
@@ -60,7 +60,7 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
     get() = apiDownloadTask != null
   override val modInstallTask: InstallTaskInterface
     get() = FabricInstallTask(launcher, modVersion)
-  override val modKind: KindOfMod?
+  override val modKind: KindOfMod
     get() = KindOfMod.FABRIC
 
 }

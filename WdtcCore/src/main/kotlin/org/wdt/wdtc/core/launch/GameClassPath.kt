@@ -1,6 +1,7 @@
 package org.wdt.wdtc.core.launch
 
 import org.wdt.utils.io.createDirectories
+import org.wdt.wdtc.core.auth.accounts.Accounts
 import org.wdt.wdtc.core.game.GetGameNeedLibraryFile
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.FileManger.llbmpipeLoader
@@ -28,7 +29,7 @@ class GameClassPath(private val launcher: Launcher) : AbstractGameCommand() {
         }
       }
       commandBuilder.append(launcher.versionJar)
-      val accounts = launcher.accounts.jvmCommand
+      val accounts = Accounts().jvmCommand
       if (accounts.isNotEmpty()) {
         commandBuilder.append(accounts)
       }

@@ -4,7 +4,12 @@ import com.google.gson.JsonObject
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.*
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
-import org.wdt.wdtc.core.game.DownloadedGameVersion
+import org.wdt.wdtc.core.game.DownloadedGameVersion.getGameVersionList
+import org.wdt.wdtc.core.manger.FileManger.llbmpipeLoader
+import org.wdt.wdtc.core.manger.FileManger.settingFile
+import org.wdt.wdtc.core.manger.FileManger.userListFile
+import org.wdt.wdtc.core.manger.FileManger.versionManifestFile
+import org.wdt.wdtc.core.manger.FileManger.wdtcCache
 import org.wdt.wdtc.core.utils.DownloadUtils
 import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
@@ -28,23 +33,26 @@ object TaskManger {
   @JvmStatic
   @Throws(IOException::class)
   fun runStartUpTask() {
-    FileUtils.delete(DownloadUtils.StopProcess)
+    DownloadUtils.StopProcess.delete()
     File(FileManger.wdtcConfig, "readme.txt").writeStringToFile(
-      IOUtils.toString(Objects.requireNonNull(SettingManger::class.java.getResourceAsStream("/assets/readme.txt")))
+      IOUtils.toString(
+        SettingManger::class.java.getResourceAsStream("/assets/readme.txt") ?: throw RuntimeException()
+      )
     )
-    FileManger.wdtcCache.createDirectories()
-    if (FileManger.userListFile.isFileNotExists()) {
-      FileManger.userListFile.writeObjectToFile(JsonObject())
+    wdtcCache.createDirectories()
+    if (userListFile.isFileNotExists()) {
+      userListFile.writeObjectToFile(JsonObject())
     }
-    if (FileManger.settingFile.isFileNotExists()) {
-      FileManger.settingFile.writeObjectToFile(SettingManger.Setting())
+    if (settingFile.isFileNotExists()) {
+      settingFile.writeObjectToFile(SettingManger.Setting())
     }
-    val llbmpipeLoader =
-      "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar"
-    if (FileManger.llbmpipeLoader.isFileNotExists()) {
-      startDownloadTask(llbmpipeLoader, FileManger.llbmpipeLoader)
+    if (llbmpipeLoader.isFileNotExists()) {
+      startDownloadTask(
+        "https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar",
+        llbmpipeLoader
+      )
     }
-    if (FileManger.versionManifestFile.isFileNotExists()) {
+    if (versionManifestFile.isFileNotExists()) {
       DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
     }
   }
@@ -54,12 +62,11 @@ object TaskManger {
     if (boolean) {
       FileManger.wdtcConfig.deleteDirectory()
       val launchers =
-        DownloadedGameVersion.getGameVersionList(GameDirectoryManger(SettingManger.setting.defaultGamePath))
+        GameDirectoryManger(SettingManger.setting.defaultGamePath).getGameVersionList()
       if (!launchers.isNullOrEmpty()) {
-        for (launcher in launchers) {
-          launcher.versionConfigFile.delete()
+        launchers.forEach {
+          it.versionConfigFile.delete()
         }
-
       }
     }
   }

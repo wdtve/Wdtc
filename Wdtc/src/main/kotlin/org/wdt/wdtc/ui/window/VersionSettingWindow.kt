@@ -18,10 +18,11 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.InstallGameVersion
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
+import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
 import org.wdt.wdtc.core.manger.SettingManger
 import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
 import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.getVersionModInstall
+import org.wdt.wdtc.core.utils.ModUtils.modDownloadInfo
 import org.wdt.wdtc.core.utils.ThreadUtils.startThread
 import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
@@ -31,19 +32,19 @@ import java.io.IOException
 import java.util.*
 
 class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage) : SettingManger() {
-  private val config: DefaultGameConfig.Config? = launcher.gameConfig.config
+  private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
   private val size: WindwosSizeManger = mainStage.getSizeManger()
 
   fun setWindow() {
     val window = HomeWindow(launcher)
-    val ParentPane = AnchorPane()
-    val SonScrollPane = ScrollPane()
-    SonScrollPane.layoutX = 105.0
-    SonScrollPane.layoutY = 52.0
-    AnchorPane.setTopAnchor(SonScrollPane, 50.0)
-    AnchorPane.setLeftAnchor(SonScrollPane, 105.0)
-    AnchorPane.setBottomAnchor(SonScrollPane, 0.0)
-    AnchorPane.setRightAnchor(SonScrollPane, 0.0)
+    val parentPane = AnchorPane()
+    val sonScrollPane = ScrollPane()
+    sonScrollPane.layoutX = 105.0
+    sonScrollPane.layoutY = 52.0
+    AnchorPane.setTopAnchor(sonScrollPane, 50.0)
+    AnchorPane.setLeftAnchor(sonScrollPane, 105.0)
+    AnchorPane.setBottomAnchor(sonScrollPane, 0.0)
+    AnchorPane.setRightAnchor(sonScrollPane, 0.0)
     val pane = AnchorPane()
     AnchorPane.setBottomAnchor(pane, 0.0)
     AnchorPane.setRightAnchor(pane, 0.0)
@@ -61,16 +62,16 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     AnchorPane.setTopAnchor(AutoDownload, 80.0)
     AnchorPane.setLeftAnchor(AutoDownload, 0.0)
     GameSetting.isDisable = true
-    setVersionSettingPane(SonScrollPane)
-    GameSetting.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+    setVersionSettingPane(sonScrollPane)
+    GameSetting.onAction = EventHandler {
       AutoDownload.isDisable = false
       GameSetting.isDisable = true
-      setVersionSettingPane(SonScrollPane)
+      setVersionSettingPane(sonScrollPane)
     }
-    AutoDownload.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+    AutoDownload.onAction = EventHandler {
       GameSetting.isDisable = false
       AutoDownload.isDisable = true
-      setAutoDownload(SonScrollPane)
+      setAutoDownload(sonScrollPane)
     }
     val completion = JFXButton("补全游戏文件")
     completion.layoutY = 395.0
@@ -82,13 +83,13 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     delete.setPrefSize(105.0, 30.0)
     AnchorPane.setBottomAnchor(delete, 0.0)
     AnchorPane.setLeftAnchor(delete, 0.0)
-    ParentPane.children.addAll(SonScrollPane, completion, delete, back, GameSetting, AutoDownload)
+    parentPane.children.addAll(sonScrollPane, completion, delete, back, GameSetting, AutoDownload)
     Consoler.setCss("BlackBorder", back)
-    ParentPane.background = Consoler.background
-    ParentPane.setStylesheets()
-    mainStage.setScene(Scene(ParentPane))
+    parentPane.background = Consoler.background
+    parentPane.setStylesheets()
+    mainStage.setScene(Scene(parentPane))
     Consoler.setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload)
-    delete.onAction = EventHandler { event: ActionEvent? ->
+    delete.onAction = EventHandler {
       try {
         FileUtils.deleteDirectory(launcher.versionDirectory)
         val setting = setting
@@ -101,7 +102,7 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
         ExceptionWindow.setErrorWin(e)
       }
     }
-    completion.onAction = EventHandler { event: ActionEvent? ->
+    completion.onAction = EventHandler {
       Runnable {
         val version = InstallGameVersion(launcher, true)
         version.startInstallGame()
@@ -114,36 +115,36 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     val pane = AnchorPane()
     val line = 35.0
     val tips = Label("JDK地址:")
-    tips.layoutX = layoutX
+    tips.layoutX = LAYOUT_X
     tips.layoutY = line
     val tips2 = Label("版本:")
     tips2.layoutX = 107.0
     tips2.layoutY = line
     val line2 = 55.0
     val JavaPath = TextField()
-    JavaPath.layoutX = layoutX
+    JavaPath.layoutX = LAYOUT_X
     JavaPath.layoutY = line2
     JavaPath.setPrefSize(300.0, 23.0)
     val choose = JFXButton("...")
     choose.layoutX = 315.0
     choose.layoutY = line2
     val tips3 = Label("游戏运行内存:")
-    tips3.layoutX = layoutX
+    tips3.layoutX = LAYOUT_X
     tips3.layoutY = 89.0
     val Input = TextField()
-    Input.layoutX = layoutX
+    Input.layoutX = LAYOUT_X
     Input.layoutY = 104.0
     Input.setPrefSize(90.0, 23.0)
     val line3 = 138.0
     val tips4 = Label("窗口宽度:")
-    tips4.layoutX = layoutX
+    tips4.layoutX = LAYOUT_X
     tips4.layoutY = line3
     val tips5 = Label("窗口高度:")
     tips5.layoutX = 165.0
     tips5.layoutY = line3
     val line4 = 156.0
     val InputWidth = TextField()
-    InputWidth.layoutX = layoutX
+    InputWidth.layoutX = LAYOUT_X
     InputWidth.layoutY = line4
     InputWidth.setPrefSize(90.0, 23.0)
     val InputHeight = TextField()
@@ -176,18 +177,18 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     pane.setStylesheets()
     Consoler.setCss("BlackBorder", choose, apply)
     scrollPane.content = pane
-    JavaPath.text = config!!.javaPath
+    JavaPath.text = config.javaPath
     InputWidth.text = config.width.toString()
     InputHeight.text = config.hight.toString()
     Input.text = config.memory.toString()
-    tips2.text = "Java版本: " + getJavaVersion(config.javaPath)
-    choose.onAction = EventHandler { event: ActionEvent? ->
+    tips2.text = "Java版本: ${getJavaVersion(config.javaPath)}"
+    choose.onAction = EventHandler {
       val fileChooser = FileChooser()
       fileChooser.title = "选择Java文件"
       fileChooser.initialDirectory = File("C:\\Program Files")
-      val JavaExePath = fileChooser.showOpenDialog(mainStage)
-      if (JavaExePath != null) {
-        JavaPath.text = JavaExePath.absolutePath
+      val javaExePath = fileChooser.showOpenDialog(mainStage)
+      if (javaExePath != null) {
+        JavaPath.text = javaExePath.absolutePath
       }
     }
     apply.onAction = EventHandler {
@@ -214,7 +215,7 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
   }
 
   private fun setAutoDownload(scrollPane: ScrollPane) {
-    val ModList = AnchorPane()
+    val modList = AnchorPane()
     var i = 0.0
     for (kind in KindOfMod.entries.toTypedArray()) {
       val modPane = AnchorPane()
@@ -222,35 +223,35 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
       modPane.prefHeight = 44.0
       modPane.prefWidth = 510.0
       setModPane(kind, modPane)
-      size.modifyWindwosSize(ModList, modPane)
+      size.modifyWindwosSize(modList, modPane)
       i++
     }
-    ModList.setStylesheets()
-    scrollPane.content = ModList
+    modList.setStylesheets()
+    scrollPane.content = modList
   }
 
   private fun setModPane(kind: KindOfMod, ModPane: AnchorPane) {
-    val ModIcon = ImageView()
+    val modIcon = ImageView()
     when (kind) {
-      KindOfMod.FORGE -> ModIcon.image = Image(
+      KindOfMod.FORGE -> modIcon.image = Image(
         Objects.requireNonNull(
           VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/forge.png")
         )
       )
 
-      KindOfMod.FABRIC -> ModIcon.image = Image(
+      KindOfMod.FABRIC -> modIcon.image = Image(
         Objects.requireNonNull(
           VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/fabric.png")
         )
       )
 
-      KindOfMod.QUILT -> ModIcon.image = Image(
+      KindOfMod.QUILT -> modIcon.image = Image(
         Objects.requireNonNull(
           VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/quilt.png")
         )
       )
 
-      KindOfMod.ORIGINAL -> ModIcon.image = Image(
+      KindOfMod.ORIGINAL -> modIcon.image = Image(
         Objects.requireNonNull(
           VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/ico.jpg")
         )
@@ -258,32 +259,28 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
 
       else -> {}
     }
-    AnchorPane.setTopAnchor(ModIcon, 4.0)
-    AnchorPane.setLeftAnchor(ModIcon, 10.0)
-    AnchorPane.setBottomAnchor(ModIcon, 4.0)
-    val ModVersion = Label()
+    AnchorPane.setTopAnchor(modIcon, 4.0)
+    AnchorPane.setLeftAnchor(modIcon, 10.0)
+    AnchorPane.setBottomAnchor(modIcon, 4.0)
+    val modVersion = Label()
     if (launcher.kind == kind) {
-      val info = getVersionModInstall(launcher, kind)
-      if (info != null) {
-        ModVersion.text = kind.toString() + " : " + info.modVersion
-      } else {
-        ModVersion.text = "$kind : 不安装"
-      }
+      val info = launcher.modDownloadInfo
+      modVersion.text = if (info != null) "$kind : ${info.modVersion}" else "$kind : 不安装"
     } else {
-      ModVersion.text = "$kind : 不安装"
+      modVersion.text = "$kind : 不安装"
     }
-    AnchorPane.setBottomAnchor(ModVersion, 15.0)
-    AnchorPane.setLeftAnchor(ModVersion, 60.0)
-    AnchorPane.setTopAnchor(ModVersion, 15.0)
-    val Download = JFXButton("-->")
-    AnchorPane.setTopAnchor(Download, 11.0)
-    AnchorPane.setRightAnchor(Download, 20.0)
-    AnchorPane.setBottomAnchor(Download, 11.0)
-    ModPane.children.addAll(ModIcon, ModVersion, Download)
+    AnchorPane.setBottomAnchor(modVersion, 15.0)
+    AnchorPane.setLeftAnchor(modVersion, 60.0)
+    AnchorPane.setTopAnchor(modVersion, 15.0)
+    val download = JFXButton("-->")
+    AnchorPane.setTopAnchor(download, 11.0)
+    AnchorPane.setRightAnchor(download, 20.0)
+    AnchorPane.setBottomAnchor(download, 11.0)
+    ModPane.children.addAll(modIcon, modVersion, download)
   }
 
   companion object {
-    private const val layoutX = 10.0
+    private const val LAYOUT_X = 10.0
     private val logmaker = getLogger(VersionSettingWindow::class.java)
   }
 }

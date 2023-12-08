@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.GameConfig.Companion.ckeckVersionInfo
 import org.wdt.wdtc.core.game.config.GameConfig.Companion.writeConfigJson
-import org.wdt.wdtc.core.utils.ModUtils.getModInstallTask
+import org.wdt.wdtc.core.utils.ModUtils.modInstallTask
 import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import java.io.IOException
 
@@ -20,12 +20,12 @@ class InstallGameVersion @JvmOverloads constructor(
     try {
       val startTime = System.currentTimeMillis()
       if (launcher.versionConfigFile.isFileNotExists()) {
-        writeConfigJson(launcher)
+        launcher.writeConfigJson()
       } else {
-        ckeckVersionInfo(launcher)
+        launcher.ckeckVersionInfo()
       }
       downloadGameFileTask()
-      val task = getModInstallTask(launcher)
+      val task = launcher.modInstallTask
       if (install && task != null) {
         task.beforInstallTask()
         task.writeVersionJsonPatches()

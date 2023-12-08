@@ -10,30 +10,27 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.VMManger.isDebug
 import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.gameModIsFabric
-import org.wdt.wdtc.core.utils.ModUtils.gameModIsForge
-import org.wdt.wdtc.core.utils.ModUtils.gameModIsQuilt
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.ModUtils.isFabric
+import org.wdt.wdtc.core.utils.ModUtils.isForge
+import org.wdt.wdtc.core.utils.ModUtils.isQuilt
+import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
+import org.wdt.wdtc.ui.window.WindwosSizeManger.Companion.getSizeManger
 import java.io.IOException
 
-class ModChooseWindow(private val launcher: Launcher, private val MainStage: Stage) {
-  private val size: WindwosSizeManger
-
-  init {
-    size = WindwosSizeManger(MainStage)
-  }
-
+class ModChooseWindow(private val launcher: Launcher, private val mainStage: Stage) {
+  private val size: WindwosSizeManger = mainStage.getSizeManger()
+  private val logmaker = ModChooseVersionWindow::class.java.getWdtcLogger()
   fun setChooseWin() {
     val pane = Pane()
     val back = JFXButton("返回")
     val title = Label(launcher.versionNumber)
     title.layoutX = 283.0
     title.layoutY = 69.0
-    val forge = Label(Tips.ForgeNo)
-    val fabric = Label(Tips.FabricNo)
-    val fabricAPI = Label(Tips.FabricAPINo)
-    val quilt = Label(Tips.QuiltNo)
+    val forge = Label(Tips.FORGE_NO)
+    val fabric = Label(Tips.FABRIC_NO)
+    val fabricAPI = Label(Tips.FABRIC_API_NO)
+    val quilt = Label(Tips.QUILT_NO)
     val forgePane = Pane()
     forgePane.layoutX = 60.0
     forgePane.layoutY = 96.0
@@ -104,11 +101,11 @@ class ModChooseWindow(private val launcher: Launcher, private val MainStage: Sta
     Consoler.setCss("BlackBorder", back, downloadForge, downloadFabric, downloadFabricAPI, downloadQuilt)
     Consoler.setCss("BlackBorder", cancelForge, cancelFabric, cancelFabricAPI, cancelQuilt)
     pane.setStylesheets()
-    MainStage.setScene(Scene(pane))
+    mainStage.setScene(Scene(pane))
     downloadForge.onAction = EventHandler {
       try {
-        val Choose = ModChooseVersionWindow(KindOfMod.FORGE, MainStage, launcher)
-        Choose.setModChooser()
+        val choose = ModChooseVersionWindow(KindOfMod.FORGE, mainStage, launcher)
+        choose.setModChooser()
       } catch (e: IOException) {
         ExceptionWindow.setErrorWin(e)
       }
@@ -117,13 +114,13 @@ class ModChooseWindow(private val launcher: Launcher, private val MainStage: Sta
       launcher.cleanKind()
       downloadFabricAPI.isDisable = false
       downloadFabric.isDisable = false
-      forge.text = Tips.ForgeNo
-      fabric.text = Tips.FabricNo
+      forge.text = Tips.FORGE_NO
+      fabric.text = Tips.FABRIC_NO
     }
     downloadFabric.onAction = EventHandler {
       try {
-        val Choose = ModChooseVersionWindow(KindOfMod.FABRIC, MainStage, launcher)
-        Choose.setModChooser()
+        val choose = ModChooseVersionWindow(KindOfMod.FABRIC, mainStage, launcher)
+        choose.setModChooser()
       } catch (e: IOException) {
         ExceptionWindow.setErrorWin(e)
       }
@@ -131,95 +128,89 @@ class ModChooseWindow(private val launcher: Launcher, private val MainStage: Sta
     cancelFabric.onAction = EventHandler {
       try {
         launcher.cleanKind()
-        launcher.fabricModInstallInfo!!.apiDownloadTask = null
+        launcher.fabricModInstallInfo?.apiDownloadTask = null
         downloadForge.isDisable = false
         downloadFabricAPI.isDisable = true
-        forge.text = Tips.ForgeNo
-        fabric.text = Tips.FabricNo
-        fabricAPI.text = Tips.FabricAPINo
+        forge.text = Tips.FORGE_NO
+        fabric.text = Tips.FABRIC_NO
+        fabricAPI.text = Tips.FABRIC_API_NO
       } catch (e: NullPointerException) {
         logmaker.warn("warn:", e)
       }
     }
     downloadFabricAPI.onAction = EventHandler {
       try {
-        val Choose = ModChooseVersionWindow(KindOfMod.FABRICAPI, MainStage, launcher)
-        Choose.setModChooser()
+        val choose = ModChooseVersionWindow(KindOfMod.FABRICAPI, mainStage, launcher)
+        choose.setModChooser()
       } catch (e: IOException) {
         ExceptionWindow.setErrorWin(e)
       }
     }
     cancelFabricAPI.onAction = EventHandler {
       try {
-        launcher.fabricModInstallInfo!!.apiDownloadTask = null
-        fabricAPI.text = Tips.FabricAPINo
+        launcher.fabricModInstallInfo?.apiDownloadTask = null
+        fabricAPI.text = Tips.FABRIC_API_NO
       } catch (e: NullPointerException) {
         logmaker.warn("warn:", e)
       }
     }
     downloadQuilt.onAction = EventHandler {
       try {
-        val Choose = ModChooseVersionWindow(KindOfMod.QUILT, MainStage, launcher)
-        Choose.setModChooser()
+        val choose = ModChooseVersionWindow(KindOfMod.QUILT, mainStage, launcher)
+        choose.setModChooser()
       } catch (e: IOException) {
         ExceptionWindow.setErrorWin(e)
       }
     }
     cancelQuilt.onAction = EventHandler {
-      quilt.text = Tips.QuiltNo
-      forge.text = Tips.ForgeNo
-      fabric.text = Tips.FabricNo
+      quilt.text = Tips.QUILT_NO
+      forge.text = Tips.FORGE_NO
+      fabric.text = Tips.FABRIC_NO
       downloadForge.isDisable = false
       downloadFabric.isDisable = false
     }
-    if (gameModIsForge(launcher)) {
-      forge.text = "Froge : " + launcher.forgeModDownloadInfo!!.modVersion
+    if (launcher.isForge) {
+      forge.text = "Froge : " + launcher.forgeModDownloadInfo?.modVersion
       fabric.text = "Fabric : 与Forge不兼容"
       downloadFabricAPI.isDisable = true
       downloadFabric.isDisable = true
     } else {
-      forge.text = Tips.ForgeNo
+      forge.text = Tips.FORGE_NO
     }
-    if (gameModIsFabric(launcher)) {
-      fabric.text = "Fabric : " + launcher.fabricModInstallInfo!!.modVersion
+    if (launcher.isFabric) {
+      fabric.text = "Fabric : " + launcher.fabricModInstallInfo?.modVersion
       forge.text = "Forge : 与Fabric不兼容"
       downloadFabricAPI.isDisable = false
       downloadForge.isDisable = true
-      if (launcher.fabricModInstallInfo!!.isAPIDownloadTaskNoNull) {
-        fabricAPI.text = launcher.fabricModInstallInfo!!.apiDownloadTask!!.fabricAPIVersionNumber
+      val fabircModInstallInfo = launcher.fabricModInstallInfo
+      if (fabircModInstallInfo?.isAPIDownloadTaskNoNull == true) {
+        fabricAPI.text = fabircModInstallInfo?.apiDownloadTask?.fabricAPIVersionNumber
       }
     } else {
-      fabric.text = Tips.FabricNo
+      fabric.text = Tips.FABRIC_NO
       downloadFabricAPI.isDisable = true
     }
-    if (gameModIsQuilt(launcher)) {
-      quilt.text = "Quilt : " + launcher.quiltModDownloadInfo!!.modVersion
+    if (launcher.isQuilt) {
+      quilt.text = "Quilt : " + launcher.quiltModDownloadInfo?.modVersion
       forge.text = "Forge : 与Quilt不兼容"
       fabric.text = "Fabric :  与Quilt不兼容"
       downloadFabric.isDisable = true
       downloadForge.isDisable = true
     }
     back.onAction = EventHandler {
-      GameVersionListWindow.setWindowScene(
-        MainStage
-      )
+      GameVersionListWindow.setWindowScene(mainStage)
     }
     confirm.onAction = EventHandler {
-      val gameDownloadingWindow = GameDownloadingWindow(
-        launcher
-      )
-      gameDownloadingWindow.setDownGameWin(MainStage)
+      val gameDownloadingWindow = GameDownloadingWindow(launcher)
+      gameDownloadingWindow.setDownGameWin(mainStage)
     }
   }
 
   private object Tips {
-    var ForgeNo = "Forge : 不安装"
-    var FabricNo = "Fabric : 不安装"
-    var FabricAPINo = "FabricAPI : 不安装"
-    var QuiltNo = "Quilt : 不安装"
+    const val FORGE_NO = "Forge : 不安装"
+    const val FABRIC_NO = "Fabric : 不安装"
+    const val FABRIC_API_NO = "FabricAPI : 不安装"
+    const val QUILT_NO = "Quilt : 不安装"
   }
 
-  companion object {
-    private val logmaker = getLogger(ModChooseWindow::class.java)
-  }
 }

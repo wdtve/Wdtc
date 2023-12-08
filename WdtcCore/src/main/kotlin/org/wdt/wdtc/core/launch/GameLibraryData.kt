@@ -1,12 +1,12 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.utils.dependency.DependencyDownload
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.LibraryObject
 import org.wdt.wdtc.core.game.LibraryObject.NativesOs
 import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
 import org.wdt.wdtc.core.manger.DownloadSourceManger.isNotOfficialDownloadSource
+import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.File
 import java.net.URL
 
