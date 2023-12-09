@@ -18,22 +18,23 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.InstallGameVersion
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
-import org.wdt.wdtc.core.manger.SettingManger
+import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.putSettingToFile
+import org.wdt.wdtc.core.manger.setting
 import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.modDownloadInfo
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.modDownloadInfo
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.WindwosSizeManger.Companion.getSizeManger
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.concurrent.thread
 
-class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage) : SettingManger() {
+class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage) {
   private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
   private val size: WindwosSizeManger = mainStage.getSizeManger()
+  private val LAYOUT_X = 10.0
 
   fun setWindow() {
     val window = HomeWindow(launcher)
@@ -92,7 +93,6 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     delete.onAction = EventHandler {
       try {
         FileUtils.deleteDirectory(launcher.versionDirectory)
-        val setting = setting
         setting.preferredVersion = null
         putSettingToFile(setting)
         val homeWindow = HomeWindow()
@@ -103,11 +103,11 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
       }
     }
     completion.onAction = EventHandler {
-      Runnable {
+      thread {
         val version = InstallGameVersion(launcher, true)
         version.startInstallGame()
         logmaker.info(launcher.versionNumber + " downloaded")
-      }.startThread()
+      }
     }
   }
 
@@ -279,8 +279,4 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     ModPane.children.addAll(modIcon, modVersion, download)
   }
 
-  companion object {
-    private const val LAYOUT_X = 10.0
-    private val logmaker = getLogger(VersionSettingWindow::class.java)
-  }
 }

@@ -5,18 +5,16 @@ import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.DownloadSourceManger.officialDownloadSource
-import org.wdt.wdtc.core.manger.FileManger.wdtcCache
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.officialDownloadSource
+import org.wdt.wdtc.core.manger.wdtcCache
+import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.File
 import java.io.IOException
 
 open class FabricDonwloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
   var apiDownloadTask: FabricAPIDownloadTask? = null
-  private val logmaker = FabricDonwloadInfo::class.java.getWdtcLogger()
 
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
@@ -36,15 +34,13 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
       wdtcCache,
       "${launcher.versionNumber}-$modVersion-frofile-zip.zip"
     )
-  val profileZipUrl: String
+  private val profileZipUrl: String
     get() =
-      "${officialDownloadSource.fabricMetaUrl}v2/versions/loader/%s/%s/profile/zip".format(
-        launcher.versionNumber,
-        modVersion
-      )
+      "${officialDownloadSource.fabricMetaUrl}v2/versions/loader/%s/%s/profile/zip"
+        .format(launcher.versionNumber, modVersion)
 
 
-  val fromFabricLoaderFolder: String
+  private val fromFabricLoaderFolder: String
     get() = "fabric-loader-%s-%s".format(modVersion, launcher.versionNumber)
 
 

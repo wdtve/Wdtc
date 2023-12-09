@@ -3,11 +3,11 @@ package org.wdt.wdtc.core.launch
 import org.wdt.utils.io.writeStringToFile
 import org.wdt.wdtc.core.download.DownloadGameVersion
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
-import org.wdt.wdtc.core.manger.FileManger.starterBat
-import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.manger.starterBat
+import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.logmaker
 
 class LaunchGame private constructor(private val launcher: Launcher) {
 
@@ -19,9 +19,7 @@ class LaunchGame private constructor(private val launcher: Launcher) {
   val launchProcess: LaunchProcess = LaunchProcess(launchTaskProcess)
 
   companion object {
-    private val logmaker = getLogger(LaunchGame::class.java)
 
-    @JvmStatic
     fun create(launcher: Launcher): LaunchGame {
       try {
         launcher.beforLaunchTask()

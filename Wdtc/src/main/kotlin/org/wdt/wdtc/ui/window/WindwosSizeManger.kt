@@ -4,18 +4,18 @@ import javafx.beans.value.ObservableValue
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Region
 import javafx.stage.Stage
-import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
+import org.wdt.wdtc.core.manger.setting
 
-class WindwosSizeManger(private val MainStage: Stage) {
+class WindwosSizeManger(private val mainStage: Stage) {
   fun modifyWindwosSize(pane: Pane, vararg node: Region) {
     pane.children.addAll(*node)
     for (region in node) {
-      val widthratio = MainStage.width / windowsWidht
+      val widthratio = mainStage.width / windowsWidht
       region.layoutX *= widthratio
       if (region.prefWidth != -1.0) {
         region.prefWidth *= widthratio
       }
-      MainStage.widthProperty()
+      mainStage.widthProperty()
         .addListener { _: ObservableValue<out Number>?, oldValue: Number, newValue: Number ->
           val ratio = newValue.toDouble() / oldValue.toDouble()
           region.layoutX *= ratio
@@ -41,19 +41,16 @@ class WindwosSizeManger(private val MainStage: Stage) {
 
   fun setWindwosSize() {
     val (_, _, _, _, _, _, windowsWidth, windowsHeight) = setting
-    MainStage.width = windowsWidth
-    MainStage.height = windowsHeight
+    mainStage.width = windowsWidth
+    mainStage.height = windowsHeight
   }
 
   override fun toString(): String {
-    return "WindwosSize{" + "MainStageSize=" + MainStage.width + "," + MainStage.height + "}"
+    return "WindwosSizeManger(MainStage=${mainStage.width}, ${mainStage.height})"
   }
-
-  companion object {
-    const val windowsWidht = 616.0
-    const val windowsHeight = 489.0
-    fun Stage.getSizeManger(): WindwosSizeManger {
-      return WindwosSizeManger(this)
-    }
-  }
+}
+const val windowsWidht = 616.0
+const val windowsHeight = 489.0
+fun Stage.getSizeManger(): WindwosSizeManger {
+  return WindwosSizeManger(this)
 }

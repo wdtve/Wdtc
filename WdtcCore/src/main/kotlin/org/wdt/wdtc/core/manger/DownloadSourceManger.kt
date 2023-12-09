@@ -1,3 +1,5 @@
+@file:JvmName("DownloadSourceManger")
+
 package org.wdt.wdtc.core.manger
 
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
@@ -5,46 +7,37 @@ import org.wdt.wdtc.core.download.source.BmclDownloadSource
 import org.wdt.wdtc.core.download.source.McbbsDownloadSource
 import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
-object DownloadSourceManger {
-  @JvmStatic
-  val officialDownloadSource: DownloadSourceInterface
-    get() = OfficialDownloadSource()
+val officialDownloadSource: DownloadSourceInterface
+  get() = OfficialDownloadSource()
 
-  @JvmStatic
-  val downloadSourceKind: DownloadSourceList
-    get() = SettingManger.setting.downloadSource
+val downloadSourceKind: DownloadSourceList
+  get() = setting.downloadSource
 
-  @JvmStatic
-  val downloadSource: DownloadSourceInterface
-    get() {
-      val source = downloadSourceKind
-      return when (source) {
-        DownloadSourceList.OFFICIAL -> {
-          OfficialDownloadSource()
-        }
+val downloadSource: DownloadSourceInterface
+  get() {
 
-        DownloadSourceList.BMCLAPI -> {
-          BmclDownloadSource()
-        }
+    return when (downloadSourceKind) {
+      DownloadSourceList.OFFICIAL -> {
+        OfficialDownloadSource()
+      }
 
-        else -> {
-          McbbsDownloadSource()
-        }
+      DownloadSourceList.BMCLAPI -> {
+        BmclDownloadSource()
+      }
+
+      else -> {
+        McbbsDownloadSource()
       }
     }
-
-  @JvmStatic
-  val isNotOfficialDownloadSource: Boolean
-    get() = !isOfficialDownloadSource()
-
-  @JvmStatic
-  fun isOfficialDownloadSource(): Boolean {
-    return downloadSourceKind == DownloadSourceList.OFFICIAL
   }
 
-  enum class DownloadSourceList {
-    OFFICIAL,
-    BMCLAPI,
-    MCBBS
-  }
+val isOfficialDownloadSource: Boolean = downloadSourceKind == DownloadSourceList.OFFICIAL
+
+val isNotOfficialDownloadSource: Boolean = !isOfficialDownloadSource
+
+
+enum class DownloadSourceList {
+  OFFICIAL,
+  BMCLAPI,
+  MCBBS
 }

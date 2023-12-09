@@ -8,17 +8,16 @@ import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.auth.BaseUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
-import org.wdt.wdtc.core.manger.FileManger.userJson
-import org.wdt.wdtc.core.manger.URLManger.littleskinApi
-import org.wdt.wdtc.core.utils.StringUtils.toBase64
-import org.wdt.wdtc.core.utils.URLUtils.getURLToString
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.manger.littleskinApiUrl
+import org.wdt.wdtc.core.manger.userJson
+import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.toBase64
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.URL
 
 class YggdrasilAccounts(val url: String, val username: String, val password: String) : BaseUser() {
-  private val logmaker = getLogger(YggdrasilAccounts::class.java)
 
   @Throws(IOException::class)
   fun sendPostWithJson(): String {
@@ -46,7 +45,7 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
       val userInfo = userInformation
       val textures = yggdrasilTextures
       val selectedProfile = userInfo.selectedProfile!!
-      val api = littleskinApi.getURLToString()
+      val api = littleskinApiUrl.getURLToString()
       val user = User(
         username,
         userInfo.accessToken,

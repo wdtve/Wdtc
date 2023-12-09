@@ -3,8 +3,8 @@ package org.wdt.wdtc.ui.window
 import javafx.scene.Node
 import javafx.scene.image.Image
 import javafx.scene.layout.*
-import org.wdt.wdtc.core.manger.VMManger.isDebug
-import org.wdt.wdtc.core.manger.VMManger.launcherVersion
+import org.wdt.wdtc.core.manger.isDebug
+import org.wdt.wdtc.core.manger.launcherVersion
 import java.util.*
 
 object Consoler {
@@ -23,8 +23,8 @@ object Consoler {
           BackgroundRepeat.NO_REPEAT,
           BackgroundPosition.CENTER,
           BackgroundSize(
-            WindwosSizeManger.Companion.windowsWidht,
-            WindwosSizeManger.Companion.windowsHeight,
+            windowsWidht,
+            windowsHeight,
             false,
             false,
             true,
@@ -33,8 +33,8 @@ object Consoler {
         )
       )
     }
-  val cssFile: String
-    get() = Consoler::class.java.getResource("/css/color.css").toString()
+  val cssFile: String?
+    get() = Consoler::class.java.getResource("/css/color.css")?.toString()
 
   fun setCss(id: String?, vararg pane: Region) {
     for (region in pane) {

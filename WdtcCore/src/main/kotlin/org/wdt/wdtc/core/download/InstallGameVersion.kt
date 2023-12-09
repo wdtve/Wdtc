@@ -3,10 +3,10 @@ package org.wdt.wdtc.core.download
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.ckeckVersionInfo
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.writeConfigJson
-import org.wdt.wdtc.core.utils.ModUtils.modInstallTask
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.game.config.ckeckVersionInfo
+import org.wdt.wdtc.core.game.config.writeConfigJson
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.modInstallTask
 import java.io.IOException
 
 // TODO Optimize download speed
@@ -15,7 +15,6 @@ class InstallGameVersion @JvmOverloads constructor(
   var setTextFieldText: TextInterface? = null
 ) : DownloadGameVersion(launcher, install) {
 
-  private val logmaker = InstallGameVersion::class.java.getWdtcLogger()
   fun startInstallGame() {
     try {
       val startTime = System.currentTimeMillis()
@@ -26,18 +25,16 @@ class InstallGameVersion @JvmOverloads constructor(
       }
       downloadGameFileTask()
       val task = launcher.modInstallTask
-      if (install && task != null) {
-        task.beforInstallTask()
-        task.writeVersionJsonPatches()
-        task.overwriteVersionJson()
+      if (install) {
+        task?.beforInstallTask()
+        task?.writeVersionJsonPatches()
+        task?.overwriteVersionJson()
       }
       downloadGameLibraryTask()
       val libraryFinishTime = "游戏所需类库下载完成,耗时:${System.currentTimeMillis() - startTime}ms"
       logmaker.info(libraryFinishTime)
       setTextFieldText?.setControl(libraryFinishTime)
-      if (install && task != null) {
-        task.afterDownloadTask()
-      }
+      if (install) task?.afterDownloadTask()
       downloadResourceFileTask()
       val endTime = "下载完成,耗时:${System.currentTimeMillis() - startTime}ms"
       logmaker.info(endTime)

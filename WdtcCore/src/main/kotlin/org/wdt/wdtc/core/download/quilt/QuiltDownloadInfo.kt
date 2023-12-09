@@ -5,8 +5,8 @@ import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.FileManger.wdtcCache
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
+import org.wdt.wdtc.core.manger.wdtcCache
+import org.wdt.wdtc.core.utils.KindOfMod
 import java.io.File
 import java.io.IOException
 

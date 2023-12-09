@@ -2,8 +2,7 @@ package org.wdt.wdtc.core.game.config
 
 import com.google.gson.annotations.SerializedName
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.VersionInfo.Companion.versionInfo
-import org.wdt.wdtc.core.utils.JavaUtils.runJavaHome
+import org.wdt.wdtc.core.utils.runJavaHome
 
 
 data class DefaultGameConfig @JvmOverloads constructor(

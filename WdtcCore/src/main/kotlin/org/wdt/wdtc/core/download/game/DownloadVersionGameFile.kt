@@ -3,12 +3,12 @@ package org.wdt.wdtc.core.download.game
 import org.wdt.utils.io.isFileNotExistsAndIsNotSameSize
 import org.wdt.wdtc.core.download.game.GameVersionList.GameVersionJsonObjectImpl
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
-import org.wdt.wdtc.core.manger.DownloadSourceManger.isOfficialDownloadSource
-import org.wdt.wdtc.core.manger.FileManger.versionManifestFile
-import org.wdt.wdtc.core.manger.URLManger.pistonMetaMojang
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.URLUtils.toURL
+import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.isOfficialDownloadSource
+import org.wdt.wdtc.core.manger.pistonMetaMojang
+import org.wdt.wdtc.core.manger.versionManifestFile
+import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 
 class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
@@ -18,7 +18,7 @@ class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
       return
     }
     var notFoundVersion = true
-    if (isOfficialDownloadSource()) {
+    if (isOfficialDownloadSource) {
       val versionJsonObjectList = GameVersionList().versionList
       for (versionJsonObject in versionJsonObjectList) {
         if (versionJsonObject is GameVersionJsonObjectImpl) {
@@ -40,7 +40,7 @@ class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
   @Throws(IOException::class)
   fun startDownloadGameAssetsListJson() {
     val fileDataObject = launcher.gameVersionJsonObject.assetIndex!!
-    val listJsonURL = if (isOfficialDownloadSource())
+    val listJsonURL = if (isOfficialDownloadSource)
       fileDataObject.listJsonURL
     else
       fileDataObject.listJsonURL.toString().replace(pistonMetaMojang, downloadSource.metaUrl).toURL()
@@ -53,7 +53,7 @@ class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
   @Throws(IOException::class)
   fun startDownloadVersionJar() {
     val fileDataObject = launcher.gameVersionJsonObject.downloads?.client!!
-    val jarUrl = if (isOfficialDownloadSource())
+    val jarUrl = if (isOfficialDownloadSource)
       fileDataObject.listJsonURL
     else
       downloadSource.versionClientUrl.format(launcher.versionNumber, "client").toURL()

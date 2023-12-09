@@ -9,15 +9,12 @@ import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
-import org.wdt.wdtc.core.manger.DownloadSourceManger.isNotOfficialDownloadSource
-import org.wdt.wdtc.core.manger.FileManger.wdtcCache
-import org.wdt.wdtc.core.manger.URLManger.pistonDataMojang
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
-import org.wdt.wdtc.core.utils.URLUtils.getRedirectUrl
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
-import org.wdt.wdtc.core.utils.ZipUtils.unZipBySpecifyFile
+import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
+import org.wdt.wdtc.core.manger.pistonDataMojang
+import org.wdt.wdtc.core.manger.wdtcCache
+import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.core.utils.dependency.DefaultDependency
 import org.wdt.wdtc.core.utils.dependency.DependencyDownload
 import java.io.*
@@ -30,7 +27,6 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
   ForgeDownloadInfo(launcher, forgeVersion), InstallTaskInterface {
 
   private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
-  private val logmaker = ForgeInstallTask::class.java.getWdtcLogger()
 
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
@@ -105,10 +101,10 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
         txtPath = DefaultDependency(matcher.group(1))
       }
     }
-    var txtUrl: String = launcher.versionJson.readFileToJsonObject().getJsonObject("downloads")
+    var txtUrl = launcher.versionJson.readFileToJsonObject().getJsonObject("downloads")
       .getJsonObject("client_mappings").getString("url")
     if (isNotOfficialDownloadSource) {
-      txtUrl = getRedirectUrl(txtUrl.replace(pistonDataMojang, source.dataUrl))
+      txtUrl = txtUrl.replace(pistonDataMojang, downloadSource.dataUrl).toURL().getRedirectUrl()
     }
     if (txtPath != null) {
       startDownloadTask(txtUrl, File(launcher.gameLibraryDirectory, txtPath.formJar()))
@@ -132,11 +128,10 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
     }
   }
 
-  val clientLzmaPath: File
-    get() = File(wdtcCache, "/data/client.lzma")
+  private val clientLzmaPath: File = File(wdtcCache, "/data/client.lzma")
 
 
-  fun cleanString(str: String): String {
+  private fun cleanString(str: String): String {
     return str.cleanStrInString("{").cleanStrInString("}").cleanStrInString("[").cleanStrInString("]")
   }
 

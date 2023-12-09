@@ -156,8 +156,6 @@ class GameVersionJsonObject {
     override fun toString(): String {
       return "Downloads(client=$client, clientMappings=$clientMappings, server=$server, serverMappings=$serverMappings)"
     }
-
-
   }
 
   override fun toString(): String {

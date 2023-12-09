@@ -12,7 +12,7 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile.Companion.startDownloadVersionManifestJsonFile
 import org.wdt.wdtc.core.download.game.GameVersionList
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.manger.GameFileManger.Companion.downloadVersionManifestJsonFileTask
+import org.wdt.wdtc.core.manger.downloadVersionManifestJsonFileTask
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.Consoler.setTopGrid
 
@@ -62,7 +62,7 @@ object GameVersionListWindow {
     }
     sp.content = list
     sp.layoutX = 155.0
-    sp.prefHeight = WindwosSizeManger.Companion.windowsHeight
+    sp.prefHeight = windowsHeight
     sp.prefWidth = 461.0
     pane.children.addAll(sp, back, tips, refreshButton)
     pane.setStylesheets()

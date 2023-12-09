@@ -14,13 +14,13 @@ import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.newInputStream
-import org.wdt.wdtc.core.auth.User
-import org.wdt.wdtc.core.auth.User.Companion.setUserToJson
-import org.wdt.wdtc.core.auth.UsersList.getUser
-import org.wdt.wdtc.core.auth.UsersList.userList
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Offline
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Yggdrasil
-import org.wdt.wdtc.core.manger.FileManger.userListFile
+import org.wdt.wdtc.core.auth.getUser
+import org.wdt.wdtc.core.auth.preferredUser
+import org.wdt.wdtc.core.auth.setUserToJson
+import org.wdt.wdtc.core.auth.userList
+import org.wdt.wdtc.core.manger.userListFile
 import org.wdt.wdtc.ui.window.Consoler
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.ExceptionWindow
@@ -33,10 +33,9 @@ object UserListPane {
     scrollPane.setPrefSize(600.0, 400.0)
     val vBox = VBox()
     vBox.setPrefSize(595.0, 395.0)
-    val users = userList
-    if (users.isNotEmpty()) {
-      for (user in users) {
-        val userName = user.userName
+    if (userList.isNotEmpty()) {
+      for (newUser in userList) {
+        val userName = newUser.userName
         val userPane = AnchorPane()
         userPane.setPrefSize(595.0, 40.0)
         val enter = RadioButton()
@@ -47,11 +46,11 @@ object UserListPane {
           setUserToJson(getUser(userName!!))
           setUserList(pane)
         }
-        if (user == User.user) {
+        if (newUser == preferredUser) {
           enter.isSelected = true
         }
         val image: Image? = try {
-          Image(user.headFile?.newInputStream())
+          Image(newUser.headFile?.newInputStream())
         } catch (e: IOException) {
           ExceptionWindow.setErrorWin(e)
           null
@@ -62,11 +61,11 @@ object UserListPane {
         AnchorPane.setTopAnchor(head, 15.0)
         AnchorPane.setBottomAnchor(head, 15.0)
         AnchorPane.setLeftAnchor(head, 50.0)
-        val userNameLabel = Label(user.userName)
+        val userNameLabel = Label(newUser.userName)
         AnchorPane.setTopAnchor(userNameLabel, 10.0)
         AnchorPane.setLeftAnchor(userNameLabel, 96.0)
         val userTypeLabel = Label()
-        when (user.type) {
+        when (newUser.type) {
           Offline -> userTypeLabel.text = "离线账户"
           Yggdrasil -> userTypeLabel.text = "Yggdrasil外置登录"
           else -> TODO()

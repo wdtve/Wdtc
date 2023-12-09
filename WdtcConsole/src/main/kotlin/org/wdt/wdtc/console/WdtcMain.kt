@@ -9,7 +9,7 @@ import org.wdt.wdtc.core.utils.WdtcLogger
 import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
 
 object WdtcMain {
-  private val logmaker = WdtcLogger.getLogger(WdtcMain::class.java)
+  private val logmaker = WdtcLogger.getLogger()
 
   init {
     TaskManger.ckeckVMConfig()

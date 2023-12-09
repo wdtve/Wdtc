@@ -5,8 +5,8 @@ import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.game.VersionNotFoundException
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.modDownloadInfo
+import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.modDownloadInfo
 
 data class VersionInfo @JvmOverloads constructor(
   val versionNumber: String,
@@ -36,10 +36,7 @@ data class VersionInfo @JvmOverloads constructor(
       }
       return launcher
     }
-
-  companion object {
-    val Launcher.versionInfo
-      get() = VersionInfo(this)
-  }
-
 }
+
+val Launcher.versionInfo
+  get() = VersionInfo(this)

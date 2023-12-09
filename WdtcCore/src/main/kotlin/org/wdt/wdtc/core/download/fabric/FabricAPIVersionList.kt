@@ -6,7 +6,7 @@ import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.URLUtils.getURLToString
+import org.wdt.wdtc.core.utils.getURLToString
 import java.io.IOException
 import java.net.URL
 import java.util.*

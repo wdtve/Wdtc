@@ -3,10 +3,10 @@ package org.wdt.wdtc.core.auth.yggdrasil
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
 import org.wdt.utils.gson.parseObject
-import org.wdt.wdtc.core.manger.FileManger.minecraftComSkin
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
+import org.wdt.wdtc.core.manger.minecraftComSkin
 import org.wdt.wdtc.core.utils.SkinUtils
-import org.wdt.wdtc.core.utils.URLUtils.getURLToString
+import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.File
 import java.io.IOException
 import java.net.URL

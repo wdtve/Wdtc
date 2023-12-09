@@ -4,10 +4,7 @@ import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.newOutputStream
 import org.wdt.utils.io.toFile
 import org.wdt.utils.io.touch
-import org.wdt.wdtc.core.manger.FileManger
-import org.wdt.wdtc.core.utils.URLUtils.newInputStream
-import org.wdt.wdtc.core.utils.URLUtils.toURL
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.wdtcCache
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -28,13 +25,11 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
     }
   }
 
-  @Throws(IOException::class)
   fun startDownloadFile() {
     downloadFile.touch()
     val downloadFileOutput = downloadFile.newOutputStream()
     val urlFileInput = srcousFileURL.newInputStream()
     var donwloaded: Double
-    Thread.currentThread().setName(downloadFile.getName())
     val data = ByteArray(1024)
     while (urlFileInput.read(data, 0, 1024).also { donwloaded = it.toDouble() } >= 0) {
       if (isDownloadProcess) {
@@ -49,46 +44,38 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
     urlFileInput.close()
   }
 
-  companion object {
-    @JvmField
-    val StopProcess = File(FileManger.wdtcCache, "process")
-    private val logmaker = DownloadUtils::class.java.getWdtcLogger()
+}
 
-    @JvmStatic
-    @get:Throws(IOException::class)
-    val isDownloadProcess: Boolean
-      get() = StopProcess.isFileExists()
+val StopProcess = File(wdtcCache, "process")
+val isDownloadProcess: Boolean
+  get() = StopProcess.isFileExists()
 
-    @JvmStatic
-    fun startDownloadTask(url: String, path: String) {
-      startDownloadTask(url.toURL(), path.toFile())
-    }
+fun startDownloadTask(url: String, path: String) {
+  startDownloadTask(url.toURL(), path.toFile())
+}
 
-    @JvmStatic
-    fun startDownloadTask(url: String, file: File) {
-      startDownloadTask(url.toURL(), file)
-    }
+fun startDownloadTask(url: String, file: File) {
+  startDownloadTask(url.toURL(), file)
+}
 
-    @JvmStatic
-    fun startDownloadTask(url: URL, file: File) {
-      val now = System.currentTimeMillis()
-      val downloadUtils = DownloadUtils(file, url)
-      try {
-        logmaker.info("Task Start: $url")
-        downloadUtils.manyTimesToTryDownload(5)
-        logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
-      } catch (e: Exception) {
-        logmaker.warn("Task: $url", e)
-        try {
-          logmaker.info("Task: $url Start retry")
-          downloadUtils.manyTimesToTryDownload(5)
-          logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
-        } catch (exception: Exception) {
-          if (file.delete()) {
-            logmaker.error("Task: $url Error", exception)
-          }
-        }
+fun startDownloadTask(url: URL, file: File) {
+  val now = System.currentTimeMillis()
+  val downloadUtils = DownloadUtils(file, url)
+  try {
+    logmaker.info("Task Start: $url")
+    downloadUtils.manyTimesToTryDownload(5)
+    logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
+  } catch (e: Exception) {
+    logmaker.warn("Task: $url", e)
+    try {
+      logmaker.info("Task: $url Start retry")
+      downloadUtils.manyTimesToTryDownload(5)
+      logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
+    } catch (exception: Exception) {
+      if (file.delete()) {
+        logmaker.error("Task: $url Error", exception)
       }
     }
   }
 }
+

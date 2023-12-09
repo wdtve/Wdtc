@@ -11,13 +11,9 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.sizeOfDirectory
-import org.wdt.wdtc.core.manger.DownloadSourceManger.DownloadSourceList
-import org.wdt.wdtc.core.manger.FileManger.settingFile
-import org.wdt.wdtc.core.manger.FileManger.wdtcCache
-import org.wdt.wdtc.core.manger.FileManger.wdtcConfig
-import org.wdt.wdtc.core.manger.SettingManger
-import org.wdt.wdtc.core.utils.URLUtils.openSomething
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.manger.*
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.openSomething
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.Consoler.setTopGrid
 import java.io.File
@@ -25,17 +21,15 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-object SettingWindow : SettingManger() {
-  private val logmaker = getLogger(SettingWindow::class.java)
+object SettingWindow {
 
   @Throws(IOException::class)
   fun setSettingWin(MainStage: Stage) {
-    val setting = setting
     val back = JFXButton("返回")
     back.onAction = EventHandler { event: ActionEvent? ->
       val win = HomeWindow()
       win.setHome(MainStage)
-      logmaker.info(Companion.setting)
+      logmaker.info(setting)
     }
     back.styleClass.add("BlackBorder")
     MainStage.title = Consoler.getWindowsTitle("Setting")
@@ -55,7 +49,7 @@ object SettingWindow : SettingManger() {
         try {
           val fileChooser = DirectoryChooser()
           fileChooser.title = "选择游戏文件夹"
-          fileChooser.initialDirectory = Companion.setting.defaultGamePath
+          fileChooser.initialDirectory = setting.defaultGamePath
           val file = fileChooser.showDialog(MainStage)
           if (Objects.nonNull(file)) {
             setting.defaultGamePath = file
@@ -192,7 +186,7 @@ object SettingWindow : SettingManger() {
           val formatter = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
           val srcFile = File(wdtcCache, "logs/Wdtc.log")
           val logFile = File(
-            logDirectory.getAbsoluteFile(),
+            logDirectory.canonicalPath,
             "Wdtc-Demo-" + formatter.format(calendar.time) + ".log"
           )
           FileUtils.copyFile(srcFile, logFile)

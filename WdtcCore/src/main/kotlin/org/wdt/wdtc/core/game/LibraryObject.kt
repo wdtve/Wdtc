@@ -5,8 +5,8 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.io.IOUtils
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
 import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.logmaker
 import java.net.URL
 
 class LibraryObject {
@@ -56,7 +56,6 @@ class LibraryObject {
   }
 
   companion object {
-    private val logger = getLogger(LibraryObject::class.java)
     fun getLibraryObject(dependency: DependencyDownload, defaultUrl: String): LibraryObject {
       val artifact = Artifact()
       val url = dependency.libraryUrl
@@ -70,11 +69,10 @@ class LibraryObject {
       val libraryObject = LibraryObject()
       libraryObject.libraryName = dependency.libraryName
       libraryObject.downloads = downloads
-      logger.info(libraryObject)
+      logmaker.info(libraryObject)
       return libraryObject
     }
 
-    @JvmStatic
     fun getLibraryObject(jsonObject: JsonObject): LibraryObject {
       return jsonObject.parseObject()
     }

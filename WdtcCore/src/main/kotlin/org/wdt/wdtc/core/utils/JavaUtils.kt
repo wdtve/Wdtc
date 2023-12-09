@@ -1,27 +1,24 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.*
-import org.wdt.wdtc.core.manger.SettingManger
-import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
+import org.wdt.utils.io.IOUtils
+import org.wdt.utils.io.isFileExists
+import org.wdt.utils.io.isFileNotExists
+import org.wdt.utils.io.toFile
+import org.wdt.wdtc.core.manger.putSettingToFile
+import org.wdt.wdtc.core.manger.setting
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
 
-object JavaUtils {
-  private val logmaker = WdtcLogger.getLogger(JavaUtils::class.java)
+val runJavaHome: String = JavaUtils.getJavaExePath(File(System.getProperty("java.home")))
 
-  @JvmStatic
-  val runJavaHome: String
-    get() = getJavaExePath(File(System.getProperty("java.home")))
+object JavaUtils {
 
   @JvmStatic
   fun main(args: Array<String>) {
     try {
       for (s in args) {
-        if (DownloadUtils.isDownloadProcess) {
-          break
-        }
+        if (isDownloadProcess) break
         getPotentialJava(s)
       }
       logmaker.info("Find Java Done")
@@ -30,16 +27,14 @@ object JavaUtils {
     }
   }
 
-  @Throws(IOException::class)
   private fun getPotentialJava(key: String) {
     val process = ProcessBuilder("reg", "query", key).start()
-    val setting = SettingManger.setting
     val newJavaList: MutableSet<JavaInfo> = setting.javaPath
     for (s in IOUtils.readLines(process.inputStream)) {
       if (s.startsWith(key)) {
         for (map in getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
-          if (DownloadUtils.isDownloadProcess) return
-          val newInfo = JavaInfo(File(map["JavaPath"]))
+          if (isDownloadProcess) return
+          val newInfo = JavaInfo(File(map["JavaPath"]!!))
           if (newJavaList.add(newInfo)) {
             logmaker.info("Find Java : ${newInfo.javaExeFile}, Version : ${newInfo.versionNumber}")
           }
@@ -47,10 +42,9 @@ object JavaUtils {
       }
     }
     setting.javaPath = newJavaList
-    SettingManger.putSettingToFile(setting)
+    putSettingToFile(setting)
   }
 
-  @Throws(IOException::class)
   private fun getPotentialJavaFolders(key: String): List<String> {
     val list: MutableList<String> = ArrayList()
     val process = ProcessBuilder("reg", "query", key).start()
@@ -62,14 +56,13 @@ object JavaUtils {
     return list
   }
 
-  @Throws(IOException::class)
   private fun getPotentialJavaHome(list: List<String>): List<String> {
     val javaHomeList: MutableList<String> = ArrayList()
     val pattern = Pattern.compile("\\s+JavaHome\\s+REG_SZ\\s+(.+)")
     for (key in list) {
       val process = ProcessBuilder("reg", "query", key, "/v", "JavaHome").start()
       for (s in IOUtils.readLines(process.inputStream)) {
-        val javaHomeCleaned = s.cleanStrInString(StringUtils.STRING_SPACE)
+        val javaHomeCleaned = s.cleanStrInString(STRING_SPACE)
         if (javaHomeCleaned.startsWith("JavaHome")) {
           val matcher = pattern.matcher(s)
           if (matcher.find()) {
@@ -81,8 +74,7 @@ object JavaUtils {
     return javaHomeList
   }
 
-  @Throws(IOException::class)
-  fun getJavaExeAndVersion(list: List<String>): List<Map<String, String?>> {
+  private fun getJavaExeAndVersion(list: List<String>): List<Map<String, String?>> {
     val javaList: MutableList<Map<String, String?>> = ArrayList()
     for (path in list) {
       val javaPath = getJavaExePath(File(path))
@@ -100,7 +92,6 @@ object JavaUtils {
     return javaList
   }
 
-  @JvmStatic
   fun getJavaVersion(javaPath: String): String? {
     try {
       val process = Runtime.getRuntime().exec(arrayOf(javaPath, "-XshowSettings:properties", "-version"))
@@ -139,22 +130,13 @@ object JavaUtils {
   }
 
   enum class JavaTips {
-    JDK,
-    JRE;
+    JDK, JRE;
 
     companion object {
-      fun isJRE(javaHome: File): Boolean {
-        return try {
-          File(javaHome, "bin/javac.exe").isFileNotExists()
-        } catch (e: IOException) {
-          logmaker.error(e.getExceptionMessage())
-          false
-        }
-      }
+      private fun isJRE(javaHome: File): Boolean = File(javaHome, "bin/javac.exe").isFileNotExists()
 
-      fun getJavaTips(javaHomeFile: File): JavaTips {
-        return if (isJRE(javaHomeFile)) JRE else JDK
-      }
+      fun getJavaTips(javaHomeFile: File): JavaTips = if (isJRE(javaHomeFile)) JRE else JDK
+
     }
   }
 

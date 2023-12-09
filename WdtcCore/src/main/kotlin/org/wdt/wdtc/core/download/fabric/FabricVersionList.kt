@@ -5,8 +5,8 @@ import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
-import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
-import org.wdt.wdtc.core.utils.URLUtils.getURLToString
+import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.utils.getURLToString
 import java.io.IOException
 import java.util.*
 

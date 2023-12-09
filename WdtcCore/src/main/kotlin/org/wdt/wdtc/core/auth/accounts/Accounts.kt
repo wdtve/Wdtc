@@ -1,31 +1,32 @@
 package org.wdt.wdtc.core.auth.accounts
 
-import org.wdt.wdtc.core.auth.User.Companion.user
-import org.wdt.wdtc.core.manger.FileManger.authlibInjector
-import org.wdt.wdtc.core.manger.URLManger.littleskinApi
-import org.wdt.wdtc.core.utils.StringUtils
-import org.wdt.wdtc.core.utils.StringUtils.appendForString
+import org.wdt.wdtc.core.auth.preferredUser
+import org.wdt.wdtc.core.manger.authlibInjector
+import org.wdt.wdtc.core.manger.littleskinApiUrl
+import org.wdt.wdtc.core.utils.STRING_EMPTY
+import org.wdt.wdtc.core.utils.STRING_SPACE
+import org.wdt.wdtc.core.utils.appendForString
 
 class Accounts {
   private val type: AccountsType
 
   init {
-    type = if (user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
+    type = if (preferredUser.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
   }
 
-  val ifAccountsIsOffline = type != AccountsType.Yggdrasil
+  private val ifAccountsIsOffline = type != AccountsType.Yggdrasil
 
   val jvmCommand: String
     get() = if (ifAccountsIsOffline)
-      StringUtils.STRING_EMPTY
-    else StringUtils.STRING_SPACE.appendForString(
+      STRING_EMPTY
+    else STRING_SPACE.appendForString(
       "-javaagent:",
       authlibInjector,
       "=",
-      littleskinApi,
-      StringUtils.STRING_SPACE,
+      littleskinApiUrl,
+      STRING_SPACE,
       "-Dauthlibinjector.yggdrasil.prefetched=",
-      user.base64Data
+      preferredUser.base64Data
     )
 
   enum class AccountsType {

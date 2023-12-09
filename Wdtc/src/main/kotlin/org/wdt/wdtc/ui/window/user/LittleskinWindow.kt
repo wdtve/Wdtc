@@ -6,15 +6,14 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.Pane
-import org.wdt.wdtc.core.auth.UsersList.addUser
+import org.wdt.wdtc.core.auth.addUser
 import org.wdt.wdtc.core.auth.yggdrasil.YggdrasilAccounts
-import org.wdt.wdtc.core.manger.URLManger.littleskinUrl
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.manger.littleskinUrl
+import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.ui.window.ExceptionWindow
 import java.io.IOException
 
 object LittleskinWindow {
-  private val logmaker = getLogger(LittleskinWindow::class.java)
   fun setLittleskinWin(pane: Pane) {
     pane.children.clear()
     val littleskinTitle = Label("Littleskin外置登录")

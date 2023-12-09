@@ -6,7 +6,7 @@ import java.io.IOException
 
 class GetGameNeedLibraryFile(private val launcher: Launcher) {
   @get:Throws(IOException::class)
-  val fileList: List<LibraryFile>
+  val libraryList: List<LibraryFile>
     get() {
       val fileList: MutableList<LibraryFile> = ArrayList()
       val versionJsonObject = launcher.gameVersionJsonObject

@@ -2,7 +2,7 @@ package org.wdt.wdtc.core.launch
 
 import org.wdt.utils.io.IOUtils
 import org.wdt.wdtc.core.download.infterface.TextInterface
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.utils.logmaker
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -12,7 +12,6 @@ import kotlin.concurrent.thread
 
 class LaunchProcess(private val process: Process) {
   var setUIText: TextInterface? = null
-  private val logmaker = LaunchProcess::class.java.getWdtcLogger()
   fun startLaunchGame() {
     try {
       thread(name = "Read info inputStream") { getRunInfo(process.inputStream) }

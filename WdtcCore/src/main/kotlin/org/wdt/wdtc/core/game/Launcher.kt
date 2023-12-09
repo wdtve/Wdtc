@@ -7,9 +7,9 @@ import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
 import org.wdt.wdtc.core.manger.GameFileManger
-import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.setModTask
+import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.setModTask
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -52,26 +52,36 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
     kind = KindOfMod.ORIGINAL
   }
 
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other !is Launcher) return false
-    return if (other.versionNumber == versionNumber) {
-      other.kind === kind
-    } else false
-  }
-
-  override fun hashCode(): Int {
-    return Objects.hash(versionNumber, kind)
-  }
 
   override fun toString(): String {
     return "Launcher(versionNumber=$versionNumber, kind=$kind)"
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
 
-  companion object {
-    val preferredLauncher: Launcher?
-      get() = if (setting.preferredVersion != null) Launcher(setting.preferredVersion!!).setModTask() else null
+    other as Launcher
 
+    if (versionNumber != other.versionNumber) return false
+    if (kind != other.kind) return false
+    if (fabricModInstallInfo != other.fabricModInstallInfo) return false
+    if (forgeModDownloadInfo != other.forgeModDownloadInfo) return false
+    if (quiltModDownloadInfo != other.quiltModDownloadInfo) return false
+
+    return true
   }
+
+  override fun hashCode(): Int {
+    var result = fabricModInstallInfo?.hashCode() ?: 0
+    result = 31 * result + (forgeModDownloadInfo?.hashCode() ?: 0)
+    result = 31 * result + (quiltModDownloadInfo?.hashCode() ?: 0)
+    result = 31 * result + kind.hashCode()
+    result = 31 * result + versionNumber.hashCode()
+    return result
+  }
+
 }
+
+val preferredLauncher: Launcher?
+  get() = if (setting.preferredVersion != null) Launcher(setting.preferredVersion!!).setModTask() else null

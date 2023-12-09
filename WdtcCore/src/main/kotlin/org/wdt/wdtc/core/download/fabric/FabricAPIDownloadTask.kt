@@ -6,12 +6,13 @@ import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList.FabricAPIVersionJs
 import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList.FabricAPIVersionJsonObjectImpl.FilesObject
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.URLUtils.getURLToString
+import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.File
 import java.io.IOException
 
 class FabricAPIDownloadTask(private val launcher: Launcher, val fabricAPIVersionNumber: String?) {
+
   private var versionJsonObjectInterface: VersionJsonObjectInterface? = null
   private val versionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version"
 
@@ -37,7 +38,7 @@ class FabricAPIDownloadTask(private val launcher: Launcher, val fabricAPIVersion
     }
   }
 
-  fun downloadFabricAPITask(filesObject: FilesObject) {
-    startDownloadTask(filesObject.jarDownloadURL!!, File(launcher.gameModsPath, filesObject.jarFileName))
+  private fun downloadFabricAPITask(filesObject: FilesObject) {
+    startDownloadTask(filesObject.jarDownloadURL!!, File(launcher.gameModsPath, filesObject.jarFileName!!))
   }
 }

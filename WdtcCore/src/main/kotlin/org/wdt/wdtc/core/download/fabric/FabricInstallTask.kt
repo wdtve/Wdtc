@@ -1,18 +1,16 @@
 package org.wdt.wdtc.core.download.fabric
 
 import org.wdt.utils.gson.*
-import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
+import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.IOException
 
 class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String) :
   FabricDonwloadInfo(launcher, fabricVersionNumber), InstallTaskInterface {
-  private val source: DownloadSourceInterface = downloadSource
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
     launcher,
@@ -28,7 +26,7 @@ class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String) :
     for (i in 0 until fabricLibraryList.size()) {
       val libraryObject = fabricLibraryList.getJsonObject(i)
       val dependency = DependencyDownload(libraryObject.getString("name"))
-      dependency.defaultUrl = source.fabricLibraryUrl
+      dependency.defaultUrl = downloadSource.fabricLibraryUrl
       dependency.downloadPath = launcher.gameLibraryDirectory
       libraryObjectList.add(LibraryObject.getLibraryObject(dependency, libraryObject.getString("url")))
     }

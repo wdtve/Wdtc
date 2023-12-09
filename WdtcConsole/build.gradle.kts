@@ -1,5 +1,5 @@
 plugins {
-  kotlin("jvm") version "1.9.20"
+  kotlin("jvm") version "1.9.21"
   id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -13,6 +13,7 @@ dependencies {
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("commons-cli:commons-cli:1.6.0")
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
   testImplementation("org.junit.jupiter:junit-jupiter")

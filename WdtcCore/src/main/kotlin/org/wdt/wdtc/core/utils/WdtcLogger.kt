@@ -1,53 +1,53 @@
+@file:JvmName("WdtcLogger")
+
 package org.wdt.wdtc.core.utils
 
 import org.apache.log4j.*
-import org.wdt.wdtc.core.manger.FileManger
-import org.wdt.wdtc.core.manger.VMManger
+import org.wdt.wdtc.core.manger.isDebug
+import org.wdt.wdtc.core.manger.isUI
+import org.wdt.wdtc.core.manger.wdtcConfig
 import java.io.PrintWriter
 import java.io.StringWriter
 
-object WdtcLogger {
-  @JvmStatic
-  fun <T> getLogger(clazz: Class<T>): Logger {
-    val logmaker = Logger.getLogger(clazz.getName())
+val logmaker: Logger
+  get() {
+    // 23333333
+    val dictChars = mutableListOf<Char>().apply { "I love Kotlin very much".forEach { this.add(it) } }  //Yes, indeed
+    val randomStr = StringBuilder().apply { (1..((10..30).random())).onEach { append(dictChars.random()) } }
+    val logmaker: Logger = Logger.getLogger(randomStr.toString())
     logmaker.addAppender(fileAppender)
-    if (VMManger.isUI) {
-      logmaker.addAppender(consoleAppender)
-    }
+    if (isUI) logmaker.addAppender(consoleAppender)
     return logmaker
   }
 
-  private val fileAppender: RollingFileAppender
-    get() {
-      val fileAppender = RollingFileAppender()
-      fileAppender.setFile("${FileManger.wdtcConfig}/logs/Wdtc.log")
-      fileAppender.append = true
-      fileAppender.layout = PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p]:%t * %m%n")
-      fileAppender.setMaxFileSize("10MB")
-      fileAppender.maxBackupIndex = 10
-      fileAppender.threshold = Level.DEBUG
-      fileAppender.activateOptions()
-      return fileAppender
-    }
-  private val consoleAppender: ConsoleAppender
-    get() {
-      val consoleAppender = ConsoleAppender(PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n"))
-      consoleAppender.setTarget("System.err")
-      consoleAppender.immediateFlush = true
-      consoleAppender.encoding = "UTF-8"
-      consoleAppender.threshold = if (VMManger.isDebug) Level.DEBUG else Level.INFO
-      consoleAppender.activateOptions()
-      return consoleAppender
-    }
 
-  @JvmStatic
-  fun Throwable.getExceptionMessage(): String {
-    val sw = StringWriter()
-    this.printStackTrace(PrintWriter(sw, true))
-    return sw.buffer.toString()
+val fileAppender: RollingFileAppender
+  get() {
+    val fileAppender = RollingFileAppender()
+    fileAppender.setFile("${wdtcConfig}/logs/Wdtc.log")
+    fileAppender.append = true
+    fileAppender.layout = PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p]:%t * %m%n")
+    fileAppender.setMaxFileSize("10MB")
+    fileAppender.maxBackupIndex = 10
+    fileAppender.threshold = Level.DEBUG
+    fileAppender.activateOptions()
+    return fileAppender
+  }
+val consoleAppender: ConsoleAppender
+  get() {
+    val consoleAppender = ConsoleAppender(PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n"))
+    consoleAppender.setTarget("System.err")
+    consoleAppender.immediateFlush = true
+    consoleAppender.encoding = "UTF-8"
+    consoleAppender.threshold = if (isDebug) Level.DEBUG else Level.INFO
+    consoleAppender.activateOptions()
+    return consoleAppender
   }
 
-  fun <T> Class<T>.getWdtcLogger(): Logger {
-    return getLogger(this)
-  }
+fun Throwable.getExceptionMessage(): String {
+  val sw = StringWriter()
+  this.printStackTrace(PrintWriter(sw, true))
+  return sw.buffer.toString()
 }
+
+

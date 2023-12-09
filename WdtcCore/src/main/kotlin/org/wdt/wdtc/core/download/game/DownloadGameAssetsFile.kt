@@ -8,16 +8,14 @@ import org.wdt.utils.io.isFileNotExistsAndIsNotSameSize
 import org.wdt.wdtc.core.download.SpeedOfProgress
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.manger.DownloadSourceManger.downloadSource
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.isDownloadProcess
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
-import org.wdt.wdtc.core.utils.URLUtils.toURL
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.utils.isDownloadProcess
+import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.startThread
+import org.wdt.wdtc.core.utils.toURL
 import java.io.File
 
 open class DownloadGameAssetsFile(val launcher: Launcher) {
-  private val logmaker = DownloadGameAssetsFile::class.java.getWdtcLogger()
   fun startDownloadAssetsFiles() {
     val maps = launcher.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap()
     val progress = SpeedOfProgress(maps.size)
@@ -43,7 +41,7 @@ open class DownloadGameAssetsFile(val launcher: Launcher) {
     val hashSplicing: String
       get() = "$hashHead/$hash"
     val hashHead: String
-      get() = hash!!.substring(0, 2)
+      get() = hash?.substring(0, 2)!!
   }
 
   class DownloadGameAssetsFileTask(

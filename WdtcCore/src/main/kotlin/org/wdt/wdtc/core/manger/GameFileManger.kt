@@ -1,12 +1,13 @@
 package org.wdt.wdtc.core.manger
 
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.isFileOlder
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
 import org.wdt.wdtc.core.game.GameVersionJsonObject
-import org.wdt.wdtc.core.manger.FileManger.versionManifestFile
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -61,21 +62,18 @@ open class GameFileManger : GameDirectoryManger {
     get() = File(gameDirectory, "Launcher_profiles.json")
   val versionConfigFile: File
     get() = File(versionDirectory, "config.json")
+}
 
-  companion object {
-    @JvmStatic
-    fun downloadVersionManifestJsonFileTask() {
-      val calendar = Calendar.getInstance()
-      calendar.setTime(Date())
-      calendar.add(Calendar.DATE, -7)
-      try {
-        if (versionManifestFile.isFileNotExists() ||
-          versionManifestFile.isFileOlder(calendar.time)
-        ) {
-          DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
-        }
-      } catch (e: IOException) {
-        throw RuntimeException(e)
+fun downloadVersionManifestJsonFileTask() {
+  val calendar = Calendar.getInstance()
+  calendar.time = Date()
+  calendar.add(Calendar.DATE, -7)
+  if (versionManifestFile.isFileNotExists() ||
+    versionManifestFile.isFileOlder(calendar.time)
+  ) {
+    runBlocking {
+      launch {
+        DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
       }
     }
   }

@@ -1,28 +1,26 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.wdtc.core.utils.StringUtils
+import org.wdt.wdtc.core.utils.STRING_SPACE
 import java.io.File
-import java.io.IOException
 
 abstract class AbstractGameCommand {
   protected val commandBuilder: StringBuilder = StringBuilder()
 
-  @Throws(IOException::class)
   abstract fun getCommand(): StringBuilder
   protected fun nonBreakingSpace(o: Any) {
-    commandBuilder.append(o).append(StringUtils.STRING_SPACE)
+    commandBuilder.append(o).append(STRING_SPACE)
   }
 
   protected fun insertclasspathSeparator(file: File) {
     insertclasspathSeparator(file.absolutePath)
   }
 
-  protected fun insertclasspathSeparator(str: String) {
+  private fun insertclasspathSeparator(str: String) {
     commandBuilder.append(str).append(";")
   }
 
   protected fun insertSpace(str: String?) {
-    commandBuilder.append(str).append(StringUtils.STRING_SPACE)
+    commandBuilder.append(str).append(STRING_SPACE)
   }
 
   protected fun nonBreakingSpace(str: String, string: Any) {

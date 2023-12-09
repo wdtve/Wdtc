@@ -9,11 +9,10 @@ import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.logmaker
 
 object ExceptionWindow {
-  private val logmaker = getLogger(ExceptionWindow::class.java)
   fun setErrorWin(e: Throwable) {
     logmaker.error("Error", e)
     setWin(e.getExceptionMessage(), "发生错误!")

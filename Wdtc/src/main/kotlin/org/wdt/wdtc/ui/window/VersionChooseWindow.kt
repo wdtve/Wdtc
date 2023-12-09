@@ -11,14 +11,14 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import org.wdt.wdtc.core.game.DownloadedGameVersion.getGameVersionList
-import org.wdt.wdtc.core.game.DownloadedGameVersion.isDownloadedGame
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.Launcher.Companion.preferredLauncher
+import org.wdt.wdtc.core.game.getGameVersionList
+import org.wdt.wdtc.core.game.isDownloadedGame
+import org.wdt.wdtc.core.game.preferredLauncher
 import org.wdt.wdtc.core.manger.GameDirectoryManger
-import org.wdt.wdtc.core.manger.SettingManger.Companion.putSettingToFile
-import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
+import org.wdt.wdtc.core.manger.putSettingToFile
+import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.Consoler.setTopLowerLeft
 import org.wdt.wdtc.ui.window.Consoler.setTopLowerRight
@@ -59,7 +59,6 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
         size.modifyWindwosSize(pane, versionId, modKind)
         size.modifyWindwosSize(versionList, pane)
         versionId.onAction = EventHandler { event: ActionEvent? ->
-          val setting = setting
           setting.preferredVersion = versionId.text
           putSettingToFile(setting)
           val win = HomeWindow(gameVersion)

@@ -8,18 +8,17 @@ import org.wdt.wdtc.core.game.GetGameNeedLibraryFile
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.LibraryObject
 import org.wdt.wdtc.core.launch.GameLibraryData
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.ThreadUtils.startThread
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.startThread
 import java.io.IOException
 import java.nio.file.Files
 
 class DownloadGameClass(private val launcher: Launcher) : GameLibraryData(launcher) {
-  private val logmaker = DownloadGameClass::class.java.getWdtcLogger()
   fun startDownloadLibraryFile() {
     try {
       Files.createDirectories(launcher.versionNativesPath.toPath())
-      val fileList = GetGameNeedLibraryFile(launcher).fileList
+      val fileList = GetGameNeedLibraryFile(launcher).libraryList
       val speed = SpeedOfProgress(fileList.size)
       for (libraryFile in fileList) {
         if (libraryFile.nativesLibrary) {

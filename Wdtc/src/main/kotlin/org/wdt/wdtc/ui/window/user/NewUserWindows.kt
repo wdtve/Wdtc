@@ -10,8 +10,8 @@ import javafx.scene.layout.Pane
 import javafx.stage.Modality
 import javafx.stage.Stage
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
-import org.wdt.wdtc.core.manger.URLManger.littleskinUrl
-import org.wdt.wdtc.core.utils.URLUtils.openSomething
+import org.wdt.wdtc.core.manger.littleskinUrl
+import org.wdt.wdtc.core.utils.openSomething
 import org.wdt.wdtc.ui.window.Consoler
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.Consoler.setTopLowerLeft

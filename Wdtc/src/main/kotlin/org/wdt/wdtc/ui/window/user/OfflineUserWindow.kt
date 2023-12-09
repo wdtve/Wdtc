@@ -6,15 +6,14 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.Pane
-import org.wdt.wdtc.core.auth.UsersList.addUser
 import org.wdt.wdtc.core.auth.accounts.OfflineAccounts
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.auth.addUser
+import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.ui.window.ExceptionWindow
 import java.io.IOException
 import java.util.regex.Pattern
 
 object OfflineUserWindow {
-  private val loggmaker = getLogger(OfflineUserWindow::class.java)
   fun setUserWin(pane: Pane) {
     pane.children.clear()
     pane.setPrefSize(600.0, 400.0)
@@ -40,7 +39,7 @@ object OfflineUserWindow {
         if (isQualified(username)) {
           val offline = OfflineAccounts(username)
           addUser(offline.user)
-          loggmaker.info("离线账户" + username + "注册成功")
+          logmaker.info("离线账户" + username + "注册成功")
           UserListPane.setUserList(pane)
         } else {
           OKRegister.text = "不能带中文字符哦"

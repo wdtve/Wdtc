@@ -1,9 +1,9 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.wdtc.core.auth.User.Companion.user
+import org.wdt.wdtc.core.auth.preferredUser
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
-import org.wdt.wdtc.core.manger.VMManger.launcherVersion
+import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.launcherVersion
 import java.io.IOException
 
 class GameCLICommand(private val launcher: Launcher) : AbstractGameCommand() {
@@ -27,7 +27,7 @@ class GameCLICommand(private val launcher: Launcher) : AbstractGameCommand() {
   private val dataMap
     get() = mutableMapOf(
       "\${auth_player_name}" to
-          user.userName,
+          preferredUser.userName,
       "\${version_name}" to
           launcher.versionNumber,
       "\${game_directory}" to
@@ -37,11 +37,11 @@ class GameCLICommand(private val launcher: Launcher) : AbstractGameCommand() {
       "\${assets_index_name}" to
           launcher.gameVersionJsonObject.assets,
       "\${auth_uuid}" to
-          user.uuid,
+          preferredUser.uuid,
       "\${auth_access_token}" to
-          user.accessToken,
+          preferredUser.accessToken,
       "\${user_type}" to
-          user.type.toString(),
+          preferredUser.type.toString(),
       "\${version_type}" to
           "Wdtc-$launcherVersion"
     )

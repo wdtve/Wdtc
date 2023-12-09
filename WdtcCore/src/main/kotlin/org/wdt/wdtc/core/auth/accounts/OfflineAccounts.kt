@@ -5,15 +5,14 @@ import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.wdtc.core.auth.BaseUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
-import org.wdt.wdtc.core.manger.FileManger.userJson
+import org.wdt.wdtc.core.manger.userJson
 import org.wdt.wdtc.core.utils.SkinUtils
-import org.wdt.wdtc.core.utils.StringUtils.cleanStrInString
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.utils.cleanStrInString
+import org.wdt.wdtc.core.utils.logmaker
 import java.io.IOException
 import java.util.*
 
 class OfflineAccounts(private val username: String) : BaseUser() {
-  private val logmaker = getLogger(OfflineAccounts::class.java)
   private val userUuid = UUID.randomUUID().toString().cleanStrInString("-")
 
   @get:Throws(IOException::class)

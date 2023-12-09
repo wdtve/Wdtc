@@ -8,19 +8,13 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.manger.VMManger.isDebug
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
-import org.wdt.wdtc.core.utils.ModUtils.isFabric
-import org.wdt.wdtc.core.utils.ModUtils.isForge
-import org.wdt.wdtc.core.utils.ModUtils.isQuilt
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.isDebug
+import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.WindwosSizeManger.Companion.getSizeManger
 import java.io.IOException
 
 class ModChooseWindow(private val launcher: Launcher, private val mainStage: Stage) {
   private val size: WindwosSizeManger = mainStage.getSizeManger()
-  private val logmaker = ModChooseVersionWindow::class.java.getWdtcLogger()
   fun setChooseWin() {
     val pane = Pane()
     val back = JFXButton("返回")
@@ -184,7 +178,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
       downloadForge.isDisable = true
       val fabircModInstallInfo = launcher.fabricModInstallInfo
       if (fabircModInstallInfo?.isAPIDownloadTaskNoNull == true) {
-        fabricAPI.text = fabircModInstallInfo?.apiDownloadTask?.fabricAPIVersionNumber
+        fabricAPI.text = fabircModInstallInfo.apiDownloadTask?.fabricAPIVersionNumber
       }
     } else {
       fabric.text = Tips.FABRIC_NO

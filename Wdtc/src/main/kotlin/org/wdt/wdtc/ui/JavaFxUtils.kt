@@ -13,12 +13,12 @@ import org.wdt.utils.io.isFileNotExistsAndIsNotSameSize
 import org.wdt.wdtc.core.download.SpeedOfProgress
 import org.wdt.wdtc.core.game.LibraryObject
 import org.wdt.wdtc.core.game.LibraryObject.Companion.getLibraryObject
-import org.wdt.wdtc.core.manger.FileManger.wdtcImplementationPath
-import org.wdt.wdtc.core.manger.FileManger.wtdcOpenJFXPath
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.startDownloadTask
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.wdtcImplementationPath
+import org.wdt.wdtc.core.manger.wtdcOpenJFXPath
 import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.File
 import java.io.IOException
 import java.lang.module.Configuration
@@ -29,7 +29,6 @@ import java.util.*
 import kotlin.concurrent.thread
 
 object JavaFxUtils {
-  private val logmaker = JavaFxUtils::class.java.getWdtcLogger()
   fun setJavaFXListJson() {
     try {
       val openJfxListFile = File(wdtcImplementationPath, "openjfx-list.json")

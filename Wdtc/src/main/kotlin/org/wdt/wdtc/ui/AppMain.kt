@@ -6,22 +6,17 @@ import javafx.event.EventHandler
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import org.wdt.utils.io.touch
-import org.wdt.wdtc.core.manger.SettingManger.Companion.putSettingToFile
-import org.wdt.wdtc.core.manger.SettingManger.Companion.setting
-import org.wdt.wdtc.core.manger.VMManger.isDebug
-import org.wdt.wdtc.core.utils.DownloadUtils.Companion.StopProcess
-import org.wdt.wdtc.core.utils.URLUtils.isOnline
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
-import org.wdt.wdtc.ui.window.Consoler
-import org.wdt.wdtc.ui.window.ExceptionWindow
-import org.wdt.wdtc.ui.window.HomeWindow
-import org.wdt.wdtc.ui.window.WindwosSizeManger
-import org.wdt.wdtc.ui.window.WindwosSizeManger.Companion.getSizeManger
+import org.wdt.wdtc.core.manger.isDebug
+import org.wdt.wdtc.core.manger.putSettingToFile
+import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.utils.StopProcess
+import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.isOnline
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 
 class AppMain : Application() {
-  private val logmaker = getLogger(AppMain::class.java)
   override fun start(mainStage: Stage) {
     try {
       val size = mainStage.getSizeManger()
@@ -31,8 +26,8 @@ class AppMain : Application() {
         mainStage.title = Consoler.getWindowsTitle("无网络")
         logmaker.warn("当前无网络连接,下载功能无法正常使用!")
       }
-      mainStage.minWidth = WindwosSizeManger.windowsWidht
-      mainStage.minHeight = WindwosSizeManger.windowsHeight
+      mainStage.minWidth = windowsWidht
+      mainStage.minHeight = windowsHeight
       size.setWindwosSize()
       mainStage.icons.add(Image("assets/icon/ico.jpg"))
       mainStage.isResizable = isDebug
@@ -43,7 +38,6 @@ class AppMain : Application() {
       mainStage.onCloseRequest = EventHandler {
         logmaker.info(size)
         try {
-          val setting = setting
           setting.windowsWidth = mainStage.width
           setting.windowsHeight = mainStage.height
           StopProcess.touch()

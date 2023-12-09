@@ -2,8 +2,8 @@ package org.wdt.wdtc.core.launch
 
 import org.wdt.utils.io.FileUtils
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.config.GameConfig.Companion.gameConfig
-import org.wdt.wdtc.core.manger.VMManger.launcherVersion
+import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.launcherVersion
 import java.io.IOException
 
 class GameJvmCommand(private val launcher: Launcher) : AbstractGameCommand() {

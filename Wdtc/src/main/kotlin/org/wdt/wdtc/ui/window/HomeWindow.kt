@@ -8,23 +8,25 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import org.wdt.wdtc.core.auth.User.Companion.isExistUserJsonFile
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
+import org.wdt.wdtc.core.auth.isExistUserJsonFile
 import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.Launcher.Companion.preferredLauncher
-import org.wdt.wdtc.core.launch.LaunchGame.Companion.create
-import org.wdt.wdtc.core.manger.FileManger.wdtcCache
+import org.wdt.wdtc.core.game.preferredLauncher
+import org.wdt.wdtc.core.launch.LaunchGame
 import org.wdt.wdtc.core.manger.GameDirectoryManger
-import org.wdt.wdtc.core.manger.VMManger.launcherVersion
-import org.wdt.wdtc.core.utils.URLUtils.isOnline
-import org.wdt.wdtc.core.utils.URLUtils.openSomething
-import org.wdt.wdtc.core.utils.WdtcLogger.getLogger
+import org.wdt.wdtc.core.manger.launcherVersion
+import org.wdt.wdtc.core.manger.wdtcCache
+import org.wdt.wdtc.core.utils.isOnline
+import org.wdt.wdtc.core.utils.openSomething
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 import java.io.IOException
 import java.util.*
-import kotlin.concurrent.thread
 
 class HomeWindow {
   private var launcher = preferredLauncher
@@ -58,7 +60,7 @@ class HomeWindow {
     startgame.layoutY = 69.0
     startgame.setPrefSize(128.0, 46.0)
     startgame.onAction = EventHandler {
-      val choose = VersionChooseWindow(Objects.requireNonNullElseGet(launcher) { GameDirectoryManger() })
+      val choose = VersionChooseWindow(Objects.requireNonNullElseGet(launcher) { GameDirectoryManger() }!!)
       choose.setWindow(mainStage)
     }
     val VersionSetting = JFXButton("版本设置")
@@ -73,9 +75,9 @@ class HomeWindow {
     val setting = getSettingButton(mainStage)
     val github = JFXButton("GitHub")
     github.setPrefSize(128.0, 46.0)
-    github.onAction = EventHandler { openSomething("https://github.com/Wd-t/Wdtc") }
+    github.onAction = EventHandler { openSomething("https://github.com/wd-t/Wdtc") }
     val name = Label(
-      """
+        """
       Wdtc
       $launcherVersion
       """.trimIndent()
@@ -104,19 +106,13 @@ class HomeWindow {
     LaunchGameButton.onAction = EventHandler {
       if (launcher != null) {
         if (isExistUserJsonFile) {
-          thread(name = "Launch game") {
-            try {
-              val launchProcess = create(launcher!!).launchProcess
-              launchProcess.setUIText =
-                TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
-              launchProcess.startLaunchGame()
-            } catch (e: IOException) {
-              ExceptionWindow.setErrorWin(e)
-            }
+          runBlocking {
+            launchGame(launcher!!)
           }
         } else {
           noUser(mainStage)
         }
+
       } else {
         GameVersionListWindow.setWindowScene(mainStage)
       }
@@ -131,15 +127,14 @@ class HomeWindow {
     pane.setStylesheets()
     pane.background = Consoler.background
     val scene = Scene(pane, 600.0, 450.0)
-    mainStage.setScene(scene)
+    mainStage.scene = scene
     if (!isExistUserJsonFile) {
       noUser(mainStage)
     }
   }
 
   companion object {
-    private val logmaker = getLogger(HomeWindow::class.java)
-    private fun getSettingButton(MainStage: Stage): JFXButton {
+    private fun getSettingButton(mainStage: Stage): JFXButton {
       val setting = JFXButton("设置")
       setting.setPrefSize(128.0, 46.0)
       setting.onMousePressed = EventHandler { event: MouseEvent ->
@@ -147,7 +142,7 @@ class HomeWindow {
           openSomething(wdtcCache)
         } else {
           try {
-            SettingWindow.setSettingWin(MainStage)
+            SettingWindow.setSettingWin(mainStage)
           } catch (e: IOException) {
             ExceptionWindow.setErrorWin(e)
           }
@@ -156,11 +151,23 @@ class HomeWindow {
       return setting
     }
 
-    private fun noUser(MainStage: Stage) {
-      val windows = NewUserWindows(MainStage)
+    private fun noUser(mainStage: Stage) {
+      val windows = NewUserWindows(mainStage)
       windows.title = "您还没有账户呢!"
       windows.type = AccountsType.Offline
       windows.show()
+    }
+
+    private fun CoroutineScope.launchGame(launcher: Launcher) {
+      launch(CoroutineName("Launch game")) {
+        try {
+          val launchProcess = LaunchGame.create(launcher).launchProcess
+          launchProcess.setUIText = TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
+          launchProcess.startLaunchGame()
+        } catch (e: IOException) {
+          ExceptionWindow.setErrorWin(e)
+        }
+      }
     }
   }
 }

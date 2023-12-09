@@ -20,9 +20,8 @@ import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
 import org.wdt.wdtc.core.download.quilt.QuiltVersionList
 import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.utils.ModUtils.KindOfMod
+import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.WindwosSizeManger.Companion.getSizeManger
 import java.io.IOException
 
 class ModChooseVersionWindow(
@@ -96,6 +95,7 @@ class ModChooseVersionWindow(
         KindOfMod.QUILT -> launcher.quiltModDownloadInfo = QuiltInstallTask(launcher, versionJsonObject)
         KindOfMod.FABRICAPI -> launcher.fabricModInstallInfo?.apiDownloadTask =
           FabricAPIDownloadTask(launcher, versionJsonObject)
+
         else -> {}
       }
       val choose = ModChooseWindow(launcher, mainStage)
