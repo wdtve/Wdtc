@@ -11,6 +11,6 @@ subprojects {
 
 }
 
-val versionNumber = "0.0.1.20"
+val versionNumber = "0.0.1.20.1"
 group = "org.wdt.wdtc"
 version = "$versionNumber-kotlin"
