@@ -9,7 +9,7 @@ import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.manger.putSettingToFile
 import org.wdt.wdtc.core.manger.setting
-import org.wdt.wdtc.core.utils.StopProcess
+import org.wdt.wdtc.core.utils.stopProcess
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.logmaker
@@ -40,7 +40,7 @@ class AppMain : Application() {
         try {
           setting.windowsWidth = mainStage.width
           setting.windowsHeight = mainStage.height
-          StopProcess.touch()
+          stopProcess.touch()
           putSettingToFile(setting)
         } catch (e: IOException) {
           logmaker.error(e.getExceptionMessage())

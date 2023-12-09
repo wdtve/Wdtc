@@ -8,10 +8,6 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.auth.isExistUserJsonFile
 import org.wdt.wdtc.core.download.infterface.TextInterface
@@ -27,6 +23,7 @@ import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 import java.io.IOException
 import java.util.*
+import kotlin.concurrent.thread
 
 class HomeWindow {
   private var launcher = preferredLauncher
@@ -41,13 +38,13 @@ class HomeWindow {
     val pane = AnchorPane()
     val windwosSizeManger = WindwosSizeManger(mainStage)
     mainStage.title = Consoler.windowsTitle
-    val Menu = VBox()
-    Menu.setPrefSize(128.0, 450.0)
+    val menu = VBox()
+    menu.setPrefSize(128.0, 450.0)
     val home = JFXButton("首页")
     home.setPrefSize(128.0, 46.0)
-    val UserWindow = JFXButton("修改账户")
-    UserWindow.setPrefSize(128.0, 46.0)
-    UserWindow.onAction = EventHandler {
+    val userWindow = JFXButton("修改账户")
+    userWindow.setPrefSize(128.0, 46.0)
+    userWindow.onAction = EventHandler {
       val windows = NewUserWindows(mainStage)
       windows.title = "注册账户"
       windows.show()
@@ -76,53 +73,38 @@ class HomeWindow {
     val github = JFXButton("GitHub")
     github.setPrefSize(128.0, 46.0)
     github.onAction = EventHandler { openSomething("https://github.com/wd-t/Wdtc") }
-    val name = Label(
-        """
-      Wdtc
-      $launcherVersion
-      """.trimIndent()
-    )
+    val name = Label("Wdtc\n$launcherVersion")
     name.layoutX = 17.0
     name.layoutY = 161.0
     val readme = Label("一个简单到不能再简单的我的世界Java版启动器")
     readme.layoutX = 180.0
     readme.layoutY = 180.0
     readme.styleClass.add("readme")
-    val LaunchGameButton = JFXButton()
-    if (launcher != null) {
-      LaunchGameButton.text = """
-            启动游戏
-            ${launcher!!.versionNumber}
-            """.trimIndent()
-    } else {
-      LaunchGameButton.text = "当前无游戏版本"
-    }
-    LaunchGameButton.setPrefSize(227.0, 89.0)
-    LaunchGameButton.layoutX = 335.0
-    LaunchGameButton.layoutY = 316.0
-    LaunchGameButton.styleClass.add("BackGroundWriteButton")
-    AnchorPane.setBottomAnchor(LaunchGameButton, 30.0)
-    AnchorPane.setRightAnchor(LaunchGameButton, 30.0)
-    LaunchGameButton.onAction = EventHandler {
+    val launchGameButton = JFXButton()
+    launchGameButton.text = if (launcher != null) "启动游戏${launcher!!.versionNumber}" else "当前无游戏版本"
+    launchGameButton.setPrefSize(227.0, 89.0)
+    launchGameButton.layoutX = 335.0
+    launchGameButton.layoutY = 316.0
+    launchGameButton.styleClass.add("BackGroundWriteButton")
+    AnchorPane.setBottomAnchor(launchGameButton, 30.0)
+    AnchorPane.setRightAnchor(launchGameButton, 30.0)
+    launchGameButton.onAction = EventHandler {
       if (launcher != null) {
         if (isExistUserJsonFile) {
-          runBlocking {
-            launchGame(launcher!!)
-          }
+          launchGame(launcher!!)
         } else {
           noUser(mainStage)
         }
-
       } else {
         GameVersionListWindow.setWindowScene(mainStage)
       }
     }
-    Menu.children.addAll(home, UserWindow, downgame, startgame, VersionSetting, setting, github)
-    Menu.styleClass.add("BlackBorder")
-    AnchorPane.setTopAnchor(Menu, 0.0)
-    AnchorPane.setBottomAnchor(Menu, 0.0)
-    AnchorPane.setLeftAnchor(Menu, 0.0)
-    pane.children.addAll(Menu, LaunchGameButton)
+    menu.children.addAll(home, userWindow, downgame, startgame, VersionSetting, setting, github)
+    menu.styleClass.add("BlackBorder")
+    AnchorPane.setTopAnchor(menu, 0.0)
+    AnchorPane.setBottomAnchor(menu, 0.0)
+    AnchorPane.setLeftAnchor(menu, 0.0)
+    pane.children.addAll(menu, launchGameButton)
     windwosSizeManger.modifyWindwosSize(pane, readme)
     pane.setStylesheets()
     pane.background = Consoler.background
@@ -158,15 +140,16 @@ class HomeWindow {
       windows.show()
     }
 
-    private fun CoroutineScope.launchGame(launcher: Launcher) {
-      launch(CoroutineName("Launch game")) {
-        try {
+    private fun launchGame(launcher: Launcher) {
+      try {
+        thread(name = "${launcher.versionNumber} launch task") {
           val launchProcess = LaunchGame.create(launcher).launchProcess
-          launchProcess.setUIText = TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
+          launchProcess.setUIText =
+            TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
           launchProcess.startLaunchGame()
-        } catch (e: IOException) {
-          ExceptionWindow.setErrorWin(e)
         }
+      } catch (e: IOException) {
+        ExceptionWindow.setErrorWin(e)
       }
     }
   }

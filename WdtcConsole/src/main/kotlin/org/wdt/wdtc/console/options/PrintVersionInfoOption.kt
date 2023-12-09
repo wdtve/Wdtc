@@ -1,10 +1,10 @@
 package org.wdt.wdtc.console.options
 
-import org.wdt.wdtc.core.manger.VMManger
+import org.wdt.wdtc.core.manger.launcherVersion
 
 class PrintVersionInfoOption {
 
   fun printInfo() {
-    println("Launcher Version: ${VMManger.launcherVersion}")
+    println("Launcher Version: $launcherVersion")
   }
 }

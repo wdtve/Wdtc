@@ -32,7 +32,7 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
     var donwloaded: Double
     val data = ByteArray(1024)
     while (urlFileInput.read(data, 0, 1024).also { donwloaded = it.toDouble() } >= 0) {
-      if (isDownloadProcess) {
+      if (isStopDownloadProcess) {
         logmaker.debug(Thread.currentThread().name + " Stop")
         downloadFileOutput.close()
         urlFileInput.close()
@@ -46,9 +46,9 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
 
 }
 
-val StopProcess = File(wdtcCache, "process")
-val isDownloadProcess: Boolean
-  get() = StopProcess.isFileExists()
+val stopProcess = File(wdtcCache, "process")
+val isStopDownloadProcess: Boolean
+  get() = stopProcess.isFileExists()
 
 fun startDownloadTask(url: String, path: String) {
   startDownloadTask(url.toURL(), path.toFile())

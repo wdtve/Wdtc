@@ -18,7 +18,7 @@ object JavaUtils {
   fun main(args: Array<String>) {
     try {
       for (s in args) {
-        if (isDownloadProcess) break
+        if (isStopDownloadProcess) break
         getPotentialJava(s)
       }
       logmaker.info("Find Java Done")
@@ -33,7 +33,7 @@ object JavaUtils {
     for (s in IOUtils.readLines(process.inputStream)) {
       if (s.startsWith(key)) {
         for (map in getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(s)))) {
-          if (isDownloadProcess) return
+          if (isStopDownloadProcess) return
           val newInfo = JavaInfo(File(map["JavaPath"]!!))
           if (newJavaList.add(newInfo)) {
             logmaker.info("Find Java : ${newInfo.javaExeFile}, Version : ${newInfo.versionNumber}")

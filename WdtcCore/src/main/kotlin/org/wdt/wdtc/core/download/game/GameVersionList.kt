@@ -7,15 +7,14 @@ import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
-import org.wdt.wdtc.core.manger.FileManger.versionManifestFile
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
-import org.wdt.wdtc.core.utils.WdtcLogger.getWdtcLogger
+import org.wdt.wdtc.core.manger.versionManifestFile
+import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.logmaker
 import java.io.IOException
 import java.net.URL
 import java.util.*
 
 class GameVersionList : VersionListInterface {
-  private val logmaker = GameVersionList::class.java.getWdtcLogger()
 
   init {
     if (versionManifestFile.isFileNotExists()) {

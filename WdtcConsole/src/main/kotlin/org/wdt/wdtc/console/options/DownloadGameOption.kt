@@ -17,10 +17,10 @@ class DownloadGameOption {
             launcher = Launcher(commandLine.getOptionValue(chooseVersionNumber))
 
         } else {
-            val versionList = GameVersionList().versionList
+            val versionList = GameVersionList().versionList.stream().toList()
             for (i in versionList.indices) {
-                val versionObejct = versionList[i] as GameVersionJsonObjectImpl
-                println("$i. Version: ${versionObejct.versionNumber}, Type: ${versionObejct.gameType}")
+                val versionObject = versionList as GameVersionJsonObjectImpl
+                println("$i. Version: ${versionObject.versionNumber}, Type: ${versionObject.gameType}")
             }
             val input = Scanner(System.`in`)
             print("Choose a number:")

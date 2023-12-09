@@ -1,7 +1,5 @@
 package org.wdt.wdtc.core.manger
 
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
@@ -71,10 +69,6 @@ fun downloadVersionManifestJsonFileTask() {
   if (versionManifestFile.isFileNotExists() ||
     versionManifestFile.isFileOlder(calendar.time)
   ) {
-    runBlocking {
-      launch {
-        DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
-      }
-    }
+    DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
   }
 }

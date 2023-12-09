@@ -2,10 +2,9 @@
 
 package org.wdt.wdtc.ui
 
-import kotlinx.coroutines.runBlocking
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.auth.printUserList
-import org.wdt.wdtc.core.auth.yggdrasil.AuthlibInjector.updateAuthlibInjector
+import org.wdt.wdtc.core.auth.yggdrasil.updateAuthlibInjector
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.writeConfigJsonToAllVersion
 import org.wdt.wdtc.core.manger.*
@@ -32,14 +31,12 @@ fun main(args: Array<String>) {
     logmaker.info("Wdtc Config Path:$wdtcConfig")
     logmaker.info("Setting File:$settingFile")
     logmaker.info("Here:$defaultHere")
-    runBlocking {
       runStartUpTask()
       downloadVersionManifestJsonFileTask()
       removePreferredVersion()
       printUserList()
       updateAuthlibInjector()
       writeConfigJsonToAllVersion()
-    }
     thread(name = "Found Java") { JavaUtils.main(registryKey) }
     javafx.application.Application.launch(AppMain::class.java, *args)
   } catch (e: Throwable) {

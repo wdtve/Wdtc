@@ -9,7 +9,7 @@ import org.wdt.wdtc.core.download.SpeedOfProgress
 import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.isDownloadProcess
+import org.wdt.wdtc.core.utils.isStopDownloadProcess
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.startThread
 import org.wdt.wdtc.core.utils.toURL
@@ -21,7 +21,7 @@ open class DownloadGameAssetsFile(val launcher: Launcher) {
     val progress = SpeedOfProgress(maps.size)
     for (key in maps.keys) {
       val data: AssetsFileData = maps[key]?.asJsonObject?.parseObject()!!
-      if (isDownloadProcess) return
+      if (isStopDownloadProcess) return
       if (File(launcher.gameObjects, data.hashSplicing).isFileNotExistsAndIsNotSameSize(data.size.toLong())) {
         val task = DownloadGameAssetsFileTask(launcher, data, progress)
         task.startThread()

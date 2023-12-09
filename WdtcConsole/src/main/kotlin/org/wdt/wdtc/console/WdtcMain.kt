@@ -1,6 +1,5 @@
 package org.wdt.wdtc.console
 
-import kotlinx.coroutines.runBlocking
 import org.apache.commons.cli.Options
 import org.wdt.wdtc.console.manger.CommandTaskManger
 import org.wdt.wdtc.core.auth.yggdrasil.updateAuthlibInjector
@@ -13,11 +12,11 @@ import org.wdt.wdtc.core.utils.logmaker
 fun main(args: Array<String>) {
   try {
     ckeckVMConfig()
-    runBlocking {
-      runStartUpTask()
-      updateAuthlibInjector()
-      downloadVersionManifestJsonFileTask()
-    }
+
+    runStartUpTask()
+    updateAuthlibInjector()
+    downloadVersionManifestJsonFileTask()
+
     val options = Options()
     logmaker.info("Args: " + args.contentToString())
     val commandTaskManger = CommandTaskManger(options, args)

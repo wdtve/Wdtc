@@ -3,7 +3,7 @@ package org.wdt.wdtc.console.manger
 import org.apache.commons.cli.*
 import org.wdt.wdtc.console.options.DownloadGameOption
 import org.wdt.wdtc.console.options.PrintVersionInfoOption
-import org.wdt.wdtc.core.utils.WdtcLogger.getExceptionMessage
+import org.wdt.wdtc.core.utils.getExceptionMessage
 
 class CommandTaskManger(private val options: Options, private val args: Array<String>) {
 
