@@ -23,5 +23,4 @@ data class Setting(
 
 val setting: Setting = settingFile.readFileToClass()
 
-fun putSettingToFile(setting: Setting) =
-  settingFile.writeObjectToFile(setting, Json.getBuilder().setPrettyPrinting())
+fun Setting.putSettingToFile() = settingFile.writeObjectToFile(this, Json.getBuilder().setPrettyPrinting())

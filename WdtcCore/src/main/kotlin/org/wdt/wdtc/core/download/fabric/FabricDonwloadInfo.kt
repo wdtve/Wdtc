@@ -9,8 +9,10 @@ import org.wdt.wdtc.core.manger.officialDownloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import java.io.File
 import java.io.IOException
+import java.net.URL
 
 open class FabricDonwloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
@@ -29,15 +31,15 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
     startDownloadTask(profileZipUrl, profileZipFile)
   }
 
-  val profileZipFile: File
+  private val profileZipFile: File
     get() = File(
       wdtcCache,
       "${launcher.versionNumber}-$modVersion-frofile-zip.zip"
     )
-  private val profileZipUrl: String
+  private val profileZipUrl: URL
     get() =
       "${officialDownloadSource.fabricMetaUrl}v2/versions/loader/%s/%s/profile/zip"
-        .format(launcher.versionNumber, modVersion)
+        .format(launcher.versionNumber, modVersion).toURL()
 
 
   private val fromFabricLoaderFolder: String

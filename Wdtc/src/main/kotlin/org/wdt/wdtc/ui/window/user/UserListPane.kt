@@ -21,9 +21,9 @@ import org.wdt.wdtc.core.auth.preferredUser
 import org.wdt.wdtc.core.auth.setUserToJson
 import org.wdt.wdtc.core.auth.userList
 import org.wdt.wdtc.core.manger.userListFile
-import org.wdt.wdtc.ui.window.Consoler
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.ExceptionWindow
+import org.wdt.wdtc.ui.window.setCss
+import org.wdt.wdtc.ui.window.setStylesheets
 import java.io.IOException
 
 object UserListPane {
@@ -85,7 +85,7 @@ object UserListPane {
             ExceptionWindow.setErrorWin(e)
           }
         }
-        Consoler.setCss("BlackBorder", userPane)
+        setCss("BlackBorder", userPane)
         userPane.children.addAll(enter, head, userNameLabel, userTypeLabel, detele)
         vBox.children.add(userPane)
       }

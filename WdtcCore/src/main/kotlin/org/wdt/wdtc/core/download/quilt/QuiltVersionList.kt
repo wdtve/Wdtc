@@ -4,10 +4,11 @@ import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
 
@@ -18,7 +19,7 @@ class QuiltVersionList(private val launcher: Launcher) : VersionListInterface {
   override val versionList: Set<VersionJsonObjectInterface>
     get() {
       val list: MutableSet<VersionJsonObjectInterface> = HashSet()
-      val versionArray = quiltquVersionListUrl.format(launcher.versionNumber).getURLToString().parseJsonArray()
+      val versionArray = quiltquVersionListUrl.format(launcher.versionNumber).toURL().toStrings().parseJsonArray()
       versionArray.forEach {
         list.add(it.asJsonObject.getJsonObject("loader").parseObject())
       }

@@ -9,8 +9,10 @@ import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import org.wdt.wdtc.core.utils.unZipToFile
 import java.io.File
+import java.net.URL
 
 // TODO Using 'Url' class
 open class ForgeDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
@@ -24,13 +26,13 @@ open class ForgeDownloadInfo(protected val launcher: Launcher, override val modV
     startDownloadTask(forgeInstallJarUrl, forgeInstallJarFile)
   }
 
-  val installJarUrl: String
+  private val installJarUrl: String
     get() = "${downloadSource.forgeLibraryMavenUrl}net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar"
   val forgeInstallJarFile: File
     get() = File(wdtcCache, "$modVersion-installer.jar")
-  val forgeInstallJarUrl: String
+  private val forgeInstallJarUrl: URL
     get() = installJarUrl.replace(":mcversion", launcher.versionNumber)
-      .replace(":forgeversion", modVersion)
+      .replace(":forgeversion", modVersion).toURL()
 
   fun unZipToInstallProfile() {
     unZipToFile(forgeInstallJarFile, installProfileFile, "install_profile.json")

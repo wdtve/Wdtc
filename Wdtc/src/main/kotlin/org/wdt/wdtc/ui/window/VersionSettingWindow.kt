@@ -25,7 +25,6 @@ import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.modDownloadInfo
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -85,16 +84,16 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     AnchorPane.setBottomAnchor(delete, 0.0)
     AnchorPane.setLeftAnchor(delete, 0.0)
     parentPane.children.addAll(sonScrollPane, completion, delete, back, GameSetting, AutoDownload)
-    Consoler.setCss("BlackBorder", back)
-    parentPane.background = Consoler.background
+    setCss("BlackBorder", back)
+    parentPane.background = background
     parentPane.setStylesheets()
     mainStage.setScene(Scene(parentPane))
-    Consoler.setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload)
+    setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload)
     delete.onAction = EventHandler {
       try {
         FileUtils.deleteDirectory(launcher.versionDirectory)
         setting.preferredVersion = null
-        putSettingToFile(setting)
+        setting.putSettingToFile()
         val homeWindow = HomeWindow()
         homeWindow.setHome(mainStage)
         logmaker.info(launcher.versionNumber + " Deleted")
@@ -175,7 +174,7 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     )
     pane.children.add(apply)
     pane.setStylesheets()
-    Consoler.setCss("BlackBorder", choose, apply)
+    setCss("BlackBorder", choose, apply)
     scrollPane.content = pane
     JavaPath.text = config.javaPath
     InputWidth.text = config.width.toString()

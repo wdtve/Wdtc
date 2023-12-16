@@ -7,7 +7,6 @@ import org.wdt.utils.io.isFileExists
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.userJson
 import java.io.File
-import java.util.*
 
 class User @JvmOverloads constructor(
   var userName: String? = null,
@@ -26,10 +25,6 @@ class User @JvmOverloads constructor(
 ) {
 
 
-  override fun hashCode(): Int {
-    return Objects.hash(userName, accessToken, type, uuid, metaData)
-  }
-
   override fun toString(): String {
     return "User(userName=$userName, type=$type, headFile=$headFile)"
   }
@@ -44,15 +39,25 @@ class User @JvmOverloads constructor(
     if (accessToken != other.accessToken) return false
     if (type != other.type) return false
     if (uuid != other.uuid) return false
+    if (metaData != other.metaData) return false
+    if (base64Data != other.base64Data) return false
 
     return true
   }
 
+  override fun hashCode(): Int {
+    var result = userName?.hashCode() ?: 0
+    result = 31 * result + (accessToken?.hashCode() ?: 0)
+    result = 31 * result + (type?.hashCode() ?: 0)
+    result = 31 * result + (uuid?.hashCode() ?: 0)
+    result = 31 * result + (metaData?.hashCode() ?: 0)
+    result = 31 * result + (base64Data?.hashCode() ?: 0)
+    return result
+  }
+
 }
 
-fun setUserToJson(user: User) {
-  userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
-}
+fun setUserToJson(user: User) = userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
 
 val preferredUser: User = userJson.readFileToClass()
 

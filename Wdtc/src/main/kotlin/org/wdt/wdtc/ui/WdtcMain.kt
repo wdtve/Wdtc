@@ -9,8 +9,8 @@ import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.writeConfigJsonToAllVersion
 import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.JavaUtils
+import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.ui.JavaFxUtils.ckeckJavaFX
 import org.wdt.wdtc.ui.window.ExceptionWindow
 import java.util.*
 import kotlin.concurrent.thread
@@ -31,12 +31,14 @@ fun main(args: Array<String>) {
     logmaker.info("Wdtc Config Path:$wdtcConfig")
     logmaker.info("Setting File:$settingFile")
     logmaker.info("Here:$defaultHere")
-      runStartUpTask()
+    runStartUpTask()
+    removePreferredVersion()
+    printUserList()
+    if (isOnline) {
       downloadVersionManifestJsonFileTask()
-      removePreferredVersion()
-      printUserList()
       updateAuthlibInjector()
-      writeConfigJsonToAllVersion()
+    }
+    writeConfigJsonToAllVersion()
     thread(name = "Found Java") { JavaUtils.main(registryKey) }
     javafx.application.Application.launch(AppMain::class.java, *args)
   } catch (e: Throwable) {
@@ -50,16 +52,15 @@ private fun removePreferredVersion() {
     val launcher = Launcher(setting.preferredVersion!!)
     if (launcher.versionJson.isFileNotExists()) {
       setting.preferredVersion = null
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
   }
 }
 
-private val registryKey: Array<String>
-  get() = arrayOf(
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit",
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update",
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps",
-    "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"
-  )
+private val registryKey: Array<String> = arrayOf(
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit",
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Update",
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps",
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"
+)
 

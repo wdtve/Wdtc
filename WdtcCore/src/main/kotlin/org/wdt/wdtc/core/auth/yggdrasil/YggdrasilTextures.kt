@@ -3,38 +3,35 @@ package org.wdt.wdtc.core.auth.yggdrasil
 import com.google.gson.annotations.SerializedName
 import org.jetbrains.annotations.NotNull
 import org.wdt.utils.gson.parseObject
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.manger.minecraftComSkin
 import org.wdt.wdtc.core.utils.SkinUtils
-import org.wdt.wdtc.core.utils.getURLToString
 import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import java.io.File
 import java.io.IOException
 import java.net.URL
 import java.util.*
 
 class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
-  val username: String
+  private val userName: String = yggdrasilAccounts.userName
 
   @NotNull
   var url: String? = null
 
   init {
-    username = yggdrasilAccounts.username
     url = yggdrasilAccounts.url
   }
 
-  val userJsonUrl: String
-    get() = "$url/csl/$username.json"
-
+  private val userJsonUrl: URL = "$url/csl/$userName.json".toURL()
 
   @Throws(IOException::class)
   fun getUserSkinHash(): String {
-    val skins: Skins = csl.skins!!
-    return skins.skinKind!!
+    val skins: Skins? = csl.skins
+    return skins?.skinKind ?: throw NullPointerException()
   }
 
-  val userSkinFile: File
-    get() = SkinUtils(username).getSkinFile()
+  private val userSkinFile: File = SkinUtils.getUserSkinFile(userName)
 
   @Throws(IOException::class)
   fun startDownloadUserSkin() {
@@ -47,9 +44,8 @@ class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
   val skinUrl: URL
     get() = URL(url + "/textures/" + getUserSkinHash())
 
-  @get:Throws(IOException::class)
   val csl: Csl
-    get() = userJsonUrl.getURLToString().parseObject()
+    get() = userJsonUrl.toStrings().parseObject()
 
   @get:Throws(IOException::class)
   val utils: SkinUtils

@@ -4,7 +4,9 @@ import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
-import org.wdt.wdtc.core.game.*
+import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.getGameVersionList
+import org.wdt.wdtc.core.game.isDownloadedGame
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.logmaker
@@ -20,9 +22,7 @@ class GameConfig(private val launcher: Launcher) {
     get() = defaultGameConfig.info
 
   fun putConfigToFile(config: DefaultGameConfig) {
-    launcher.versionConfigFile.writeObjectToFile(
-      config, Json.getBuilder().setPrettyPrinting()
-    )
+    launcher.writeConfigJsonToFile(config)
   }
 }
 
@@ -46,8 +46,21 @@ fun writeConfigJsonToAllVersion() {
 }
 
 fun Launcher.writeConfigJson() {
+  val config = DefaultGameConfig(this)
+  this.writeConfigJsonToFile(config)
+}
+
+fun Launcher.ckeckVersionInfo() {
+  val config = this.gameConfig.defaultGameConfig
+  config.info = this.versionInfo
+  this.writeConfigJsonToFile(config)
+}
+
+val Launcher.gameConfig: GameConfig
+  get() = GameConfig(this)
+
+private fun Launcher.writeConfigJsonToFile(config: DefaultGameConfig) {
   try {
-    val config = DefaultGameConfig(this)
     this.versionConfigFile.writeObjectToFile(
       config, Json.getBuilder().setPrettyPrinting()
     )
@@ -56,16 +69,3 @@ fun Launcher.writeConfigJson() {
     logmaker.error(e.getExceptionMessage())
   }
 }
-
-@Throws(IOException::class)
-fun Launcher.ckeckVersionInfo() {
-  val config = this.gameConfig.defaultGameConfig
-  config.info = this.versionInfo
-  this.versionConfigFile.writeObjectToFile(
-    config, Json.getBuilder().setPrettyPrinting()
-  )
-  logmaker.info("${this.versionNumber} $config")
-}
-
-val Launcher.gameConfig: GameConfig
-  get() = GameConfig(this)

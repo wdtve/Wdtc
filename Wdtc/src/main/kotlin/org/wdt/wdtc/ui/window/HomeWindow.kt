@@ -19,7 +19,6 @@ import org.wdt.wdtc.core.manger.launcherVersion
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.openSomething
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 import java.io.IOException
 import java.util.*
@@ -37,7 +36,7 @@ class HomeWindow {
   fun setHome(mainStage: Stage) {
     val pane = AnchorPane()
     val windwosSizeManger = WindwosSizeManger(mainStage)
-    mainStage.title = Consoler.windowsTitle
+    mainStage.title = windowsTitle
     val menu = VBox()
     menu.setPrefSize(128.0, 450.0)
     val home = JFXButton("首页")
@@ -107,7 +106,7 @@ class HomeWindow {
     pane.children.addAll(menu, launchGameButton)
     windwosSizeManger.modifyWindwosSize(pane, readme)
     pane.setStylesheets()
-    pane.background = Consoler.background
+    pane.background = background
     val scene = Scene(pane, 600.0, 450.0)
     mainStage.scene = scene
     if (!isExistUserJsonFile) {

@@ -13,8 +13,6 @@ import org.wdt.wdtc.core.download.game.DownloadVersionGameFile.Companion.startDo
 import org.wdt.wdtc.core.download.game.GameVersionList
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.downloadVersionManifestJsonFileTask
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.Consoler.setTopGrid
 
 object GameVersionListWindow {
   fun setWindowScene(MainStage: Stage) {
@@ -66,8 +64,8 @@ object GameVersionListWindow {
     sp.prefWidth = 461.0
     pane.children.addAll(sp, back, tips, refreshButton)
     pane.setStylesheets()
-    pane.background = Consoler.background
-    MainStage.title = Consoler.getWindowsTitle("下载游戏")
+    pane.background = background
+    MainStage.title = getWindowsTitle("下载游戏")
     MainStage.setScene(Scene(pane, 600.0, 450.0))
   }
 }

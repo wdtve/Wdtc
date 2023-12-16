@@ -13,19 +13,19 @@ import java.io.IOException
 import java.util.*
 
 class OfflineAccounts(private val username: String) : BaseUser() {
-  private val userUuid = UUID.randomUUID().toString().cleanStrInString("-")
+  private val userUUID = UUID.randomUUID().toString().cleanStrInString("-")
 
   @get:Throws(IOException::class)
   override val user: User
     get() {
-      val utils = SkinUtils(SkinUtils(username).getSkinFile())
+      val utils = SkinUtils(SkinUtils.getUserSkinFile(username))
       utils.userSkinInput = OfflineAccounts::class.java.getResourceAsStream("/assets/skin/steve.png")
       val user =
         User(
           username,
           "\${auth_access_token}",
           AccountsType.Offline,
-          userUuid,
+          userUUID,
           headFile = utils.writeSkinHead()
         )
       userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())

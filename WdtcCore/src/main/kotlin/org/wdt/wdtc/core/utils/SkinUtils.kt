@@ -16,11 +16,11 @@ class SkinUtils {
 
   var userSkinInput: InputStream? = null
 
-  constructor(skinFile: File?) {
+  constructor(skinFile: File) {
     this.skinFile = skinFile
   }
 
-  constructor(userName: String?) {
+  constructor(userName: String) {
     this.userName = userName
   }
 
@@ -28,20 +28,22 @@ class SkinUtils {
   fun writeSkinHead(): File {
     val image = ImageIO.read(userSkinInput ?: skinFile?.newInputStream())
     val extension = skinFile?.extension
-    val image1 = image.getSubimage(8, 8, 8, 8)
-    val file = File(
+    val newImage = image.getSubimage(8, 8, 8, 8)
+    val headPhoto = File(
       userAsste, skinFile?.name?.cleanStrInString(".$extension")?.appendForString("-head.", extension)!!
     )
-    file.touch()
-    ImageIO.write(image1, extension, file.newOutputStream())
-    return file
-  }
-
-  fun getSkinFile(): File {
-    return File(userAsste, "$userName.png")
+    headPhoto.touch()
+    ImageIO.write(newImage, extension, headPhoto.newOutputStream())
+    return headPhoto
   }
 
   fun copySkinFile() {
-    IOUtils.copy(userSkinInput, FileUtils.newOutputStream(getSkinFile()))
+    IOUtils.copy(userSkinInput, getUserSkinFile(userName).newOutputStream())
+  }
+
+  companion object {
+    fun getUserSkinFile(userName: String?): File {
+      return File(userAsste, "$userName.png")
+    }
   }
 }

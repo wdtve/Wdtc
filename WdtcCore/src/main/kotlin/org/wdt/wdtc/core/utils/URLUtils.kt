@@ -1,6 +1,5 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.IOUtils
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -28,9 +27,6 @@ fun URL.getRedirectUrl(): String {
 
 val isOnline: Boolean = "https://www.bilibili.com".toURL().isNetworkHasThisFile()
 
-fun String.getURLToString(): String {
-  return IOUtils.toString(this.toURL())
-}
 
 fun openSomething(o: Any) {
   Runtime.getRuntime().exec(arrayOf("cmd.exe", "/c", "start", o.toString()))

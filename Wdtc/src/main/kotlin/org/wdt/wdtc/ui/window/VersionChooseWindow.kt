@@ -19,9 +19,6 @@ import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.manger.putSettingToFile
 import org.wdt.wdtc.core.manger.setting
 import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.Consoler.setTopLowerLeft
-import org.wdt.wdtc.ui.window.Consoler.setTopLowerRight
 
 class VersionChooseWindow(private val path: GameDirectoryManger) {
   fun setWindow(mainStage: Stage) {
@@ -58,9 +55,9 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
         modKind.layoutY = 13.0
         size.modifyWindwosSize(pane, versionId, modKind)
         size.modifyWindwosSize(versionList, pane)
-        versionId.onAction = EventHandler { event: ActionEvent? ->
+        versionId.onAction = EventHandler {
           setting.preferredVersion = versionId.text
-          putSettingToFile(setting)
+          setting.putSettingToFile()
           val win = HomeWindow(gameVersion)
           win.setHome(mainStage)
         }
@@ -76,9 +73,9 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
     tips.prefWidth = 96.0
     tips.layoutY = 70.0
     parentPane.children.addAll(newGame, back, sonScrollPane, tips)
-    parentPane.background = Consoler.background
+    parentPane.background = background
     parentPane.setStylesheets()
-    Consoler.setCss("BlackBorder", back)
+    setCss("BlackBorder", back)
     mainStage.setScene(Scene(parentPane))
     newGame.onAction = EventHandler { event: ActionEvent? -> GameVersionListWindow.setWindowScene(mainStage) }
   }

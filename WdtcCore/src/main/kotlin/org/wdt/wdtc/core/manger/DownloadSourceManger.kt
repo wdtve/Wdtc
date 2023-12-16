@@ -7,15 +7,12 @@ import org.wdt.wdtc.core.download.source.BmclDownloadSource
 import org.wdt.wdtc.core.download.source.McbbsDownloadSource
 import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
-val officialDownloadSource: DownloadSourceInterface
-  get() = OfficialDownloadSource()
+val officialDownloadSource: DownloadSourceInterface = OfficialDownloadSource()
 
-val downloadSourceKind: DownloadSourceList
-  get() = setting.downloadSource
+val downloadSourceKind: DownloadSourceList = setting.downloadSource
 
 val downloadSource: DownloadSourceInterface
   get() {
-
     return when (downloadSourceKind) {
       DownloadSourceList.OFFICIAL -> {
         OfficialDownloadSource()
@@ -34,7 +31,6 @@ val downloadSource: DownloadSourceInterface
 val isOfficialDownloadSource: Boolean = downloadSourceKind == DownloadSourceList.OFFICIAL
 
 val isNotOfficialDownloadSource: Boolean = !isOfficialDownloadSource
-
 
 enum class DownloadSourceList {
   OFFICIAL,

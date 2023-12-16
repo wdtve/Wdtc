@@ -12,10 +12,10 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinUrl
 import org.wdt.wdtc.core.utils.openSomething
-import org.wdt.wdtc.ui.window.Consoler
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.Consoler.setTopLowerLeft
-import org.wdt.wdtc.ui.window.Consoler.setTopLowerRight
+import org.wdt.wdtc.ui.window.background
+import org.wdt.wdtc.ui.window.setStylesheets
+import org.wdt.wdtc.ui.window.setTopLowerLeft
+import org.wdt.wdtc.ui.window.setTopLowerRight
 
 class NewUserWindows(private val mainStage: Stage) {
   var type: AccountsType? = null
@@ -66,7 +66,7 @@ class NewUserWindows(private val mainStage: Stage) {
     buttonLine.styleClass.add("BlackBorder")
     buttonLine.setTopLowerLeft()
     AnchorPane.setTopAnchor(buttonLine, 0.0)
-    parentPane.background = Consoler.background
+    parentPane.background = background
     parentPane.children.addAll(buttonLine, sonPane)
     userStage.setScene(Scene(parentPane))
     parentPane.setStylesheets()

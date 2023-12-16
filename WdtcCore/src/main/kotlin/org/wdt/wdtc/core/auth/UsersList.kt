@@ -24,9 +24,8 @@ fun addUser(user: User) {
 }
 
 
-fun getUser(userName: String): User {
-  return userListFile.readFileToJsonObject().getAsJsonObject(userName).parseObject()
-}
+fun getUser(userName: String): User = userListFile.readFileToJsonObject().getAsJsonObject(userName).parseObject()
+
 
 val userList: HashSet<User>
   get() {
@@ -44,7 +43,6 @@ val userList: HashSet<User>
     return userList
   }
 
-fun printUserList() {
-  userList.forEach { logmaker.info(it) }
-}
+fun printUserList() = userList.forEach { logmaker.info(it) }
+
 

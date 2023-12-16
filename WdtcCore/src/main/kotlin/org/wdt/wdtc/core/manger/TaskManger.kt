@@ -22,10 +22,8 @@ fun ckeckVMConfig() {
 fun runStartUpTask() {
   stopProcess.delete()
   File(wdtcConfig, "readme.txt").writeStringToFile(
-    IOUtils.toString(
-      object {}.javaClass.getResourceAsStream("/assets/readme.txt")
-        ?: throw NullPointerException("readme.txt is null")
-    )
+    object {}.javaClass.getResourceAsStream("/assets/readme.txt")?.toStrings()
+      ?: throw NullPointerException("readme.txt is null")
   )
   wdtcCache.createDirectories()
   if (userListFile.isFileNotExists()) {

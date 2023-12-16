@@ -18,7 +18,7 @@ import kotlin.concurrent.thread
 class GameDownloadingWindow(private val launcher: Launcher) {
   fun setDownGameWin(mainStage: Stage) {
     val size = WindwosSizeManger(mainStage)
-    mainStage.title = Consoler.getWindowsTitle("下载游戏")
+    mainStage.title = getWindowsTitle("下载游戏")
     val pane = AnchorPane()
     val back = JFXButton("返回")
     back.onAction = EventHandler {
@@ -50,7 +50,7 @@ class GameDownloadingWindow(private val launcher: Launcher) {
         installGameVersion.setTextFieldText = TextInterface { value: String? -> textField.text = value }
         installGameVersion.startInstallGame()
       }
-    pane.background = Consoler.background
+    pane.background = background
     size.modifyWindwosSize(pane, back, time, statusBar, bmclHome, openBmcl, textField)
     val downScene = Scene(pane)
     mainStage.setScene(downScene)

@@ -3,10 +3,11 @@ package org.wdt.wdtc.core.download.fabric
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
 
@@ -15,7 +16,7 @@ class FabricVersionList : VersionListInterface {
   override val versionList: Set<VersionJsonObjectInterface>
     get() {
       val fabricVersionList: MutableSet<VersionJsonObjectInterface> = HashSet()
-      val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".getURLToString().parseJsonArray()
+      val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".toURL().toStrings().parseJsonArray()
       versionArray.forEach { fabricVersionList.add(it.asJsonObject.parseObject()) }
       return fabricVersionList
     }

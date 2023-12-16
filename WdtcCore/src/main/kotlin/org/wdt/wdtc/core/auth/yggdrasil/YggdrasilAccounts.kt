@@ -5,29 +5,30 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.*
 import org.wdt.utils.io.IOUtils
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.auth.BaseUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinApiUrl
 import org.wdt.wdtc.core.manger.userJson
-import org.wdt.wdtc.core.utils.getURLToString
 import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.toBase64
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.URL
 
-class YggdrasilAccounts(val url: String, val username: String, val password: String) : BaseUser() {
+class YggdrasilAccounts(val url: String, val userName: String, private val password: String) : BaseUser() {
 
   @Throws(IOException::class)
   fun sendPostWithJson(): String {
     val requestUrl = URL("$url/api/yggdrasil/authserver/authenticate")
-    val jsonObject = PostJsonObject(username, password)
-    val jsonStr: String = jsonObject.toJsonString()
+    val jsonObject = PostJsonObject(userName, password)
+    val jsonStr = jsonObject.toJsonString(Json.getBuilder().setPrettyPrinting())
     val conn = requestUrl.openConnection()
     conn.setRequestProperty("content-type", "application/json")
-    conn.setDoOutput(true)
-    conn.setDoInput(true)
+    conn.doOutput = true
+    conn.doInput = true
     val out = PrintWriter(conn.getOutputStream())
     out.print(jsonStr)
     out.flush()
@@ -45,9 +46,9 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
       val userInfo = userInformation
       val textures = yggdrasilTextures
       val selectedProfile = userInfo.selectedProfile!!
-      val api = littleskinApiUrl.getURLToString()
+      val api = littleskinApiUrl.toURL().toStrings()
       val user = User(
-        username,
+        userName,
         userInfo.accessToken,
         AccountsType.Yggdrasil,
         selectedProfile.getString("id"),
@@ -70,14 +71,13 @@ class YggdrasilAccounts(val url: String, val username: String, val password: Str
     @SerializedName("agent")
     private val agent: Agent = Agent()
 
-    class Agent @JvmOverloads constructor(
+    class Agent(
       @field:SerializedName("name")
       private val name: String = "Minecraft",
 
       @field:SerializedName("version")
       private val version: Int = 1
     )
-
   }
 
   class UserInformation {

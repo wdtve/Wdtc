@@ -14,29 +14,29 @@ import org.wdt.utils.io.sizeOfDirectory
 import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.openSomething
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
-import org.wdt.wdtc.ui.window.Consoler.setTopGrid
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 object SettingWindow {
+  private const val LAYOUT_X = 20.0
+  private const val LAYOUT_X_2 = 138.0
 
   @Throws(IOException::class)
-  fun setSettingWin(MainStage: Stage) {
+  fun setSettingWin(mainStage: Stage) {
     val back = JFXButton("返回")
-    back.onAction = EventHandler { event: ActionEvent? ->
+    back.onAction = EventHandler {
       val win = HomeWindow()
-      win.setHome(MainStage)
+      win.setHome(mainStage)
       logmaker.info(setting)
     }
     back.styleClass.add("BlackBorder")
-    MainStage.title = Consoler.getWindowsTitle("Setting")
+    mainStage.title = getWindowsTitle("Setting")
     val line = 55.0
     val gamePath = TextField()
     gamePath.text = setting.defaultGamePath.canonicalPath
-    gamePath.layoutX = Coordinate.layoutX
+    gamePath.layoutX = LAYOUT_X
     gamePath.layoutY = line
     gamePath.setPrefSize(297.0, 23.0)
     val button = Button("...")
@@ -50,11 +50,11 @@ object SettingWindow {
           val fileChooser = DirectoryChooser()
           fileChooser.title = "选择游戏文件夹"
           fileChooser.initialDirectory = setting.defaultGamePath
-          val file = fileChooser.showDialog(MainStage)
+          val file = fileChooser.showDialog(mainStage)
           if (Objects.nonNull(file)) {
             setting.defaultGamePath = file
-            putSettingToFile(setting)
-            gamePath.text = file.getCanonicalPath()
+            setting.putSettingToFile()
+            gamePath.text = file.canonicalPath
             logmaker.info("* 游戏文件夹已更改为:$file")
           }
         } catch (e: IOException) {
@@ -64,111 +64,111 @@ object SettingWindow {
     }
     val line1 = 35.0
     val tips = Label("游戏文件夹位置:")
-    tips.layoutX = Coordinate.layoutX
+    tips.layoutX = LAYOUT_X
     tips.layoutY = line1
     val tips2 = Label("如:选择C盘则游戏文件夹为\"C:\\minceaft\"")
     tips2.layoutX = 107.0
     tips2.layoutY = line1
     tips2.styleClass.add("tips")
     val cmd = Label("启动时是否显示控制台窗口(如果按启动后长时间没反应可以设置显示,默认不显示):")
-    cmd.layoutX = Coordinate.layoutX
+    cmd.layoutX = LAYOUT_X
     cmd.layoutY = 89.0
-    val TrueLog = RadioButton("显示")
-    val FalseLog = RadioButton("不显示")
+    val trueLog = RadioButton("显示")
+    val falseLog = RadioButton("不显示")
     val line2 = 111.0
-    TrueLog.layoutX = Coordinate.layoutX
-    TrueLog.layoutY = line2
-    FalseLog.layoutX = Coordinate.layoutX2
-    FalseLog.layoutY = line2
-    FalseLog.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
-      TrueLog.isSelected = false
+    trueLog.layoutX = LAYOUT_X
+    trueLog.layoutY = line2
+    falseLog.layoutX = LAYOUT_X_2
+    falseLog.layoutY = line2
+    falseLog.onAction = EventHandler {
+      trueLog.isSelected = false
       logmaker.info("启动日志器关闭显示")
       setting.console = false
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
-    TrueLog.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
-      FalseLog.isSelected = false
+    trueLog.onAction = EventHandler {
+      falseLog.isSelected = false
       logmaker.info("启动日志器开启显示")
       setting.console = true
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
-    val DownloadSourceTips = Label("选择下载源(默认选择Official):")
-    DownloadSourceTips.layoutX = Coordinate.layoutX
-    DownloadSourceTips.layoutY = 138.0
-    val OfficialDownloadSource = RadioButton("Official")
-    val BmclDownloadSource = RadioButton("Bmcl")
-    val McbbsDownloadSource = RadioButton("Mcbbs")
+    val downloadSourceTips = Label("选择下载源(默认选择Official):")
+    downloadSourceTips.layoutX = LAYOUT_X
+    downloadSourceTips.layoutY = 138.0
+    val officialDownloadSource = RadioButton("Official")
+    val bmclDownloadSource = RadioButton("Bmcl")
+    val mcbbsDownloadSource = RadioButton("Mcbbs")
     val line3 = 159.0
-    OfficialDownloadSource.layoutX = Coordinate.layoutX
-    OfficialDownloadSource.layoutY = line3
-    BmclDownloadSource.layoutX = Coordinate.layoutX2
-    BmclDownloadSource.layoutY = line3
-    McbbsDownloadSource.layoutX = 281.0
-    McbbsDownloadSource.layoutY = line3
-    OfficialDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
-      BmclDownloadSource.isSelected = false
-      McbbsDownloadSource.isSelected = false
+    officialDownloadSource.layoutX = LAYOUT_X
+    officialDownloadSource.layoutY = line3
+    bmclDownloadSource.layoutX = LAYOUT_X_2
+    bmclDownloadSource.layoutY = line3
+    mcbbsDownloadSource.layoutX = 281.0
+    mcbbsDownloadSource.layoutY = line3
+    officialDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+      bmclDownloadSource.isSelected = false
+      mcbbsDownloadSource.isSelected = false
       logmaker.info("* Switch to Official DownloadSource")
       setting.downloadSource = DownloadSourceList.OFFICIAL
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
-    BmclDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
-      OfficialDownloadSource.isSelected = false
-      McbbsDownloadSource.isSelected = false
+    bmclDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+      officialDownloadSource.isSelected = false
+      mcbbsDownloadSource.isSelected = false
       logmaker.info("Switch to Bmcl DownloadSource")
       setting.downloadSource = DownloadSourceList.BMCLAPI
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
-    McbbsDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
-      OfficialDownloadSource.isSelected = false
-      BmclDownloadSource.isSelected = false
+    mcbbsDownloadSource.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
+      officialDownloadSource.isSelected = false
+      bmclDownloadSource.isSelected = false
       logmaker.info("Switch to Mcbbs DownloadSource")
       setting.downloadSource = DownloadSourceList.MCBBS
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
     val tips3 = Label("是否启用OpenGL软渲染器:")
-    tips3.layoutX = Coordinate.layoutX
+    tips3.layoutX = LAYOUT_X
     tips3.layoutY = 185.0
     val TrueOpenGl = RadioButton("启用")
     val FalseOpenGL = RadioButton("不启用")
     val line4 = 209.0
-    TrueOpenGl.layoutX = Coordinate.layoutX
+    TrueOpenGl.layoutX = LAYOUT_X
     TrueOpenGl.layoutY = line4
-    FalseOpenGL.layoutX = Coordinate.layoutX2
+    FalseOpenGL.layoutX = LAYOUT_X_2
     FalseOpenGL.layoutY = line4
     TrueOpenGl.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
       FalseOpenGL.isSelected = false
       setting.llvmpipeLoader = true
       logmaker.info("OpenGL软渲染已开启")
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
     FalseOpenGL.onAction = EventHandler<ActionEvent> { event: ActionEvent? ->
       TrueOpenGl.isSelected = false
       setting.llvmpipeLoader = false
       logmaker.info("OpenGL软渲染已关闭")
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
     val tips4 = Label("将游戏设置成中文(默认开启):")
-    tips4.layoutX = Coordinate.layoutX
+    tips4.layoutX = LAYOUT_X
     tips4.layoutY = 235.0
     val TrueZhcn = RadioButton("启用")
     val line5 = 254.0
-    TrueZhcn.layoutX = Coordinate.layoutX
+    TrueZhcn.layoutX = LAYOUT_X
     TrueZhcn.layoutY = line5
     val FalseZhcn = RadioButton("不启用")
-    FalseZhcn.layoutX = Coordinate.layoutX2
+    FalseZhcn.layoutX = LAYOUT_X_2
     FalseZhcn.layoutY = line5
     FalseZhcn.onAction = EventHandler {
       setting.chineseLanguage = false
       TrueZhcn.isSelected = false
       logmaker.info("取消将游戏设置为中文")
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
     TrueZhcn.onAction = EventHandler {
       setting.chineseLanguage = true
       FalseZhcn.isSelected = false
       logmaker.info("将游戏设置为中文")
-      putSettingToFile(setting)
+      setting.putSettingToFile()
     }
     val ExportLog = JFXButton("导出日志")
     ExportLog.layoutY = 420.0
@@ -180,8 +180,8 @@ object SettingWindow {
         val fileChooser = DirectoryChooser()
         fileChooser.title = "选择日志文件保存路径"
         fileChooser.initialDirectory = wdtcConfig
-        val logDirectory = fileChooser.showDialog(MainStage)
-        if (Objects.nonNull(logDirectory)) {
+        val logDirectory = fileChooser.showDialog(mainStage)
+        if (logDirectory != null) {
           val calendar = Calendar.getInstance()
           val formatter = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
           val srcFile = File(wdtcCache, "logs/Wdtc.log")
@@ -209,26 +209,26 @@ object SettingWindow {
         try {
           FileUtils.cleanDirectory(wdtcCache)
           logmaker.info("Cache Folder Cleaned")
-          cleanCache.text = "清除缓存:" + FileUtils.sizeOfDirectory(wdtcCache) + "B"
+          cleanCache.text = "清除缓存:${wdtcCache.sizeOfDirectory()}B"
         } catch (e: IOException) {
           logmaker.error("Clean Cache Folder Error,", e)
         }
       }
     }
-    val SonPane = AnchorPane()
-    SonPane.setTopGrid()
-    SonPane.setPrefSize(493.0, 336.0)
-    val size = WindwosSizeManger(MainStage)
+    val sonPane = AnchorPane()
+    sonPane.setTopGrid()
+    sonPane.setPrefSize(493.0, 336.0)
+    val size = WindwosSizeManger(mainStage)
     size.modifyWindwosSize(
-      SonPane,
+      sonPane,
       back,
-      OfficialDownloadSource,
-      BmclDownloadSource,
-      McbbsDownloadSource,
-      TrueLog,
-      FalseLog,
+      officialDownloadSource,
+      bmclDownloadSource,
+      mcbbsDownloadSource,
+      trueLog,
+      falseLog,
       cmd,
-      DownloadSourceTips,
+      downloadSourceTips,
       gamePath,
       tips2,
       tips,
@@ -240,32 +240,28 @@ object SettingWindow {
       TrueZhcn,
       FalseZhcn
     )
-    val scrollPane = ScrollPane(SonPane)
+    val scrollPane = ScrollPane(sonPane)
     AnchorPane.setLeftAnchor(scrollPane, 105.0)
     AnchorPane.setTopAnchor(scrollPane, 70.0)
     AnchorPane.setRightAnchor(scrollPane, 0.0)
     AnchorPane.setBottomAnchor(scrollPane, 0.0)
     val pane = AnchorPane()
-    Consoler.setCss("BackGroundWriteButton", ExportLog, cleanCache)
+    setCss("BackGroundWriteButton", ExportLog, cleanCache)
     pane.setStylesheets()
     pane.children.addAll(scrollPane, back, ExportLog, cleanCache)
-    pane.background = Consoler.background
-    MainStage.setScene(Scene(pane))
-    FalseLog.isSelected = !setting.console
+    pane.background = background
+    mainStage.setScene(Scene(pane))
+    falseLog.isSelected = !setting.console
     FalseOpenGL.isSelected = !setting.llvmpipeLoader
     FalseZhcn.isSelected = !setting.chineseLanguage
-    TrueLog.isSelected = setting.console
+    trueLog.isSelected = setting.console
     TrueOpenGl.isSelected = setting.llvmpipeLoader
     TrueZhcn.isSelected = setting.chineseLanguage
     when (setting.downloadSource) {
-      DownloadSourceList.MCBBS -> McbbsDownloadSource.isSelected = true
-      DownloadSourceList.BMCLAPI -> BmclDownloadSource.isSelected = true
-      DownloadSourceList.OFFICIAL -> OfficialDownloadSource.isSelected = true
+      DownloadSourceList.MCBBS -> mcbbsDownloadSource.isSelected = true
+      DownloadSourceList.BMCLAPI -> bmclDownloadSource.isSelected = true
+      DownloadSourceList.OFFICIAL -> officialDownloadSource.isSelected = true
     }
   }
 
-  private object Coordinate {
-    const val layoutX = 20.0
-    const val layoutX2 = 138.0
-  }
 }

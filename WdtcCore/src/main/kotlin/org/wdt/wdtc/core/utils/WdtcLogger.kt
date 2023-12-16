@@ -21,7 +21,7 @@ val logmaker: Logger
   }
 
 
-val fileAppender: RollingFileAppender
+private val fileAppender: RollingFileAppender
   get() {
     val fileAppender = RollingFileAppender()
     fileAppender.setFile("${wdtcConfig}/logs/Wdtc.log")
@@ -33,7 +33,7 @@ val fileAppender: RollingFileAppender
     fileAppender.activateOptions()
     return fileAppender
   }
-val consoleAppender: ConsoleAppender
+private val consoleAppender: ConsoleAppender
   get() {
     val consoleAppender = ConsoleAppender(PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n"))
     consoleAppender.setTarget("System.err")

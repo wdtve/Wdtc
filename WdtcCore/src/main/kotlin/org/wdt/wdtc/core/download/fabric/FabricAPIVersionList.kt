@@ -3,22 +3,23 @@ package org.wdt.wdtc.core.download.fabric
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.net.URL
 import java.util.*
 
 class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterface {
-  private val versionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version"
+  private val versionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version".toURL()
 
   @get:Throws(IOException::class)
   override val versionList: Set<VersionJsonObjectInterface>
     get() {
       val versionList: MutableSet<VersionJsonObjectInterface> = HashSet()
-      val versionListArray = versionListUrl.getURLToString().parseJsonArray()
+      val versionListArray = versionListUrl.toStrings().parseJsonArray()
       versionListArray.forEach {
         val versionJsonObject: FabricAPIVersionJsonObjectImpl = it.asJsonObject.parseObject()
         if (launcher.versionNumber == versionJsonObject.gameVersion!![0]) {

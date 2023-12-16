@@ -9,10 +9,10 @@ import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.manger.putSettingToFile
 import org.wdt.wdtc.core.manger.setting
-import org.wdt.wdtc.core.utils.stopProcess
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.stopProcess
 import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 
@@ -20,12 +20,8 @@ class AppMain : Application() {
   override fun start(mainStage: Stage) {
     try {
       val size = mainStage.getSizeManger()
-      if (isOnline) {
-        mainStage.title = Consoler.windowsTitle
-      } else {
-        mainStage.title = Consoler.getWindowsTitle("无网络")
-        logmaker.warn("当前无网络连接,下载功能无法正常使用!")
-      }
+      mainStage.title = if (isOnline) windowsTitle else getWindowsTitle("无网络")
+      if (!isOnline) logmaker.warn("当前无网络连接,下载功能无法正常使用!")
       mainStage.minWidth = windowsWidht
       mainStage.minHeight = windowsHeight
       size.setWindwosSize()
@@ -41,7 +37,7 @@ class AppMain : Application() {
           setting.windowsWidth = mainStage.width
           setting.windowsHeight = mainStage.height
           stopProcess.touch()
-          putSettingToFile(setting)
+          setting.putSettingToFile()
         } catch (e: IOException) {
           logmaker.error(e.getExceptionMessage())
         }

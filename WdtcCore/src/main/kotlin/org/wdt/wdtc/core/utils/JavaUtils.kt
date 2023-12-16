@@ -42,7 +42,7 @@ object JavaUtils {
       }
     }
     setting.javaPath = newJavaList
-    putSettingToFile(setting)
+    setting.putSettingToFile()
   }
 
   private fun getPotentialJavaFolders(key: String): List<String> {

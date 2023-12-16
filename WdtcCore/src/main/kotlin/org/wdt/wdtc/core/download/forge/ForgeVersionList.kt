@@ -3,22 +3,24 @@ package org.wdt.wdtc.core.download.forge
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
+import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.getURLToString
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
+import java.net.URL
 import java.util.*
 
 class ForgeVersionList(private val launcher: Launcher) : VersionListInterface {
-  val forgeListUrl: String
-    get() = "https://bmclapi2.bangbang93.com/forge/minecraft/${launcher.versionNumber}"
+  private val forgeListUrl: URL
+    get() = "https://bmclapi2.bangbang93.com/forge/minecraft/${launcher.versionNumber}".toURL()
 
   @get:Throws(IOException::class)
   override val versionList: Set<VersionJsonObjectInterface>
     get() {
       val versionObjects: MutableSet<VersionJsonObjectInterface> = HashSet()
-      val versionList = forgeListUrl.getURLToString().parseJsonArray()
+      val versionList = forgeListUrl.toStrings().parseJsonArray()
       versionList.forEach { versionObjects.add(it.asJsonObject.parseObject()) }
       return versionObjects
     }

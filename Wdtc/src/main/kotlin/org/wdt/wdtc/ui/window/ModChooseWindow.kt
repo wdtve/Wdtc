@@ -10,7 +10,6 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.utils.*
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import java.io.IOException
 
 class ModChooseWindow(private val launcher: Launcher, private val mainStage: Stage) {
@@ -89,11 +88,11 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     AnchorPane.setBottomAnchor(confirm, 30.0)
     confirm.styleClass.add("BackGroundWriteButton")
     confirm.setPrefSize(107.0, 57.0)
-    pane.background = Consoler.background
+    pane.background = background
     size.modifyWindwosSize(pane, back, title, confirm, forgePane, fabricPane, fabricAPIPane, quiltPane)
-    Consoler.setCss("ModChoosePane", fabricPane, forgePane, fabricAPIPane, quiltPane)
-    Consoler.setCss("BlackBorder", back, downloadForge, downloadFabric, downloadFabricAPI, downloadQuilt)
-    Consoler.setCss("BlackBorder", cancelForge, cancelFabric, cancelFabricAPI, cancelQuilt)
+    setCss("ModChoosePane", fabricPane, forgePane, fabricAPIPane, quiltPane)
+    setCss("BlackBorder", back, downloadForge, downloadFabric, downloadFabricAPI, downloadQuilt)
+    setCss("BlackBorder", cancelForge, cancelFabric, cancelFabricAPI, cancelQuilt)
     pane.setStylesheets()
     mainStage.setScene(Scene(pane))
     downloadForge.onAction = EventHandler {

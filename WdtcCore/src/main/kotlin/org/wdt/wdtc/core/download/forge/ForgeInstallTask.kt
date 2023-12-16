@@ -148,11 +148,11 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
     process.destroy()
   }
 
-  fun getMiddleBracket(args: String?): Matcher {
+  private fun getMiddleBracket(args: String): Matcher {
     return Pattern.compile("\\[(.+)]").matcher(args)
   }
 
-  fun getLargeBracket(args: String?): Matcher {
+  private fun getLargeBracket(args: String): Matcher {
     return Pattern.compile("\\{(.+)}").matcher(args)
   }
 

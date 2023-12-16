@@ -21,7 +21,6 @@ import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
 import org.wdt.wdtc.core.download.quilt.QuiltVersionList
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.ui.window.Consoler.setStylesheets
 import java.io.IOException
 
 class ModChooseVersionWindow(
@@ -75,7 +74,7 @@ class ModChooseVersionWindow(
     }
     list.content = buttonList
     size.modifyWindwosSize(pane, list, back, tips)
-    pane.background = Consoler.background
+    pane.background = background
     pane.setStylesheets()
     mainStage.setScene(Scene(pane))
     back.onAction = EventHandler {
