@@ -6,4 +6,5 @@ interface ModDownloadInfoInterface {
   val modVersion: String
   val modInstallTask: InstallTaskInterface
   val modKind: KindOfMod
+  override fun toString(): String
 }

@@ -1,7 +1,5 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.utils.io.IOUtils
-import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.utils.logmaker
 import java.io.BufferedReader
 import java.io.IOException
@@ -10,8 +8,11 @@ import java.io.InputStreamReader
 import java.util.regex.Pattern
 import kotlin.concurrent.thread
 
-class LaunchProcess(private val process: Process) {
-  var setUIText: TextInterface? = null
+class LaunchProcess(
+  private val process: Process,
+  var printInfo: (String) -> Unit
+) {
+  private val builder = StringBuilder()
   fun startLaunchGame() {
     try {
       thread(name = "Read info inputStream") { getRunInfo(process.inputStream) }
@@ -26,7 +27,7 @@ class LaunchProcess(private val process: Process) {
     try {
       val thread = Thread.currentThread()
       val reader = BufferedReader(InputStreamReader(inputStream, "GBK"))
-      var line: String?
+      var line: String
       while (reader.readLine().also { line = it } != null) {
         if (thread.isInterrupted) {
           launchErrorTask()
@@ -35,9 +36,11 @@ class LaunchProcess(private val process: Process) {
           val errorWarn = Pattern.compile("FATAL").matcher(line)
           if (errorWarn.find()) {
             println(line)
+            builder.append(line)
             thread.interrupt()
           } else {
             println(line)
+            builder.append(line)
           }
         }
       }
@@ -46,10 +49,8 @@ class LaunchProcess(private val process: Process) {
     }
   }
 
-  // TODO Optimize error display
-  @Throws(IOException::class)
   private fun launchErrorTask() {
-    setUIText?.setControl("启动失败:${IOUtils.toString(process.errorStream)}${IOUtils.toString(process.inputStream)}")
+    printInfo("启动失败:\n${builder}")
   }
 
 }

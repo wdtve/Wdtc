@@ -1,6 +1,6 @@
 package org.wdt.wdtc.core.auth.accounts
 
-import org.wdt.wdtc.core.auth.preferredUser
+import org.wdt.wdtc.core.auth.getPreferredUser
 import org.wdt.wdtc.core.manger.authlibInjector
 import org.wdt.wdtc.core.manger.littleskinApiUrl
 import org.wdt.wdtc.core.utils.STRING_EMPTY
@@ -9,9 +9,10 @@ import org.wdt.wdtc.core.utils.appendForString
 
 class Accounts {
   private val type: AccountsType
+  private val user = getPreferredUser()
 
   init {
-    type = if (preferredUser.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
+    type = if (user.type == AccountsType.Offline) AccountsType.Offline else AccountsType.Yggdrasil
   }
 
   private val ifAccountsIsOffline = type != AccountsType.Yggdrasil
@@ -26,7 +27,7 @@ class Accounts {
       littleskinApiUrl,
       STRING_SPACE,
       "-Dauthlibinjector.yggdrasil.prefetched=",
-      preferredUser.base64Data
+      user.base64Data
     )
 
   enum class AccountsType {

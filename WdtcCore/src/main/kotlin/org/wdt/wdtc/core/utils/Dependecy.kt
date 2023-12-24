@@ -1,16 +1,20 @@
-package org.wdt.wdtc.core.utils.dependency
+package org.wdt.wdtc.core.utils
 
+import java.io.File
+import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URL
 import java.util.*
 import java.util.regex.Pattern
 
 open class DefaultDependency(libraryName: String) {
   val libraryName: String
-  var groupId: String
+  private var groupId: String
 
   @JvmField
   var artifactId: String
   var version: String
-  var spaec: String? = null
+  private var spaec: String? = null
 
   init {
     val p = Pattern.compile("([^: ]+):([^: ]+)(:([^: ]*)(:([^: ]+))?)?:([^: ]+)")
@@ -68,4 +72,22 @@ open class DefaultDependency(libraryName: String) {
   fun cleanString(str: String): String {
     return str.replace(":", "").replace("[", "").replace("]", "")
   }
+}
+
+class DependencyDownload : DefaultDependency {
+  var downloadPath: File? = null
+  var defaultUrl = "https://repo1.maven.org/maven2/"
+
+  constructor(lib: String) : super(lib)
+  constructor(groupId: String, artifactId: String, version: String) : super(groupId, artifactId, version)
+
+  @get:Throws(IOException::class)
+  val libraryFilePath: String
+    get() = libraryFile.getCanonicalPath()
+  val libraryFile: File
+    get() = File(downloadPath, formJar())
+
+  @get:Throws(MalformedURLException::class)
+  val libraryUrl: URL
+    get() = URL(defaultUrl + formJar())
 }

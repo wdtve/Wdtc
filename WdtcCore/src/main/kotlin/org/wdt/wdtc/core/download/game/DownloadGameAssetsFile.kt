@@ -6,7 +6,6 @@ import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.io.isFileNotExistsAndIsNotSameSize
 import org.wdt.wdtc.core.download.SpeedOfProgress
-import org.wdt.wdtc.core.download.infterface.DownloadSourceInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.utils.isStopDownloadProcess
@@ -40,8 +39,8 @@ open class DownloadGameAssetsFile(val launcher: Launcher) {
     val size = 0
     val hashSplicing: String
       get() = "$hashHead/$hash"
-    val hashHead: String
-      get() = hash?.substring(0, 2)!!
+    private val hashHead: String
+      get() = hash?.substring(0, 2).toString()
   }
 
   class DownloadGameAssetsFileTask(
@@ -49,11 +48,10 @@ open class DownloadGameAssetsFile(val launcher: Launcher) {
     private val data: AssetsFileData,
     private val progress: SpeedOfProgress
   ) : Thread() {
-    private val source: DownloadSourceInterface = downloadSource
 
     override fun run() {
       val hashFile = File(launcher.gameObjects, data.hashSplicing)
-      val hashUrl = (source.assetsUrl + data.hashSplicing).toURL()
+      val hashUrl = (downloadSource.assetsUrl + data.hashSplicing).toURL()
       startDownloadTask(hashUrl, hashFile)
       synchronized(this) { progress.countDown() }
     }

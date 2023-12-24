@@ -17,7 +17,7 @@ import org.wdt.wdtc.core.game.LibraryObject
 import org.wdt.wdtc.core.game.LibraryObject.Companion.getLibraryObject
 import org.wdt.wdtc.core.manger.wdtcImplementationPath
 import org.wdt.wdtc.core.manger.wtdcOpenJFXPath
-import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.DependencyDownload
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.startDownloadTask

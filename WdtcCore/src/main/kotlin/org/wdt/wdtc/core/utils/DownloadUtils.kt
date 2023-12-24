@@ -25,7 +25,7 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
     }
   }
 
-  fun startDownloadFile() {
+  private fun startDownloadFile() {
     downloadFile.touch()
     val downloadFileOutput = downloadFile.newOutputStream()
     val urlFileInput = srcousFileURL.newInputStream()

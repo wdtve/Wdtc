@@ -1,5 +1,6 @@
 package org.wdt.wdtc.core.download.fabric
 
+import com.google.gson.annotations.JsonAdapter
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
@@ -8,14 +9,18 @@ import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.officialDownloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.File
 import java.io.IOException
 import java.net.URL
 
-open class FabricDonwloadInfo(protected val launcher: Launcher, override val modVersion: String) :
-  ModDownloadInfoInterface {
+@JsonAdapter(DownloadInfoTypeAdapter::class)
+open class FabricDonwloadInfo(
+  protected val launcher: Launcher,
+  override val modVersion: String
+) : ModDownloadInfoInterface {
   var apiDownloadTask: FabricAPIDownloadTask? = null
 
 
@@ -30,6 +35,7 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
   fun startDownloadProfileZip() {
     startDownloadTask(profileZipUrl, profileZipFile)
   }
+
 
   private val profileZipFile: File
     get() = File(
@@ -60,5 +66,9 @@ open class FabricDonwloadInfo(protected val launcher: Launcher, override val mod
     get() = FabricInstallTask(launcher, modVersion)
   override val modKind: KindOfMod
     get() = KindOfMod.FABRIC
+  override fun toString(): String {
+    return "FabricDonwloadInfo(modVersion='$modVersion', apiDownloadTask=$apiDownloadTask)"
+  }
+
 
 }

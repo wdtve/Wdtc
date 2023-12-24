@@ -5,7 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.io.IOUtils
-import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.DependencyDownload
 import org.wdt.wdtc.core.utils.logmaker
 import java.net.URL
 

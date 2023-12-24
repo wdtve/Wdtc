@@ -100,7 +100,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
         val choose = ModChooseVersionWindow(KindOfMod.FORGE, mainStage, launcher)
         choose.setModChooser()
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     cancelForge.onAction = EventHandler {
@@ -115,7 +115,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
         val choose = ModChooseVersionWindow(KindOfMod.FABRIC, mainStage, launcher)
         choose.setModChooser()
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     cancelFabric.onAction = EventHandler {
@@ -136,7 +136,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
         val choose = ModChooseVersionWindow(KindOfMod.FABRICAPI, mainStage, launcher)
         choose.setModChooser()
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     cancelFabricAPI.onAction = EventHandler {
@@ -152,7 +152,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
         val choose = ModChooseVersionWindow(KindOfMod.QUILT, mainStage, launcher)
         choose.setModChooser()
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     cancelQuilt.onAction = EventHandler {

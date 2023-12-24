@@ -1,5 +1,6 @@
 package org.wdt.wdtc.core.download.quilt
 
+import com.google.gson.annotations.JsonAdapter
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
@@ -7,11 +8,15 @@ import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
 import java.io.File
 import java.io.IOException
 
-open class QuiltDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
-  ModDownloadInfoInterface {
+@JsonAdapter(DownloadInfoTypeAdapter::class)
+open class QuiltDownloadInfo(
+  protected val launcher: Launcher,
+  override val modVersion: String
+) : ModDownloadInfoInterface {
   private val libraryListUrl = "https://meta.quiltmc.org/v3/versions/loader/%s/%s/profile/json"
 
   constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
@@ -29,5 +34,9 @@ open class QuiltDownloadInfo(protected val launcher: Launcher, override val modV
     get() = QuiltInstallTask(launcher, modVersion)
   override val modKind: KindOfMod
     get() = KindOfMod.QUILT
+
+  override fun toString(): String {
+    return "QuiltDownloadInfo(modVersion='$modVersion')"
+  }
 
 }

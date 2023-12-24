@@ -8,7 +8,7 @@ import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.modDownloadInfo
 
-data class VersionInfo @JvmOverloads constructor(
+data class VersionInfo(
   val versionNumber: String,
 
   val kind: KindOfMod,

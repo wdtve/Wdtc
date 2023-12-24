@@ -58,7 +58,7 @@ object SettingWindow {
             logmaker.info("* 游戏文件夹已更改为:$file")
           }
         } catch (e: IOException) {
-          ExceptionWindow.setErrorWin(e)
+          setErrorWin(e)
         }
       }
     }
@@ -193,7 +193,7 @@ object SettingWindow {
           logmaker.info("日志已导出:$logFile")
         }
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     val cleanCache = JFXButton()

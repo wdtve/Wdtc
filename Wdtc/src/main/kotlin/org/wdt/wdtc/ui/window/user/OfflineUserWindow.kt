@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane
 import org.wdt.wdtc.core.auth.accounts.OfflineAccounts
 import org.wdt.wdtc.core.auth.addUser
 import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.ui.window.ExceptionWindow
+import org.wdt.wdtc.ui.window.setErrorWin
 import java.io.IOException
 import java.util.regex.Pattern
 
@@ -45,12 +45,12 @@ object OfflineUserWindow {
           OKRegister.text = "不能带中文字符哦"
         }
       } catch (exception: IOException) {
-        ExceptionWindow.setErrorWin(exception)
+        setErrorWin(exception)
       }
     }
   }
 
-  fun isQualified(str: String?): Boolean {
+  private fun isQualified(str: String): Boolean {
     return Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,999}$").matcher(str).find()
   }
 }

@@ -10,12 +10,13 @@ import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 
 class FabricVersionList : VersionListInterface {
   @get:Throws(IOException::class)
-  override val versionList: Set<VersionJsonObjectInterface>
+  override val versionList: List<VersionJsonObjectInterface>
     get() {
-      val fabricVersionList: MutableSet<VersionJsonObjectInterface> = HashSet()
+      val fabricVersionList: MutableList<VersionJsonObjectInterface> = ArrayList()
       val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".toURL().toStrings().parseJsonArray()
       versionArray.forEach { fabricVersionList.add(it.asJsonObject.parseObject()) }
       return fabricVersionList

@@ -1,5 +1,6 @@
 package org.wdt.wdtc.core.download.forge
 
+import com.google.gson.annotations.JsonAdapter
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
@@ -8,6 +9,7 @@ import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import org.wdt.wdtc.core.utils.unZipToFile
@@ -15,6 +17,7 @@ import java.io.File
 import java.net.URL
 
 // TODO Using 'Url' class
+@JsonAdapter(DownloadInfoTypeAdapter::class)
 open class ForgeDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
   ModDownloadInfoInterface {
 
@@ -50,10 +53,15 @@ open class ForgeDownloadInfo(protected val launcher: Launcher, override val modV
     unZipToFile(forgeInstallJarFile, forgeVersionJsonFile, "version.json")
   }
 
+  override fun toString(): String {
+    return "ForgeDownloadInfo(modVersion='$modVersion')"
+  }
+
   val forgeVersionJsonObject
     get() = forgeVersionJsonFile.readFileToJsonObject()
   override val modInstallTask: InstallTaskInterface
     get() = ForgeInstallTask(launcher, modVersion)
   override val modKind: KindOfMod
     get() = KindOfMod.FORGE
+
 }

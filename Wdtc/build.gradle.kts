@@ -1,7 +1,7 @@
 plugins {
   id("org.openjfx.javafxplugin") version "0.1.0"
   id("com.github.johnrengelman.shadow") version "8.1.1"
-  kotlin("jvm") version "1.9.21"
+  kotlin("jvm")
 }
 val moduleList = listOf("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 javafx {
@@ -58,8 +58,8 @@ tasks.compileJava<JavaCompile> {
 
 dependencies {
   implementation(project(":WdtcCore"))
-  implementation("com.github.wd-t.utils:utils-gson:1.2.7")
-  implementation("com.github.wd-t.utils:utils-io:1.2.7")
+  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
+  implementation("com.github.wd-t.utils:utils-io:1.3.0")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.jfoenix:jfoenix:9.0.10")
@@ -73,7 +73,7 @@ fun getJvmArgs(debug: Boolean): MutableList<String> {
   val jvmList = mutableListOf(
     "-Dwtdc.application.type=ui",
     "-Dwdtc.launcher.version=${project.version}",
-    "-Dwdtc.ui.background=1"
+    "-Dwdtc.ui.background=0"
   )
   return if (debug) {
     jvmList.add("-Dwdtc.debug.switch=true")

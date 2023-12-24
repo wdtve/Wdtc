@@ -1,15 +1,16 @@
 package org.wdt.wdtc.core.launch
 
-import org.wdt.wdtc.core.auth.preferredUser
+import org.wdt.wdtc.core.auth.getPreferredUser
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.gameConfig
 import org.wdt.wdtc.core.manger.launcherVersion
 import java.io.IOException
 
 class GameCLICommand(private val launcher: Launcher) : AbstractGameCommand() {
+  private val preferredUser = getPreferredUser()
   @Throws(IOException::class)
   override fun getCommand(): StringBuilder {
-    val gameConfig = launcher.gameConfig.config!!
+    val gameConfig = launcher.gameConfig.config
     val versionJsonObject = launcher.gameVersionJsonObject
     nonBreakingSpace(versionJsonObject.mainClass!!)
     for (element in versionJsonObject.arguments?.gameList!!) {

@@ -1,42 +1,39 @@
 package org.wdt.wdtc.ui.window
 
-import javafx.application.Platform
-import javafx.event.EventHandler
-import javafx.scene.Scene
-import javafx.scene.control.TextArea
-import javafx.scene.image.Image
-import javafx.scene.layout.VBox
-import javafx.scene.text.Font
-import javafx.stage.Stage
-import javafx.stage.WindowEvent
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.logmaker
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Font
+import javax.swing.JFrame
+import javax.swing.JScrollPane
+import javax.swing.JTextArea
 
-object ExceptionWindow {
-  fun setErrorWin(e: Throwable) {
-    logmaker.error("Error", e)
-    setWin(e.getExceptionMessage(), "发生错误!")
-  }
+fun setErrorWin(e: Throwable) {
+  logmaker.error("Error", e)
+  setWin(e.getExceptionMessage(), "发生错误!")
+}
 
-  fun setWin(e: String?, title: String?) {
-    val runnable = Runnable {
-      val stage = Stage()
-      stage.setWidth(1000.0)
-      stage.setHeight(600.0)
-      val label = TextArea()
-      label.text = e
-      label.font = Font(14.0)
-      label.prefHeight = stage.height
-      label.prefWidth = stage.width
-      val vBox = VBox()
-      stage.title = title
-      stage.icons.add(Image("assets/icon/ico.jpg"))
-      val size = WindwosSizeManger(stage)
-      size.modifyWindwosSize(vBox, label)
-      stage.setScene(Scene(vBox))
-      stage.show()
-      stage.onCloseRequest = EventHandler { _: WindowEvent? -> vBox.children.clear() }
-    }
-    Platform.runLater(runnable)
-  }
+fun setWin(e: String, title: String) {
+  val window = JFrame(title)
+  val textArea = JTextArea()
+  textArea.text = e
+  textArea.setCaretPosition(0)
+  textArea.setCaretColor(Color.RED)
+  textArea.setBackground(Color(0xEEEEEE))
+  textArea.setFont(Font("JetBrains Mono", Font.ITALIC, 14))
+  textArea.setSelectionColor(Color.BLACK)
+  textArea.setSelectedTextColor(Color.WHITE)
+  textArea.setLineWrap(true)
+  textArea.setWrapStyleWord(true)
+  val jsp = JScrollPane(textArea)
+
+  window.layout = BorderLayout()
+  window.add(jsp, BorderLayout.CENTER)
+  window.setTitle("文本编辑器")
+  window.isVisible = true
+  window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  window.setSize(800, 500)
+  window.setResizable(true)
+
 }

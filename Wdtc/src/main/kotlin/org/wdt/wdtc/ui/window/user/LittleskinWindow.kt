@@ -10,7 +10,7 @@ import org.wdt.wdtc.core.auth.addUser
 import org.wdt.wdtc.core.auth.yggdrasil.YggdrasilAccounts
 import org.wdt.wdtc.core.manger.littleskinUrl
 import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.ui.window.ExceptionWindow
+import org.wdt.wdtc.ui.window.setErrorWin
 import java.io.IOException
 
 object LittleskinWindow {
@@ -59,7 +59,7 @@ object LittleskinWindow {
             logmaker.info("Littleskin用户:" + UserName + "登陆成功!")
             UserListPane.setUserList(pane)
           } catch (e: IOException) {
-            ExceptionWindow.setErrorWin(e)
+            setErrorWin(e)
           }
         } catch (e: IOException) {
           label.text = "用户名或密码错误"

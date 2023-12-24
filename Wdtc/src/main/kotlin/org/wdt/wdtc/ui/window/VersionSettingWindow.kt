@@ -98,7 +98,7 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
         homeWindow.setHome(mainStage)
         logmaker.info(launcher.versionNumber + " Deleted")
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     completion.onAction = EventHandler {

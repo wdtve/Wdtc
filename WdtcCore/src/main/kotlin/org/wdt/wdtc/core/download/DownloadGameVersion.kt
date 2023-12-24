@@ -8,7 +8,7 @@ open class DownloadGameVersion @JvmOverloads constructor(
   protected val launcher: Launcher,
   protected val install: Boolean = false
 ) {
-  protected val downloadGame: DownloadVersionGameFile = DownloadVersionGameFile(launcher, install)
+  private val downloadGame: DownloadVersionGameFile = DownloadVersionGameFile(launcher, install)
 
   @Throws(IOException::class)
   fun downloadGameFileTask() {

@@ -56,7 +56,7 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
         size.modifyWindwosSize(pane, versionId, modKind)
         size.modifyWindwosSize(versionList, pane)
         versionId.onAction = EventHandler {
-          setting.preferredVersion = versionId.text
+          setting.preferredVersion = gameVersion
           setting.putSettingToFile()
           val win = HomeWindow(gameVersion)
           win.setHome(mainStage)

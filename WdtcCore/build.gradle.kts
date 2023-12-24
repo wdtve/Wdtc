@@ -1,13 +1,13 @@
 plugins {
-  kotlin("jvm") version "1.9.21"
+  kotlin("jvm")
 }
 
 group = "org.wdt.wdtc.core"
 version = rootProject.version
 
 dependencies {
-  implementation("com.github.wd-t.utils:utils-gson:1.2.7")
-  implementation("com.github.wd-t.utils:utils-io:1.2.7")
+  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
+  implementation("com.github.wd-t.utils:utils-io:1.3.0")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation(kotlin("stdlib-jdk8"))
@@ -37,6 +37,8 @@ fun getJvmArgs(debug: Boolean): MutableList<String> {
     jvmList
   }
 }
+
+
 tasks.test {
   workingDir = rootDir
   jvmArgs = getJvmArgs(true)

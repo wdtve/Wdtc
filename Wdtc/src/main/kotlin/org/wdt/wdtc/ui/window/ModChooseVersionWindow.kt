@@ -69,7 +69,7 @@ class ModChooseVersionWindow(
           size.modifyWindwosSize(buttonList, versionButton)
         }
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
     list.content = buttonList

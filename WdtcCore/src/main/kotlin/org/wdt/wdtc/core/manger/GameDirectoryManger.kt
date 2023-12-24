@@ -5,20 +5,20 @@ import java.io.File
 
 open class GameDirectoryManger {
   //此必须在编辑运行配置里把工作目录改成"$ProjectFileDir$"不然游戏文件夹地址会出错
-  private var here: File
+  val workDirectory: File
 
   constructor() {
-    here = setting.defaultGamePath
+    workDirectory = setting.defaultGamePath
   }
 
   constructor(here: File) {
-    this.here = here
+    this.workDirectory = here
   }
 
   val gameObjects: File
     get() = File(gameAssetsDirectory, "objects")
   val gameDirectory: File
-    get() = File(here, ".minecraft")
+    get() = File(workDirectory, ".minecraft")
   val gameLibraryDirectory: File
     get() = File(gameDirectory, "libraries")
   val gameVersionsDirectory: File

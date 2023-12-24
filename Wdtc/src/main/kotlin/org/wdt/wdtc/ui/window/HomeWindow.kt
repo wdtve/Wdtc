@@ -10,10 +10,10 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.auth.isExistUserJsonFile
-import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.preferredLauncher
 import org.wdt.wdtc.core.launch.LaunchGame
+import org.wdt.wdtc.core.launch.LaunchProcess
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.manger.launcherVersion
 import org.wdt.wdtc.core.manger.wdtcCache
@@ -59,14 +59,14 @@ class HomeWindow {
       val choose = VersionChooseWindow(Objects.requireNonNullElseGet(launcher) { GameDirectoryManger() }!!)
       choose.setWindow(mainStage)
     }
-    val VersionSetting = JFXButton("版本设置")
-    VersionSetting.setPrefSize(128.0, 46.0)
+    val versionSetting = JFXButton("版本设置")
+    versionSetting.setPrefSize(128.0, 46.0)
     if (launcher != null) {
-      VersionSetting.isDisable = false
+      versionSetting.isDisable = false
       val windows = VersionSettingWindow(launcher!!, mainStage)
-      VersionSetting.onAction = EventHandler { windows.setWindow() }
+      versionSetting.onAction = EventHandler { windows.setWindow() }
     } else {
-      VersionSetting.isDisable = true
+      versionSetting.isDisable = true
     }
     val setting = getSettingButton(mainStage)
     val github = JFXButton("GitHub")
@@ -98,7 +98,7 @@ class HomeWindow {
         GameVersionListWindow.setWindowScene(mainStage)
       }
     }
-    menu.children.addAll(home, userWindow, downgame, startgame, VersionSetting, setting, github)
+    menu.children.addAll(home, userWindow, downgame, startgame, versionSetting, setting, github)
     menu.styleClass.add("BlackBorder")
     AnchorPane.setTopAnchor(menu, 0.0)
     AnchorPane.setBottomAnchor(menu, 0.0)
@@ -125,7 +125,7 @@ class HomeWindow {
           try {
             SettingWindow.setSettingWin(mainStage)
           } catch (e: IOException) {
-            ExceptionWindow.setErrorWin(e)
+            setErrorWin(e)
           }
         }
       }
@@ -142,13 +142,13 @@ class HomeWindow {
     private fun launchGame(launcher: Launcher) {
       try {
         thread(name = "${launcher.versionNumber} launch task") {
-          val launchProcess = LaunchGame.create(launcher).launchProcess
-          launchProcess.setUIText =
-            TextInterface { string: String? -> ExceptionWindow.setWin(string, "Launch Error") }
+          val launchProcess = LaunchProcess(LaunchGame.create(launcher).launchTaskProcess) {
+            setWin(it, "Launch error")
+          }
           launchProcess.startLaunchGame()
         }
       } catch (e: IOException) {
-        ExceptionWindow.setErrorWin(e)
+        setErrorWin(e)
       }
     }
   }

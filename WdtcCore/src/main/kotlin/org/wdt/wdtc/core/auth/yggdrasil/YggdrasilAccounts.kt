@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.*
 import org.wdt.utils.io.IOUtils
 import org.wdt.utils.io.toStrings
-import org.wdt.wdtc.core.auth.BaseUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinApiUrl
@@ -18,7 +17,11 @@ import java.io.IOException
 import java.io.PrintWriter
 import java.net.URL
 
-class YggdrasilAccounts(val url: String, val userName: String, private val password: String) : BaseUser() {
+class YggdrasilAccounts(
+  val url: String,
+  val userName: String,
+  private val password: String
+) {
 
   @Throws(IOException::class)
   fun sendPostWithJson(): String {
@@ -40,8 +43,7 @@ class YggdrasilAccounts(val url: String, val userName: String, private val passw
   val yggdrasilTextures: YggdrasilTextures
     get() = YggdrasilTextures(this)
 
-  @get:Throws(IOException::class)
-  override val user: User
+  val user: User
     get() {
       val userInfo = userInformation
       val textures = yggdrasilTextures
@@ -80,11 +82,11 @@ class YggdrasilAccounts(val url: String, val userName: String, private val passw
     )
   }
 
-  class UserInformation {
-    var accessToken: String? = null
-    var clientToken: String? = null
-    var availableProfiles: JsonArray? = null
-    var user: JsonObject? = null
-    var selectedProfile: JsonObject? = null
-  }
+  class UserInformation(
+    var accessToken: String,
+    var clientToken: String,
+    var availableProfiles: JsonArray,
+    var user: JsonObject,
+    var selectedProfile: JsonObject,
+  )
 }

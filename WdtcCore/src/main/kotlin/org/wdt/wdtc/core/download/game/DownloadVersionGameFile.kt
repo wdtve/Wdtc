@@ -11,14 +11,12 @@ import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 
-class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
+class DownloadVersionGameFile(val launcher: Launcher, private val install: Boolean) {
 
   fun startDownloadGameVersionJson() {
-    if (!install) {
-      return
-    }
-    var notFoundVersion = true
+    if (!install) return
     if (isOfficialDownloadSource) {
+      var notFoundVersion = true
       val versionJsonObjectList = GameVersionList().versionList
       for (versionJsonObject in versionJsonObjectList) {
         if (versionJsonObject is GameVersionJsonObjectImpl) {
@@ -69,7 +67,6 @@ class DownloadVersionGameFile(val launcher: Launcher, val install: Boolean) {
     get() = DownloadGameAssetsFile(launcher)
 
   companion object {
-    @JvmStatic
     fun startDownloadVersionManifestJsonFile() {
       startDownloadTask(downloadSource.versionManifestUrl, versionManifestFile)
     }

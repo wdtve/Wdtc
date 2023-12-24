@@ -4,6 +4,7 @@ import org.wdt.utils.gson.Json
 import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileNotExists
+import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.getGameVersionList
 import org.wdt.wdtc.core.game.isDownloadedGame
@@ -13,12 +14,12 @@ import org.wdt.wdtc.core.utils.logmaker
 import java.io.IOException
 
 class GameConfig(private val launcher: Launcher) {
-  val config: DefaultGameConfig.Config?
+  val config: DefaultGameConfig.Config
     get() = defaultGameConfig.config
 
   val defaultGameConfig: DefaultGameConfig
     get() = launcher.versionConfigFile.readFileToClass()
-  val versionInfo: VersionInfo?
+  val versionInfo: VersionInfo
     get() = defaultGameConfig.info
 
   fun putConfigToFile(config: DefaultGameConfig) {
@@ -61,6 +62,7 @@ val Launcher.gameConfig: GameConfig
 
 private fun Launcher.writeConfigJsonToFile(config: DefaultGameConfig) {
   try {
+    this.versionConfigFile.touch()
     this.versionConfigFile.writeObjectToFile(
       config, Json.getBuilder().setPrettyPrinting()
     )

@@ -16,17 +16,18 @@ import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.newInputStream
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Offline
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Yggdrasil
+import org.wdt.wdtc.core.auth.getPreferredUser
 import org.wdt.wdtc.core.auth.getUser
-import org.wdt.wdtc.core.auth.preferredUser
 import org.wdt.wdtc.core.auth.setUserToJson
 import org.wdt.wdtc.core.auth.userList
 import org.wdt.wdtc.core.manger.userListFile
-import org.wdt.wdtc.ui.window.ExceptionWindow
 import org.wdt.wdtc.ui.window.setCss
+import org.wdt.wdtc.ui.window.setErrorWin
 import org.wdt.wdtc.ui.window.setStylesheets
 import java.io.IOException
 
 object UserListPane {
+  private val preferredUser = getPreferredUser()
   fun setUserList(pane: Pane) {
     pane.children.clear()
     val scrollPane = ScrollPane()
@@ -43,16 +44,16 @@ object UserListPane {
         AnchorPane.setBottomAnchor(enter, 15.0)
         AnchorPane.setLeftAnchor(enter, 15.0)
         enter.onAction = EventHandler {
-          setUserToJson(getUser(userName!!))
+          setUserToJson(getUser(userName))
           setUserList(pane)
         }
         if (newUser == preferredUser) {
           enter.isSelected = true
         }
         val image: Image? = try {
-          Image(newUser.headFile?.newInputStream())
+          Image(newUser.headFile.newInputStream())
         } catch (e: IOException) {
-          ExceptionWindow.setErrorWin(e)
+          setErrorWin(e)
           null
         }
         val head = ImageView(image ?: throw RuntimeException())
@@ -82,7 +83,7 @@ object UserListPane {
             userListFile.writeObjectToFile(userListObject, Json.getBuilder().setPrettyPrinting())
             setUserList(pane)
           } catch (e: IOException) {
-            ExceptionWindow.setErrorWin(e)
+            setErrorWin(e)
           }
         }
         setCss("BlackBorder", userPane)

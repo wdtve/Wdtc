@@ -16,13 +16,13 @@ class FabricAPIVersionList(private val launcher: Launcher) : VersionListInterfac
   private val versionListUrl = "https://api.modrinth.com/v2/project/P7dR8mSH/version".toURL()
 
   @get:Throws(IOException::class)
-  override val versionList: Set<VersionJsonObjectInterface>
+  override val versionList: List<VersionJsonObjectInterface>
     get() {
-      val versionList: MutableSet<VersionJsonObjectInterface> = HashSet()
+      val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
       val versionListArray = versionListUrl.toStrings().parseJsonArray()
       versionListArray.forEach {
         val versionJsonObject: FabricAPIVersionJsonObjectImpl = it.asJsonObject.parseObject()
-        if (launcher.versionNumber == versionJsonObject.gameVersion!![0]) {
+        if (launcher.versionNumber == (versionJsonObject.gameVersion?.get(0) ?: throw NullPointerException())) {
           versionList.add(versionJsonObject)
         }
       }

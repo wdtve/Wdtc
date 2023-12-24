@@ -14,8 +14,8 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class Launcher @JvmOverloads constructor(version: String, here: File = setting.defaultGamePath) :
-  GameFileManger(version, here) {
+class Launcher @JvmOverloads constructor(versionNumber: String, here: File = setting.defaultGamePath) :
+  GameFileManger(versionNumber, here) {
 
   var fabricModInstallInfo: FabricDonwloadInfo? = null
     set(value) {
@@ -84,4 +84,4 @@ class Launcher @JvmOverloads constructor(version: String, here: File = setting.d
 }
 
 val preferredLauncher: Launcher?
-  get() = if (setting.preferredVersion != null) Launcher(setting.preferredVersion!!).setModTask() else null
+  get() = if (setting.preferredVersion != null) setting.preferredVersion?.setModTask() else null

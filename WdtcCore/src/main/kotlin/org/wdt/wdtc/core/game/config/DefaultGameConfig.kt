@@ -4,13 +4,12 @@ import com.google.gson.annotations.SerializedName
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.utils.runJavaHome
 
-
-data class DefaultGameConfig @JvmOverloads constructor(
+data class DefaultGameConfig(
   @field:SerializedName("info")
-  var info: VersionInfo? = null,
+  var info: VersionInfo,
 
   @field:SerializedName("config")
-  var config: Config? = null
+  var config: Config
 
 ) {
   constructor(launcher: Launcher) : this(launcher.versionInfo, Config())

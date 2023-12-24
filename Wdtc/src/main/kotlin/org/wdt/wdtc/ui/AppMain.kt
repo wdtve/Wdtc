@@ -45,7 +45,7 @@ class AppMain : Application() {
         logmaker.info("======= Wdtc Stop ========")
       }
     } catch (e: Exception) {
-      ExceptionWindow.setErrorWin(e)
+      setErrorWin(e)
     }
   }
 //  @JvmStatic

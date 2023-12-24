@@ -16,7 +16,6 @@ class LaunchGame private constructor(private val launcher: Launcher) {
       Runtime.getRuntime().exec(arrayOf<String>("cmd.exe", "/C", "start", starterBat.canonicalPath))
     else ProcessBuilder(starterBat.canonicalPath).directory(launcher.versionDirectory).start()
 
-  val launchProcess: LaunchProcess = LaunchProcess(launchTaskProcess)
 
   companion object {
 

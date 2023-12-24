@@ -22,9 +22,9 @@ class GameVersionList : VersionListInterface {
     }
   }
 
-  override val versionList: Set<VersionJsonObjectInterface>
+  override val versionList: List<VersionJsonObjectInterface>
     get() {
-      val versionList: MutableSet<VersionJsonObjectInterface> = HashSet()
+      val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
       try {
         val versionJsonArray = versionManifestFile.readFileToJsonObject().getJsonArray("versions")
         versionJsonArray.forEach {

@@ -9,7 +9,6 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
 import org.wdt.wdtc.core.download.InstallGameVersion
-import org.wdt.wdtc.core.download.infterface.TextInterface
 import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.manger.downloadSourceKind
 import org.wdt.wdtc.core.utils.openSomething
@@ -45,11 +44,10 @@ class GameDownloadingWindow(private val launcher: Launcher) {
     AnchorPane.setRightAnchor(openBmcl, 70.0)
     AnchorPane.setTopAnchor(openBmcl, 4.0)
     textField.text = launcher.versionNumber + "开始下载,下载源: " + downloadSourceKind
-      thread(name = "Download ${launcher.versionNumber} task") {
-        val installGameVersion = InstallGameVersion(launcher, true)
-        installGameVersion.setTextFieldText = TextInterface { value: String? -> textField.text = value }
-        installGameVersion.startInstallGame()
-      }
+    thread(name = "Download ${launcher.versionNumber} task") {
+      val installGameVersion = InstallGameVersion(launcher, true) { textField.text = it }
+      installGameVersion.startInstallGame()
+    }
     pane.background = background
     size.modifyWindwosSize(pane, back, time, statusBar, bmclHome, openBmcl, textField)
     val downScene = Scene(pane)

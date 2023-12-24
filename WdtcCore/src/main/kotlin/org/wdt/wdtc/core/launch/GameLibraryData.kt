@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.game.LibraryObject
 import org.wdt.wdtc.core.game.LibraryObject.NativesOs
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
-import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.DependencyDownload
 import java.io.File
 import java.net.URL
 

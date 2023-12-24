@@ -42,4 +42,9 @@ class FabricAPIDownloadTask(private val launcher: Launcher, val fabricAPIVersion
   private fun downloadFabricAPITask(filesObject: FilesObject) {
     startDownloadTask(filesObject.jarDownloadURL!!, File(launcher.gameModsPath, filesObject.jarFileName!!))
   }
+
+  override fun toString(): String {
+    return "FabricAPIDownloadTask(fabricAPIVersionNumber=$fabricAPIVersionNumber)"
+  }
+
 }

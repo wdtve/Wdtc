@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.DependencyDownload
 import org.wdt.wdtc.core.utils.startDownloadTask
 import java.io.IOException
 

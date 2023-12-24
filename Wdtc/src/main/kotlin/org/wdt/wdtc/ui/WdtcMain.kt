@@ -5,13 +5,12 @@ package org.wdt.wdtc.ui
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.auth.printUserList
 import org.wdt.wdtc.core.auth.yggdrasil.updateAuthlibInjector
-import org.wdt.wdtc.core.game.Launcher
 import org.wdt.wdtc.core.game.config.writeConfigJsonToAllVersion
 import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.JavaUtils
 import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.ui.window.ExceptionWindow
+import org.wdt.wdtc.ui.window.setErrorWin
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -42,15 +41,15 @@ fun main(args: Array<String>) {
     thread(name = "Found Java") { JavaUtils.main(registryKey) }
     javafx.application.Application.launch(AppMain::class.java, *args)
   } catch (e: Throwable) {
-    ExceptionWindow.setErrorWin(e)
+    setErrorWin(e)
   }
 }
 
 private fun removePreferredVersion() {
   val setting = setting
-  if (setting.preferredVersion != null) {
-    val launcher = Launcher(setting.preferredVersion!!)
-    if (launcher.versionJson.isFileNotExists()) {
+  val version = setting.preferredVersion
+  if (version != null) {
+    if (version.versionJson.isFileNotExists()) {
       setting.preferredVersion = null
       setting.putSettingToFile()
     }

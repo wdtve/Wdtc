@@ -15,8 +15,8 @@ import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
 import org.wdt.wdtc.core.manger.pistonDataMojang
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.*
-import org.wdt.wdtc.core.utils.dependency.DefaultDependency
-import org.wdt.wdtc.core.utils.dependency.DependencyDownload
+import org.wdt.wdtc.core.utils.DefaultDependency
+import org.wdt.wdtc.core.utils.DependencyDownload
 import java.io.*
 import java.util.jar.JarInputStream
 import java.util.regex.Matcher

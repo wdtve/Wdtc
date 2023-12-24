@@ -1,5 +1,5 @@
 plugins {
-  kotlin("jvm") version "1.9.21"
+  kotlin("jvm")
   id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -8,8 +8,8 @@ version = rootProject.version
 
 dependencies {
   implementation(project(":WdtcCore"))
-  implementation("com.github.wd-t.utils:utils-gson:1.2.7")
-  implementation("com.github.wd-t.utils:utils-io:1.2.7")
+  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
+  implementation("com.github.wd-t.utils:utils-io:1.3.0")
   implementation("log4j:log4j:1.2.17")
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("commons-cli:commons-cli:1.6.0")
@@ -45,12 +45,12 @@ tasks.create<JavaExec>("runShadowJar") {
   dependsOn(tasks.jar)
   group = "application"
   classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
-  jvmArgs = getJvmArgs(true)
+  jvmArgs = getJvmArgs()
   args = listOf("-d")
   workingDir = rootProject.rootDir
 }
 
-fun getJvmArgs(debug: Boolean): MutableList<String> {
+fun getJvmArgs(debug: Boolean = true): MutableList<String> {
   val jvmList = mutableListOf(
     "-Dwtdc.application.type=console",
     "-Dwdtc.launcher.version=${project.version}"
@@ -64,5 +64,6 @@ fun getJvmArgs(debug: Boolean): MutableList<String> {
 }
 
 tasks.test {
+  jvmArgs = getJvmArgs()
   useJUnitPlatform()
 }

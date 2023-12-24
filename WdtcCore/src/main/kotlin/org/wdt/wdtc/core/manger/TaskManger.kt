@@ -7,6 +7,7 @@ import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.*
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
 import org.wdt.wdtc.core.game.getGameVersionList
+import org.wdt.wdtc.core.utils.gson.serializeLauncherGson
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.stopProcess
 import org.wdt.wdtc.core.utils.toURL
@@ -30,7 +31,7 @@ fun runStartUpTask() {
     userListFile.writeObjectToFile(JsonObject())
   }
   if (settingFile.isFileNotExists()) {
-    settingFile.writeObjectToFile(Setting())
+    settingFile.writeObjectToFile(Setting(), serializeLauncherGson)
   }
   if (llbmpipeLoader.isFileNotExists()) {
     startDownloadTask(
