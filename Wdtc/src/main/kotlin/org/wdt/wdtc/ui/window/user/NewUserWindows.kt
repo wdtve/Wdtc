@@ -1,7 +1,6 @@
 package org.wdt.wdtc.ui.window.user
 
 import com.jfoenix.controls.JFXButton
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -12,68 +11,79 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinUrl
 import org.wdt.wdtc.core.utils.openSomething
-import org.wdt.wdtc.ui.window.background
-import org.wdt.wdtc.ui.window.setStylesheets
-import org.wdt.wdtc.ui.window.setTopLowerLeft
-import org.wdt.wdtc.ui.window.setTopLowerRight
+import org.wdt.wdtc.ui.window.*
 
 class NewUserWindows(private val mainStage: Stage) {
   var type: AccountsType? = null
   var title: String? = null
 
   fun show() {
-    val userStage = Stage()
-    userStage.setWidth(725.0)
-    userStage.setHeight(430.0)
-    val parentPane = AnchorPane()
-    userStage.icons.add(Image("/assets/icon/ico.jpg"))
-    val sonPane = Pane()
-    if (type == null) {
-      UserListPane.setUserList(sonPane)
-    } else {
-      when (type) {
-        AccountsType.Yggdrasil -> LittleskinWindow.setLittleskinWin(sonPane)
-        AccountsType.Offline -> OfflineUserWindow.setUserWin(sonPane)
-        else -> TODO()
+    val userStage = Stage().apply {
+      width = 725.0
+      height = 430.0
+      icons.add(Image("/assets/icon/ico.jpg"))
+      initOwner(mainStage)
+      title = this@NewUserWindows.title
+      initModality(Modality.APPLICATION_MODAL)
+      isResizable = false
+    }
+    val sonPane = Pane().apply {
+      setTopLowerRight()
+      setBottomAnchor(0.0)
+      setLeftAnchor(125.0)
+      setPrefSize(600.0, 400.0)
+    }
+    sonPane.let {
+      if (type == null) {
+        UserListPane.setUserList(it)
+      } else {
+        when (type) {
+          AccountsType.YGGDRASIL -> LittleskinWindow.setLittleskinWin(it)
+          AccountsType.OFFLINE -> OfflineUserWindow.setUserWin(it)
+          else -> TODO()
+        }
       }
     }
-    userStage.initOwner(mainStage)
-    userStage.title = title
-    sonPane.setPrefSize(600.0, 400.0)
-    val buttonLine = AnchorPane()
-    buttonLine.prefWidth = 125.0
-    val UserListButton = JFXButton("账户列表")
-    UserListButton.onAction = EventHandler { event: ActionEvent? -> UserListPane.setUserList(sonPane) }
-    UserListButton.setPrefSize(125.0, 30.0)
-    val OfflineButton = JFXButton("离线账户")
-    AnchorPane.setTopAnchor(OfflineButton, 30.0)
-    OfflineButton.setPrefSize(125.0, 30.0)
-    OfflineButton.onAction = EventHandler { event: ActionEvent? -> OfflineUserWindow.setUserWin(sonPane) }
-    val LittleskinCom = JFXButton("Littleskin官网")
-    LittleskinCom.setPrefSize(125.0, 30.0)
-    AnchorPane.setBottomAnchor(LittleskinCom, 30.0)
-    val buygame = JFXButton("购买正版")
-    buygame.setPrefSize(125.0, 30.0)
-    AnchorPane.setBottomAnchor(buygame, 0.0)
-    val YggdrasilButton = JFXButton("Yggdrasil账户")
-    YggdrasilButton.setPrefSize(125.0, 30.0)
-    YggdrasilButton.onAction = EventHandler { LittleskinWindow.setLittleskinWin(sonPane) }
-    AnchorPane.setTopAnchor(YggdrasilButton, 60.0)
-    sonPane.setTopLowerRight()
-    AnchorPane.setBottomAnchor(sonPane, 0.0)
-    AnchorPane.setLeftAnchor(sonPane, 125.0)
-    buttonLine.children.addAll(UserListButton, OfflineButton, YggdrasilButton, LittleskinCom, buygame)
-    buttonLine.styleClass.add("BlackBorder")
-    buttonLine.setTopLowerLeft()
-    AnchorPane.setTopAnchor(buttonLine, 0.0)
-    parentPane.background = background
-    parentPane.children.addAll(buttonLine, sonPane)
-    userStage.setScene(Scene(parentPane))
-    parentPane.setStylesheets()
-    userStage.initModality(Modality.APPLICATION_MODAL)
-    userStage.isResizable = false
-    userStage.show()
-    LittleskinCom.onAction = EventHandler { openSomething(littleskinUrl) }
-    buygame.onAction = EventHandler { openSomething("https://www.minecraft.net/zh-hans") }
+    val userListButton = JFXButton("账户列表").apply {
+      onAction = EventHandler { UserListPane.setUserList(sonPane) }
+      setPrefSize(125.0, 30.0)
+    }
+    val offlineButton = JFXButton("离线账户").apply {
+      setTopAnchor(30.0)
+      setPrefSize(125.0, 30.0)
+      onAction = EventHandler { OfflineUserWindow.setUserWin(sonPane) }
+    }
+    val littleskinCom = JFXButton("Littleskin官网").apply {
+      setPrefSize(125.0, 30.0)
+      setBottomAnchor(30.0)
+      onAction = EventHandler { openSomething(littleskinUrl) }
+    }
+    val buygame = JFXButton("购买正版").apply {
+      setPrefSize(125.0, 30.0)
+      setBottomAnchor(0.0)
+      onAction = EventHandler { openSomething("https://www.minecraft.net/zh-hans") }
+    }
+    val yggdrasilButton = JFXButton("Yggdrasil账户").apply {
+      setPrefSize(125.0, 30.0)
+      onAction = EventHandler { LittleskinWindow.setLittleskinWin(sonPane) }
+      setTopAnchor(60.0)
+    }
+    val buttonLine = AnchorPane().apply {
+      prefWidth = 125.0
+      children.addAll(userListButton, offlineButton, yggdrasilButton, littleskinCom, buygame)
+      styleClass.add("BlackBorder")
+      setTopLowerLeft()
+      setTopAnchor(0.0)
+    }
+    AnchorPane().apply {
+      background = wdtcBackground
+      children.addAll(buttonLine, sonPane)
+      setStylesheets()
+    }.let {
+      userStage.run {
+        scene = Scene(it)
+        show()
+      }
+    }
   }
 }

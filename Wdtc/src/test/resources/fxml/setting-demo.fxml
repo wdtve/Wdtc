@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <ScrollPane layoutX="105.0" layoutY="62.0" prefHeight="338.0" prefWidth="495.0">
         <Pane prefHeight="334.0" prefWidth="493.0">
-            <Label layoutX="10.0" layoutY="35.0" text="游戏文件夹位置:"/>
-            <Label layoutX="107.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;"
-                   textFill="#0000007c"/>
-            <TextField layoutX="10.0" layoutY="55.0" prefHeight="23.0" prefWidth="297.0"/>
-            <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..."/>
-            <RadioButton layoutX="10.0" layoutY="111.0" mnemonicParsing="false" text="显示"/>
-            <RadioButton layoutX="139.0" layoutY="111.0" mnemonicParsing="false" selected="true" text="不显示"/>
-            <Label layoutX="10.0" layoutY="89.0"
-                   text="启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):"/>
-            <Label layoutX="10.0" layoutY="138.0" text="选择下载源"/>
-            <RadioButton layoutX="10.0" layoutY="159.0" mnemonicParsing="false" text="Mojang"/>
-            <RadioButton layoutX="139.0" layoutY="159.0" mnemonicParsing="false" selected="true" text="Bmcl"/>
-            <RadioButton layoutX="281.0" layoutY="159.0" mnemonicParsing="false" text="Mcbbs"/>
-            <Label layoutX="10.0" layoutY="185.0" text="是否启用OpenGL软渲染器:"/>
-            <RadioButton layoutX="10.0" layoutY="209.0" mnemonicParsing="false" text="启用"/>
-            <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用"/>
-            <Label layoutX="10.0" layoutY="235.0" text="将游戏设置成中文(默认开启):"/>
-            <RadioButton layoutX="10.0" layoutY="254.0" mnemonicParsing="false" text="启用"/>
-            <RadioButton layoutX="139.0" layoutY="254.0" mnemonicParsing="false" text="不启用"/>
+            <Label layoutX="10.0" layoutY="35.0" text="游戏文件夹位置:" />
+            <Label layoutX="107.0" layoutY="35.0" text="如:选择C盘则游戏文件夹为&quot;C:\minceaft&quot;" textFill="#0000007c" />
+            <TextField layoutX="10.0" layoutY="55.0" prefHeight="23.0" prefWidth="297.0" />
+            <Button layoutX="315.0" layoutY="55.0" mnemonicParsing="false" text="..." />
+            <RadioButton layoutX="10.0" layoutY="111.0" mnemonicParsing="false" text="显示" />
+            <RadioButton layoutX="139.0" layoutY="111.0" mnemonicParsing="false" selected="true" text="不显示" />
+            <Label layoutX="10.0" layoutY="89.0" text="启动时是否显示cmd窗口(如果按启动后长时间没反应可以设置显示,默认不显示):" />
+            <Label layoutX="10.0" layoutY="138.0" text="选择下载源" />
+            <RadioButton layoutX="10.0" layoutY="159.0" mnemonicParsing="false" text="Mojang" />
+            <RadioButton layoutX="139.0" layoutY="159.0" mnemonicParsing="false" selected="true" text="Bmcl" />
+            <RadioButton layoutX="281.0" layoutY="159.0" mnemonicParsing="false" text="Mcbbs" />
+            <Label layoutX="10.0" layoutY="185.0" text="是否启用OpenGL软渲染器:" />
+            <RadioButton layoutX="10.0" layoutY="209.0" mnemonicParsing="false" text="启用" />
+            <RadioButton layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="不启用" />
+            <Label layoutX="10.0" layoutY="235.0" text="将游戏设置成中文(默认开启):" />
+            <RadioButton layoutX="10.0" layoutY="254.0" mnemonicParsing="false" text="启用" />
+            <RadioButton layoutX="139.0" layoutY="254.0" mnemonicParsing="false" text="不启用" />
         </Pane>
     </ScrollPane>
-    <Button layoutY="371.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button"/>
-    <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Button"/>
+    <Button layoutY="371.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Button" />
+    <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="64.0" text="Button" />
+   <TextField layoutX="149.0" layoutY="39.0" prefHeight="23.0" prefWidth="356.0" />
+   <Button layoutX="505.0" layoutY="39.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="96.0" text="Button" />
+   <Label layoutX="105.0" layoutY="43.0" text="回声洞:" />
     <!--    <JFXButton style="-fx-border-color: #000000;" text="返回"/>-->
 
 

@@ -16,11 +16,17 @@ class McbbsDownloadSource : DownloadSourceInterface {
   override val fabricMetaUrl: String
     get() = "https://download.mcbbs.net/fabric-meta/"
   override val fabricLibraryUrl: String
-    get() = "https://download.mcbbs.net/maven/"
+    get() = libraryUrl
   override val forgeLibraryMavenUrl: String
-    get() = "https://download.mcbbs.net/maven/"
+    get() = libraryUrl
   override val versionClientUrl: String
     get() = "https://download.mcbbs.net/version/%s/%s"
   override val officialUrl: String
     get() = "https://download.mcbbs.net/"
+
+  // TODO: Bmcl quilt api is not available - see https://bmclapidoc.bangbang93.com/
+  override val quiltMetaUrl: String
+    get() = "https://download.mcbbs.net/quilt-meta/"
+  override val quiltMavenUrl: String
+    get() = libraryUrl
 }

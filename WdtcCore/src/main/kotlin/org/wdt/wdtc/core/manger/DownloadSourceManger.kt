@@ -9,7 +9,7 @@ import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
 val officialDownloadSource: DownloadSourceInterface = OfficialDownloadSource()
 
-val downloadSourceKind: DownloadSourceList = setting.downloadSource
+val downloadSourceKind: DownloadSourceList = currentSetting.downloadSource
 
 val downloadSource: DownloadSourceInterface
   get() {

@@ -4,7 +4,7 @@ import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.game.VersionNotFoundException
 import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
-import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.modDownloadInfo
 
@@ -16,27 +16,28 @@ data class VersionInfo(
   var modVersion: String? = null
 ) {
 
-  constructor(launcher: Launcher) : this(
-    launcher.versionNumber,
-    launcher.kind,
-    launcher.modDownloadInfo?.modVersion
+  constructor(version: Version) : this(
+    version.versionNumber,
+    version.kind,
+    version.modDownloadInfo?.modVersion
   )
 
-  val launcher: Launcher
+  val version: Version
     get() {
-      val launcher = Launcher(versionNumber)
       val modVersion = this.modVersion ?: throw NullPointerException("$modVersion is null")
-      when (kind) {
-        KindOfMod.FORGE -> launcher.forgeModDownloadInfo = ForgeDownloadInfo(launcher, modVersion)
-        KindOfMod.FABRIC -> launcher.fabricModInstallInfo = FabricDonwloadInfo(launcher, modVersion)
-        KindOfMod.QUILT -> launcher.quiltModDownloadInfo = QuiltInstallTask(launcher, modVersion)
-        else -> {
-          throw VersionNotFoundException("Game mod not found")
+      val version = Version(versionNumber).apply {
+        when (kind) {
+          KindOfMod.FORGE -> forgeModDownloadInfo = ForgeDownloadInfo(this, modVersion)
+          KindOfMod.FABRIC -> fabricModInstallInfo = FabricDonwloadInfo(this, modVersion)
+          KindOfMod.QUILT -> quiltModDownloadInfo = QuiltInstallTask(this, modVersion)
+          else -> {
+            throw VersionNotFoundException("Game mod not found")
+          }
         }
       }
-      return launcher
+      return version
     }
 }
 
-val Launcher.versionInfo
+val Version.versionInfo
   get() = VersionInfo(this)

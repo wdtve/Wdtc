@@ -13,14 +13,18 @@ fun String.cleanStrInString(strs: String): String {
 }
 
 fun String.appendForString(vararg strings: Any?): String {
-  val string = StringBuilder(this)
-  for (str in strings) {
-    string.append(str)
+  return buildString {
+    append(this@appendForString)
+    strings.forEach {
+      append(it)
+    }
   }
-  return string.toString()
 }
 
 fun String.toBase64(): String {
-  return Base64.getEncoder().encodeToString(this.toByteArray(StandardCharsets.UTF_8))
+  return Base64.getEncoder().encodeToString(toByteArray(StandardCharsets.UTF_8))
 }
 
+fun String.startendWith(start: String, end: String): Boolean {
+  return this.startsWith(start) && this.endsWith(end)
+}

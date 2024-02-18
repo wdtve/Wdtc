@@ -1,6 +1,6 @@
 plugins {
-  kotlin("jvm")
-  id("com.github.johnrengelman.shadow") version "8.1.1"
+  alias(libs.plugins.kotlin)
+  alias(libs.plugins.shadowJar)
 }
 
 group = "org.wdt.wdtc.console"
@@ -8,15 +8,14 @@ version = rootProject.version
 
 dependencies {
   implementation(project(":WdtcCore"))
-  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
-  implementation("com.github.wd-t.utils:utils-io:1.3.0")
-  implementation("log4j:log4j:1.2.17")
-  implementation("com.google.code.gson:gson:2.10.1")
-  implementation("commons-cli:commons-cli:1.6.0")
-  implementation(kotlin("stdlib-jdk8"))
-  testImplementation(kotlin("test"))
-  testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation(platform("org.junit:junit-bom:5.10.0"))
+  implementation("com.github.wd-t.utils:utils-cli:1.3.3")
+  implementation(libs.utils.io)
+  implementation(libs.utils.gson)
+  implementation(libs.gson)
+  implementation(libs.coroutines.core)
+  implementation(libs.coroutines.core.jvm)
+  implementation(libs.stdlib.jdk8)
+  testImplementation(libs.stdlib.test)
 }
 
 val mainClazz = "org.wdt.wdtc.console.WdtcMain"
@@ -45,12 +44,11 @@ tasks.create<JavaExec>("runShadowJar") {
   dependsOn(tasks.jar)
   group = "application"
   classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)
-  jvmArgs = getJvmArgs()
-  args = listOf("-d")
+  jvmArgs = getJvmArgs(true)
   workingDir = rootProject.rootDir
 }
 
-fun getJvmArgs(debug: Boolean = true): MutableList<String> {
+fun getJvmArgs(debug: Boolean): MutableList<String> {
   val jvmList = mutableListOf(
     "-Dwtdc.application.type=console",
     "-Dwdtc.launcher.version=${project.version}"
@@ -64,6 +62,6 @@ fun getJvmArgs(debug: Boolean = true): MutableList<String> {
 }
 
 tasks.test {
-  jvmArgs = getJvmArgs()
+  jvmArgs = getJvmArgs(true)
   useJUnitPlatform()
 }

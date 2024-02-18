@@ -7,17 +7,17 @@ import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
-import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.utils.*
 import java.io.IOException
 
-class ModChooseWindow(private val launcher: Launcher, private val mainStage: Stage) {
+class ModChooseWindow(private val version: Version, private val mainStage: Stage) {
   private val size: WindwosSizeManger = mainStage.getSizeManger()
   fun setChooseWin() {
     val pane = Pane()
     val back = JFXButton("返回")
-    val title = Label(launcher.versionNumber)
+    val title = Label(version.versionNumber)
     title.layoutX = 283.0
     title.layoutY = 69.0
     val forge = Label(Tips.FORGE_NO)
@@ -88,7 +88,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     AnchorPane.setBottomAnchor(confirm, 30.0)
     confirm.styleClass.add("BackGroundWriteButton")
     confirm.setPrefSize(107.0, 57.0)
-    pane.background = background
+    pane.background = wdtcBackground
     size.modifyWindwosSize(pane, back, title, confirm, forgePane, fabricPane, fabricAPIPane, quiltPane)
     setCss("ModChoosePane", fabricPane, forgePane, fabricAPIPane, quiltPane)
     setCss("BlackBorder", back, downloadForge, downloadFabric, downloadFabricAPI, downloadQuilt)
@@ -97,14 +97,14 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     mainStage.setScene(Scene(pane))
     downloadForge.onAction = EventHandler {
       try {
-        val choose = ModChooseVersionWindow(KindOfMod.FORGE, mainStage, launcher)
+        val choose = ModChooseVersionWindow(KindOfMod.FORGE, mainStage, version)
         choose.setModChooser()
       } catch (e: IOException) {
         setErrorWin(e)
       }
     }
     cancelForge.onAction = EventHandler {
-      launcher.cleanKind()
+      version.cleanKind()
       downloadFabricAPI.isDisable = false
       downloadFabric.isDisable = false
       forge.text = Tips.FORGE_NO
@@ -112,7 +112,7 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     }
     downloadFabric.onAction = EventHandler {
       try {
-        val choose = ModChooseVersionWindow(KindOfMod.FABRIC, mainStage, launcher)
+        val choose = ModChooseVersionWindow(KindOfMod.FABRIC, mainStage, version)
         choose.setModChooser()
       } catch (e: IOException) {
         setErrorWin(e)
@@ -120,20 +120,20 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     }
     cancelFabric.onAction = EventHandler {
       try {
-        launcher.cleanKind()
-        launcher.fabricModInstallInfo?.apiDownloadTask = null
+        version.cleanKind()
+        version.fabricModInstallInfo?.apiDownloadTask = null
         downloadForge.isDisable = false
         downloadFabricAPI.isDisable = true
         forge.text = Tips.FORGE_NO
         fabric.text = Tips.FABRIC_NO
         fabricAPI.text = Tips.FABRIC_API_NO
       } catch (e: NullPointerException) {
-        logmaker.warn("warn:", e)
+        logmaker.warning("warn:", e)
       }
     }
     downloadFabricAPI.onAction = EventHandler {
       try {
-        val choose = ModChooseVersionWindow(KindOfMod.FABRICAPI, mainStage, launcher)
+        val choose = ModChooseVersionWindow(KindOfMod.FABRICAPI, mainStage, version)
         choose.setModChooser()
       } catch (e: IOException) {
         setErrorWin(e)
@@ -141,15 +141,15 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
     }
     cancelFabricAPI.onAction = EventHandler {
       try {
-        launcher.fabricModInstallInfo?.apiDownloadTask = null
+        version.fabricModInstallInfo?.apiDownloadTask = null
         fabricAPI.text = Tips.FABRIC_API_NO
       } catch (e: NullPointerException) {
-        logmaker.warn("warn:", e)
+        logmaker.warning(e.getExceptionMessage())
       }
     }
     downloadQuilt.onAction = EventHandler {
       try {
-        val choose = ModChooseVersionWindow(KindOfMod.QUILT, mainStage, launcher)
+        val choose = ModChooseVersionWindow(KindOfMod.QUILT, mainStage, version)
         choose.setModChooser()
       } catch (e: IOException) {
         setErrorWin(e)
@@ -162,20 +162,20 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
       downloadForge.isDisable = false
       downloadFabric.isDisable = false
     }
-    if (launcher.isForge) {
-      forge.text = "Froge : " + launcher.forgeModDownloadInfo?.modVersion
+    if (version.isForge) {
+      forge.text = "Froge : " + version.forgeModDownloadInfo?.modVersion
       fabric.text = "Fabric : 与Forge不兼容"
       downloadFabricAPI.isDisable = true
       downloadFabric.isDisable = true
     } else {
       forge.text = Tips.FORGE_NO
     }
-    if (launcher.isFabric) {
-      fabric.text = "Fabric : " + launcher.fabricModInstallInfo?.modVersion
+    if (version.isFabric) {
+      fabric.text = "Fabric : " + version.fabricModInstallInfo?.modVersion
       forge.text = "Forge : 与Fabric不兼容"
       downloadFabricAPI.isDisable = false
       downloadForge.isDisable = true
-      val fabircModInstallInfo = launcher.fabricModInstallInfo
+      val fabircModInstallInfo = version.fabricModInstallInfo
       if (fabircModInstallInfo?.isAPIDownloadTaskNoNull == true) {
         fabricAPI.text = fabircModInstallInfo.apiDownloadTask?.fabricAPIVersionNumber
       }
@@ -183,8 +183,8 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
       fabric.text = Tips.FABRIC_NO
       downloadFabricAPI.isDisable = true
     }
-    if (launcher.isQuilt) {
-      quilt.text = "Quilt : " + launcher.quiltModDownloadInfo?.modVersion
+    if (version.isQuilt) {
+      quilt.text = "Quilt : " + version.quiltModDownloadInfo?.modVersion
       forge.text = "Forge : 与Quilt不兼容"
       fabric.text = "Fabric :  与Quilt不兼容"
       downloadFabric.isDisable = true
@@ -194,8 +194,9 @@ class ModChooseWindow(private val launcher: Launcher, private val mainStage: Sta
       GameVersionListWindow.setWindowScene(mainStage)
     }
     confirm.onAction = EventHandler {
-      val gameDownloadingWindow = GameDownloadingWindow(launcher)
-      gameDownloadingWindow.setDownGameWin(mainStage)
+      GameDownloadingWindow(version).run {
+        setDownGameWin(mainStage)
+      }
     }
   }
 

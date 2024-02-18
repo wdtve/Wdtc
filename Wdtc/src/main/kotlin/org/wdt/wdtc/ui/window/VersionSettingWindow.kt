@@ -13,30 +13,31 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.download.InstallGameVersion
-import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
 import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.currentSetting
 import org.wdt.wdtc.core.manger.putSettingToFile
-import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
-import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.core.utils.modDownloadInfo
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlin.concurrent.thread
 
-class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage) {
-  private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
+class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
+  private val config: DefaultGameConfig.Config = version.gameConfig.config
   private val size: WindwosSizeManger = mainStage.getSizeManger()
   private val LAYOUT_X = 10.0
 
   fun setWindow() {
-    val window = HomeWindow(launcher)
+    val window = HomeWindow(version)
     val parentPane = AnchorPane()
     val sonScrollPane = ScrollPane()
     sonScrollPane.layoutX = 105.0
@@ -85,27 +86,28 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     AnchorPane.setLeftAnchor(delete, 0.0)
     parentPane.children.addAll(sonScrollPane, completion, delete, back, GameSetting, AutoDownload)
     setCss("BlackBorder", back)
-    parentPane.background = background
+    parentPane.background = wdtcBackground
     parentPane.setStylesheets()
     mainStage.setScene(Scene(parentPane))
     setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload)
     delete.onAction = EventHandler {
       try {
-        FileUtils.deleteDirectory(launcher.versionDirectory)
-        setting.preferredVersion = null
-        setting.putSettingToFile()
+        FileUtils.deleteDirectory(version.versionDirectory)
+        currentSetting.preferredVersion = null
+        currentSetting.putSettingToFile()
         val homeWindow = HomeWindow()
         homeWindow.setHome(mainStage)
-        logmaker.info(launcher.versionNumber + " Deleted")
+        logmaker.info(version.versionNumber + " Deleted")
       } catch (e: IOException) {
         setErrorWin(e)
       }
     }
     completion.onAction = EventHandler {
-      thread {
-        val version = InstallGameVersion(launcher, true)
-        version.startInstallGame()
-        logmaker.info(launcher.versionNumber + " downloaded")
+      CoroutineScope(Dispatchers.IO).launch(CoroutineName("completion ${version.versionNumber} task")) {
+        InstallGameVersion(version, true).run {
+          startInstallGame()
+        }
+        logmaker.info(version.versionNumber + " downloaded")
       }
     }
   }
@@ -195,20 +197,20 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
         if (File(JavaPath.text).isFileNotExists()) throw NumberFormatException()
         val newConfig =
           DefaultGameConfig.Config(Input.text.toInt(), JavaPath.text, InputWidth.text.toInt(), InputHeight.text.toInt())
-        val gameConfig = launcher.gameConfig.defaultGameConfig
+        val gameConfig = version.gameConfig.defaultGameConfig
         gameConfig.config = newConfig
         logmaker.info(gameConfig)
-        launcher.gameConfig.putConfigToFile(gameConfig)
+        version.gameConfig.putConfigToFile(gameConfig)
         tips6.text = "设置成功"
         tips2.text = "Java版本: ${getJavaVersion(JavaPath.text)}"
       } catch (e: NumberFormatException) {
         tips6.textFill = Color.RED
         tips6.text = "请输入正确配置"
-        logmaker.warn("配置无效", e)
+        logmaker.warning("配置无效", e)
       } catch (e: IOException) {
         tips6.textFill = Color.RED
         tips6.text = "请输入正确配置"
-        logmaker.warn("配置无效", e)
+        logmaker.warning("配置无效", e)
       }
     }
   }
@@ -262,8 +264,8 @@ class VersionSettingWindow(private val launcher: Launcher, val mainStage: Stage)
     AnchorPane.setLeftAnchor(modIcon, 10.0)
     AnchorPane.setBottomAnchor(modIcon, 4.0)
     val modVersion = Label()
-    if (launcher.kind == kind) {
-      val info = launcher.modDownloadInfo
+    if (version.kind == kind) {
+      val info = version.modDownloadInfo
       modVersion.text = if (info != null) "$kind : ${info.modVersion}" else "$kind : 不安装"
     } else {
       modVersion.text = "$kind : 不安装"

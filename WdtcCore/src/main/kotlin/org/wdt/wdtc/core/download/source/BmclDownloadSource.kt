@@ -16,12 +16,17 @@ class BmclDownloadSource : DownloadSourceInterface {
   override val fabricMetaUrl: String
     get() = "https://bmclapi2.bangbang93.com/fabric-meta/"
   override val fabricLibraryUrl: String
-    get() = "https://bmclapi2.bangbang93.com/maven/"
+    get() = libraryUrl
   override val forgeLibraryMavenUrl: String
-    get() = "https://bmclapi2.bangbang93.com/maven/"
+    get() = libraryUrl
   override val versionClientUrl: String
     get() = "https://bmclapi2.bangbang93.com/version/%s/%s"
   override val officialUrl: String
     get() = "https://bmclapi2.bangbang93.com/"
+  // TODO: Bmcl quilt api is not available - see https://bmclapidoc.bangbang93.com/
+  override val quiltMetaUrl: String
+    get() = "https://bmclapi2.bangbang93.com/quilt-meta/"
+  override val quiltMavenUrl: String
+    get() = libraryUrl
 
 }

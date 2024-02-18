@@ -1,5 +1,8 @@
 package org.wdt.wdtc.core.manger
 
+import org.wdt.wdtc.core.game.GameVersionsList
+import org.wdt.wdtc.core.game.Version
+import org.wdt.wdtc.core.utils.runIfNoNull
 import java.io.File
 
 
@@ -8,7 +11,7 @@ open class GameDirectoryManger {
   val workDirectory: File
 
   constructor() {
-    workDirectory = setting.defaultGamePath
+    workDirectory = currentSetting.defaultGamePath
   }
 
   constructor(here: File) {
@@ -26,5 +29,24 @@ open class GameDirectoryManger {
   val gameAssetsDirectory: File
     get() = File(gameDirectory, "assets")
 }
+
 val defaultHere: File
   get() = File(System.getProperty("user.dir"))
+
+val GameDirectoryManger.gameVersionList: GameVersionsList
+  get() = GameVersionsList().apply {
+    this@gameVersionList.gameVersionsDirectory.listFiles().run {
+      runIfNoNull {
+        if (isNotEmpty()) {
+          forEach {
+            Version(it.name).addToList()
+          }
+        }
+      }
+    }
+  }
+
+
+val GameDirectoryManger.isDownloadedGame: Boolean
+  get() = this.gameVersionList.isNotEmpty()
+

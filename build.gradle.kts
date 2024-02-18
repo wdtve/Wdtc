@@ -1,7 +1,3 @@
-plugins {
-  kotlin("jvm") version "1.9.21" apply false
-}
-
 subprojects {
   repositories {
     maven { url = uri("https://jitpack.io") }
@@ -12,6 +8,6 @@ subprojects {
   }
 }
 
-val versionNumber = "0.0.1.22"
+val versionNumber = "0.0.2.0"
 group = "org.wdt.wdtc"
 version = "$versionNumber-kotlin"

@@ -6,8 +6,8 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.isFileOlder
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
 import org.wdt.wdtc.core.game.GameVersionJsonObject
+import org.wdt.wdtc.core.game.readGameVersionJsonObjectGson
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
 
@@ -38,37 +38,37 @@ open class GameFileManger : GameDirectoryManger {
   val gameAssetsListJson: File
     get() = File(gameAssetsDirectory, "indexes/${gameVersionJsonObject.assets}.json")
   val gameOptionsFile: File
-    get() = File(versionDirectory, "assets/options.txt")
+    get() = File(versionDirectory, "options.txt")
   val gameModsPath: File
     get() = File(versionDirectory, "mods")
   val gameLogDirectory: File
     get() = File(versionDirectory, "logs")
 
-  fun putToVersionJson(o: GameVersionJsonObject) {
-    versionJson.writeObjectToFile(o)
+  fun GameVersionJsonObject.putToVersionJson() {
+    versionJson.writeObjectToFile(this)
   }
 
-  @get:Throws(IOException::class)
   val gameVersionJsonObject: GameVersionJsonObject
-    get() {
-      if (versionJson.isFileNotExists()) {
-        throw FileNotFoundException("$versionJson not exists")
-      }
-      return versionJson.readFileToClass()
+    get() = versionJson.run {
+      readFileToClass(readGameVersionJsonObjectGson)
     }
+
   val laucnherProfiles: File
     get() = File(gameDirectory, "Launcher_profiles.json")
   val versionConfigFile: File
     get() = File(versionDirectory, "config.json")
 }
 
+
 fun downloadVersionManifestJsonFileTask() {
-  val calendar = Calendar.getInstance()
-  calendar.time = Date()
-  calendar.add(Calendar.DATE, -7)
-  if (versionManifestFile.isFileNotExists() ||
-    versionManifestFile.isFileOlder(calendar.time)
-  ) {
-    DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
+  val calendar = Calendar.getInstance().apply {
+    time = Date()
+    add(Calendar.DATE, -7)
+  }
+  versionManifestFile.run {
+    if (isFileNotExists() || isFileOlder(calendar.time)) {
+      DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
+    }
   }
 }
+

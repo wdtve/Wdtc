@@ -1,5 +1,6 @@
 package org.wdt.wdtc.core.utils
 
+import org.wdt.wdtc.core.manger.networkimeoutTime
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -8,9 +9,10 @@ import javax.net.ssl.HttpsURLConnection
 
 fun URL.isNetworkHasThisFile(): Boolean {
   return try {
-    val uc = this.openConnection()
-    uc.connectTimeout = 12000
-    uc.connect()
+    this.openConnection().run {
+      connectTimeout = networkimeoutTime
+      connect()
+    }
     true
   } catch (e: IOException) {
     false
@@ -19,10 +21,11 @@ fun URL.isNetworkHasThisFile(): Boolean {
 
 @Throws(IOException::class)
 fun URL.getRedirectUrl(): String {
-  val conn = this.toHttpsURLConnection()
-  conn.instanceFollowRedirects = false
-  conn.connectTimeout = 5000
-  return conn.getHeaderField("Location")
+  return this.toHttpsURLConnection().run {
+    instanceFollowRedirects = false
+    connectTimeout = networkimeoutTime
+    getHeaderField("Location")
+  }
 }
 
 val isOnline: Boolean = "https://www.bilibili.com".toURL().isNetworkHasThisFile()
@@ -34,10 +37,11 @@ fun openSomething(o: Any) {
 }
 
 fun URL.newInputStream(): InputStream {
-  val connection = this.toHttpsURLConnection()
-  connection.connectTimeout = 5000
-  connection.readTimeout = 5000
-  return connection.inputStream
+  return this.toHttpsURLConnection().run {
+    connectTimeout = networkimeoutTime
+    readTimeout = networkimeoutTime
+    inputStream
+  }
 }
 
 fun URL.toHttpsURLConnection(): HttpsURLConnection {

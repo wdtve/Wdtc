@@ -1,21 +1,20 @@
 package org.wdt.wdtc.core.game
 
-import org.wdt.utils.io.FileUtils
-import org.wdt.utils.io.IOUtils
-import org.wdt.utils.io.writeStringToFile
+import org.wdt.utils.io.isFileExists
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
 import org.wdt.wdtc.core.manger.GameFileManger
-import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.manger.currentSetting
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.setModTask
 import java.io.File
-import java.io.IOException
 import java.util.*
 
-class Launcher @JvmOverloads constructor(versionNumber: String, here: File = setting.defaultGamePath) :
+class Version @JvmOverloads constructor(versionNumber: String, here: File = currentSetting.defaultGamePath) :
   GameFileManger(versionNumber, here) {
+
+  var kind = KindOfMod.ORIGINAL
 
   var fabricModInstallInfo: FabricDonwloadInfo? = null
     set(value) {
@@ -37,17 +36,6 @@ class Launcher @JvmOverloads constructor(versionNumber: String, here: File = set
     }
 
 
-  var kind = KindOfMod.ORIGINAL
-
-
-  @Throws(IOException::class)
-  fun beforLaunchTask() {
-    if (setting.chineseLanguage && FileUtils.isFileNotExists(gameOptionsFile)) {
-      val options = IOUtils.toString(Objects.requireNonNull(javaClass.getResourceAsStream("/assets/options.txt")))
-      gameOptionsFile.writeStringToFile(options)
-    }
-  }
-
   fun cleanKind() {
     kind = KindOfMod.ORIGINAL
   }
@@ -61,7 +49,7 @@ class Launcher @JvmOverloads constructor(versionNumber: String, here: File = set
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
 
-    other as Launcher
+    other as Version
 
     if (versionNumber != other.versionNumber) return false
     if (kind != other.kind) return false
@@ -83,5 +71,25 @@ class Launcher @JvmOverloads constructor(versionNumber: String, here: File = set
 
 }
 
-val preferredLauncher: Launcher?
-  get() = if (setting.preferredVersion != null) setting.preferredVersion?.setModTask() else null
+val preferredVersion: Version?
+  get() = currentSetting.preferredVersion.run {
+    this?.setModTask()
+  }
+
+class GameVersionsList(
+  private val versions: LinkedList<Version> = LinkedList()
+) : MutableList<Version> by versions {
+  override fun add(element: Version): Boolean {
+    element.setModTask().let {
+      if (it != null && it.versionJson.isFileExists()) {
+        return versions.add(it)
+      }
+    }
+    return false
+  }
+
+  fun Version.addToList() {
+    add(this)
+  }
+}
+

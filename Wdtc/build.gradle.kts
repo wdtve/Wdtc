@@ -1,13 +1,12 @@
 plugins {
   id("org.openjfx.javafxplugin") version "0.1.0"
-  id("com.github.johnrengelman.shadow") version "8.1.1"
-  kotlin("jvm")
+  alias(libs.plugins.kotlin)
+  alias(libs.plugins.shadowJar)
 }
 val moduleList = listOf("javafx.base", "javafx.controls", "javafx.fxml", "javafx.web", "javafx.graphics")
 javafx {
   version = "17.0.6"
   modules = moduleList
-  setPlatform("windows")
 }
 
 group = "org.wdt.wdtc.ui"
@@ -26,8 +25,8 @@ val sameManifest = mapOf(
 tasks.shadowJar {
   minimize()
   dependencies {
-    for (module in moduleList) {
-      exclude(dependency("org.openjfx:$module:${javafx.version}"))
+    moduleList.forEach {
+      exclude(dependency("org.openjfx:$it:${javafx.version}"))
     }
   }
   manifest.attributes(sameManifest)
@@ -51,29 +50,24 @@ tasks.create<JavaExec>("runShadowJar") {
   workingDir = rootProject.rootDir
 }
 
-
-tasks.compileJava<JavaCompile> {
-  options.compilerArgs.add("--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED")
-}
-
 dependencies {
   implementation(project(":WdtcCore"))
-  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
-  implementation("com.github.wd-t.utils:utils-io:1.3.0")
-  implementation("log4j:log4j:1.2.17")
-  implementation("com.google.code.gson:gson:2.10.1")
+  implementation(libs.utils.io)
+  implementation(libs.utils.gson)
+  implementation(libs.gson)
+  implementation(libs.coroutines.core)
+  implementation(libs.coroutines.core.jvm)
   implementation("com.jfoenix:jfoenix:9.0.10")
-  implementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
-  implementation(kotlin("stdlib-jdk8"))
-  implementation(kotlin("test"))
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:${libs.versions.kotlinx.coroutines}")
+  implementation(libs.stdlib.jdk8)
+  testImplementation(libs.stdlib.test)
 }
 
-fun getJvmArgs(debug: Boolean): MutableList<String> {
+fun getJvmArgs(debug: Boolean): List<String> {
   val jvmList = mutableListOf(
+    "-Xmx512M",
     "-Dwtdc.application.type=ui",
     "-Dwdtc.launcher.version=${project.version}",
-    "-Dwdtc.ui.background=0"
   )
   return if (debug) {
     jvmList.add("-Dwdtc.debug.switch=true")

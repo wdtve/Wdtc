@@ -5,9 +5,10 @@ import org.wdt.utils.gson.getJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.utils.io.isFileNotExists
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.manger.versionManifestFile
+import org.wdt.wdtc.core.utils.error
 import org.wdt.wdtc.core.utils.getExceptionMessage
 import org.wdt.wdtc.core.utils.logmaker
 import java.io.IOException
@@ -22,26 +23,30 @@ class GameVersionList : VersionListInterface {
     }
   }
 
-  override val versionList: List<VersionJsonObjectInterface>
+  override val versionList: GameVersionsObjectList
     get() {
-      val versionList: MutableList<VersionJsonObjectInterface> = ArrayList()
-      try {
-        val versionJsonArray = versionManifestFile.readFileToJsonObject().getJsonArray("versions")
-        versionJsonArray.forEach {
-          val versionJsonObject: GameVersionJsonObjectImpl = it.asJsonObject.parseObject()
-          if (versionJsonObject.gameType == "release") {
-            versionList.add(versionJsonObject)
+      return GameVersionsObjectList().apply {
+        try {
+          versionManifestFile.readFileToJsonObject().getJsonArray("versions").forEach {
+            it.asJsonObject.parseObject<GameVersionsJsonObjectImpl>().let { version ->
+              if (version.gameType == "release") {
+                add(version)
+              }
+            }
           }
+        } catch (e: IOException) {
+          logmaker.error(e.getExceptionMessage())
         }
-      } catch (e: IOException) {
-        logmaker.error(e.getExceptionMessage())
       }
-      return versionList
     }
 
-  class GameVersionJsonObjectImpl : VersionJsonObjectInterface {
-    @SerializedName("id")
-    override val versionNumber: String? = null
+  class GameVersionsJsonObjectImpl(
+    @field:SerializedName("id")
+    override val versionNumber: String,
+
+    @field:SerializedName("releaseTime")
+    val releaseTime: Date
+  ) : VersionsJsonObjectInterface, Comparable<GameVersionsJsonObjectImpl> {
 
     @SerializedName("type")
     val gameType: String? = null
@@ -50,20 +55,32 @@ class GameVersionList : VersionListInterface {
     val versionJsonURL: URL? = null
 
     @SerializedName("time")
-    val time: String? = null
+    val time: Date? = null
+    override fun compareTo(other: GameVersionsJsonObjectImpl): Int {
+      return releaseTime.compareTo(other.releaseTime)
+    }
 
-    @SerializedName("releaseTime")
-    val releaseTime: String? = null
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
       if (other == null || javaClass != other.javaClass) return false
-      val that = other as GameVersionJsonObjectImpl
+      val that = other as GameVersionsJsonObjectImpl
       return versionNumber == that.versionNumber && gameType == that.gameType
     }
 
     override fun hashCode(): Int {
       return Objects.hash(versionNumber, gameType)
     }
+
+  }
+}
+
+class GameVersionsObjectList(
+  private val versionsList: TreeSet<VersionsJsonObjectInterface> = TreeSet()
+) : MutableSet<VersionsJsonObjectInterface> by versionsList {
+  constructor(collection: Collection<VersionsJsonObjectInterface>) : this(TreeSet(collection))
+
+  override fun toString(): String {
+    return "GameVersionsObjectList(versionsList=$versionsList)"
   }
 }

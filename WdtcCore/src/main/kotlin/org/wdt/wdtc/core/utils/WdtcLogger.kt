@@ -1,48 +1,104 @@
-@file:JvmName("WdtcLogger")
+@file:JvmName("WdtcLogger") @file:Suppress("NOTHING_TO_INLINE")
 
 package org.wdt.wdtc.core.utils
 
-import org.apache.log4j.*
-import org.wdt.wdtc.core.manger.isDebug
+import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.manger.isUI
 import org.wdt.wdtc.core.manger.wdtcConfig
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.text.MessageFormat
+import java.util.*
+import java.util.logging.*
+import java.util.logging.Formatter
+import kotlin.io.path.Path
 
-val logmaker: Logger
-  get() {
-    // 23333333
-    val dictChars = mutableListOf<Char>().apply { "I love Kotlin very much".forEach { this.add(it) } }  //Yes, indeed
-    val randomStr = StringBuilder().apply { (1..((10..30).random())).onEach { append(dictChars.random()) } }
-    val logmaker: Logger = Logger.getLogger(randomStr.toString())
-    logmaker.addAppender(fileAppender)
-    if (isUI) logmaker.addAppender(consoleAppender)
-    return logmaker
+private val FORMAT = MessageFormat("[{0,date,HH:mm:ss}] [{1}.{2}/{3}] {4}\n")
+
+@field:JvmField
+val logmaker: Logger = Logger.getLogger("Wdtc")
+fun initLogmaker() {
+  val logFile = Path(wdtcConfig.canonicalPath, "logs").resolve("Wdtc.log")
+  logFile.touch()
+  logmaker.apply {
+    level = Level.ALL
+    useParentHandlers = false
+  }
+  val formatter = object : Formatter() {
+    override fun format(record: LogRecord): String {
+      return formatLog(record)
+    }
+  }
+  FileHandler(logFile.toString()).apply {
+    level = Level.ALL
+    this.formatter = formatter
+    encoding = "UTF-8"
+  }.let {
+    logmaker.addHandler(it)
+  }
+  ConsoleHandler().apply {
+    this.formatter = formatter
+    level = Level.ALL
+    encoding = "UTF-8"
+  }.let {
+    if (isUI) {
+      logmaker.addHandler(it)
+    }
   }
 
+}
 
-private val fileAppender: RollingFileAppender
-  get() {
-    val fileAppender = RollingFileAppender()
-    fileAppender.setFile("${wdtcConfig}/logs/Wdtc.log")
-    fileAppender.append = true
-    fileAppender.layout = PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p]:%t * %m%n")
-    fileAppender.setMaxFileSize("10MB")
-    fileAppender.maxBackupIndex = 10
-    fileAppender.threshold = Level.DEBUG
-    fileAppender.activateOptions()
-    return fileAppender
+
+private fun formatLog(record: LogRecord): String {
+
+  val thrown = record.thrown
+
+  val writer: StringWriter?
+  val buffer: StringBuffer
+  if (thrown == null) {
+    writer = null
+    buffer = StringBuffer(256)
+  } else {
+    writer = StringWriter(1024)
+    buffer = writer.buffer
   }
-private val consoleAppender: ConsoleAppender
-  get() {
-    val consoleAppender = ConsoleAppender(PatternLayout("[%d{HH:mm:ss}] [%C.%M/%p] * %m%n"))
-    consoleAppender.setTarget("System.err")
-    consoleAppender.immediateFlush = true
-    consoleAppender.encoding = "UTF-8"
-    consoleAppender.threshold = if (isDebug) Level.DEBUG else Level.INFO
-    consoleAppender.activateOptions()
-    return consoleAppender
+
+  FORMAT.format(
+    arrayOf<Any>(
+      Date(record.millis), record.sourceClassName, record.sourceMethodName, record.level.name, record.message
+    ), buffer, null
+  )
+  if (thrown != null) {
+    writer?.let {
+      PrintWriter(it).use { printWriter ->
+        thrown.printStackTrace(printWriter)
+      }
+    }
   }
+  return buffer.toString()
+}
+
+
+inline fun Logger.error(message: String) {
+  this.log(Level.SEVERE, message)
+}
+
+inline fun Logger.error(e: Throwable) {
+  this.log(Level.SEVERE, e.getExceptionMessage())
+}
+
+inline fun Logger.error(message: String, e: Throwable) {
+  this.log(Level.SEVERE, message, e)
+}
+
+inline fun Logger.info(any: Any) {
+  this.info(any.toString())
+}
+
+inline fun Logger.warning(message: String, e: Throwable) {
+  this.log(Level.WARNING, message, e)
+}
+
 
 fun Throwable.getExceptionMessage(): String {
   val sw = StringWriter()

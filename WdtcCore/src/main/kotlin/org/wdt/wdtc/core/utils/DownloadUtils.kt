@@ -1,18 +1,21 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.isFileExists
-import org.wdt.utils.io.newOutputStream
+import okio.Path
+import okio.Path.Companion.toOkioPath
+import okio.buffer
+import org.wdt.utils.io.okio.touch
 import org.wdt.utils.io.toFile
-import org.wdt.utils.io.touch
-import org.wdt.wdtc.core.manger.wdtcCache
 import java.io.File
 import java.io.IOException
 import java.net.URL
+import kotlin.system.measureTimeMillis
 
-class DownloadUtils(private val downloadFile: File, private val srcousFileURL: URL) {
+class DownloadUtils(targetFile: File, private val url: URL) {
+  private val targetPath: Path = targetFile.toOkioPath()
+
   fun manyTimesToTryDownload(times: Int) {
-    var exception: IOException? = null
-    for (i in 0 until times) {
+    lateinit var exception: IOException
+    repeat(times) {
       exception = try {
         startDownloadFile()
         return
@@ -20,35 +23,21 @@ class DownloadUtils(private val downloadFile: File, private val srcousFileURL: U
         e
       }
     }
-    if (exception != null) {
-      logmaker.warn("Thread ${Thread.currentThread().name} Error,", exception)
-    }
+    throw exception
   }
 
   private fun startDownloadFile() {
-    downloadFile.touch()
-    val downloadFileOutput = downloadFile.newOutputStream()
-    val urlFileInput = srcousFileURL.newInputStream()
-    var donwloaded: Double
-    val data = ByteArray(1024)
-    while (urlFileInput.read(data, 0, 1024).also { donwloaded = it.toDouble() } >= 0) {
-      if (isStopDownloadProcess) {
-        logmaker.debug(Thread.currentThread().name + " Stop")
-        downloadFileOutput.close()
-        urlFileInput.close()
-        return
-      }
-      downloadFileOutput.write(data, 0, donwloaded.toInt())
+    if (!fileSystem.exists(targetPath)) {
+      targetPath.toFile().touch()
     }
-    downloadFileOutput.close()
-    urlFileInput.close()
+    fileSystem.sink(targetPath).buffer().use { sink ->
+      url.newInputStream().toBufferedSource().use { source ->
+        sink.write(source.readByteArray())
+      }
+    }
   }
 
 }
-
-val stopProcess = File(wdtcCache, "process")
-val isStopDownloadProcess: Boolean
-  get() = stopProcess.isFileExists()
 
 fun startDownloadTask(url: String, path: String) {
   startDownloadTask(url.toURL(), path.toFile())
@@ -59,23 +48,13 @@ fun startDownloadTask(url: String, file: File) {
 }
 
 fun startDownloadTask(url: URL, file: File) {
-  val now = System.currentTimeMillis()
   val downloadUtils = DownloadUtils(file, url)
   try {
     logmaker.info("Task Start: $url")
-    downloadUtils.manyTimesToTryDownload(5)
-    logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
+    val spentTime = measureTimeMillis { downloadUtils.manyTimesToTryDownload(5) }
+    logmaker.info("Task Finish: $file, Take A Period Of $spentTime ms")
   } catch (e: Exception) {
-    logmaker.warn("Task: $url", e)
-    try {
-      logmaker.info("Task: $url Start retry")
-      downloadUtils.manyTimesToTryDownload(5)
-      logmaker.info("Task Finish: $file, Take A Period Of ${System.currentTimeMillis() - now} ms")
-    } catch (exception: Exception) {
-      if (file.delete()) {
-        logmaker.error("Task: $url Error", exception)
-      }
-    }
+    logmaker.error("Task: $url Error", e)
   }
 }
 

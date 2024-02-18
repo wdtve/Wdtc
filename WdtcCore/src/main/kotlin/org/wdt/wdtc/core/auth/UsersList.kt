@@ -1,48 +1,76 @@
-@file:JvmName("UsersList")
-
 package org.wdt.wdtc.core.auth
 
-import org.wdt.utils.gson.Json
+import com.google.gson.*
 import org.wdt.utils.gson.parseObject
-import org.wdt.utils.gson.readFileToJsonObject
+import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.writeObjectToFile
+import org.wdt.wdtc.core.manger.userJson
 import org.wdt.wdtc.core.manger.userListFile
-import org.wdt.wdtc.core.utils.getExceptionMessage
+import org.wdt.wdtc.core.utils.forEachWhenIsNotEmpty
+import org.wdt.wdtc.core.utils.gson.TypeAdapters
+import org.wdt.wdtc.core.utils.gson.defaultGsonBuilder
+import org.wdt.wdtc.core.utils.gson.prettyGsonBuilder
+import org.wdt.wdtc.core.utils.info
 import org.wdt.wdtc.core.utils.logmaker
-import java.io.IOException
+import java.lang.reflect.Type
 
 
-fun addUser(user: User) {
-  val userList = userListFile.readFileToJsonObject()
-  val userName = user.userName
-  if (userList.has(userName)) {
-    logmaker.warn("$userName Remove")
-    userList.remove(userName)
+class UsersList(
+  private val usersList: LinkedHashSet<User> = linkedSetOf()
+) : MutableSet<User> by usersList {
+  fun add(loginUser: LoginUser) {
+    loginUser.user.let {
+      userJson.writeObjectToFile(it, prettyGsonBuilder)
+      logmaker.info(it)
+      this.add(it)
+    }
   }
-  userList.add(userName, Json.GSON.toJsonTree(user, User::class.java))
-  userListFile.writeObjectToFile(userList)
+
+  override fun remove(element: User): Boolean {
+    preferredUser.let {
+      if (it == element) {
+        userJson.writeObjectToFile(JsonObject())
+      }
+    }
+    return usersList.remove(element)
+  }
+
+  fun LoginUser.addToList() {
+    add(this)
+  }
+
+  companion object {
+    fun UsersList.saveChangeToFile() {
+      userListFile.writeObjectToFile(this, serializeUsersListGsonBuilder)
+    }
+  }
 }
 
-
-fun getUser(userName: String): User = userListFile.readFileToJsonObject().getAsJsonObject(userName).parseObject()
-
-
-val userList: HashSet<User>
-  get() {
-    val userList = HashSet<User>()
-    try {
-      val userListMap = userListFile.readFileToJsonObject().asMap()
-      if (userListMap.keys.isNotEmpty()) {
-        for (s in userListMap.keys) {
-          userList.add(getUser(s))
-        }
+class UsersListTypeAdapters : TypeAdapters<UsersList> {
+  override fun serialize(src: UsersList, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+    return JsonArray().apply {
+      src.forEach {
+        add(defaultGsonBuilder.create().toJsonTree(it))
       }
-    } catch (e: IOException) {
-      logmaker.error(e.getExceptionMessage())
     }
-    return userList
   }
 
-fun printUserList() = userList.forEach { logmaker.info(it) }
+  override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): UsersList {
+    if (!json.isJsonArray) error("json must be array")
+    return LinkedHashSet(json.asJsonArray.map {
+      it.asJsonObject.parseObject<User>()
+    }).let {
+      UsersList(it)
+    }
+  }
+
+}
+
+val serializeUsersListGsonBuilder: GsonBuilder =
+  prettyGsonBuilder.registerTypeAdapter(UsersList::class.java, UsersListTypeAdapters())
+
+fun printUserList() = currentUsersList.forEachWhenIsNotEmpty { logmaker.info(it) }
 
 
+val currentUsersList: UsersList
+  get() = userListFile.readFileToClass(serializeUsersListGsonBuilder)

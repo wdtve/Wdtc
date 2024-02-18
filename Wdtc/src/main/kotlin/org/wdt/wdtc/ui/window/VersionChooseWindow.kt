@@ -11,13 +11,10 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import org.wdt.wdtc.core.game.Launcher
-import org.wdt.wdtc.core.game.getGameVersionList
-import org.wdt.wdtc.core.game.isDownloadedGame
-import org.wdt.wdtc.core.game.preferredLauncher
-import org.wdt.wdtc.core.manger.GameDirectoryManger
-import org.wdt.wdtc.core.manger.putSettingToFile
-import org.wdt.wdtc.core.manger.setting
+import org.wdt.wdtc.core.game.GameVersionsList
+import org.wdt.wdtc.core.game.Version
+import org.wdt.wdtc.core.game.preferredVersion
+import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.KindOfMod
 
 class VersionChooseWindow(private val path: GameDirectoryManger) {
@@ -31,16 +28,16 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
     val versionList = VBox()
     val back = JFXButton("返回")
     back.onAction = EventHandler {
-      val window = (path as? Launcher)?.let { HomeWindow(it) } ?: HomeWindow()
+      val window = (path as? Version)?.let { HomeWindow(it) } ?: HomeWindow()
       window.setHome(mainStage)
     }
     if (path.isDownloadedGame) {
-      val gameVersionList: List<Launcher> = path.getGameVersionList()!!
+      val gameVersionList: GameVersionsList = path.gameVersionList
       for (gameVersion in gameVersionList) {
         val pane = Pane()
         pane.setPrefSize(514.0, 40.0)
         val versionId = RadioButton(gameVersion.versionNumber)
-        if (preferredLauncher != null && preferredLauncher == gameVersion) {
+        if (preferredVersion != null && preferredVersion == gameVersion) {
           versionId.isSelected = true
         }
         versionId.layoutX = 14.0
@@ -56,8 +53,9 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
         size.modifyWindwosSize(pane, versionId, modKind)
         size.modifyWindwosSize(versionList, pane)
         versionId.onAction = EventHandler {
-          setting.preferredVersion = gameVersion
-          setting.putSettingToFile()
+          currentSetting.apply {
+            preferredVersion = gameVersion
+          }.putSettingToFile()
           val win = HomeWindow(gameVersion)
           win.setHome(mainStage)
         }
@@ -73,7 +71,7 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
     tips.prefWidth = 96.0
     tips.layoutY = 70.0
     parentPane.children.addAll(newGame, back, sonScrollPane, tips)
-    parentPane.background = background
+    parentPane.background = wdtcBackground
     parentPane.setStylesheets()
     setCss("BlackBorder", back)
     mainStage.setScene(Scene(parentPane))

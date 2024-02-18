@@ -4,64 +4,58 @@ package org.wdt.wdtc.core.utils
 
 import org.wdt.utils.io.*
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.regex.Pattern
 import java.util.zip.ZipFile
-import kotlin.streams.toList
 
 
 fun unzipByFile(file: File, path: String) {
+  val zip = ZipFile(file)
   try {
-    val zip = ZipFile(file)
-    for (entry in zip.stream().toList()) {
-      val name = entry.name
-      if (FilenameUtils.getExtension(name) == "dll") {
-        val unfile = File(path + File.separator + name)
-        if (unfile.isFileNotExists()) {
-          logmaker.info("提取natives库dll文件${name}中")
-          Files.createFile(Paths.get(path + File.separator + name))
-          val input = zip.getInputStream(entry)
-          val fos = FileOutputStream(unfile)
-          IOUtils.copy(input, fos)
+    zip.stream().forEach {
+      if (FilenameUtils.getExtension(it.name) == "dll") {
+        path.toFile(it.name).run {
+          if (compareFile(it.toFileData(zip))) {
+            touch()
+            logmaker.info("extract ${it.name}")
+            IOUtils.copy(zip.getInputStream(it), newOutputStream())
+          }
         }
       }
     }
     zip.close()
   } catch (e: Exception) {
     logmaker.error(e.getExceptionMessage())
+    zip.close()
   }
 }
 
-fun unZipBySpecifyFile(zipFile: File, unZipPath: File) {
+fun unZipBySpecifyFile(zipFile: File, unZipFile: File) {
+  val zip = ZipFile(zipFile)
   try {
-    val zip = ZipFile(zipFile)
-    for (entry in zip.stream().toList()) {
-      val name = entry.name
-      if (Pattern.compile(unZipPath.getName()).matcher(name).find()) {
-        logmaker.info("提取$unZipPath 中")
-        unZipPath.touch()
-        val input = zip.getInputStream(entry)
-        val fos = unZipPath.newOutputStream()
-        IOUtils.copy(input, fos)
+    zip.stream().forEach {
+      unZipFile.run {
+        if (compareFile(it.toFileData(zip))) {
+          touch()
+          IOUtils.copy(zip.getInputStream(it), newOutputStream())
+        }
       }
     }
     zip.close()
   } catch (e: Exception) {
     logmaker.error(e.getExceptionMessage())
+    zip.close()
   }
 }
 
 fun unZipToFile(parentZipFile: File, unFile: File, unFileName: String) {
+  val zipFile = ZipFile(parentZipFile)
   try {
-    val zipFile = ZipFile(parentZipFile)
-    val outputStream = FileOutputStream(unFile)
     val stream = zipFile.getInputStream(zipFile.getEntry(unFileName))
-    IOUtils.copy(stream, outputStream)
+    IOUtils.copy(stream, unFile.outputStream())
+    zipFile.close()
   } catch (e: IOException) {
     logmaker.error(e.getExceptionMessage())
+    zipFile.close()
   }
 }
 

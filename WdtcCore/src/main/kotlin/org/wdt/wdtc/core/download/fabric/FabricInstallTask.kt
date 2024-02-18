@@ -1,38 +1,39 @@
 package org.wdt.wdtc.core.download.fabric
 
 import org.wdt.utils.gson.*
-import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
+import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.DependencyDownload
+import org.wdt.wdtc.core.utils.ckeckIsNull
 import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 
-class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String) :
-  FabricDonwloadInfo(launcher, fabricVersionNumber), InstallTaskInterface {
+class FabricInstallTask(version: Version, fabricVersionNumber: String) :
+  FabricDonwloadInfo(version, fabricVersionNumber), ModInstallTaskInterface {
 
-  constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
-    launcher,
-    versionJsonObjectInterface.versionNumber!!
+  constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) : this(
+    version,
+    versionsJsonObjectInterface.versionNumber.ckeckIsNull()
   )
 
   @Throws(IOException::class)
   override fun overwriteVersionJson() {
-    val gameVersionJsonObject = launcher.gameVersionJsonObject
-    val libraryObjectList = gameVersionJsonObject.libraries!!
+    val gameVersionJsonObject = version.gameVersionJsonObject
+    val libraryObjectList = gameVersionJsonObject.libraries
     val fabricVersionJsonObject = fabricVersionJsonObject
     val fabricLibraryList = fabricVersionJsonObject.getJsonArray("libraries")
     for (i in 0 until fabricLibraryList.size()) {
       val libraryObject = fabricLibraryList.getJsonObject(i)
-      val dependency = DependencyDownload(libraryObject.getString("name"))
-      dependency.defaultUrl = downloadSource.fabricLibraryUrl
-      dependency.downloadPath = launcher.gameLibraryDirectory
-      libraryObjectList.add(LibraryObject.getLibraryObject(dependency, libraryObject.getString("url")))
+      val dependency = GameRuntimeDependency(libraryObject.getString("name"))
+      dependency.libraryRepositoriesUrl = downloadSource.fabricLibraryUrl.toURL()
+      dependency.libraryDirectory = version.gameLibraryDirectory
+      libraryObjectList.add(LibraryObject.getLibraryObject(dependency, libraryObject.getString("url").toURL()))
     }
     gameVersionJsonObject.libraries = libraryObjectList
     gameVersionJsonObject.mainClass = fabricVersionJsonObject.getString("mainClass")
-    val gameVersionJsonArguments = gameVersionJsonObject.arguments!!
+    val gameVersionJsonArguments = gameVersionJsonObject.arguments
     val fabricVersionJsonArguments = fabricVersionJsonObject.getJsonObject("arguments")
     val gameVersionJsonJvmList = gameVersionJsonArguments.jvmList!!
     gameVersionJsonJvmList.addAll(fabricVersionJsonArguments.getJsonArray("jvm"))
@@ -41,30 +42,34 @@ class FabricInstallTask(launcher: Launcher, fabricVersionNumber: String) :
     gameVersionJsonGameList.addAll(fabricVersionJsonArguments.getJsonArray("game"))
     gameVersionJsonArguments.gameList = gameVersionJsonGameList
     gameVersionJsonObject.arguments = gameVersionJsonArguments
-    gameVersionJsonObject.id = "${launcher.versionNumber}-fabric-$modVersion"
-    launcher.putToVersionJson(gameVersionJsonObject)
+    gameVersionJsonObject.id = "${version.versionNumber}-fabric-$modVersion"
+    version.run {
+      gameVersionJsonObject.putToVersionJson()
+    }
   }
 
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
-    val gameVersionJsonObject = launcher.gameVersionJsonObject
-    gameVersionJsonObject.patches = mutableListOf(
-      launcher.versionJson.readFileToJsonObject(),
-      fabricVersionJson.readFileToJsonObject()
-    )
-    launcher.putToVersionJson(gameVersionJsonObject)
+    version.run {
+      gameVersionJsonObject.apply {
+        patches = mutableListOf(
+          version.versionJson.readFileToJsonObject(),
+          fabricVersionJson.readFileToJsonObject()
+        )
+      }.putToVersionJson()
+    }
   }
 
   @Throws(IOException::class)
   override fun afterDownloadTask() {
     if (isAPIDownloadTaskNoNull) {
-      apiDownloadTask?.startDownloadFabricAPI()
+      apiDownloadTask.ckeckIsNull().startDownloadFabricAPI()
     }
   }
 
   override fun beforInstallTask() {
     startDownloadTask(
-      fabricVersionFileUrl.format(launcher.versionNumber, modVersion),
+      fabricVersionFileUrl.format(version.versionNumber, modVersion),
       fabricVersionJson
     )
   }

@@ -4,40 +4,49 @@ import com.google.gson.annotations.SerializedName
 import org.wdt.utils.gson.parseJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.io.toStrings
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
+import org.wdt.wdtc.core.download.game.GameVersionsObjectList
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
+import org.wdt.wdtc.core.game.determineSize
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FabricVersionList : VersionListInterface {
+  private val versionListUrl = "${downloadSource.fabricMetaUrl}v2/versions/loader"
+
   @get:Throws(IOException::class)
-  override val versionList: List<VersionJsonObjectInterface>
-    get() {
-      val fabricVersionList: MutableList<VersionJsonObjectInterface> = ArrayList()
-      val versionArray = "${downloadSource.fabricMetaUrl}v2/versions/loader".toURL().toStrings().parseJsonArray()
-      versionArray.forEach { fabricVersionList.add(it.asJsonObject.parseObject()) }
-      return fabricVersionList
+  override val versionList: GameVersionsObjectList
+    get() = GameVersionsObjectList().apply {
+      versionListUrl.toURL().toStrings().parseJsonArray().forEach {
+        add(it.asJsonObject.parseObject<FabricVersionsJsonObjectImpl>())
+      }
     }
 
-  class FabricVersionJsonObjectImpl : VersionJsonObjectInterface {
-    @SerializedName("version")
-    override val versionNumber: String? = null
+
+  class FabricVersionsJsonObjectImpl(
+    @field:SerializedName("version")
+    override val versionNumber: String
+  ) : VersionsJsonObjectInterface, Comparable<FabricVersionsJsonObjectImpl> {
 
     @SerializedName("build")
-    var buildNumber = 0
+    val buildNumber = 0
+    override fun compareTo(other: FabricVersionsJsonObjectImpl): Int {
+      return if (determineSize(other.versionNumber, versionNumber)) -1 else 1
+    }
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
       if (other == null || javaClass != other.javaClass) return false
-      val that = other as FabricVersionJsonObjectImpl
+      val that = other as FabricVersionsJsonObjectImpl
       return buildNumber == that.buildNumber && versionNumber == that.versionNumber
     }
 
     override fun hashCode(): Int {
       return Objects.hash(versionNumber, buildNumber)
     }
+
+
   }
 }

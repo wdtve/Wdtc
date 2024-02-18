@@ -25,6 +25,10 @@ class OfficialDownloadSource : DownloadSourceInterface {
     }
   override val officialUrl: String
     get() = metaUrl
+  override val quiltMetaUrl: String
+    get() = "https://meta.quiltmc.org/"
+  override val quiltMavenUrl: String
+    get() = "https://maven.quiltmc.org/repository/release/"
 
 
 }

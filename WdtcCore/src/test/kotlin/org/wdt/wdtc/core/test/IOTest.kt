@@ -1,3 +1,9 @@
 package org.wdt.wdtc.core.test
 
-class IOTest
+import kotlin.test.Test
+
+class IOTest {
+  @Test
+  fun test() {
+  }
+}

@@ -1,12 +1,17 @@
 package org.wdt.wdtc.ui.test
 
-import org.wdt.wdtc.ui.window.setErrorWin
-import java.io.IOException
+import org.wdt.wdtc.core.manger.ckeckVMConfig
+import org.wdt.wdtc.core.manger.runStartUpTask
+import org.wdt.wdtc.core.utils.initLogmaker
+import org.wdt.wdtc.ui.setJavaFXListJson
+import kotlin.test.Test
 
-fun main() {
-  try {
-    throw IOException()
-  } catch (e: Throwable) {
-    setErrorWin(e)
+class UITest {
+  @Test
+  fun setListJson() {
+    ckeckVMConfig()
+    initLogmaker()
+    runStartUpTask()
+    setJavaFXListJson()
   }
 }

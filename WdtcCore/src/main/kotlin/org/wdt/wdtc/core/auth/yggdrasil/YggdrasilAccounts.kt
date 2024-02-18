@@ -3,16 +3,15 @@ package org.wdt.wdtc.core.auth.yggdrasil
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.*
 import org.wdt.utils.gson.*
-import org.wdt.utils.io.IOUtils
 import org.wdt.utils.io.toStrings
+import org.wdt.wdtc.core.auth.LoginUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinApiUrl
-import org.wdt.wdtc.core.manger.userJson
-import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.ckeckIsNull
 import org.wdt.wdtc.core.utils.toBase64
-import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.URL
@@ -21,46 +20,37 @@ class YggdrasilAccounts(
   val url: String,
   val userName: String,
   private val password: String
-) {
-
-  @Throws(IOException::class)
-  fun sendPostWithJson(): String {
-    val requestUrl = URL("$url/api/yggdrasil/authserver/authenticate")
-    val jsonObject = PostJsonObject(userName, password)
-    val jsonStr = jsonObject.toJsonString(Json.getBuilder().setPrettyPrinting())
-    val conn = requestUrl.openConnection()
-    conn.setRequestProperty("content-type", "application/json")
-    conn.doOutput = true
-    conn.doInput = true
-    val out = PrintWriter(conn.getOutputStream())
-    out.print(jsonStr)
-    out.flush()
-    return IOUtils.toString(conn.getInputStream())
-  }
+) : LoginUser {
 
   @get:Throws(IOException::class)
-  val userInformation: UserInformation = sendPostWithJson().parseObject()
+  private val sendPostWithJson: String = URL("$url/api/yggdrasil/authserver/authenticate").let {
+    it.openConnection().apply {
+      setRequestProperty("content-type", "application/json")
+      doOutput = true
+      doInput = true
+    }.apply {
+      PrintWriter(getOutputStream()).run {
+        print(PostJsonObject(userName, password).toJsonString())
+        flush()
+      }
+    }.getInputStream().toStrings()
+  }
+
   val yggdrasilTextures: YggdrasilTextures
     get() = YggdrasilTextures(this)
 
-  val user: User
-    get() {
-      val userInfo = userInformation
-      val textures = yggdrasilTextures
-      val selectedProfile = userInfo.selectedProfile!!
-      val api = littleskinApiUrl.toURL().toStrings()
-      val user = User(
+  override val user: User
+    get() = sendPostWithJson.parseObject<UserInformation>().let {
+      User(
         userName,
-        userInfo.accessToken,
-        AccountsType.Yggdrasil,
-        selectedProfile.getString("id"),
-        api,
-        api.toBase64(),
-        textures.utils.writeSkinHead()
-      )
-      userJson.writeObjectToFile(user, Json.GSON_BUILDER.setPrettyPrinting())
-      logmaker.info(user)
-      return user
+        it.accessToken,
+        AccountsType.YGGDRASIL,
+        it.selectedProfile.getString("id"),
+        yggdrasilTextures.utils.writeSkinHead()
+      ).apply {
+        metaData = littleskinApiUrl.toStrings()
+        base64Data = metaData.ckeckIsNull().toBase64()
+      }
     }
 
   class PostJsonObject(

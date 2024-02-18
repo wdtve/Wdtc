@@ -26,15 +26,15 @@ class SkinUtils {
 
   @Throws(IOException::class)
   fun writeSkinHead(): File {
-    val image = ImageIO.read(userSkinInput ?: skinFile?.newInputStream())
-    val extension = skinFile?.extension
-    val newImage = image.getSubimage(8, 8, 8, 8)
-    val headPhoto = File(
-      userAsste, skinFile?.name?.cleanStrInString(".$extension")?.appendForString("-head.", extension)!!
-    )
-    headPhoto.touch()
-    ImageIO.write(newImage, extension, headPhoto.newOutputStream())
-    return headPhoto
+    val newImage = ImageIO.read(userSkinInput ?: skinFile?.newInputStream()).getSubimage(8, 8, 8, 8)
+    return skinFile?.extension.let {
+      File(
+        userAsste, skinFile.ckeckIsNull().name.cleanStrInString(".$it").appendForString("-head.", it)
+      ).apply {
+        touch()
+        ImageIO.write(newImage, extension, newOutputStream())
+      }
+    }
   }
 
   fun copySkinFile() {

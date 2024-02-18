@@ -2,26 +2,32 @@
 
 package org.wdt.wdtc.ui
 
+import kotlinx.coroutines.*
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.auth.printUserList
 import org.wdt.wdtc.core.auth.yggdrasil.updateAuthlibInjector
 import org.wdt.wdtc.core.game.config.writeConfigJsonToAllVersion
 import org.wdt.wdtc.core.manger.*
-import org.wdt.wdtc.core.utils.JavaUtils
-import org.wdt.wdtc.core.utils.isOnline
-import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.ui.window.setErrorWin
 import java.util.*
-import kotlin.concurrent.thread
+import javafx.application.Application.launch as launchApp
 
+@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 fun main(args: Array<String>) {
+  val startTime = System.currentTimeMillis()
   try {
+    ckeckRunEnvironment()
     ckeckVMConfig()
+    createNeedDirectories()
+    initLogmaker()
     if (args.isNotEmpty()) {
       removeConfigDirectory(Arrays.stream(args).toList()[0] == "refresh")
     }
     ckeckJavaFX()
-    logmaker.info("===== Wdtc - $launcherVersion - =====")
+    logmaker.info("===== Wdtc - $launcherVersion =====")
+    logmaker.info("Current System:${System.getProperty("os.name")}")
+    logmaker.info("Current Platform:$currentSystem")
     logmaker.info("Java Version:${System.getProperty("java.version")}")
     logmaker.info("Java VM Version:${System.getProperty("java.vm.name")}")
     logmaker.info("Java Home:${System.getProperty("java.home")}")
@@ -30,30 +36,41 @@ fun main(args: Array<String>) {
     logmaker.info("Wdtc Config Path:$wdtcConfig")
     logmaker.info("Setting File:$settingFile")
     logmaker.info("Here:$defaultHere")
-    runStartUpTask()
-    removePreferredVersion()
-    printUserList()
-    if (isOnline) {
-      downloadVersionManifestJsonFileTask()
-      updateAuthlibInjector()
+    runBlocking {
+      runStartUpTask()
+      launch(Dispatchers.IO) {
+        removePreferredVersion()
+        printUserList()
+        if (isOnline) {
+          downloadVersionManifestJsonFileTask()
+          updateAuthlibInjector()
+        }
+        writeConfigJsonToAllVersion()
+      }
+      launch(newSingleThreadContext(name = "Find Java")) { JavaUtils.main(registryKey) }
+      launchApp(AppMain::class.java)
     }
-    writeConfigJsonToAllVersion()
-    thread(name = "Found Java") { JavaUtils.main(registryKey) }
-    javafx.application.Application.launch(AppMain::class.java, *args)
+    awaitApplicationBreak(startTime)
   } catch (e: Throwable) {
     setErrorWin(e)
   }
 }
 
 private fun removePreferredVersion() {
-  val setting = setting
-  val version = setting.preferredVersion
-  if (version != null) {
-    if (version.versionJson.isFileNotExists()) {
-      setting.preferredVersion = null
-      setting.putSettingToFile()
+  currentSetting.preferredVersion.let {
+    it.runIfNoNull {
+      if (versionJson.isFileNotExists()) {
+        currentSetting.apply {
+          preferredVersion = null
+        }.putSettingToFile()
+      }
     }
   }
+}
+
+private fun awaitApplicationBreak(time: Long) {
+  logmaker.info("Runtime: ${System.currentTimeMillis() - time}ms")
+  logmaker.info("======= Wdtc Stop ========")
 }
 
 private val registryKey: Array<String> = arrayOf(

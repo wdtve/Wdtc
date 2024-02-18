@@ -1,59 +1,70 @@
 package org.wdt.wdtc.core.download.game
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
-import org.wdt.utils.io.isFileNotExistsAndIsNotSameSize
 import org.wdt.wdtc.core.download.SpeedOfProgress
-import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.game.Version
+import org.wdt.wdtc.core.manger.TaskKind
+import org.wdt.wdtc.core.manger.TaskManger
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.isStopDownloadProcess
-import org.wdt.wdtc.core.utils.startDownloadTask
-import org.wdt.wdtc.core.utils.startThread
-import org.wdt.wdtc.core.utils.toURL
+import org.wdt.wdtc.core.utils.*
 import java.io.File
 
-open class DownloadGameAssetsFile(val launcher: Launcher) {
-  fun startDownloadAssetsFiles() {
-    val maps = launcher.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap()
-    val progress = SpeedOfProgress(maps.size)
-    for (key in maps.keys) {
-      val data: AssetsFileData = maps[key]?.asJsonObject?.parseObject()!!
-      if (isStopDownloadProcess) return
-      if (File(launcher.gameObjects, data.hashSplicing).isFileNotExistsAndIsNotSameSize(data.size.toLong())) {
-        val task = DownloadGameAssetsFileTask(launcher, data, progress)
-        task.startThread()
+class DownloadGameAssetsFile(private val version: Version) {
+  fun startDownloadAssetsFiles() =
+    version.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap().run {
+      val progress = SpeedOfProgress(size).apply {
+        coroutineScope = executorCoroutineScope(name = "Download assets file")
+      }
+      keys.forEach {
+        get(it).ckeckIsNull().asJsonObject.parseObject<AssetsFileData>().let { data ->
+          DownloadGameAssetsFileTask(version, data, progress).run {
+            start()
+          }
+        }
+      }
+      progress.await()
+    }
+
+
+  private class AssetsFileData(
+    @SerializedName("hash")
+    override val sha1: String,
+    @SerializedName("size")
+    override val size: Long = 0
+  ) : FileData {
+    val hashSplicing: String
+      get() = "$hashHead/$sha1"
+    private val hashHead: String
+      get() = sha1.substring(0, 2)
+  }
+
+  private class DownloadGameAssetsFileTask(
+    version: Version, private val data: AssetsFileData, private val progress: SpeedOfProgress
+  ) : TaskManger(data.sha1, TaskKind.COROUTINES) {
+
+    private val hashFile = File(version.gameObjects, data.hashSplicing)
+
+    init {
+      coroutinesAction = progress.coroutineScope.launch(
+        actionName.toCoroutineName(),
+        CoroutineStart.LAZY
+      ) {
+        startDownloadTask((downloadSource.assetsUrl + data.hashSplicing).toURL(), hashFile)
+        synchronized(this) { progress.countDown() }
+      }
+    }
+
+    override fun start() {
+      if (hashFile.compareFile(data)) {
+        coroutinesAction.ckeckIsNull().start()
       } else {
         progress.countDown()
       }
-    }
-    progress.await()
-  }
-
-  class AssetsFileData {
-    @SerializedName("hash")
-    val hash: String? = null
-
-    @SerializedName("size")
-    val size = 0
-    val hashSplicing: String
-      get() = "$hashHead/$hash"
-    private val hashHead: String
-      get() = hash?.substring(0, 2).toString()
-  }
-
-  class DownloadGameAssetsFileTask(
-    private val launcher: Launcher,
-    private val data: AssetsFileData,
-    private val progress: SpeedOfProgress
-  ) : Thread() {
-
-    override fun run() {
-      val hashFile = File(launcher.gameObjects, data.hashSplicing)
-      val hashUrl = (downloadSource.assetsUrl + data.hashSplicing).toURL()
-      startDownloadTask(hashUrl, hashFile)
-      synchronized(this) { progress.countDown() }
     }
   }
 }

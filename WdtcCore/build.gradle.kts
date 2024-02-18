@@ -1,46 +1,32 @@
 plugins {
-  kotlin("jvm")
+  alias(libs.plugins.kotlin)
 }
 
 group = "org.wdt.wdtc.core"
 version = rootProject.version
 
 dependencies {
-  implementation("com.github.wd-t.utils:utils-gson:1.3.0")
-  implementation("com.github.wd-t.utils:utils-io:1.3.0")
-  implementation("log4j:log4j:1.2.17")
-  implementation("com.google.code.gson:gson:2.10.1")
-  implementation(kotlin("stdlib-jdk8"))
-  testImplementation(kotlin("test"))
-  testImplementation(platform("org.junit:junit-bom:5.10.0"))
-  testImplementation("org.junit.jupiter:junit-jupiter")
+  implementation(libs.utils.io)
+  implementation(libs.utils.io.okio)
+  implementation(libs.utils.gson)
+  implementation(libs.gson)
+  implementation(libs.coroutines.core)
+  implementation(libs.coroutines.core.jvm)
+  implementation(libs.okio)
+  implementation(libs.stdlib.jdk8)
+  testImplementation(libs.stdlib.test)
 }
-
 
 tasks.jar {
   manifest.attributes(
     "Implementation-Vendor" to "Wdt~(wd-t)",
     "Implementation-Title" to "wdtc-core-kotlin",
-    "Implementation-Version" to "${project.version}",
+    "Implementation-Version" to "${project.version}"
   )
 }
-
-fun getJvmArgs(debug: Boolean): MutableList<String> {
-  val jvmList = mutableListOf(
-    "-Dwtdc.application.type=console",
-    "-Dwdtc.launcher.version=${project.version}"
-  )
-  return if (debug) {
-    jvmList.add("-Dwdtc.debug.switch=true")
-    jvmList
-  } else {
-    jvmList
-  }
-}
-
 
 tasks.test {
   workingDir = rootDir
-  jvmArgs = getJvmArgs(true)
+  jvmArgs = listOf("-Dwdtc.debug.switch=true", "-Dwdtc.config.path=./")
   useJUnitPlatform()
 }

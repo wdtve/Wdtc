@@ -11,6 +11,8 @@ interface DownloadSourceInterface {
   val forgeLibraryMavenUrl: String
   val versionClientUrl: String
   val officialUrl: String
+  val quiltMetaUrl: String
+  val quiltMavenUrl: String
 
   companion object {
     const val MOJANG_VERSION_MANIFEST = "https://piston-meta.mojang.com/mc/game/version_manifest.json"

@@ -10,89 +10,98 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import org.wdt.utils.gson.Json
-import org.wdt.utils.gson.readFileToJsonObject
-import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.newInputStream
-import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Offline
-import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.Yggdrasil
-import org.wdt.wdtc.core.auth.getPreferredUser
-import org.wdt.wdtc.core.auth.getUser
+import org.wdt.wdtc.core.auth.UsersList.Companion.saveChangeToFile
+import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.OFFLINE
+import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.YGGDRASIL
+import org.wdt.wdtc.core.auth.currentUsersList
+import org.wdt.wdtc.core.auth.preferredUser
 import org.wdt.wdtc.core.auth.setUserToJson
-import org.wdt.wdtc.core.auth.userList
-import org.wdt.wdtc.core.manger.userListFile
-import org.wdt.wdtc.ui.window.setCss
-import org.wdt.wdtc.ui.window.setErrorWin
-import org.wdt.wdtc.ui.window.setStylesheets
+import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.forEachWhenIsNotEmpty
+import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 
 object UserListPane {
-  private val preferredUser = getPreferredUser()
   fun setUserList(pane: Pane) {
-    pane.children.clear()
-    val scrollPane = ScrollPane()
-    scrollPane.setPrefSize(600.0, 400.0)
-    val vBox = VBox()
-    vBox.setPrefSize(595.0, 395.0)
-    if (userList.isNotEmpty()) {
-      for (newUser in userList) {
-        val userName = newUser.userName
-        val userPane = AnchorPane()
-        userPane.setPrefSize(595.0, 40.0)
-        val enter = RadioButton()
-        AnchorPane.setTopAnchor(enter, 15.0)
-        AnchorPane.setBottomAnchor(enter, 15.0)
-        AnchorPane.setLeftAnchor(enter, 15.0)
-        enter.onAction = EventHandler {
-          setUserToJson(getUser(userName))
-          setUserList(pane)
+    val preferredUser = preferredUser
+    val vBox = VBox().apply {
+      setPrefSize(595.0, 395.0)
+      setStylesheets()
+    }
+    currentUsersList.run {
+      forEachWhenIsNotEmpty { newUser ->
+        val enter = RadioButton().apply {
+          setTopAnchor(15.0)
+          setBottomAnchor(15.0)
+          setLeftAnchor(15.0)
+          onAction = EventHandler {
+            setUserToJson(newUser)
+            isSelected = true
+            setUserList(pane)
+          }
+          if (preferredUser == newUser) {
+            isSelected = true
+          }
         }
-        if (newUser == preferredUser) {
-          enter.isSelected = true
-        }
-        val image: Image? = try {
+        val head = try {
           Image(newUser.headFile.newInputStream())
         } catch (e: IOException) {
           setErrorWin(e)
           null
+        }.let {
+          ImageView(it.ckeckIsNull())
+        }.apply {
+          fitHeight = 32.0
+          fitWidth = 32.0
+          setTopAnchor(15.0)
+          setBottomAnchor(15.0)
+          setLeftAnchor(50.0)
         }
-        val head = ImageView(image ?: throw RuntimeException())
-        head.fitHeight = 32.0
-        head.fitWidth = 32.0
-        AnchorPane.setTopAnchor(head, 15.0)
-        AnchorPane.setBottomAnchor(head, 15.0)
-        AnchorPane.setLeftAnchor(head, 50.0)
-        val userNameLabel = Label(newUser.userName)
-        AnchorPane.setTopAnchor(userNameLabel, 10.0)
-        AnchorPane.setLeftAnchor(userNameLabel, 96.0)
-        val userTypeLabel = Label()
-        when (newUser.type) {
-          Offline -> userTypeLabel.text = "离线账户"
-          Yggdrasil -> userTypeLabel.text = "Yggdrasil外置登录"
-          else -> TODO()
+        val userNameLabel = Label(newUser.userName).apply {
+          setTopAnchor(10.0)
+          setLeftAnchor(96.0)
         }
-        AnchorPane.setTopAnchor(userTypeLabel, 30.0)
-        AnchorPane.setLeftAnchor(userTypeLabel, 96.0)
-        val detele = JFXButton("删除")
-        AnchorPane.setTopAnchor(detele, 17.0)
-        AnchorPane.setLeftAnchor(detele, 530.0)
-        detele.onAction = EventHandler {
-          try {
-            val userListObject = userListFile.readFileToJsonObject()
-            userListObject.remove(userName)
-            userListFile.writeObjectToFile(userListObject, Json.getBuilder().setPrettyPrinting())
-            setUserList(pane)
-          } catch (e: IOException) {
-            setErrorWin(e)
+        val userTypeLabel = Label().apply {
+          text = when (newUser.type) {
+            OFFLINE -> "离线账户"
+            YGGDRASIL -> "Yggdrasil外置登录"
+            else -> TODO()
+          }
+          setTopAnchor(30.0)
+          setLeftAnchor(96.0)
+        }
+        val detele = JFXButton("删除").apply {
+          setTopAnchor(17.0)
+          setLeftAnchor(530.0)
+          onAction = EventHandler {
+            try {
+              remove(newUser)
+              saveChangeToFile()
+              setUserList(pane)
+            } catch (e: IOException) {
+              setErrorWin(e)
+            }
           }
         }
-        setCss("BlackBorder", userPane)
-        userPane.children.addAll(enter, head, userNameLabel, userTypeLabel, detele)
-        vBox.children.add(userPane)
+        AnchorPane().apply {
+          setPrefSize(595.0, 40.0)
+        }.run {
+          setCss("BlackBorder", this)
+          children.addAll(enter, head, userNameLabel, userTypeLabel, detele)
+          vBox.children.add(this)
+        }
       }
     }
-    vBox.setStylesheets()
-    scrollPane.content = vBox
-    pane.children.add(scrollPane)
+
+    ScrollPane().apply {
+      setPrefSize(600.0, 400.0)
+      content = vBox
+    }.let {
+      pane.children.run {
+        clear()
+        add(it)
+      }
+    }
   }
 }

@@ -1,11 +1,12 @@
 package org.wdt.wdtc.core.download.forge
 
 import com.google.gson.annotations.JsonAdapter
+import org.wdt.utils.gson.readFileToClass
 import org.wdt.utils.gson.readFileToJsonObject
-import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
-import org.wdt.wdtc.core.game.Launcher
+import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
+import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
@@ -18,36 +19,35 @@ import java.net.URL
 
 // TODO Using 'Url' class
 @JsonAdapter(DownloadInfoTypeAdapter::class)
-open class ForgeDownloadInfo(protected val launcher: Launcher, override val modVersion: String) :
+open class ForgeDownloadInfo(protected val version: Version, override val modVersion: String) :
   ModDownloadInfoInterface {
 
 
-  constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) :
-      this(launcher, versionJsonObjectInterface.versionNumber!!)
+  constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) :
+      this(version, versionsJsonObjectInterface.versionNumber)
 
   fun startDownloadInstallJar() {
     startDownloadTask(forgeInstallJarUrl, forgeInstallJarFile)
   }
 
-  private val installJarUrl: String
-    get() = "${downloadSource.forgeLibraryMavenUrl}net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar"
   val forgeInstallJarFile: File
     get() = File(wdtcCache, "$modVersion-installer.jar")
   private val forgeInstallJarUrl: URL
-    get() = installJarUrl.replace(":mcversion", launcher.versionNumber)
+    get() = "${downloadSource.forgeLibraryMavenUrl}net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar"
+      .replace(":mcversion", version.versionNumber)
       .replace(":forgeversion", modVersion).toURL()
 
   fun unZipToInstallProfile() {
-    unZipToFile(forgeInstallJarFile, installProfileFile, "install_profile.json")
+    unZipToFile(forgeInstallJarFile, forgeInstallProfileFile, "install_profile.json")
   }
 
-  val installProfileFile: File
-    get() = File(wdtcCache, "install_profile-${launcher.versionJson}-$modVersion.json")
+  private val forgeInstallProfileFile: File
+    get() = File(wdtcCache, "install_profile-${version.versionNumber}-$modVersion.json")
 
-  val installPrefileJSONObject
-    get() = installProfileFile.readFileToJsonObject()
+  val forgeInstallProfileJsonObject
+    get() = forgeInstallProfileFile.readFileToJsonObject()
   val forgeVersionJsonFile: File
-    get() = File(wdtcCache, "version-${launcher.versionNumber}-$modVersion.json")
+    get() = File(wdtcCache, "version-${version.versionNumber}-$modVersion.json")
 
   fun unZipToForgeVersionJson() {
     unZipToFile(forgeInstallJarFile, forgeVersionJsonFile, "version.json")
@@ -59,8 +59,15 @@ open class ForgeDownloadInfo(protected val launcher: Launcher, override val modV
 
   val forgeVersionJsonObject
     get() = forgeVersionJsonFile.readFileToJsonObject()
-  override val modInstallTask: InstallTaskInterface
-    get() = ForgeInstallTask(launcher, modVersion)
+
+  val newForgeVersionJsonObject: ForgeVersionJsonObject
+    get() = forgeVersionJsonFile.readFileToClass(forgeJsonObjectGsonBuilder)
+
+  val newForgeInstallProfileJsonObject: ForgeInstallProfileJsonObject
+    get() = forgeInstallProfileFile.readFileToClass()
+
+  override val modInstallTask: ModInstallTaskInterface
+    get() = ForgeInstallTask(version, modVersion)
   override val modKind: KindOfMod
     get() = KindOfMod.FORGE
 

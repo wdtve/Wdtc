@@ -1,11 +1,12 @@
 package org.wdt.wdtc.core.auth.yggdrasil
 
 import com.google.gson.annotations.SerializedName
-import org.jetbrains.annotations.NotNull
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.io.toStrings
+import org.wdt.wdtc.core.manger.isWindows
 import org.wdt.wdtc.core.manger.minecraftComSkin
 import org.wdt.wdtc.core.utils.SkinUtils
+import org.wdt.wdtc.core.utils.ckeckIsNull
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.File
@@ -15,44 +16,36 @@ import java.util.*
 
 class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
   private val userName: String = yggdrasilAccounts.userName
+  private val url: String = yggdrasilAccounts.url
 
-  @NotNull
-  var url: String? = null
-
-  init {
-    url = yggdrasilAccounts.url
-  }
 
   private val userJsonUrl: URL = "$url/csl/$userName.json".toURL()
 
-  @Throws(IOException::class)
-  fun getUserSkinHash(): String {
-    val skins: Skins? = csl.skins
-    return skins?.skinKind ?: throw NullPointerException()
-  }
+  private val userSkinHash: String
+    get() = csl.skins?.skinKind.ckeckIsNull()
 
   private val userSkinFile: File = SkinUtils.getUserSkinFile(userName)
 
   @Throws(IOException::class)
   fun startDownloadUserSkin() {
-    val userSkinHash = getUserSkinHash()
-    val skinPath = File(minecraftComSkin, "${userSkinHash.substring(0, 2)}/$userSkinHash")
+    if (!isWindows) return
+    val skinPath = userSkinHash.let {
+      File(minecraftComSkin, "${it.substring(0, 2)}/$it")
+    }
     startDownloadTask(skinUrl, skinPath)
   }
 
   @get:Throws(IOException::class)
   val skinUrl: URL
-    get() = URL(url + "/textures/" + getUserSkinHash())
+    get() = URL("$url/textures/${userSkinHash}")
 
   private val csl: Csl
     get() = userJsonUrl.toStrings().parseObject()
 
   @get:Throws(IOException::class)
   val utils: SkinUtils
-    get() {
-      val utils = SkinUtils(userSkinFile)
-      utils.userSkinInput = skinUrl.openStream()
-      return utils
+    get() = SkinUtils(userSkinFile).apply {
+      userSkinInput = skinUrl.openStream()
     }
 
   class Csl {

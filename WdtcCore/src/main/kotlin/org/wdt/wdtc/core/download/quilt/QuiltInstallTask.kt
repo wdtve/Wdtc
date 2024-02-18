@@ -1,63 +1,68 @@
 package org.wdt.wdtc.core.download.quilt
 
 import org.wdt.utils.gson.*
-import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
+import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.DependencyDownload
 import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 
-class QuiltInstallTask : QuiltDownloadInfo, InstallTaskInterface {
+class QuiltInstallTask : QuiltDownloadInfo, ModInstallTaskInterface {
 
-  constructor(launcher: Launcher, quiltVersionNumber: String) : super(launcher, quiltVersionNumber)
+  constructor(version: Version, quiltVersionNumber: String) : super(version, quiltVersionNumber)
 
-  constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : super(
-    launcher,
-    versionJsonObjectInterface
+  constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) : super(
+    version,
+    versionsJsonObjectInterface
   )
+
   private fun startDownloadQuiltGameVersionJson() {
     startDownloadTask(quiltVersionJsonUrl, quiltVersionJson)
   }
 
   @Throws(IOException::class)
   override fun overwriteVersionJson() {
-    val gameVersionJsonObject = launcher.gameVersionJsonObject
+    val gameVersionJsonObject = version.gameVersionJsonObject
     val quiltVersionJsonObject = quiltGameVersionJsonObject
     val quiltVersionJsonArguments = quiltVersionJsonObject.getJsonObject("arguments")
-    val gameVersionJsonArguments = gameVersionJsonObject.arguments!!
+    val gameVersionJsonArguments = gameVersionJsonObject.arguments
     val gameVersionGameList = gameVersionJsonArguments.gameList!!
     gameVersionJsonObject.mainClass = quiltVersionJsonObject.getString("mainClass")
     gameVersionGameList.addAll(quiltVersionJsonArguments.getJsonArray("game").asJsonArray)
     gameVersionJsonArguments.gameList = gameVersionGameList
     gameVersionJsonObject.arguments = gameVersionJsonArguments
     val quiltLibraryList = quiltVersionJsonObject.getJsonArray("library")
-    val gameVersionLibraryList: MutableList<LibraryObject> = gameVersionJsonObject.libraries!!
-    for (i in 0 until quiltLibraryList.size()) {
-      val quiltLibraryObject = quiltLibraryList.getJsonObject(i)
-      val download = DependencyDownload(quiltLibraryObject.getString("name"))
+    val gameVersionLibraryList = gameVersionJsonObject.libraries
+    quiltLibraryList.forEach {
+      val quiltLibraryObject = it.asJsonObject
+      val download = GameRuntimeDependency(quiltLibraryObject.getString("name"))
       val libraryDefaultUrl = quiltLibraryObject.getString("url")
       if (libraryDefaultUrl == "https://maven.fabricmc.net/") {
-        download.defaultUrl = downloadSource.fabricLibraryUrl
+        download.libraryRepositoriesUrl = downloadSource.fabricLibraryUrl.toURL()
       } else if (libraryDefaultUrl == "https://maven.quiltmc.org/repository/release/") {
-        download.defaultUrl = "https://maven.quiltmc.org/repository/release/"
+        download.libraryRepositoriesUrl = "https://maven.quiltmc.org/repository/release/".toURL()
       }
-      gameVersionLibraryList.add(LibraryObject.getLibraryObject(download, libraryDefaultUrl))
+      gameVersionLibraryList.add(LibraryObject.getLibraryObject(download, libraryDefaultUrl.toURL()))
     }
     gameVersionJsonObject.libraries = gameVersionLibraryList
-    gameVersionJsonObject.id = "${launcher.versionNumber}-quilt-$modVersion"
-    launcher.putToVersionJson(gameVersionJsonObject)
+    gameVersionJsonObject.id = "${version.versionNumber}-quilt-$modVersion"
+    version.run {
+      gameVersionJsonObject.putToVersionJson()
+    }
   }
 
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
-    val versionJsonObject = launcher.gameVersionJsonObject
-    versionJsonObject.patches = mutableListOf(
-      launcher.versionJson.readFileToJsonObject(),
-      quiltVersionJson.readFileToJsonObject()
-    )
-    launcher.putToVersionJson(versionJsonObject)
+    version.run {
+      gameVersionJsonObject.apply {
+        patches = mutableListOf(
+          versionJson.readFileToJsonObject(),
+          quiltVersionJson.readFileToJsonObject()
+        )
+      }.putToVersionJson()
+    }
   }
 
   override fun afterDownloadTask() {}

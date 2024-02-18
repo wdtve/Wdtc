@@ -1,198 +1,159 @@
 package org.wdt.wdtc.core.download.forge
 
 import org.wdt.utils.gson.*
-import org.wdt.utils.io.FilenameUtils
-import org.wdt.utils.io.newInputStream
 import org.wdt.wdtc.core.download.SpeedOfProgress
-import org.wdt.wdtc.core.download.game.DownloadGameClass
-import org.wdt.wdtc.core.download.infterface.InstallTaskInterface
-import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
+import org.wdt.wdtc.core.download.game.DownloadGameRuntime
+import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
+import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.game.config.DefaultGameConfig
 import org.wdt.wdtc.core.game.config.gameConfig
-import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
-import org.wdt.wdtc.core.manger.pistonDataMojang
-import org.wdt.wdtc.core.manger.wdtcCache
+import org.wdt.wdtc.core.launch.GameRuntimeFile
+import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.*
-import org.wdt.wdtc.core.utils.DefaultDependency
-import org.wdt.wdtc.core.utils.DependencyDownload
 import java.io.*
-import java.util.jar.JarInputStream
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 // TODO Repair and optimization Forge install
-class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
-  ForgeDownloadInfo(launcher, forgeVersion), InstallTaskInterface {
+class ForgeInstallTask(version: Version, forgeVersion: String) :
+  ForgeDownloadInfo(version, forgeVersion), ModInstallTaskInterface {
 
-  private val config: DefaultGameConfig.Config = launcher.gameConfig.config!!
+  private val config: DefaultGameConfig.Config = version.gameConfig.config
 
 
-  constructor(launcher: Launcher, versionJsonObjectInterface: VersionJsonObjectInterface) : this(
-    launcher,
-    versionJsonObjectInterface.versionNumber!!
+  constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) : this(
+    version,
+    versionsJsonObjectInterface.versionNumber
   )
 
   @Throws(IOException::class)
   fun getCommandLine(index: Int): String {
-    val jsonObject = installPrefileJSONObject.getJsonArray("processors").getJsonObject(index)
-    val commandLineBuilder = StringBuilder()
-    commandLineBuilder.append(config.javaPath).append(" -cp ")
-    val jarList = jsonObject.getJsonArray("classpath")
-    for (i in 0 until jarList.size()) {
-      val jar = DependencyDownload(jarList.getString(i))
-      jar.downloadPath = launcher.gameLibraryDirectory
-      commandLineBuilder.append(FilenameUtils.separatorsToWindows(jar.libraryFilePath)).append(";")
-    }
-    val mainJar = DependencyDownload(jsonObject.getString("jar"))
-    mainJar.downloadPath = launcher.gameLibraryDirectory
-    val mainClass =
-      JarInputStream(mainJar.libraryFile.newInputStream()).manifest.mainAttributes.getValue("Main-Class")
-    commandLineBuilder.append(mainJar.libraryFilePath).append(" ").append(mainClass).append(" ")
-    val argsList = jsonObject.getJsonArray("args")
-    for (i in 0 until argsList.size()) {
-      if (i % 2 == 0) {
-        commandLineBuilder.append(argsList.getString(i)).append(" ")
-      } else {
-        val argeStr = argsList.getString(i)
-        val middle = getMiddleBracket(argeStr)
-        val large = getLargeBracket(argeStr)
-        if (argeStr == "{MINECRAFT_JAR}") {
-          commandLineBuilder.append(launcher.versionJar).append(" ")
-        } else if (argeStr == "{BINPATCH}") {
-          unZipBySpecifyFile(forgeInstallJarFile, clientLzmaPath)
-          commandLineBuilder.append(clientLzmaPath).append(" ")
-        } else if (argeStr == "{SIDE}") {
-          commandLineBuilder.append("client").append(" ")
-        } else if (large.find()) {
-          val client = DependencyDownload(
-            cleanString(
-              installPrefileJSONObject.getJsonObject("data")
-                .getJsonObject(large.group(1)).getString("client")
-            )
-          )
-          client.downloadPath = launcher.gameLibraryDirectory
-          commandLineBuilder.append(client.libraryFilePath).append(" ")
-        } else if (middle.find()) {
-          val arge = DependencyDownload(middle.group(1))
-          arge.downloadPath = launcher.gameLibraryDirectory
-          commandLineBuilder.append(arge.libraryFilePath).append(" ")
-        } else {
-          commandLineBuilder.append(argeStr).append(" ")
+    val installProfile = newForgeInstallProfileJsonObject.processors[index]
+    return buildString {
+      append(config.javaPath).append(" -cp ")
+      installProfile.classpath.forEach {
+        it.toGameRuntimeDependency.run {
+          append(libraryFilePath).append(";")
         }
       }
+      installProfile.libraryName.toGameRuntimeDependency.run {
+        libraryFile.getJarManifestInfo("Main-Class").ckeckIsNull().let {
+          append(libraryFilePath).append(STRING_SPACE).append(it).append(" ")
+        }
+      }
+      installProfile.args.forEach { arg ->
+        if (arg.startsWith("--")) {
+          append(arg).append(STRING_SPACE)
+        } else if (arg.startendWith("{", "}")) {
+          if (arg == "{BINPATCH}") {
+            append(clientLzmaFile.canonicalPath)
+          } else {
+            dataMap[arg].ckeckIsNull().let {
+              if (it.isRuntime) append(it.client.toGameRuntimeDependency.libraryFilePath)
+              else append(it.client)
+            }
+          }
+        }
+      }
+
     }
-    return FilenameUtils.separatorsToWindows(commandLineBuilder.toString())
   }
+
+  private val dataMap: Map<String, ForgeInstallProfileJsonObject.ForgeDataObject>
+    get() {
+      return hashMapOf<String, ForgeInstallProfileJsonObject.ForgeDataObject>().apply {
+        forgeInstallProfileJsonObject.getJsonObject("data").asMap().forEach { (key, value) ->
+          put("{$key}", value.asJsonObject.parseObject())
+        }
+        put(
+          "{MINECRAFT_JAR}",
+          ForgeInstallProfileJsonObject.ForgeDataObject(
+            version.versionJar.canonicalPath,
+            version.versionJar.canonicalPath
+          )
+        )
+        put("{SIDE}", ForgeInstallProfileJsonObject.ForgeDataObject("client", "server"))
+      }
+    }
+
 
   @Throws(IOException::class)
   fun downloadClientText() {
-    var txtPath: DefaultDependency? = null
-    val dataObject = installPrefileJSONObject.getJsonObject("data")
-    if (dataObject.has("MOJMAPS")) {
-      val matcher = getMiddleBracket(dataObject.getJsonObject("MOJMAPS").getString("client"))
-      if (matcher.find()) {
-        txtPath = DefaultDependency(matcher.group(1))
-      }
-    } else {
-      val matcher = getMiddleBracket(dataObject.getJsonObject("MAPPINGS").getString("client"))
-      if (matcher.find()) {
-        txtPath = DefaultDependency(matcher.group(1))
-      }
+    val txtPath = newForgeInstallProfileJsonObject.data.let {
+      if (it.mojmaps != null) it.mojmaps.client.toGameRuntimeDependency
+      else if (it.mappings != null) it.mappings.client.toGameRuntimeDependency
+      else null
+    }.ckeckIsNull()
+    val txtUrl = version.gameVersionJsonObject.downloads.clientMappings.url.run {
+      if (isNotOfficialDownloadSource)
+        this.toString().replace(pistonDataMojang, downloadSource.dataUrl).toURL().getRedirectUrl().toURL()
+      else this
     }
-    var txtUrl = launcher.versionJson.readFileToJsonObject().getJsonObject("downloads")
-      .getJsonObject("client_mappings").getString("url")
-    if (isNotOfficialDownloadSource) {
-      txtUrl = txtUrl.replace(pistonDataMojang, downloadSource.dataUrl).toURL().getRedirectUrl()
-    }
-    if (txtPath != null) {
-      startDownloadTask(txtUrl, File(launcher.gameLibraryDirectory, txtPath.formJar()))
-    }
+    startDownloadTask(txtUrl, File(version.gameLibraryDirectory, txtPath.formJar()))
   }
 
   @Throws(IOException::class)
   fun startInstallForge() {
-    val objects = installPrefileJSONObject.getJsonArray("processors")
-    for (i in 0 until objects.size()) {
-      val taskJson = objects.getJsonObject(i)
-      if (taskJson.has("sides")) {
-        if (taskJson.getJsonArray("sides").getString(0) == "client") {
-          startRunCommand(i)
-        }
-      } else {
-        if (taskJson.getJsonArray("args").getString(1) != "DOWNLOAD_MOJMAPS") {
-          startRunCommand(i)
+    newForgeInstallProfileJsonObject.processors.let {
+      repeat(it.size) { index ->
+        it[index].run {
+          if (sides != null && sides.first() == "client") {
+            startRunCommand(index)
+          } else if (args[1] != "DOWNLOAD_MOJMAPS") {
+            startRunCommand(index)
+          }
         }
       }
     }
   }
 
-  private val clientLzmaPath: File = File(wdtcCache, "/data/client.lzma")
+  private val clientLzmaFile: File = File(wdtcCache, "data/client.lzma")
 
-
-  private fun cleanString(str: String): String {
-    return str.cleanStrInString("{").cleanStrInString("}").cleanStrInString("[").cleanStrInString("]")
-  }
 
   @Throws(IOException::class)
   private fun startRunCommand(i: Int) {
-    val commmand = getCommandLine(i)
-    logmaker.info("Command Line:$commmand")
-    val process = Runtime.getRuntime().exec(arrayOf("cmd", "/c", commmand))
-    val bufferedReader = BufferedReader(InputStreamReader(process.inputStream, "GBK"))
-    var line: String?
-    while (bufferedReader.readLine().also { line = it } != null) {
-      logmaker.info(line)
+    getCommandLine(i).let {
+      logmaker.info("Command Line:$it")
+      Runtime.getRuntime().exec(arrayOf("cmd", "/c", it)).run {
+        val bufferedReader = BufferedReader(InputStreamReader(inputStream, "GBK"))
+        var line: String?
+        while (bufferedReader.readLine().also { info -> line = info } != null) {
+          logmaker.info(line)
+        }
+        destroy()
+      }
     }
-    process.destroy()
-  }
-
-  private fun getMiddleBracket(args: String): Matcher {
-    return Pattern.compile("\\[(.+)]").matcher(args)
-  }
-
-  private fun getLargeBracket(args: String): Matcher {
-    return Pattern.compile("\\{(.+)}").matcher(args)
   }
 
   @Throws(IOException::class)
   override fun overwriteVersionJson() {
-    val forgeVersionJsonObject = forgeVersionJsonObject
-    val forgeLibraryArray = forgeVersionJsonObject.getJsonArray("libraries")
-    val gameVersionJsonObject = launcher.gameVersionJsonObject
-    val gameVersionArguments = gameVersionJsonObject.arguments
-    val gameVersionGameList = gameVersionArguments?.gameList!!
-    val forgeVersionArguments = forgeVersionJsonObject.getJsonObject("arguments")
-    gameVersionGameList.addAll(forgeVersionArguments.getJsonArray("game"))
-    gameVersionArguments.gameList = gameVersionGameList
-    val gameVersionJvmList = gameVersionArguments.jvmList!!
-    if (forgeVersionArguments.has("jvm")) {
-      gameVersionJvmList.addAll(forgeVersionArguments.getJsonArray("jvm"))
+    version.run {
+      gameVersionJsonObject.apply {
+        newForgeVersionJsonObject.let {
+          this.arguments.run {
+            jvmList?.add(it.arguments.jvmList)
+            gameList?.add(it.arguments.gameList)
+          }
+          this.libraries.addAll(it.libraries)
+        }
+      }.putToVersionJson()
     }
-    gameVersionArguments.jvmList = gameVersionJvmList
-    gameVersionJsonObject.arguments = gameVersionArguments
-    for (i in 0 until forgeLibraryArray.size()) {
-      gameVersionJsonObject.libraries?.add(forgeLibraryArray.getJsonObject(i).parseObject())
-    }
-    gameVersionJsonObject.mainClass = forgeVersionJsonObject.getString("mainClass")
-    gameVersionJsonObject.id = "${launcher.versionNumber}-forge-$modVersion"
-    launcher.putToVersionJson(gameVersionJsonObject)
   }
 
   @Throws(IOException::class)
   override fun writeVersionJsonPatches() {
-    val versionJsonObject = launcher.gameVersionJsonObject
-    versionJsonObject.patches = mutableListOf(
-      launcher.versionJson.readFileToJsonObject(),
-      forgeVersionJsonFile.readFileToJsonObject()
-    )
-    launcher.putToVersionJson(versionJsonObject)
+    version.run {
+      gameVersionJsonObject.apply {
+        patches = mutableListOf(
+          versionJson.readFileToJsonObject(),
+          forgeVersionJsonFile.readFileToJsonObject()
+        )
+      }.putToVersionJson()
+    }
   }
 
   @Throws(IOException::class)
   override fun afterDownloadTask() {
-    startDownloadForgeLibraryFile(installProfileFile)
+    startDownloadForgeLibraryFile()
     downloadClientText()
     startInstallForge()
   }
@@ -201,17 +162,39 @@ class ForgeInstallTask(launcher: Launcher, forgeVersion: String) :
     startDownloadInstallJar()
     unZipToInstallProfile()
     unZipToForgeVersionJson()
+    unZipBySpecifyFile(forgeInstallJarFile, clientLzmaFile)
   }
 
-  @Throws(IOException::class)
-  fun startDownloadForgeLibraryFile(file: File) {
-    val libraryList = file.readFileToJsonObject().getJsonArray("libraries")
-    val speed = SpeedOfProgress(libraryList.size())
-    for (i in 0 until libraryList.size()) {
-      val libraryObject: LibraryObject = LibraryObject.getLibraryObject(libraryList.getJsonObject(i))
-      val task = DownloadGameClass(launcher)
-      task.startDownloadLibraryTask(libraryObject, speed)
+  private val String.toGameRuntimeDependency: GameRuntimeDependency
+    get() {
+      return GameRuntimeDependency(
+        this.formatString.run {
+          if (isHasFileExtension) cleanStrInString("@$getFileExtension") else this
+        }
+      ).apply {
+        if (isHasFileExtension) fileExtension = this@toGameRuntimeDependency.getFileExtension
+        libraryDirectory = this@ForgeInstallTask.version.gameLibraryDirectory
+      }
     }
-    speed.await()
+
+  private val String.isHasFileExtension: Boolean
+    get() = this.indexOf("@") == -1
+
+  private val String.getFileExtension: String
+    get() = this.substringAfter("@")
+
+  private val String.formatString
+    get() = this.cleanStrInString("[").cleanStrInString("]").cleanStrInString("{").cleanStrInString("}")
+
+
+  @Throws(IOException::class)
+  fun startDownloadForgeLibraryFile() {
+    newForgeVersionJsonObject.libraries.run {
+      val speed = SpeedOfProgress(size)
+      forEach {
+        DownloadGameRuntime(version, GameRuntimeFile(it), speed).run { start() }
+      }
+      speed.await()
+    }
   }
 }

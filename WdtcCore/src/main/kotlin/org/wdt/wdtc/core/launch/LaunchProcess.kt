@@ -1,23 +1,32 @@
 package org.wdt.wdtc.core.launch
 
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.wdt.wdtc.core.utils.error
 import org.wdt.wdtc.core.utils.logmaker
-import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
+import java.nio.charset.Charset
 import java.util.regex.Pattern
-import kotlin.concurrent.thread
+import kotlin.system.measureTimeMillis
 
 class LaunchProcess(
-  private val process: Process,
+  private val process: ProcessBuilder,
   var printInfo: (String) -> Unit
 ) {
   private val builder = StringBuilder()
   fun startLaunchGame() {
     try {
-      thread(name = "Read info inputStream") { getRunInfo(process.inputStream) }
-      thread(name = "Read error inputStream") { getRunInfo(process.errorStream) }.join()
-      logmaker.info("Game stop")
+      process.start().run {
+        val runtime = measureTimeMillis {
+          runBlocking {
+            launch(CoroutineName("Read info inputStream")) { getRunInfo(inputStream) }
+            launch(CoroutineName("Read error inputStream")) { getRunInfo(errorStream) }
+          }
+        }
+        logmaker.info("Game over. Game run time: $runtime ms")
+      }
     } catch (e: InterruptedException) {
       logmaker.error("Run command error,", e)
     }
@@ -26,21 +35,22 @@ class LaunchProcess(
   private fun getRunInfo(inputStream: InputStream) {
     try {
       val thread = Thread.currentThread()
-      val reader = BufferedReader(InputStreamReader(inputStream, "GBK"))
+      val reader = inputStream.reader(Charset.forName("GBK")).buffered()
       var line: String
       while (reader.readLine().also { line = it } != null) {
-        if (thread.isInterrupted) {
-          launchErrorTask()
-          return
-        } else {
-          val errorWarn = Pattern.compile("FATAL").matcher(line)
-          if (errorWarn.find()) {
-            println(line)
-            builder.append(line)
-            thread.interrupt()
+        line.let {
+          if (thread.isInterrupted) {
+            launchErrorTask()
+            return
           } else {
-            println(line)
-            builder.append(line)
+            if (Pattern.compile("FATAL").matcher(it).find()) {
+              println(it)
+              builder.append(it)
+              thread.interrupt()
+            } else {
+              println(it)
+              builder.append(it)
+            }
           }
         }
       }
@@ -52,5 +62,4 @@ class LaunchProcess(
   private fun launchErrorTask() {
     printInfo("启动失败:\n${builder}")
   }
-
 }

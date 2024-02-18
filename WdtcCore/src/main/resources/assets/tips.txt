@@ -1,0 +1,10 @@
+亻尔女子
+hello world
+这是一条$version_number版本的Wdtc才能听见的回声!
+你知道吗,Wdtc用过两种语言,一个是Java一个是Kotlin,你现在使用的是Kotlin版本!
+你知道吗,Wdtc用过两种语言,一个是Java一个是Kotlin,而Java版本已经停止维护了
+fun main = println("Hello, Wdtc!")
+Wdtc这个名字起到相当随意,就像作者写这个启动器一样
+这个版本首次引入Kotlin协程,然后作者的开发体验就不太一样了
+作者:B站@Wd_t
+时间过的好快啊,这就一年了
