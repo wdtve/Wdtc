@@ -8,47 +8,51 @@ import javax.net.ssl.HttpsURLConnection
 
 
 fun URL.isNetworkHasThisFile(): Boolean {
-  return try {
-    this.openConnection().run {
-      connectTimeout = networkimeoutTime
-      connect()
-    }
-    true
-  } catch (e: IOException) {
-    false
-  }
+	return try {
+		this.openConnection().run {
+			connectTimeout = networkimeoutTime
+			connect()
+		}
+		true
+	} catch (e: IOException) {
+		false
+	}
 }
 
 @Throws(IOException::class)
 fun URL.getRedirectUrl(): String {
-  return this.toHttpsURLConnection().run {
-    instanceFollowRedirects = false
-    connectTimeout = networkimeoutTime
-    getHeaderField("Location")
-  }
+	return this.toHttpsURLConnection().run {
+		instanceFollowRedirects = false
+		connectTimeout = networkimeoutTime
+		getHeaderField("Location")
+	}
 }
 
 val isOnline: Boolean = "https://www.bilibili.com".toURL().isNetworkHasThisFile()
 
 
 fun openSomething(o: Any) {
-  Runtime.getRuntime().exec(arrayOf("cmd.exe", "/c", "start", o.toString()))
-  logmaker.info("$o is open")
+	o.toString().let {
+		scwn(it) {
+			Runtime.getRuntime().exec(arrayOf("cmd.exe", "/c", "start", it))
+			logmaker.info("$it is open")
+		}
+	}
 }
 
 fun URL.newInputStream(): InputStream {
-  return this.toHttpsURLConnection().run {
-    connectTimeout = networkimeoutTime
-    readTimeout = networkimeoutTime
-    inputStream
-  }
+	return this.toHttpsURLConnection().run {
+		connectTimeout = networkimeoutTime
+		readTimeout = networkimeoutTime
+		inputStream
+	}
 }
 
 fun URL.toHttpsURLConnection(): HttpsURLConnection {
-  return this.openConnection() as HttpsURLConnection
+	return this.openConnection() as HttpsURLConnection
 }
 
 fun String.toURL(): URL {
-  return URL(this)
+	return URL(this)
 }
 

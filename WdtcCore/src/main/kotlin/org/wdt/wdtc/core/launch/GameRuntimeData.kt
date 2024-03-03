@@ -7,7 +7,7 @@ import org.wdt.wdtc.core.game.LibraryObject.Companion.officialLibraryUrl
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.manger.downloadSource
 import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.toURL
 import java.io.File
 import java.net.URL
@@ -21,9 +21,9 @@ open class GameRuntimeData(private val version: Version) {
   val LibraryObject.changedNativesLibraryUrl: URL
     get() = this.downloads.classifiers.currentNativesOS.let {
       return if (isNotOfficialDownloadSource)
-        URL(downloadSource.libraryUrl + it.ckeckIsNull().path)
+        URL(downloadSource.libraryUrl + it.noNull().path)
       else
-        it.ckeckIsNull().url
+        it.noNull().url
     }
 
 

@@ -9,7 +9,7 @@ import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.officialDownloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
@@ -27,7 +27,7 @@ open class FabricDonwloadInfo(
 
   constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) : this(
     version,
-    versionsJsonObjectInterface.versionNumber.ckeckIsNull()
+    versionsJsonObjectInterface.versionNumber.noNull()
   )
 
   val fabricVersionFileUrl: String

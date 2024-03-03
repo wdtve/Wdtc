@@ -2,9 +2,9 @@ package org.wdt.wdtc.core.launch
 
 import org.wdt.wdtc.core.auth.preferredUser
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.gameConfig
 import org.wdt.wdtc.core.manger.launcherVersion
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import java.io.IOException
 
 class GameCLICommand(private val version: Version) : AbstractGameCommand() {
@@ -13,7 +13,7 @@ class GameCLICommand(private val version: Version) : AbstractGameCommand() {
   override fun getCommand(): StringBuilder {
     version.gameVersionJsonObject.run {
       nonBreakingSpace(mainClass)
-      arguments.gameList.ckeckIsNull().forEach {
+      arguments.gameList.noNull().forEach {
         if (it.isJsonPrimitive) {
           nonBreakingSpace(it.asString.replaceData(dataMap))
         }

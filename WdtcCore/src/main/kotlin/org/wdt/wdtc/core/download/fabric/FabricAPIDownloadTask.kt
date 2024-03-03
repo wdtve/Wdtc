@@ -7,7 +7,7 @@ import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList.FabricAPIVersionsJ
 import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList.FabricAPIVersionsJsonObjectImpl.FilesObject
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.File
@@ -32,11 +32,11 @@ class FabricAPIDownloadTask(private val version: Version, val fabricAPIVersionNu
       versionListUrl.toStrings().parseJsonArray().forEach {
         val newVersionJsonObject: FabricAPIVersionsJsonObjectImpl = it.asJsonObject.parseObject()
         if (newVersionJsonObject.versionNumber == fabricAPIVersionNumber) {
-          downloadFabricAPITask(newVersionJsonObject.filesObjectList.ckeckIsNull()[0])
+          downloadFabricAPITask(newVersionJsonObject.filesObjectList.noNull()[0])
         }
       }
     } else {
-      downloadFabricAPITask(versionJsonObject.filesObjectList.ckeckIsNull()[0])
+      downloadFabricAPITask(versionJsonObject.filesObjectList.noNull()[0])
     }
   }
 

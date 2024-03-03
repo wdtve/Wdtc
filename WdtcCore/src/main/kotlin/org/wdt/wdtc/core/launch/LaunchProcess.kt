@@ -1,6 +1,7 @@
 package org.wdt.wdtc.core.launch
 
 import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.wdt.wdtc.core.utils.error
@@ -20,7 +21,7 @@ class LaunchProcess(
     try {
       process.start().run {
         val runtime = measureTimeMillis {
-          runBlocking {
+          runBlocking(Dispatchers.IO) {
             launch(CoroutineName("Read info inputStream")) { getRunInfo(inputStream) }
             launch(CoroutineName("Read error inputStream")) { getRunInfo(errorStream) }
           }

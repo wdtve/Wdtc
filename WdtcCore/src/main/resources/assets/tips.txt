@@ -5,6 +5,14 @@ hello world
 你知道吗,Wdtc用过两种语言,一个是Java一个是Kotlin,而Java版本已经停止维护了
 fun main = println("Hello, Wdtc!")
 Wdtc这个名字起到相当随意,就像作者写这个启动器一样
-这个版本首次引入Kotlin协程,然后作者的开发体验就不太一样了
+周年版本首次引入Kotlin协程,然后作者的开发体验就不太一样了
 作者:B站@Wd_t
 时间过的好快啊,这就一年了
+我爱协程
+低性能模式是你的谎言
+你猜为什么有低性能模式?因为作者电脑太拉
+在Java启动参数里添加-Dwdtc.low.performance.mode=true可以开启低性能模式
+低性能模式对于启动器CPU占用以及运行速度有一定的调优
+低性能模式适合RAM较少以及CPU核数较少的电脑
+在Java启动参数里添加-Dwdtc.debug.mode=true可以开启调试模式
+在调试模式里可以体验一些不成熟的功能

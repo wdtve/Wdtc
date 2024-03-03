@@ -1,95 +1,139 @@
 package org.wdt.wdtc.core.game
 
+import org.wdt.utils.gson.readFileToClass
+import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.utils.io.isFileExists
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
-import org.wdt.wdtc.core.manger.GameFileManger
-import org.wdt.wdtc.core.manger.currentSetting
+import org.wdt.wdtc.core.game.VersionsList.Companion.changeListToFile
+import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.gson.serializeVersionsListGson
+import org.wdt.wdtc.core.utils.info
+import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.setModTask
 import java.io.File
-import java.util.*
 
-class Version @JvmOverloads constructor(versionNumber: String, here: File = currentSetting.defaultGamePath) :
-  GameFileManger(versionNumber, here) {
-
-  var kind = KindOfMod.ORIGINAL
-
-  var fabricModInstallInfo: FabricDonwloadInfo? = null
-    set(value) {
-      kind = KindOfMod.FABRIC
-      field = value
-    }
-
-  var forgeModDownloadInfo: ForgeDownloadInfo? = null
-    set(value) {
-      kind = KindOfMod.FORGE
-      field = value
-    }
-
-
-  var quiltModDownloadInfo: QuiltDownloadInfo? = null
-    set(value) {
-      kind = KindOfMod.FABRIC
-      field = value
-    }
-
-
-  fun cleanKind() {
-    kind = KindOfMod.ORIGINAL
-  }
-
-
-  override fun toString(): String {
-    return "Launcher(versionNumber=$versionNumber, kind=$kind)"
-  }
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as Version
-
-    if (versionNumber != other.versionNumber) return false
-    if (kind != other.kind) return false
-    if (fabricModInstallInfo != other.fabricModInstallInfo) return false
-    if (forgeModDownloadInfo != other.forgeModDownloadInfo) return false
-    if (quiltModDownloadInfo != other.quiltModDownloadInfo) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    var result = fabricModInstallInfo?.hashCode() ?: 0
-    result = 31 * result + (forgeModDownloadInfo?.hashCode() ?: 0)
-    result = 31 * result + (quiltModDownloadInfo?.hashCode() ?: 0)
-    result = 31 * result + kind.hashCode()
-    result = 31 * result + versionNumber.hashCode()
-    return result
-  }
-
+class Version @JvmOverloads constructor(
+	versionNumber: String,
+	here: File = currentSetting.defaultGamePath
+) : GameFileManger(versionNumber, here) {
+	
+	var kind = KindOfMod.ORIGINAL
+	
+	var fabricModInstallInfo: FabricDonwloadInfo? = null
+		set(value) {
+			kind = KindOfMod.FABRIC
+			field = value
+		}
+	
+	var forgeModDownloadInfo: ForgeDownloadInfo? = null
+		set(value) {
+			kind = KindOfMod.FORGE
+			field = value
+		}
+	
+	
+	var quiltModDownloadInfo: QuiltDownloadInfo? = null
+		set(value) {
+			kind = KindOfMod.FABRIC
+			field = value
+		}
+	
+	
+	fun cleanKind() {
+		kind = KindOfMod.ORIGINAL
+	}
+	
+	fun ckeckIsEffective(): Boolean {
+		return if (versionConfigFile.isFileExists()) {
+			gameConfig.configVersion == this
+		} else false
+	}
+	
+	override fun toString(): String {
+		return "Version(versionNumber=$versionNumber, kind=$kind, config=${gameConfig.config})"
+	}
+	
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (javaClass != other?.javaClass) return false
+		
+		other as Version
+		
+		if (versionNumber != other.versionNumber) return false
+		if (kind != other.kind) return false
+		if (fabricModInstallInfo != other.fabricModInstallInfo) return false
+		if (forgeModDownloadInfo != other.forgeModDownloadInfo) return false
+		if (quiltModDownloadInfo != other.quiltModDownloadInfo) return false
+		
+		return true
+	}
+	
+	override fun hashCode(): Int {
+		var result = fabricModInstallInfo?.hashCode() ?: 0
+		result = 31 * result + (forgeModDownloadInfo?.hashCode() ?: 0)
+		result = 31 * result + (quiltModDownloadInfo?.hashCode() ?: 0)
+		result = 31 * result + kind.hashCode()
+		result = 31 * result + versionNumber.hashCode()
+		return result
+	}
+	
 }
 
 val preferredVersion: Version?
-  get() = currentSetting.preferredVersion.run {
-    this?.setModTask()
-  }
+	get() = currentSetting.preferredVersion.run {
+		this?.setModTask()
+	}
 
-class GameVersionsList(
-  private val versions: LinkedList<Version> = LinkedList()
-) : MutableList<Version> by versions {
-  override fun add(element: Version): Boolean {
-    element.setModTask().let {
-      if (it != null && it.versionJson.isFileExists()) {
-        return versions.add(it)
-      }
-    }
-    return false
-  }
-
-  fun Version.addToList() {
-    add(this)
-  }
+class VersionsList(
+	private val versions: LinkedHashSet<Version> = linkedSetOf()
+) : MutableSet<Version> by versions {
+	fun Version.addToList(): Boolean = add(this)
+	
+	
+	companion object {
+		fun VersionsList.saveChangeToFile() {
+			versionsJson.writeObjectToFile(this, serializeVersionsListGson)
+		}
+		
+		inline fun VersionsList.changeListToFile(block: VersionsList.() -> Unit): VersionsList {
+			return apply(block).also { it.saveChangeToFile() }
+		}
+	}
 }
 
+val currentVersionsList: VersionsList
+	get() = versionsJson.readFileToClass(serializeVersionsListGson)
+
+fun printVersionList() {
+	currentVersionsList.forEach { logmaker.info(it) }
+}
+
+fun ckeckVersionsList() {
+	GameDirectoryManger().gameVersionList.forEach {
+		if (it !in currentVersionsList) {
+			currentVersionsList.changeListToFile {
+				it.gameConfig.configVersion.addToList()
+			}
+		}
+	}
+	removeInvalidVersion()
+}
+
+private fun removeInvalidVersion() {
+	currentVersionsList.run {
+		try {
+			forEach {
+				if (!it.ckeckIsEffective()) {
+					logmaker.info("$it invalid")
+					changeListToFile { remove(it) }
+				}
+			}
+		} catch (_: ConcurrentModificationException) {
+			removeInvalidVersion()
+		}
+	}
+	
+}

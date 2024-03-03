@@ -6,12 +6,7 @@ inline fun <T> T?.runIfNoNull(block: T.() -> Unit) {
   }
 }
 
-inline fun <reified T> T?.ckeckIsNull(): T {
+inline fun <reified T> T?.noNull(): T {
   return this ?: throw NullPointerException("${T::class.simpleName} is null")
 }
 
-inline fun <T> Collection<T>.forEachWhenIsNotEmpty(action: (T) -> Unit) {
-  if (isNotEmpty()) {
-    for (element in this) action(element)
-  }
-}

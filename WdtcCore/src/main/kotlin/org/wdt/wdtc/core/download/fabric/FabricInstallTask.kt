@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
 import org.wdt.wdtc.core.manger.downloadSource
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
@@ -15,7 +15,7 @@ class FabricInstallTask(version: Version, fabricVersionNumber: String) :
 
   constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) : this(
     version,
-    versionsJsonObjectInterface.versionNumber.ckeckIsNull()
+    versionsJsonObjectInterface.versionNumber.noNull()
   )
 
   @Throws(IOException::class)
@@ -63,7 +63,7 @@ class FabricInstallTask(version: Version, fabricVersionNumber: String) :
   @Throws(IOException::class)
   override fun afterDownloadTask() {
     if (isAPIDownloadTaskNoNull) {
-      apiDownloadTask.ckeckIsNull().startDownloadFabricAPI()
+      apiDownloadTask.noNull().startDownloadFabricAPI()
     }
   }
 

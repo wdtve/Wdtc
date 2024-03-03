@@ -20,95 +20,97 @@ import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
 import org.wdt.wdtc.core.download.quilt.QuiltVersionList
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
+import org.wdt.wdtc.core.utils.ioCoroutineScope
 import java.io.IOException
 
 class ModChooseVersionWindow(
-  private val kind: KindOfMod,
-  private val mainStage: Stage,
-  private val version: Version
+	private val kind: KindOfMod,
+	private val mainStage: Stage,
+	private val version: Version
 ) {
-  private val size = mainStage.getSizeManger()
-
-  private val modVersionList
-    get() = when (kind) {
-      KindOfMod.FORGE -> {
-        ForgeVersionList(version).versionList
-      }
-
-      KindOfMod.FABRICAPI -> {
-        FabricAPIVersionList(version).versionList
-      }
-
-      KindOfMod.QUILT -> {
-        QuiltVersionList(version).versionList
-      }
-
-      else -> {
-        FabricVersionList().versionList
-      }
-    }
-
-
-  @Throws(IOException::class)
-  fun setModChooser() {
-    val back = JFXButton("返回").apply {
-      styleClass.add("BlackBorder")
-      onAction = EventHandler {
-        ModChooseWindow(version, mainStage).run {
-          setChooseWin()
-        }
-      }
-    }
-    val buttonList = VBox()
-    val tips = Label("选择一个Mod版本:").apply {
-      layoutX = 130.0
-      layoutY = 20.0
-    }
-    try {
-      CoroutineScope(Dispatchers.Unconfined).launch {
-        modVersionList.forEach {
-          size.modifyWindwosSize(buttonList, getVersionButton(it, buttonList))
-        }
-      }
-    } catch (e: IOException) {
-      setErrorWin(e)
-    }
-    val list = ScrollPane().apply {
-      setTopAnchor(40.0)
-      setRightAnchor(0.0)
-      setLeftAnchor(0.0)
-      setBottomAnchor(0.0)
-      content = buttonList
-    }
-    AnchorPane().apply {
-      background = wdtcBackground
-      setStylesheets()
-    }.let {
-      size.modifyWindwosSize(it, list, back, tips)
-      mainStage.setScene(Scene(it))
-    }
-  }
-
-  private fun getVersionButton(versionJsonObject: VersionsJsonObjectInterface, buttonList: VBox): JFXButton {
-    return JFXButton(versionJsonObject.versionNumber).apply {
-      style = "-fx-border-color: #000000"
-      prefWidth = 580.0
-      onAction = EventHandler {
-        when (kind) {
-          KindOfMod.FORGE -> version.forgeModDownloadInfo = ForgeDownloadInfo(version, versionJsonObject)
-          KindOfMod.FABRIC -> version.fabricModInstallInfo = FabricDonwloadInfo(version, versionJsonObject)
-          KindOfMod.QUILT -> version.quiltModDownloadInfo = QuiltInstallTask(version, versionJsonObject)
-          KindOfMod.FABRICAPI -> version.fabricModInstallInfo.ckeckIsNull().apiDownloadTask =
-            FabricAPIDownloadTask(version, versionJsonObject)
-
-          else -> {}
-        }
-        ModChooseWindow(version, mainStage).run {
-          setChooseWin()
-        }
-        buttonList.children.clear()
-      }
-    }
-  }
+	private val size = mainStage.getSizeManger()
+	
+	private val modVersionList = ioCoroutineScope.async {
+		when (kind) {
+			KindOfMod.FORGE -> {
+				ForgeVersionList(version).versionList
+			}
+			
+			KindOfMod.FABRICAPI -> {
+				FabricAPIVersionList(version).versionList
+			}
+			
+			KindOfMod.QUILT -> {
+				QuiltVersionList(version).versionList
+			}
+			
+			else -> {
+				FabricVersionList().versionList
+			}
+		}
+	}
+	
+	
+	@Throws(IOException::class)
+	fun setModChooser() {
+		val back = JFXButton("返回").apply {
+			styleClass.add("BlackBorder")
+			onAction = EventHandler {
+				ModChooseWindow(version, mainStage).run {
+					setChooseWin()
+				}
+			}
+		}
+		val buttonList = VBox()
+		val tips = Label("选择一个Mod版本:").apply {
+			layoutX = 130.0
+			layoutY = 20.0
+		}
+		try {
+			javafxCoroutineScope.launch {
+				modVersionList.await().forEach {
+					size.modifyWindwosSize(buttonList, getVersionButton(it, buttonList))
+				}
+			}
+		} catch (e: IOException) {
+			setErrorWin(e)
+		}
+		val list = ScrollPane().apply {
+			setTopAnchor(40.0)
+			setRightAnchor(0.0)
+			setLeftAnchor(0.0)
+			setBottomAnchor(0.0)
+			content = buttonList
+		}
+		AnchorPane().apply {
+			background = wdtcBackground
+			setStylesheets()
+		}.let {
+			size.modifyWindwosSize(it, list, back, tips)
+			mainStage.setScene(Scene(it))
+		}
+	}
+	
+	private fun getVersionButton(versionJsonObject: VersionsJsonObjectInterface, buttonList: VBox): JFXButton {
+		return JFXButton(versionJsonObject.versionNumber).apply {
+			style = "-fx-border-color: #000000"
+			prefWidth = 580.0
+			onAction = EventHandler {
+				when (kind) {
+					KindOfMod.FORGE -> version.forgeModDownloadInfo = ForgeDownloadInfo(version, versionJsonObject)
+					KindOfMod.FABRIC -> version.fabricModInstallInfo = FabricDonwloadInfo(version, versionJsonObject)
+					KindOfMod.QUILT -> version.quiltModDownloadInfo = QuiltInstallTask(version, versionJsonObject)
+					KindOfMod.FABRICAPI -> version.fabricModInstallInfo.noNull().apiDownloadTask =
+						FabricAPIDownloadTask(version, versionJsonObject)
+					
+					else -> {}
+				}
+				ModChooseWindow(version, mainStage).run {
+					setChooseWin()
+				}
+				buttonList.children.clear()
+			}
+		}
+	}
 }

@@ -9,17 +9,13 @@ import java.net.URL
 const val BMCALAPI_COM = "https://download.mcbbs.net/"
 const val ALIYUN_MAVEN = "https://maven.aliyun.com/repository/public/"
 
-val pistonDataMojang: String
-  get() = DownloadSourceInterface.PISTON_DATA_MOJANG
+const val pistonDataMojang: String = DownloadSourceInterface.PISTON_DATA_MOJANG
 
-val pistonMetaMojang: String
-  get() = DownloadSourceInterface.PISTON_META_MOJANG
+const val pistonMetaMojang: String = DownloadSourceInterface.PISTON_META_MOJANG
 
-val littleskinUrl: String
-  get() = "https://littleskin.cn"
-val mojangLibrariesUrl: String
-  get() = DownloadSourceInterface.MOJANG_LIBRARIES
+const val littleskinUrl: String = "https://littleskin.cn"
 
-val littleskinApiUrl: URL
-  get() = "$littleskinUrl/api/yggdrasil".toURL()
+const val mojangLibrariesUrl: String = DownloadSourceInterface.MOJANG_LIBRARIES
+
+val littleskinApiUrl: URL = "$littleskinUrl/api/yggdrasil".toURL()
 

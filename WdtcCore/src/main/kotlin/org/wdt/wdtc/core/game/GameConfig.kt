@@ -1,18 +1,19 @@
-package org.wdt.wdtc.core.game.config
+package org.wdt.wdtc.core.game
 
 import com.google.gson.annotations.SerializedName
-import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.runJavaHome
 
-data class DefaultGameConfig(
-  @field:SerializedName("info")
-  var info: VersionInfo,
-
+data class GameConfig(
+  @field:SerializedName("configVersion")
+  var version: Version,
   @field:SerializedName("config")
   var config: Config
-
 ) {
-  constructor(version: Version) : this(version.versionInfo, Config())
+  
+  @field:SerializedName("__commons__")
+  private val commons: String = "Wdtc generates, Do not delete"
+  
+  constructor(version: Version) : this(version, Config())
 
   data class Config(
     var memory: Int = 1024,

@@ -1,7 +1,6 @@
 package org.wdt.wdtc.ui.window
 
 import com.jfoenix.controls.JFXButton
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -13,18 +12,20 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.javafx.JavaFx
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.isFileNotExists
+import org.wdt.utils.io.toFile
 import org.wdt.wdtc.core.download.InstallGameVersion
+import org.wdt.wdtc.core.game.GameConfig
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.game.config.DefaultGameConfig
-import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.game.VersionsList.Companion.changeListToFile
+import org.wdt.wdtc.core.game.currentVersionsList
+import org.wdt.wdtc.core.manger.changeSettingToFile
 import org.wdt.wdtc.core.manger.currentSetting
-import org.wdt.wdtc.core.manger.putSettingToFile
+import org.wdt.wdtc.core.manger.gameConfig
+import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
 import java.io.File
@@ -32,252 +33,337 @@ import java.io.IOException
 import java.util.*
 
 class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
-  private val config: DefaultGameConfig.Config = version.gameConfig.config
-  private val size: WindwosSizeManger = mainStage.getSizeManger()
-  private val LAYOUT_X = 10.0
-
-  fun setWindow() {
-    val window = HomeWindow(version)
-    val parentPane = AnchorPane()
-    val sonScrollPane = ScrollPane()
-    sonScrollPane.layoutX = 105.0
-    sonScrollPane.layoutY = 52.0
-    AnchorPane.setTopAnchor(sonScrollPane, 50.0)
-    AnchorPane.setLeftAnchor(sonScrollPane, 105.0)
-    AnchorPane.setBottomAnchor(sonScrollPane, 0.0)
-    AnchorPane.setRightAnchor(sonScrollPane, 0.0)
-    val pane = AnchorPane()
-    AnchorPane.setBottomAnchor(pane, 0.0)
-    AnchorPane.setRightAnchor(pane, 0.0)
-    AnchorPane.setLeftAnchor(pane, 0.0)
-    AnchorPane.setTopAnchor(pane, 0.0)
-    val back = JFXButton("返回")
-    back.onAction = EventHandler { event: ActionEvent? -> window.setHome(mainStage) }
-    val GameSetting = JFXButton("游戏设置")
-    GameSetting.setPrefSize(105.0, 30.0)
-    AnchorPane.setTopAnchor(GameSetting, 50.0)
-    AnchorPane.setLeftAnchor(GameSetting, 0.0)
-    val AutoDownload = JFXButton("自动下载")
-    AutoDownload.isDisable = true
-    AutoDownload.setPrefSize(105.0, 30.0)
-    AnchorPane.setTopAnchor(AutoDownload, 80.0)
-    AnchorPane.setLeftAnchor(AutoDownload, 0.0)
-    GameSetting.isDisable = true
-    setVersionSettingPane(sonScrollPane)
-    GameSetting.onAction = EventHandler {
-      AutoDownload.isDisable = false
-      GameSetting.isDisable = true
-      setVersionSettingPane(sonScrollPane)
-    }
-    AutoDownload.onAction = EventHandler {
-      GameSetting.isDisable = false
-      AutoDownload.isDisable = true
-      setAutoDownload(sonScrollPane)
-    }
-    val completion = JFXButton("补全游戏文件")
-    completion.layoutY = 395.0
-    completion.setPrefSize(105.0, 30.0)
-    AnchorPane.setBottomAnchor(completion, 30.0)
-    AnchorPane.setLeftAnchor(completion, 0.0)
-    val delete = JFXButton("删除该版本")
-    delete.layoutY = 425.0
-    delete.setPrefSize(105.0, 30.0)
-    AnchorPane.setBottomAnchor(delete, 0.0)
-    AnchorPane.setLeftAnchor(delete, 0.0)
-    parentPane.children.addAll(sonScrollPane, completion, delete, back, GameSetting, AutoDownload)
-    setCss("BlackBorder", back)
-    parentPane.background = wdtcBackground
-    parentPane.setStylesheets()
-    mainStage.setScene(Scene(parentPane))
-    setCss("BackGroundWriteButton", delete, completion, GameSetting, AutoDownload)
-    delete.onAction = EventHandler {
-      try {
-        FileUtils.deleteDirectory(version.versionDirectory)
-        currentSetting.preferredVersion = null
-        currentSetting.putSettingToFile()
-        val homeWindow = HomeWindow()
-        homeWindow.setHome(mainStage)
-        logmaker.info(version.versionNumber + " Deleted")
-      } catch (e: IOException) {
-        setErrorWin(e)
-      }
-    }
-    completion.onAction = EventHandler {
-      CoroutineScope(Dispatchers.IO).launch(CoroutineName("completion ${version.versionNumber} task")) {
-        InstallGameVersion(version, true).run {
-          startInstallGame()
-        }
-        logmaker.info(version.versionNumber + " downloaded")
-      }
-    }
-  }
-
-  private fun setVersionSettingPane(scrollPane: ScrollPane) {
-    val pane = AnchorPane()
-    val line = 35.0
-    val tips = Label("JDK地址:")
-    tips.layoutX = LAYOUT_X
-    tips.layoutY = line
-    val tips2 = Label("版本:")
-    tips2.layoutX = 107.0
-    tips2.layoutY = line
-    val line2 = 55.0
-    val JavaPath = TextField()
-    JavaPath.layoutX = LAYOUT_X
-    JavaPath.layoutY = line2
-    JavaPath.setPrefSize(300.0, 23.0)
-    val choose = JFXButton("...")
-    choose.layoutX = 315.0
-    choose.layoutY = line2
-    val tips3 = Label("游戏运行内存:")
-    tips3.layoutX = LAYOUT_X
-    tips3.layoutY = 89.0
-    val Input = TextField()
-    Input.layoutX = LAYOUT_X
-    Input.layoutY = 104.0
-    Input.setPrefSize(90.0, 23.0)
-    val line3 = 138.0
-    val tips4 = Label("窗口宽度:")
-    tips4.layoutX = LAYOUT_X
-    tips4.layoutY = line3
-    val tips5 = Label("窗口高度:")
-    tips5.layoutX = 165.0
-    tips5.layoutY = line3
-    val line4 = 156.0
-    val InputWidth = TextField()
-    InputWidth.layoutX = LAYOUT_X
-    InputWidth.layoutY = line4
-    InputWidth.setPrefSize(90.0, 23.0)
-    val InputHeight = TextField()
-    InputHeight.layoutX = 166.0
-    InputHeight.layoutY = line4
-    InputHeight.setPrefSize(90.0, 23.0)
-    val tips6 = Label()
-    tips6.layoutX = 340.0
-    tips6.layoutY = 340.0
-    tips6.setPrefSize(122.0, 15.0)
-    val apply = JFXButton("应用")
-    apply.setPrefSize(150.0, 50.0)
-    AnchorPane.setBottomAnchor(apply, 10.0)
-    AnchorPane.setRightAnchor(apply, 30.0)
-    size.modifyWindwosSize(
-      pane,
-      tips,
-      tips2,
-      tips3,
-      tips4,
-      tips5,
-      tips6,
-      Input,
-      JavaPath,
-      InputHeight,
-      InputWidth,
-      choose
-    )
-    pane.children.add(apply)
-    pane.setStylesheets()
-    setCss("BlackBorder", choose, apply)
-    scrollPane.content = pane
-    JavaPath.text = config.javaPath
-    InputWidth.text = config.width.toString()
-    InputHeight.text = config.hight.toString()
-    Input.text = config.memory.toString()
-    tips2.text = "Java版本: ${getJavaVersion(config.javaPath)}"
-    choose.onAction = EventHandler {
-      val fileChooser = FileChooser()
-      fileChooser.title = "选择Java文件"
-      fileChooser.initialDirectory = File("C:\\Program Files")
-      val javaExePath = fileChooser.showOpenDialog(mainStage)
-      if (javaExePath != null) {
-        JavaPath.text = javaExePath.absolutePath
-      }
-    }
-    apply.onAction = EventHandler {
-      try {
-        if (File(JavaPath.text).isFileNotExists()) throw NumberFormatException()
-        val newConfig =
-          DefaultGameConfig.Config(Input.text.toInt(), JavaPath.text, InputWidth.text.toInt(), InputHeight.text.toInt())
-        val gameConfig = version.gameConfig.defaultGameConfig
-        gameConfig.config = newConfig
-        logmaker.info(gameConfig)
-        version.gameConfig.putConfigToFile(gameConfig)
-        tips6.text = "设置成功"
-        tips2.text = "Java版本: ${getJavaVersion(JavaPath.text)}"
-      } catch (e: NumberFormatException) {
-        tips6.textFill = Color.RED
-        tips6.text = "请输入正确配置"
-        logmaker.warning("配置无效", e)
-      } catch (e: IOException) {
-        tips6.textFill = Color.RED
-        tips6.text = "请输入正确配置"
-        logmaker.warning("配置无效", e)
-      }
-    }
-  }
-
-  private fun setAutoDownload(scrollPane: ScrollPane) {
-    val modList = AnchorPane()
-    var i = 0.0
-    for (kind in KindOfMod.entries.toTypedArray()) {
-      val modPane = AnchorPane()
-      AnchorPane.setTopAnchor(modPane, 44 * i)
-      modPane.prefHeight = 44.0
-      modPane.prefWidth = 510.0
-      setModPane(kind, modPane)
-      size.modifyWindwosSize(modList, modPane)
-      i++
-    }
-    modList.setStylesheets()
-    scrollPane.content = modList
-  }
-
-  private fun setModPane(kind: KindOfMod, ModPane: AnchorPane) {
-    val modIcon = ImageView()
-    when (kind) {
-      KindOfMod.FORGE -> modIcon.image = Image(
-        Objects.requireNonNull(
-          VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/forge.png")
-        )
-      )
-
-      KindOfMod.FABRIC -> modIcon.image = Image(
-        Objects.requireNonNull(
-          VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/fabric.png")
-        )
-      )
-
-      KindOfMod.QUILT -> modIcon.image = Image(
-        Objects.requireNonNull(
-          VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/quilt.png")
-        )
-      )
-
-      KindOfMod.ORIGINAL -> modIcon.image = Image(
-        Objects.requireNonNull(
-          VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/ico.jpg")
-        )
-      )
-
-      else -> {}
-    }
-    AnchorPane.setTopAnchor(modIcon, 4.0)
-    AnchorPane.setLeftAnchor(modIcon, 10.0)
-    AnchorPane.setBottomAnchor(modIcon, 4.0)
-    val modVersion = Label()
-    if (version.kind == kind) {
-      val info = version.modDownloadInfo
-      modVersion.text = if (info != null) "$kind : ${info.modVersion}" else "$kind : 不安装"
-    } else {
-      modVersion.text = "$kind : 不安装"
-    }
-    AnchorPane.setBottomAnchor(modVersion, 15.0)
-    AnchorPane.setLeftAnchor(modVersion, 60.0)
-    AnchorPane.setTopAnchor(modVersion, 15.0)
-    val download = JFXButton("-->")
-    AnchorPane.setTopAnchor(download, 11.0)
-    AnchorPane.setRightAnchor(download, 20.0)
-    AnchorPane.setBottomAnchor(download, 11.0)
-    ModPane.children.addAll(modIcon, modVersion, download)
-  }
-
+	private val config: GameConfig.Config = version.gameConfig.config
+	private val size: WindwosSizeManger = mainStage.getSizeManger()
+	private val javaVersion = ioCoroutineScope.async { getJavaVersion(config.javaPath) }
+	
+	fun setWindow() {
+		val window = HomeWindow(version)
+		val sonScrollPane = ScrollPane().apply {
+			layoutX = 105.0
+			layoutY = 52.0
+			setTopAnchor(50.0)
+			setLeftAnchor(105.0)
+			setBottomAnchor(0.0)
+			setRightAnchor(0.0)
+		}
+		val back = JFXButton("返回").apply {
+			onAction = EventHandler { window.setHome(mainStage) }
+		}
+		val gameSetting = JFXButton("游戏设置").apply {
+			setPrefSize(105.0, 30.0)
+			setTopAnchor(50.0)
+			setLeftAnchor(0.0)
+			isDisable = true
+		}
+		val autoDownload = JFXButton("自动下载").apply {
+			isDisable = !isDebug
+			setPrefSize(105.0, 30.0)
+			setTopAnchor(80.0)
+			setLeftAnchor(0.0)
+		}
+		setVersionSettingPane(sonScrollPane)
+		gameSetting.onAction = EventHandler {
+			autoDownload.isDisable = false
+			gameSetting.isDisable = true
+			setVersionSettingPane(sonScrollPane)
+		}
+		autoDownload.onAction = EventHandler {
+			gameSetting.isDisable = false
+			autoDownload.isDisable = true
+			setAutoDownload(sonScrollPane)
+		}
+		val completion = JFXButton("补全游戏文件").apply {
+			layoutY = 395.0
+			setPrefSize(105.0, 30.0)
+			setBottomAnchor(30.0)
+			setLeftAnchor(0.0)
+			onAction = EventHandler {
+				javafxCoroutineScope.launch("completion ${version.versionNumber} task") {
+					isDisable = true
+					back.isDisable = true
+					val completionJob = launch(Dispatchers.Default) {
+						InstallGameVersion(version, false).run {
+							startInstallGame()
+						}
+					}
+					launch(Dispatchers.JavaFx) {
+						completionJob.join()
+						isDisable = false
+						back.isDisable = false
+						logmaker.info("${version.versionNumber} downloaded")
+					}
+				}
+			}
+			
+		}
+		val delete = JFXButton("删除该版本").apply {
+			layoutY = 425.0
+			setPrefSize(105.0, 30.0)
+			setBottomAnchor(0.0)
+			setLeftAnchor(0.0)
+			onAction = EventHandler {
+				try {
+					scwn("remove version") {
+						launch {
+							FileUtils.deleteDirectory(version.versionDirectory)
+							currentSetting.changeSettingToFile {
+								preferredVersion = null
+							}
+							logmaker.info(version.versionNumber + " Deleted")
+						}
+						launch {
+							currentVersionsList.changeListToFile {
+								remove(version)
+							}
+						}
+						launch(Dispatchers.JavaFx) {
+							HomeWindow().run {
+								setHome(mainStage)
+							}
+						}
+					}
+				} catch (e: IOException) {
+					setErrorWin(e)
+				}
+			}
+		}
+		setCss("BlackBorder", back)
+		AnchorPane().apply {
+			children.addAll(sonScrollPane, completion, delete, back, gameSetting, autoDownload)
+			background = wdtcBackground
+			setStylesheets()
+			mainStage.setScene(Scene(this))
+		}
+		setCss("BackGroundWriteButton", delete, completion, gameSetting, autoDownload)
+		
+	}
+	
+	private fun setVersionSettingPane(scrollPane: ScrollPane) {
+		val line = 35.0
+		val tips = Label("JDK地址:").apply {
+			layoutX = LAYOUT_X
+			layoutY = line
+		}
+		val tips2 = Label("版本:").apply {
+			layoutX = 107.0
+			layoutY = line
+		}
+		val line2 = 55.0
+		val javaPath = TextField().apply {
+			layoutX = LAYOUT_X
+			layoutY = line2
+			setPrefSize(300.0, 23.0)
+		}
+		val choose = JFXButton("...").apply {
+			layoutX = 315.0
+			layoutY = line2
+		}
+		val tips3 = Label("游戏运行内存:").apply {
+			layoutX = LAYOUT_X
+			layoutY = 89.0
+		}
+		val input = TextField().apply {
+			layoutX = LAYOUT_X
+			layoutY = 104.0
+			setPrefSize(90.0, 23.0)
+		}
+		val line3 = 138.0
+		val tips4 = Label("窗口宽度:").apply {
+			layoutX = LAYOUT_X
+			layoutY = line3
+		}
+		val tips5 = Label("窗口高度:").apply {
+			layoutX = 165.0
+			layoutY = line3
+		}
+		val line4 = 156.0
+		val inputWidth = TextField().apply {
+			layoutX = LAYOUT_X
+			layoutY = line4
+			setPrefSize(90.0, 23.0)
+		}
+		val inputHeight = TextField().apply {
+			layoutX = 166.0
+			layoutY = line4
+			setPrefSize(90.0, 23.0)
+		}
+		val tips6 = Label().apply {
+			layoutX = 340.0
+			layoutY = 340.0
+			setPrefSize(122.0, 15.0)
+		}
+		val apply = JFXButton("应用").apply {
+			setPrefSize(150.0, 50.0)
+			setBottomAnchor(10.0)
+			setRightAnchor(30.0)
+		}
+		val pane = AnchorPane().apply {
+			children.add(apply)
+			setStylesheets()
+		}
+		size.modifyWindwosSize(
+			pane,
+			tips,
+			tips2,
+			tips3,
+			tips4,
+			tips5,
+			tips6,
+			input,
+			javaPath,
+			inputHeight,
+			inputWidth,
+			choose
+		)
+		setCss("BlackBorder", choose, apply)
+		scrollPane.content = pane
+		javafxCoroutineScope.launch {
+			config.run {
+				javaPath.text = this.javaPath
+				inputWidth.text = width.toString()
+				inputHeight.text = hight.toString()
+				input.text = memory.toString()
+				tips2.text = "Java版本: ${javaVersion.await()}"
+			}
+		}
+		choose.onAction = EventHandler {
+			val javaExePath = FileChooser().apply {
+				title = "选择Java文件"
+				initialDirectory = File("C:\\Program Files")
+			}.run {
+				showOpenDialog(mainStage)
+			}
+			if (javaExePath != null) {
+				javaPath.text = javaExePath.canonicalPath
+			}
+		}
+		fun invalidConfiguration(e: Throwable) {
+			tips6.textFill = Color.RED
+			tips6.text = "请输入正确配置"
+			logmaker.warning("配置无效", e)
+		}
+		apply.onAction = EventHandler {
+			scwn {
+				try {
+					val javaVersion = getJavaVersionNumber(javaPath.text)
+					val job = launch {
+						version.gameConfig.run {
+							this.configFileObject.apply {
+								config = GameConfig.Config(
+									input.text.toInt(), javaPath.text,
+									inputWidth.text.toInt(), inputHeight.text.toInt()
+								)
+							}.let {
+								logmaker.info(it)
+								scwn {
+									putConfigToFile(it)
+								}
+							}
+						}
+					}
+					launch(Dispatchers.JavaFx) {
+						job.join()
+						tips6.text = "设置成功"
+					}
+					launch(Dispatchers.JavaFx) {
+						javaVersion.await().noNull().let {
+							tips2.text = "Java版本: $it"
+						}
+					}
+				} catch (e: NumberFormatException) {
+					invalidConfiguration(e)
+				} catch (e: IOException) {
+					invalidConfiguration(e)
+				}
+			}
+		}
+	}
+	
+	private fun CoroutineScope.getJavaVersionNumber(it: String): Deferred<String?> {
+		return async {
+			if (it.toFile().isFileNotExists())
+				throw NumberFormatException()
+			else
+				getJavaVersion(it)
+		}
+	}
+	
+	private fun setAutoDownload(scrollPane: ScrollPane) {
+		val modList = AnchorPane()
+		var i = 0.0
+		for (kind in KindOfMod.entries.toTypedArray()) {
+			AnchorPane().apply {
+				setTopAnchor(44 * i)
+				prefHeight = 44.0
+				prefWidth = 510.0
+				setModPane(kind, this)
+				size.modifyWindwosSize(modList, this)
+				i++
+			}
+		}
+		modList.let {
+			it.setStylesheets()
+			scrollPane.content = it
+		}
+	}
+	
+	private fun setModPane(kind: KindOfMod, modPane: AnchorPane) {
+		val modIcon = ImageView()
+		when (kind) {
+			KindOfMod.FORGE -> modIcon.image = Image(
+				Objects.requireNonNull(
+					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/forge.png")
+				)
+			)
+			
+			KindOfMod.FABRIC -> modIcon.image = Image(
+				Objects.requireNonNull(
+					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/fabric.png")
+				)
+			)
+			
+			KindOfMod.QUILT -> modIcon.image = Image(
+				Objects.requireNonNull(
+					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/quilt.png")
+				)
+			)
+			
+			KindOfMod.ORIGINAL -> modIcon.image = Image(
+				Objects.requireNonNull(
+					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/ico.jpg")
+				)
+			)
+			
+			else -> {}
+		}
+		modIcon.apply {
+			setTopAnchor(4.0)
+			setLeftAnchor(10.0)
+			setBottomAnchor(4.0)
+		}
+		val modVersion = Label().apply {
+			if (version.kind == kind) {
+				val info = version.modDownloadInfo
+				text = if (info != null) "$kind : ${info.modVersion}" else "$kind : 不安装"
+			} else {
+				text = "$kind : 不安装"
+			}
+			setBottomAnchor(15.0)
+			setLeftAnchor(60.0)
+			setTopAnchor(15.0)
+		}
+		val download = JFXButton("-->").apply {
+			setTopAnchor(11.0)
+			setRightAnchor(20.0)
+			setBottomAnchor(11.0)
+		}
+		modPane.children.addAll(modIcon, modVersion, download)
+	}
+	
+	companion object {
+		const val LAYOUT_X = 10.0
+		
+	}
+	
 }

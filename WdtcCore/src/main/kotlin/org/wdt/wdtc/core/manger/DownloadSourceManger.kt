@@ -9,16 +9,17 @@ import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
 val officialDownloadSource: DownloadSourceInterface = OfficialDownloadSource()
 
-val downloadSourceKind: DownloadSourceList = currentSetting.downloadSource
+val downloadSourceKind: DownloadSourceKind
+  get() = currentSetting.downloadSource
 
 val downloadSource: DownloadSourceInterface
   get() {
     return when (downloadSourceKind) {
-      DownloadSourceList.OFFICIAL -> {
+      DownloadSourceKind.OFFICIAL -> {
         OfficialDownloadSource()
       }
 
-      DownloadSourceList.BMCLAPI -> {
+      DownloadSourceKind.BMCLAPI -> {
         BmclDownloadSource()
       }
 
@@ -28,12 +29,15 @@ val downloadSource: DownloadSourceInterface
     }
   }
 
-val isOfficialDownloadSource: Boolean = downloadSourceKind == DownloadSourceList.OFFICIAL
+val isOfficialDownloadSource: Boolean
+  get() = downloadSourceKind == DownloadSourceKind.OFFICIAL
 
-val isNotOfficialDownloadSource: Boolean = !isOfficialDownloadSource
+val isNotOfficialDownloadSource: Boolean
+  get() = !isOfficialDownloadSource
 
-enum class DownloadSourceList {
+enum class DownloadSourceKind {
   OFFICIAL,
   BMCLAPI,
-  MCBBS
+  MCBBS;
+  
 }

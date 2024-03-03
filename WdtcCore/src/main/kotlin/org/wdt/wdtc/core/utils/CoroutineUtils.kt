@@ -1,28 +1,29 @@
-@file:JvmName("CoroutineUtils") @file:Suppress("NOTHING_TO_INLINE")
+@file:JvmName("CoroutineUtils")
 
 package org.wdt.wdtc.core.utils
 
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-suspend inline fun suspendKeepRun(timeMillis: Long = 0, block: () -> Unit) {
-  while (true) {
-    block()
-    delay(timeMillis)
-  }
+fun scwn(
+	name: String = "New coroutine",
+	coroutineContext: CoroutineContext = EmptyCoroutineContext,
+	block: suspend CoroutineScope.() -> Unit
+): Job {
+	return defaultCoroutineScope.launch(name.toCoroutineName() + coroutineContext, block = block)
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-inline fun newCoroutineWithName(name: String, noinline block: suspend CoroutineScope.() -> Unit): Job {
-  return GlobalScope.launch(name.toCoroutineName(), block = block)
-}
+fun CoroutineScope.launch(name: String, block: suspend CoroutineScope.() -> Unit) =
+	launch(context = name.toCoroutineName(), block = block)
 
 
-inline val ioCoroutineScope
-  get() = CoroutineScope(Dispatchers.IO)
+val ioCoroutineScope = CoroutineScope(Dispatchers.IO)
+val defaultCoroutineScope = CoroutineScope(Dispatchers.Default)
 
-inline fun String.toCoroutineName(): CoroutineName = CoroutineName(this)
+fun String.toCoroutineName(): CoroutineName = CoroutineName(this)
 
 @OptIn(DelicateCoroutinesApi::class)
 fun executorCoroutineScope(thread: Int = 64, name: String): CoroutineScope {
-  return CoroutineScope(newFixedThreadPoolContext(thread, name))
+	return CoroutineScope(newFixedThreadPoolContext(thread, name))
 }

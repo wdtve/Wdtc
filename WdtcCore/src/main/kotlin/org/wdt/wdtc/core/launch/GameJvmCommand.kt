@@ -1,9 +1,9 @@
 package org.wdt.wdtc.core.launch
 
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.game.config.gameConfig
+import org.wdt.wdtc.core.manger.gameConfig
 import org.wdt.wdtc.core.manger.launcherVersion
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import java.io.IOException
 
 class GameJvmCommand(private val version: Version) : AbstractGameCommand() {
@@ -19,7 +19,7 @@ class GameJvmCommand(private val version: Version) : AbstractGameCommand() {
     nonBreakingSpace("-Dminecraft.client.jar=", version.versionJar)
     nonBreakingSpace("-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32m")
     nonBreakingSpace("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump")
-    version.gameVersionJsonObject.arguments.jvmList.ckeckIsNull().forEach {
+    version.gameVersionJsonObject.arguments.jvmList.noNull().forEach {
       if (it.isJsonPrimitive) {
         nonBreakingSpace(it.asString.replaceData(dataMap))
       }

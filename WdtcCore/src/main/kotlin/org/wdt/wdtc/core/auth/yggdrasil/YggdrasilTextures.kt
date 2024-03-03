@@ -6,7 +6,7 @@ import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.manger.isWindows
 import org.wdt.wdtc.core.manger.minecraftComSkin
 import org.wdt.wdtc.core.utils.SkinUtils
-import org.wdt.wdtc.core.utils.ckeckIsNull
+import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.File
@@ -22,7 +22,7 @@ class YggdrasilTextures(yggdrasilAccounts: YggdrasilAccounts) {
   private val userJsonUrl: URL = "$url/csl/$userName.json".toURL()
 
   private val userSkinHash: String
-    get() = csl.skins?.skinKind.ckeckIsNull()
+    get() = csl.skins?.skinKind.noNull()
 
   private val userSkinFile: File = SkinUtils.getUserSkinFile(userName)
 

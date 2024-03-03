@@ -12,17 +12,11 @@ import java.io.IOException
 import java.util.*
 
 
-open class GameFileManger : GameDirectoryManger {
-  val versionNumber: String
-
-  constructor(versionNumber: String) {
-    this.versionNumber = versionNumber
-  }
-
-  constructor(versionNumber: String, here: File) : super(here) {
-    this.versionNumber = versionNumber
-  }
-
+open class GameFileManger(
+  val versionNumber: String,
+  here: File = currentSetting.defaultGamePath
+) : GameDirectoryManger(here) {
+  
   val versionDirectory: File
     get() = File(gameVersionsDirectory, versionNumber)
   val versionJson: File
