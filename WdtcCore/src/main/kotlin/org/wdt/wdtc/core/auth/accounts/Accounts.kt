@@ -6,14 +6,9 @@ import org.wdt.wdtc.core.manger.littleskinApiUrl
 import org.wdt.wdtc.core.utils.STRING_EMPTY
 import org.wdt.wdtc.core.utils.STRING_SPACE
 
-object Accounts {
-  private val type: AccountsType
-  private val user = preferredUser
-
-  init {
-    type = user.type
-  }
-
+class Accounts {
+	private val type: AccountsType = preferredUser.type
+  
   private val ifAccountsIsOffline = type != AccountsType.YGGDRASIL
 
   val jvmCommand: String
@@ -27,7 +22,7 @@ object Accounts {
       append(littleskinApiUrl)
       append(STRING_SPACE)
       append("-Dauthlibinjector.yggdrasil.prefetched=")
-      append(user.base64Data)
+	    append(preferredUser.base64Data)
     }
 
   enum class AccountsType {

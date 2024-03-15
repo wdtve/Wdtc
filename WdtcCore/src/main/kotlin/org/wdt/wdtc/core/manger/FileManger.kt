@@ -4,54 +4,38 @@ package org.wdt.wdtc.core.manger
 
 import java.io.File
 
-val minecraftComSkin: File
-	get() = File(System.getProperty("user.home"), "AppData/Roaming/.minecraft/assets/skins")
+val minecraftComSkin: File = File(System.getProperty("user.home"), "AppData/Roaming/.minecraft/assets/skins")
 
-val wdtcConfig: File
-	get() = File(wdtcConfigFromVM, ".wdtc")
+val wdtcConfig: File = File(VMManger.wdtcConfigFromVM, ".wdtc")
 
-val wdtcSetting: File
-	get() = File(wdtcConfig, "setting")
+val wdtcSetting: File = File(wdtcConfig, "setting")
 
-val wdtcCache: File
-	get() = File(wdtcConfig, "cache")
+val wdtcCache: File = File(wdtcConfig, "cache")
 
-val starterBat: File
-	get() = File(wdtcCache, "WdtcGameLauncherScript.bat")
+val starterBat: File = File(wdtcCache, "WdtcGameLauncherScript.bat")
 
-val wdtcDependenciesDirectory: File
-	get() = File(wdtcConfig, "dependencies")
+val wdtcDependenciesDirectory: File = File(wdtcConfig, "dependencies")
 
-val wtdcOpenJFXDirectory: File
-	get() = File(wdtcDependenciesDirectory, "openjfx")
+val wtdcOpenJFXDirectory: File = File(wdtcDependenciesDirectory, "openjfx")
 
-val wdtcUser: File
-	get() = File(wdtcConfig, "users")
+val wdtcUser: File = File(wdtcConfig, "users")
 
-val authlibInjector: File
-	get() = File(wdtcDependenciesDirectory, "authlib-injector.jar")
+val authlibInjector: File = File(wdtcDependenciesDirectory, "authlib-injector.jar")
 
-val userJson: File
-	get() = File(wdtcUser, "user.json")
+val userJson: File = File(wdtcUser, "user.json")
 
-val llbmpipeLoader: File
-	get() = File(wdtcDependenciesDirectory, "llvmpipe-loader.jar")
-val userAsste: File
-	get() = File(wdtcUser, "assets")
+val llbmpipeLoader: File = File(wdtcDependenciesDirectory, "llvmpipe-loader.jar")
 
-val userListFile: File
-	get() = File(wdtcUser, "users.json")
+val userAsste: File = File(wdtcUser, "assets")
 
-val settingFile: File
-	get() = File(wdtcSetting, "setting.json")
+val userListFile: File = File(wdtcUser, "users.json")
 
-val versionManifestFile: File
-	get() = File(wdtcCache, "versionManifest.json")
+val settingFile: File = File(wdtcSetting, "setting.json")
 
-val tipsFile: File
-	get() = File(wdtcConfig, "assets/tips.txt")
+val versionManifestFile: File = File(wdtcCache, "versionManifest.json")
 
-val versionsJson: File
-	get() = File(wdtcSetting, "versions.json")
+val tipsFile: File = File(wdtcConfig, "assets/tips.txt")
+
+val versionsJson: File = File(wdtcSetting, "versions.json")
 
 

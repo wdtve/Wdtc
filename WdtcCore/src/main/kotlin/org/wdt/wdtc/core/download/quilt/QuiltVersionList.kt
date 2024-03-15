@@ -9,13 +9,13 @@ import org.wdt.wdtc.core.download.game.GameVersionsObjectList
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
 
 class QuiltVersionList(private val version: Version) : VersionListInterface {
-  private val quiltquVersionListUrl = "${downloadSource.quiltMetaUrl}v3/versions/loader/%s"
+	private val quiltquVersionListUrl = "${currentDownloadSource.quiltMetaUrl}v3/versions/loader/%s"
 
   @get:Throws(IOException::class)
   override val versionList: GameVersionsObjectList

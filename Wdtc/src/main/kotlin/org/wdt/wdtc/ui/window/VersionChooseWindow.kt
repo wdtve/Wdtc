@@ -17,8 +17,8 @@ import org.wdt.wdtc.core.game.preferredVersion
 import org.wdt.wdtc.core.manger.GameDirectoryManger
 import org.wdt.wdtc.core.manger.changeSettingToFile
 import org.wdt.wdtc.core.manger.currentSetting
-import org.wdt.wdtc.core.manger.gameVersionList
 import org.wdt.wdtc.core.utils.KindOfMod
+import org.wdt.wdtc.core.utils.launchScope
 
 class VersionChooseWindow(private val path: GameDirectoryManger) {
 	fun setWindow(mainStage: Stage) {
@@ -31,11 +31,13 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
 		val versionList = VBox()
 		val back = JFXButton("返回").apply {
 			onAction = EventHandler {
-				val window = (path as? Version)?.let { HomeWindow(it) } ?: HomeWindow()
-				window.setHome(mainStage)
+				launchScope {
+					val window = (path as? Version)?.let { HomeWindow(it) } ?: HomeWindow()
+					window.setHome(mainStage)
+				}
 			}
 		}
-		javafxCoroutineScope.launch {
+		javafxScope.launch {
 			currentVersionsList.forEach {
 				val pane = Pane().apply {
 					setPrefSize(514.0, 40.0)
@@ -47,11 +49,15 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
 					layoutX = 14.0
 					layoutY = 12.0
 					onAction = EventHandler { _ ->
-						currentSetting.changeSettingToFile {
-							preferredVersion = it
-						}
-						HomeWindow(it).run {
-							setHome(mainStage)
+						launchScope {
+							launch {
+								currentSetting.changeSettingToFile {
+									preferredVersion = it
+								}
+							}
+							HomeWindow(it).run {
+								setHome(mainStage)
+							}
 						}
 					}
 				}
@@ -76,7 +82,7 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
 			setPrefSize(100.0, 30.0)
 			styleClass.add("BackGroundWriteButton")
 			setTopLowerLeft()
-			onAction = EventHandler { GameVersionListWindow.setWindowScene(mainStage) }
+			onAction = EventHandler { GameVersionListWindow().setWindowScene(mainStage) }
 		}
 		val tips = Label("\t当前目录").apply {
 			prefWidth = 96.0

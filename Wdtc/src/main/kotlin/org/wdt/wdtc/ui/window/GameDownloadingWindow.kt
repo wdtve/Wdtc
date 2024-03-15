@@ -8,14 +8,11 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.javafx.JavaFx
-import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.download.InstallGameVersion
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.manger.downloadSourceKind
+import org.wdt.wdtc.core.manger.currentDownloadSourceKind
+import org.wdt.wdtc.core.utils.launchScope
 import org.wdt.wdtc.core.utils.openSomething
-import org.wdt.wdtc.core.utils.scwn
 
 class GameDownloadingWindow(private val version: Version) {
 	fun setDownGameWin(mainStage: Stage) {
@@ -45,24 +42,24 @@ class GameDownloadingWindow(private val version: Version) {
 			setTopAnchor(350.0)
 			setLeftAnchor(150.0)
 			setRightAnchor(150.0)
-			text = "${version.versionNumber} 开始下载,下载源: $downloadSourceKind"
+			text = "${version.versionNumber} 开始下载,下载源: $currentDownloadSourceKind"
 		}
-		val job = scwn("Install ${version.versionNumber} task") {
+		val job = launchScope("Install ${version.versionNumber} task") {
 			InstallGameVersion(version, true) {
-				textField.text = it
+				runOnJavaFx {
+					textField.text = it
+				}
 			}.run {
 				startInstallGame()
 			}
 		}
 		val back = JFXButton("返回").apply {
 			onAction = EventHandler {
-				scwn {
-					launch(Dispatchers.JavaFx) {
-						HomeWindow().run {
-							setHome(mainStage)
-						}
+				job.cancel()
+				launchOnJavaFx {
+					HomeWindow().run {
+						setHome(mainStage)
 					}
-					job.cancel()
 				}
 			}
 			style = "-fx-border-color: #000000"
@@ -71,11 +68,9 @@ class GameDownloadingWindow(private val version: Version) {
 		AnchorPane().apply {
 			setPrefSize(mainStage.width, mainStage.height)
 			this.background = wdtcBackground
-		}.run {
-			size.modifyWindwosSize(this, back, time, statusBar, bmclHome, openBmcl, textField)
-			Scene(this).let {
-				mainStage.scene = it
-			}
+		}.also {
+			size.modifyWindwosSize(it, back, time, statusBar, bmclHome, openBmcl, textField)
+			mainStage.scene = Scene(it)
 		}
 	}
 }

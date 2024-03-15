@@ -10,7 +10,10 @@ import org.wdt.wdtc.core.launch.GameRuntimeFile
 import org.wdt.wdtc.core.manger.ProgressManger
 import org.wdt.wdtc.core.manger.TaskKind
 import org.wdt.wdtc.core.manger.TaskManger
-import org.wdt.wdtc.core.utils.*
+import org.wdt.wdtc.core.utils.compareFile
+import org.wdt.wdtc.core.utils.noNull
+import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toCoroutineName
 import java.io.File
 
 class DownloadGameRuntime(
@@ -18,7 +21,8 @@ class DownloadGameRuntime(
 ) {
 	
 	fun start() {
-		GameRuntimeData(version).run {
+		val data = GameRuntimeData(version)
+		val task = data.run {
 			gameRuntimeFile.libraryObject.run {
 				if (gameRuntimeFile.nativesLibrary) {
 					nativesLibraryArtifact.noNull().let {
@@ -28,9 +32,8 @@ class DownloadGameRuntime(
 					DownloadGameRuntimeTask(changedLibraryFile, downloads.artifact.apply { url = changedLibraryUrl }, speed)
 				}
 			}
-		}.run {
-			start()
 		}
+		task.start()
 	}
 	
 	class DownloadGameRuntimeTask(

@@ -8,13 +8,13 @@ import org.wdt.wdtc.core.download.game.GameVersionsObjectList
 import org.wdt.wdtc.core.download.infterface.VersionListInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.determineSize
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
 import java.util.*
 
 class FabricVersionList : VersionListInterface {
-  private val versionListUrl = "${downloadSource.fabricMetaUrl}v2/versions/loader"
+	private val versionListUrl = "${currentDownloadSource.fabricMetaUrl}v2/versions/loader"
 
   @get:Throws(IOException::class)
   override val versionList: GameVersionsObjectList

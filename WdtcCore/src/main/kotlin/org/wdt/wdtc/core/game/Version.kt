@@ -12,7 +12,6 @@ import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.gson.serializeVersionsListGson
 import org.wdt.wdtc.core.utils.info
 import org.wdt.wdtc.core.utils.logmaker
-import org.wdt.wdtc.core.utils.setModTask
 import java.io.File
 
 class Version @JvmOverloads constructor(
@@ -53,16 +52,14 @@ class Version @JvmOverloads constructor(
 	}
 	
 	override fun toString(): String {
-		return "Version(versionNumber=$versionNumber, kind=$kind, config=${gameConfig.config})"
+		return "Version(versionNumber=$versionNumber, kind=$kind)"
 	}
 	
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
-		if (javaClass != other?.javaClass) return false
+		if (other !is Version) return false
+		if (!super.equals(other)) return false
 		
-		other as Version
-		
-		if (versionNumber != other.versionNumber) return false
 		if (kind != other.kind) return false
 		if (fabricModInstallInfo != other.fabricModInstallInfo) return false
 		if (forgeModDownloadInfo != other.forgeModDownloadInfo) return false
@@ -72,21 +69,18 @@ class Version @JvmOverloads constructor(
 	}
 	
 	override fun hashCode(): Int {
-		var result = fabricModInstallInfo?.hashCode() ?: 0
+		var result = super.hashCode()
+		result = 31 * result + kind.hashCode()
+		result = 31 * result + (fabricModInstallInfo?.hashCode() ?: 0)
 		result = 31 * result + (forgeModDownloadInfo?.hashCode() ?: 0)
 		result = 31 * result + (quiltModDownloadInfo?.hashCode() ?: 0)
-		result = 31 * result + kind.hashCode()
-		result = 31 * result + versionNumber.hashCode()
 		return result
 	}
 	
 }
 
 val preferredVersion: Version?
-	get() = currentSetting.preferredVersion.run {
-		this?.setModTask()
-	}
-
+	get() = currentSetting.preferredVersion?.takeIf { it.ckeckIsEffective() }
 class VersionsList(
 	private val versions: LinkedHashSet<Version> = linkedSetOf()
 ) : MutableSet<Version> by versions {

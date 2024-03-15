@@ -22,7 +22,7 @@ class SkinUtils(
 			File(
 				userAsste, skinFile.name.cleanStrInString(".$it").appendForString("-head.", it)
 			).apply {
-				scwn("Write skin file") {
+				launchScope("Write skin file") {
 					touch()
 					ImageIO.write(newImage, extension, outputStream())
 				}

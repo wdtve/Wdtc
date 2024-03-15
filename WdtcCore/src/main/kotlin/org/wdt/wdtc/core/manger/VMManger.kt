@@ -1,5 +1,3 @@
-@file:JvmName("VMManger")
-
 package org.wdt.wdtc.core.manger
 
 import java.io.File
@@ -24,12 +22,6 @@ val launcherVersion: String = System.getProperty(LAUNCHER_VERSION, "demo")
 
 val isDebug: Boolean = getBoolean(DEBUG)
 
-val wdtcConfigFromVM: File
-	get() {
-		val wdtcConfigPath = System.getProperty(CONFIG_PATH)
-		return if (wdtcConfigPath != null) File(File(wdtcConfigPath).canonicalPath)
-		else File(System.getProperty("user.home"))
-	}
 
 val applicationType: String = System.getProperty(APPLICATION_TYPE, "ui")
 
@@ -41,3 +33,19 @@ val networkimeoutTime: Int = System.getProperty(NETWORK_TIMEOUT_TIME, "5000").to
 
 val isLowPerformanceMode = getBoolean(LOW_PERFORMANCE_MODE)
 
+object VMManger {
+	init {
+		if (isDebug) System.setProperty(CONFIG_PATH, "./")
+		if (System.getProperty(CONFIG_PATH) == null) {
+			System.setProperty(CONFIG_PATH, System.getProperty("user.home"))
+		}
+	}
+	
+	val wdtcConfigFromVM: File
+		get() {
+			val wdtcConfigPath = System.getProperty(CONFIG_PATH)
+			return if (wdtcConfigPath != null) File(File(wdtcConfigPath).canonicalPath)
+			else File(System.getProperty("user.home"))
+		}
+	
+}

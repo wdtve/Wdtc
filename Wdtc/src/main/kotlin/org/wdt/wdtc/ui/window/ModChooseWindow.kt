@@ -191,7 +191,7 @@ class ModChooseWindow(private val version: Version, private val mainStage: Stage
       downloadForge.isDisable = true
     }
     back.onAction = EventHandler {
-      GameVersionListWindow.setWindowScene(mainStage)
+	    GameVersionListWindow().setWindowScene(mainStage)
     }
     confirm.onAction = EventHandler {
       GameDownloadingWindow(version).run {

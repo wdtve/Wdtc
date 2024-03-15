@@ -1,8 +1,6 @@
 package org.wdt.wdtc.core.download.game
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 import org.wdt.utils.io.IOUtils
 import org.wdt.utils.io.createDirectories
 import org.wdt.utils.io.isFileExists
@@ -20,46 +18,46 @@ class DownloadVersionGameFile(val version: Version, private val install: Boolean
 			GameVersionList().versionList.forEach {
 				if (it is GameVersionsJsonObjectImpl) {
 					if (it.versionNumber == version.versionNumber) {
-						startDownloadTask(it.versionJsonURL.noNull(), version.versionJson)
+						startDownloadTask(it.versionJsonURL.noNull() to version.versionJson)
 						return
 					}
 				}
 			}
 			throw VersionNotFoundException("${version.versionNumber} not found")
 		} else {
-			downloadSource.versionClientUrl.format(version.versionNumber, "json").toURL().let {
-				startDownloadTask(it, version.versionJson)
+			currentDownloadSource.versionClientUrl.format(version.versionNumber, "json").toURL().also {
+				startDownloadTask(it to version.versionJson)
 			}
 		}
 	}
 	
 	fun startDownloadGameAssetsListJson() {
 		val data = version.gameVersionJsonObject.assetIndex
-		val listJsonURL = data.url.run {
-			if (isOfficialDownloadSource) this
-			else toString().replace(pistonMetaMojang, downloadSource.metaUrl).toURL()
+		val listJsonURL = data.url.let {
+			if (isOfficialDownloadSource) it
+			else it.toString().replace(pistonMetaMojang, currentDownloadSource.metaUrl).toURL()
 		}
-		version.gameAssetsListJson.let {
+		version.gameAssetsListJson.also {
 			if (it.compareFile(data)) {
-				startDownloadTask(listJsonURL, it)
+				startDownloadTask(listJsonURL to it)
 			}
 		}
 	}
 	
 	fun startDownloadVersionJar() {
 		val data = version.gameVersionJsonObject.downloads.client
-		val jarUrl = data.let {
-			if (isOfficialDownloadSource) it.url
-			else downloadSource.versionClientUrl.format(version.versionNumber, "client").toURL()
+		val jarUrl = data.run {
+			if (isOfficialDownloadSource) url
+			else currentDownloadSource.versionClientUrl.format(version.versionNumber, "client").toURL()
 		}
 		version.versionJar.let {
 			if (it.compareFile(data)) {
-				startDownloadTask(jarUrl, it)
+				startDownloadTask(jarUrl to it)
 			}
 		}
 	}
 	
-	fun startDownloadLibraryFile(): Unit = runBlocking(Dispatchers.IO) {
+	suspend fun startDownloadLibraryFile(): Unit = coroutineScope {
 		launch("Donwnload library file") {
 			GameRuntimeList(version).runtimeList.run {
 				val speed = ProgressManger(size).apply {
@@ -78,9 +76,7 @@ class DownloadVersionGameFile(val version: Version, private val install: Boolean
 		}
 	}
 	
-	fun startDownloadAssetsFiles() = DownloadGameAssetsFile(version).run {
-		startDownloadAssetsFiles()
-	}
+	fun startDownloadAssetsFiles() = DownloadGameAssetsFile(version).run { startDownloadAssetsFiles() }
 	
 	
 	fun createGameDirectories() {
@@ -99,7 +95,7 @@ class DownloadVersionGameFile(val version: Version, private val install: Boolean
 	
 	companion object {
 		fun startDownloadVersionManifestJsonFile() {
-			startDownloadTask(downloadSource.versionManifestUrl, versionManifestFile)
+			startDownloadTask(currentDownloadSource.versionManifestUrl, versionManifestFile)
 		}
 	}
 }

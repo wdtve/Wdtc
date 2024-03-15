@@ -1,9 +1,8 @@
 package org.wdt.wdtc.core.manger
 
 import org.wdt.utils.io.isFileExists
-import org.wdt.wdtc.core.game.VersionsList
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.utils.noNull
+import org.wdt.wdtc.core.game.VersionsList
 import org.wdt.wdtc.core.utils.runIfNoNull
 import org.wdt.wdtc.core.utils.setModTask
 import java.io.File
@@ -24,6 +23,19 @@ open class GameDirectoryManger(
 		get() = File(gameDirectory, "versions")
 	val gameAssetsDirectory: File
 		get() = File(gameDirectory, "assets")
+	
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (other !is GameDirectoryManger) return false
+		
+		if (workDirectory != other.workDirectory) return false
+		
+		return true
+	}
+	
+	override fun hashCode(): Int {
+		return workDirectory.hashCode()
+	}
 }
 
 val defaultHere: File

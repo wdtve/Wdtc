@@ -20,8 +20,8 @@ import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
 import org.wdt.wdtc.core.download.quilt.QuiltVersionList
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.KindOfMod
-import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.ioCoroutineScope
+import org.wdt.wdtc.core.utils.noNull
 import java.io.IOException
 
 class ModChooseVersionWindow(
@@ -68,7 +68,7 @@ class ModChooseVersionWindow(
 			layoutY = 20.0
 		}
 		try {
-			javafxCoroutineScope.launch {
+			javafxScope.launch {
 				modVersionList.await().forEach {
 					size.modifyWindwosSize(buttonList, getVersionButton(it, buttonList))
 				}

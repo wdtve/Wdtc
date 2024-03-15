@@ -7,46 +7,39 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
-fun URL.isNetworkHasThisFile(): Boolean {
-	return try {
-		this.openConnection().run {
-			connectTimeout = networkimeoutTime
-			connect()
-		}
-		true
-	} catch (e: IOException) {
-		false
+fun URL.isNetworkHasThisFile(): Boolean = try {
+	this.openConnection().run {
+		connectTimeout = networkimeoutTime
+		connect()
 	}
+	true
+} catch (e: IOException) {
+	false
 }
 
 @Throws(IOException::class)
-fun URL.getRedirectUrl(): String {
-	return this.toHttpsURLConnection().run {
-		instanceFollowRedirects = false
-		connectTimeout = networkimeoutTime
-		getHeaderField("Location")
-	}
-}
+fun URL.getRedirectUrl(): String = this.toHttpsURLConnection().apply {
+	instanceFollowRedirects = false
+	connectTimeout = networkimeoutTime
+}.getHeaderField("Location")
 
-val isOnline: Boolean = "https://www.bilibili.com".toURL().isNetworkHasThisFile()
+val isOnline: Boolean
+	get() = "https://www.bilibili.com".toURL().isNetworkHasThisFile()
 
 
 fun openSomething(o: Any) {
-	o.toString().let {
-		scwn(it) {
+	o.toString().also {
+		launchScope(it) {
 			Runtime.getRuntime().exec(arrayOf("cmd.exe", "/c", "start", it))
 			logmaker.info("$it is open")
 		}
 	}
 }
 
-fun URL.newInputStream(): InputStream {
-	return this.toHttpsURLConnection().run {
-		connectTimeout = networkimeoutTime
-		readTimeout = networkimeoutTime
-		inputStream
-	}
-}
+fun URL.newInputStream(): InputStream = toHttpsURLConnection().apply {
+	connectTimeout = networkimeoutTime
+	readTimeout = networkimeoutTime
+}.inputStream
 
 fun URL.toHttpsURLConnection(): HttpsURLConnection {
 	return this.openConnection() as HttpsURLConnection

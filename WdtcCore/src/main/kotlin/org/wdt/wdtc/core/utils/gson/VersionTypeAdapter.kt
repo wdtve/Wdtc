@@ -10,10 +10,10 @@ import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
 import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
-import org.wdt.wdtc.core.game.VersionsList
 import org.wdt.wdtc.core.game.Version
+import org.wdt.wdtc.core.game.VersionsList
+import org.wdt.wdtc.core.manger.GameFileManger
 import java.lang.reflect.Type
-import java.util.*
 
 class LauncherTypeAdapter : TypeAdapters<Version> {
 	override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext?): Version {
@@ -37,15 +37,25 @@ class LauncherTypeAdapter : TypeAdapters<Version> {
 	}
 	
 	override fun serialize(src: Version, typeOfSrc: Type, context: JsonSerializationContext?): JsonElement {
-		return JsonObject().apply {
+		return GameFileMangerTypeAdapters().serialize(src, typeOfSrc, context).asJsonObject.apply {
 			src.run {
-				addProperty("versionNumber", versionNumber)
 				addProperty("modKind", kind.name)
 				serializeModDownloadInfoGson.create().let {
 					add(fabricKey, it.toJsonTree(fabricModInstallInfo))
 					add(forgeKey, it.toJsonTree(forgeModDownloadInfo))
 					add(quiltKey, it.toJsonTree(quiltModDownloadInfo))
 				}
+			}
+		}
+	}
+	
+}
+
+class GameFileMangerTypeAdapters : TypeAdapters<GameFileManger> {
+	override fun serialize(src: GameFileManger, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+		return JsonObject().apply {
+			src.run {
+				addProperty("versionNumber", versionNumber)
 				addProperty("workDirectory", workDirectory.canonicalPath)
 				addProperty("versionDirectory", versionDirectory.canonicalPath)
 				addProperty("configFile", versionConfigFile.canonicalPath)
@@ -53,6 +63,12 @@ class LauncherTypeAdapter : TypeAdapters<Version> {
 		}
 	}
 	
+	override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): GameFileManger {
+		require(json.isJsonObject)
+		return json.asJsonObject.run {
+			GameFileManger(getString("versionNumber"), getString("workDirectory").toFile())
+		}
+	}
 }
 
 class GameVersionsListTypeAdapters : TypeAdapters<VersionsList> {
@@ -80,7 +96,8 @@ private val serializeModDownloadInfoGson: GsonBuilder =
 		.registerTypeAdapter(ModDownloadInfoInterface::class.java, DownloadInfoTypeAdapter())
 
 val serializeVersionGson: GsonBuilder =
-	serializeModDownloadInfoGson.registerTypeAdapter(Version::class.java, LauncherTypeAdapter())
+	serializeModDownloadInfoGson.registerTypeAdapter(GameFileManger::class.java, GameFileMangerTypeAdapters())
+		.registerTypeAdapter(Version::class.java, LauncherTypeAdapter())
 
 val serializeVersionsListGson: GsonBuilder =
 	serializeVersionGson.registerTypeAdapter(VersionsList::class.java, GameVersionsListTypeAdapters())

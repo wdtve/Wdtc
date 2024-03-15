@@ -12,8 +12,8 @@ class GameJvmCommand(private val version: Version) : AbstractGameCommand() {
   @Throws(IOException::class)
   override fun getCommand(): StringBuilder {
     val gameConfig = version.gameConfig.config
-    commandBuilder.append("@echo off\n").append("cd ").append(version.versionDirectory).append("\n")
-    nonBreakingSpace("\"" + gameConfig.javaPath + "\"")
+	  commandBuilder.append("@echo off").appendLine().append("cd ").append(version.versionDirectory).appendLine()
+	  nonBreakingSpace("\"${gameConfig.javaPath}\"")
     nonBreakingSpace("-Dlog4j.configurationFile=", version.versionLog4j2)
     nonBreakingSpace("-Xmx${gameConfig.memory}", "M")
     nonBreakingSpace("-Dminecraft.client.jar=", version.versionJar)

@@ -19,10 +19,10 @@ class UsersList(
 	private val usersList: LinkedHashSet<User> = linkedSetOf()
 ) : MutableSet<User> by usersList {
 	fun add(loginUser: LoginUser) {
-		loginUser.user.let {
+		loginUser.user.also {
 			userJson.writeObjectToFile(it, prettyGsonBuilder)
 			logmaker.info(it)
-			this.add(it)
+			usersList.add(it)
 		}
 	}
 	

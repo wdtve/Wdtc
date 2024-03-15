@@ -9,12 +9,12 @@ import org.wdt.wdtc.core.download.source.OfficialDownloadSource
 
 val officialDownloadSource: DownloadSourceInterface = OfficialDownloadSource()
 
-val downloadSourceKind: DownloadSourceKind
+val currentDownloadSourceKind: DownloadSourceKind
   get() = currentSetting.downloadSource
 
-val downloadSource: DownloadSourceInterface
+val currentDownloadSource: DownloadSourceInterface
   get() {
-    return when (downloadSourceKind) {
+	  return when (currentDownloadSourceKind) {
       DownloadSourceKind.OFFICIAL -> {
         OfficialDownloadSource()
       }
@@ -30,7 +30,7 @@ val downloadSource: DownloadSourceInterface
   }
 
 val isOfficialDownloadSource: Boolean
-  get() = downloadSourceKind == DownloadSourceKind.OFFICIAL
+	get() = currentDownloadSourceKind == DownloadSourceKind.OFFICIAL
 
 val isNotOfficialDownloadSource: Boolean
   get() = !isOfficialDownloadSource

@@ -10,28 +10,29 @@ import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.manger.ProgressManger
 import org.wdt.wdtc.core.manger.TaskKind
 import org.wdt.wdtc.core.manger.TaskManger
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.utils.*
 import java.io.File
 
 class DownloadGameAssetsFile(private val version: Version) {
-	fun startDownloadAssetsFiles() =
-		version.gameAssetsListJson.readFileToJsonObject().getJsonObject("objects").asMap().run {
-			val progress = ProgressManger(size).apply {
-				coroutineScope = executorCoroutineScope(name = "Download assets file")
+	fun startDownloadAssetsFiles() {
+		val assets = version.gameAssetsListJson.run {
+			readFileToJsonObject().getJsonObject("objects").asMap().values.map {
+				it.asJsonObject.parseObject<AssetsFileData>()
 			}
-			keys.forEach {
-				get(it).noNull().asJsonObject.parseObject<AssetsFileData>().let { data ->
-					DownloadGameAssetsFileTask(version, data, progress).run {
-						start()
-					}
-				}
-			}
-			progress.await()
 		}
+		val progress = ProgressManger(assets.size).apply {
+			coroutineScope = executorCoroutineScope(name = "Download assets file")
+		}
+		assets.forEach { data ->
+			DownloadGameAssetsFileTask(version, data, progress).run {
+				start()
+			}
+		}
+		progress.await()
+	}
 	
-	
-	private class AssetsFileData(
+	class AssetsFileData(
 		@SerializedName("hash")
 		override val sha1: String,
 		@SerializedName("size")
@@ -52,7 +53,7 @@ class DownloadGameAssetsFile(private val version: Version) {
 		init {
 			coroutinesAction = progress.run {
 				coroutineScope.launch(actionName.toCoroutineName(), CoroutineStart.LAZY) {
-					startDownloadTask((downloadSource.assetsUrl + data.hashSplicing).toURL(), hashFile)
+					startDownloadTask((currentDownloadSource.assetsUrl + data.hashSplicing).toURL(), hashFile)
 					countDown()
 				}
 			}

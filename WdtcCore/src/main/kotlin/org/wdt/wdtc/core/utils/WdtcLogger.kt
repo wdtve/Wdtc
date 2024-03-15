@@ -17,8 +17,9 @@ private val FORMAT = MessageFormat("[{0,date,HH:mm:ss}] [{1}.{2}/{3}] {4}\n")
 
 @field:JvmField
 val logmaker: Logger = Logger.getLogger("Wdtc").apply {
-	val logFile = Path(wdtcConfig.canonicalPath, "logs").resolve("Wdtc.log")
-	logFile.touch()
+	val logFile = Path(wdtcConfig.canonicalPath, "logs").resolve("Wdtc.log").also {
+		it.touch()
+	}
 	level = Level.ALL
 	useParentHandlers = false
 	val formatter = object : Formatter() {
@@ -97,9 +98,9 @@ inline fun Logger.warning(message: String, e: Throwable) {
 
 
 fun Throwable.getExceptionMessage(): String {
-	val sw = StringWriter()
-	this.printStackTrace(PrintWriter(sw, true))
-	return sw.buffer.toString()
+	return StringWriter().also {
+		this.printStackTrace(PrintWriter(it, true))
+	}.buffer.toString()
 }
 
 

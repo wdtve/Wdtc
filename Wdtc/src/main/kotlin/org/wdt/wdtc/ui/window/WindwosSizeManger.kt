@@ -47,7 +47,9 @@ class WindwosSizeManger(private val mainStage: Stage) {
   }
 
   override fun toString(): String {
-    return "WindwosSizeManger(MainStage=${mainStage.width}, ${mainStage.height})"
+	  return mainStage.run {
+		  "WindwosSizeManger(MainStage=${width}, ${height})"
+	  }
   }
 }
 

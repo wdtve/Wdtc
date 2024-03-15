@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.game.LibraryObject.Artifact
 import org.wdt.wdtc.core.game.LibraryObject.Companion.currentNativesOS
 import org.wdt.wdtc.core.game.LibraryObject.Companion.officialLibraryUrl
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.manger.isNotOfficialDownloadSource
 import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.toURL
@@ -19,11 +19,11 @@ open class GameRuntimeData(private val version: Version) {
     get() = File(version.gameLibraryDirectory, this.path)
 
   val LibraryObject.changedNativesLibraryUrl: URL
-    get() = this.downloads.classifiers.currentNativesOS.let {
-      return if (isNotOfficialDownloadSource)
-        URL(downloadSource.libraryUrl + it.noNull().path)
+	  get() = this.downloads.classifiers.currentNativesOS.noNull().let {
+		  if (isNotOfficialDownloadSource)
+			  URL(currentDownloadSource.libraryUrl + it.path)
       else
-        it.noNull().url
+			  it.url
     }
 
 
@@ -37,7 +37,7 @@ open class GameRuntimeData(private val version: Version) {
   val LibraryObject.changedLibraryUrl: URL
     get() = if (isNotOfficialDownloadSource) {
       this.libraryName.apply {
-        libraryRepositoriesUrl = downloadSource.libraryUrl.toURL()
+	      libraryRepositoriesUrl = currentDownloadSource.libraryUrl.toURL()
       }.libraryUrl
     } else {
       this.officialLibraryUrl

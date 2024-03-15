@@ -2,11 +2,11 @@ package org.wdt.wdtc.core.download.quilt
 
 import com.google.gson.annotations.JsonAdapter
 import org.wdt.utils.gson.readFileToJsonObject
-import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
+import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
@@ -18,7 +18,7 @@ open class QuiltDownloadInfo(
   protected val version: Version,
   override val modVersion: String
 ) : ModDownloadInfoInterface {
-  private val libraryListUrl = "${downloadSource.quiltMetaUrl}/versions/loader/%s/%s/profile/json"
+	private val libraryListUrl = "${currentDownloadSource.quiltMetaUrl}/versions/loader/%s/%s/profile/json"
 
   constructor(version: Version, versionsJsonObjectInterface: VersionsJsonObjectInterface) :
       this(version, versionsJsonObjectInterface.versionNumber!!)

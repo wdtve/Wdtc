@@ -280,10 +280,7 @@ class LibraryObjectList(
 
 }
 
-class Rules(private val objectList: MutableList<Rule>) : MutableList<Rule> by objectList {
-  constructor(rule: Rule) : this(objectList = mutableListOf(rule))
-  constructor() : this(objectList = mutableListOf())
-
+class Rules(private val objectList: LinkedList<Rule> = LinkedList()) : MutableList<Rule> by objectList {
   val isUseForCurrent: Boolean
     get() {
       var ok = true

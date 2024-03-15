@@ -7,6 +7,7 @@ import org.wdt.utils.gson.writeObjectToFile
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.JavaUtils.JavaInfo
 import org.wdt.wdtc.core.utils.gson.serializeVersionGson
+import org.wdt.wdtc.core.utils.launchScope
 import java.io.File
 
 data class Setting(
@@ -26,7 +27,9 @@ val currentSetting: Setting
 	get() = settingFile.readFileToClass(serializeVersionGson)
 
 fun Setting.putSettingToFile() {
-	settingFile.writeObjectToFile(this, serializeVersionGson)
+	launchScope {
+		settingFile.writeObjectToFile(this@putSettingToFile, serializeVersionGson)
+	}
 }
 
 inline fun Setting.changeSettingToFile(block: Setting.() -> Unit): Setting {

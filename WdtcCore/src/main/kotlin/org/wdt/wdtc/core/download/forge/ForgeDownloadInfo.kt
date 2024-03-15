@@ -7,7 +7,7 @@ import org.wdt.wdtc.core.download.infterface.ModDownloadInfoInterface
 import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.manger.wdtcCache
 import org.wdt.wdtc.core.utils.KindOfMod
 import org.wdt.wdtc.core.utils.gson.DownloadInfoTypeAdapter
@@ -33,7 +33,7 @@ open class ForgeDownloadInfo(protected val version: Version, override val modVer
   val forgeInstallJarFile: File
     get() = File(wdtcCache, "$modVersion-installer.jar")
   private val forgeInstallJarUrl: URL
-    get() = "${downloadSource.forgeLibraryMavenUrl}net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar"
+	  get() = "${currentDownloadSource.forgeLibraryMavenUrl}net/minecraftforge/forge/:mcversion-:forgeversion/forge-:mcversion-:forgeversion-installer.jar"
       .replace(":mcversion", version.versionNumber)
       .replace(":forgeversion", modVersion).toURL()
 

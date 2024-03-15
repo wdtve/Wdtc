@@ -10,26 +10,24 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.wdt.utils.io.newInputStream
+import org.wdt.wdtc.core.auth.*
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.OFFLINE
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType.YGGDRASIL
-import org.wdt.wdtc.core.auth.changeListToFile
-import org.wdt.wdtc.core.auth.currentUsersList
-import org.wdt.wdtc.core.auth.preferredUser
-import org.wdt.wdtc.core.auth.setUserToJson
-import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 
 object UserListPane {
 	fun setUserList(pane: Pane) {
-		val preferredUser = preferredUser
 		val vBox = VBox().apply {
 			setPrefSize(595.0, 395.0)
 			setStylesheets()
 		}
-		javafxCoroutineScope.launch {
+		javafxScope.launch {
 			currentUsersList.forEach { newUser ->
 				val enter = RadioButton().apply {
 					setTopAnchor(15.0)
@@ -44,20 +42,7 @@ object UserListPane {
 						isSelected = true
 					}
 				}
-				val head = try {
-					Image(newUser.headFile.newInputStream())
-				} catch (e: IOException) {
-					setErrorWin(e)
-					null
-				}.let {
-					ImageView(it.noNull())
-				}.apply {
-					fitHeight = 32.0
-					fitWidth = 32.0
-					setTopAnchor(15.0)
-					setBottomAnchor(15.0)
-					setLeftAnchor(50.0)
-				}
+				val head = getHeadImage(newUser)
 				val userNameLabel = Label(newUser.userName).apply {
 					setTopAnchor(10.0)
 					setLeftAnchor(96.0)
@@ -87,10 +72,10 @@ object UserListPane {
 				}
 				AnchorPane().apply {
 					setPrefSize(595.0, 40.0)
-				}.run {
-					setCss("BlackBorder", this)
-					children.addAll(enter, head, userNameLabel, userTypeLabel, detele)
-					vBox.children.add(this)
+				}.also {
+					setCss("BlackBorder", it)
+					it.children.addAll(enter, head, userNameLabel, userTypeLabel, detele)
+					vBox.children.add(it)
 				}
 			}
 			
@@ -103,6 +88,17 @@ object UserListPane {
 				clear()
 				add(it)
 			}
+		}
+	}
+	
+	private suspend fun getHeadImage(newUser: User): ImageView = coroutineScope {
+		val image = async(Dispatchers.IO) { Image(newUser.headFile.newInputStream()) }
+		ImageView(image.await()).apply {
+			fitHeight = 32.0
+			fitWidth = 32.0
+			setTopAnchor(15.0)
+			setBottomAnchor(15.0)
+			setLeftAnchor(50.0)
 		}
 	}
 }

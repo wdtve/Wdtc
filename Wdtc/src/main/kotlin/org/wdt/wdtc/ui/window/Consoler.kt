@@ -6,8 +6,7 @@ package org.wdt.wdtc.ui.window
 import javafx.scene.Node
 import javafx.scene.image.Image
 import javafx.scene.layout.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.javafx.JavaFx
 import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.readFileToLine
@@ -18,9 +17,10 @@ import org.wdt.wdtc.core.manger.tipsFile
 import org.wdt.wdtc.core.utils.getResourceAsStream
 import org.wdt.wdtc.core.utils.noNull
 
-val wdtcBackground: Background
-	get() {
-		//Form:https://www.bilibili.com/video/BV1EY411m7uZ
+val wdtcBackground: Background = background
+
+private val background: Background
+	get() {    //Form:https://www.bilibili.com/video/BV1EY411m7uZ
 		val image = Image(
 			getResourceAsStream("/assets/blackGround/BlackGround${System.getProperty("wdtc.ui.background", "0")}.jpg")
 		)
@@ -32,6 +32,7 @@ val wdtcBackground: Background
 			)
 		)
 	}
+
 val cssFile: String
 	get() = object {}.javaClass.getResource("/css/color.css").noNull().toString()
 
@@ -106,4 +107,10 @@ val tips: String
 		}
 	}
 
-val javafxCoroutineScope = CoroutineScope(Dispatchers.JavaFx)
+suspend fun <T> runOnJavaFx(block: suspend CoroutineScope.() -> T): T {
+	return withContext(Dispatchers.JavaFx, block)
+}
+
+fun launchOnJavaFx(block: suspend CoroutineScope.() -> Unit): Job = javafxScope.launch(block = block)
+
+val javafxScope = CoroutineScope(Dispatchers.JavaFx)

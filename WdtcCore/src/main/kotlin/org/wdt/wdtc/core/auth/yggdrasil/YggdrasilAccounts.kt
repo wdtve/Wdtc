@@ -4,15 +4,17 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.*
+import okio.ByteString.Companion.encodeUtf8
 import org.wdt.utils.gson.*
 import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.auth.LoginUser
 import org.wdt.wdtc.core.auth.User
 import org.wdt.wdtc.core.auth.accounts.Accounts.AccountsType
 import org.wdt.wdtc.core.manger.littleskinApiUrl
+import org.wdt.wdtc.core.utils.defaultCoroutineScope
 import org.wdt.wdtc.core.utils.ioCoroutineScope
 import org.wdt.wdtc.core.utils.noNull
-import org.wdt.wdtc.core.utils.toBase64
+import java.io.File
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.URL
@@ -39,22 +41,25 @@ class YggdrasilAccounts(
 		}
 	}
 	
-	val yggdrasilTextures: YggdrasilTextures
-		get() = YggdrasilTextures(this)
+	private val headFile: Deferred<File> = defaultCoroutineScope.async {
+		textures.utils.writeSkinHead()
+	}
+	
+	val textures = YggdrasilTextures(userName, url)
 	
 	override val user: User
 		get() = runBlocking(Dispatchers.IO) {
-			val metaData = async { littleskinApiUrl.toStrings() }
-			sendPostWithJson.await().run {
+			val metaDataDeferred = async { littleskinApiUrl.toStrings() }
+			sendPostWithJson.await().let {
 				User(
 					userName,
-					accessToken,
+					it.accessToken,
 					AccountsType.YGGDRASIL,
-					selectedProfile.getString("id"),
-					yggdrasilTextures.utils.writeSkinHead()
+					it.selectedProfile.getString("id"),
+					headFile.await()
 				).apply {
-					this.metaData = metaData.await()
-					base64Data = this.metaData.noNull().toBase64()
+					this.metaData = metaDataDeferred.await()
+					this.base64Data = metaData.noNull().encodeUtf8().base64()
 				}
 			}
 		}

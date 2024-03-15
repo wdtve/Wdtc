@@ -21,7 +21,6 @@ fun main(args: Array<String>) {
 	val startTime = System.currentTimeMillis()
 	try {
 		ckeckRunEnvironment()
-		ckeckVMConfig()
 		createNeedDirectories()
 		if (args.isNotEmpty()) {
 			removeConfigDirectory(Arrays.stream(args).toList()[0] == "refresh")
@@ -44,7 +43,9 @@ fun main(args: Array<String>) {
 				removePreferredVersion()
 				printUserList()
 				printVersionList()
-				if (isOnline) {
+			}
+			if (isOnline) {
+				launch {
 					downloadVersionManifestJsonFileTask()
 					updateAuthlibInjector()
 				}

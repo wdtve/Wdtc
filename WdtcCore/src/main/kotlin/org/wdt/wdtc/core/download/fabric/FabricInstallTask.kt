@@ -4,7 +4,7 @@ import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
@@ -27,7 +27,7 @@ class FabricInstallTask(version: Version, fabricVersionNumber: String) :
     for (i in 0 until fabricLibraryList.size()) {
       val libraryObject = fabricLibraryList.getJsonObject(i)
       val dependency = GameRuntimeDependency(libraryObject.getString("name"))
-      dependency.libraryRepositoriesUrl = downloadSource.fabricLibraryUrl.toURL()
+	    dependency.libraryRepositoriesUrl = currentDownloadSource.fabricLibraryUrl.toURL()
       dependency.libraryDirectory = version.gameLibraryDirectory
       libraryObjectList.add(LibraryObject.getLibraryObject(dependency, libraryObject.getString("url").toURL()))
     }

@@ -5,12 +5,13 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.Pane
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.wdt.wdtc.core.auth.changeListToFile
 import org.wdt.wdtc.core.auth.currentUsersList
 import org.wdt.wdtc.core.auth.yggdrasil.YggdrasilAccounts
 import org.wdt.wdtc.core.manger.littleskinUrl
 import org.wdt.wdtc.core.utils.*
+import org.wdt.wdtc.ui.window.launchOnJavaFx
 import java.io.IOException
 
 object LittleskinWindow {
@@ -51,8 +52,12 @@ object LittleskinWindow {
 					label.text = "请输入用户名、密码"
 				} else {
 					try {
-						loginUser(userName, powerWord)
-						UserListPane.setUserList(pane)
+						launchOnJavaFx {
+							withContext(Dispatchers.IO) {
+								loginUser(userName, powerWord)
+							}
+							UserListPane.setUserList(pane)
+						}
 					} catch (e: IOException) {
 						label.text = "用户名或密码错误"
 						logmaker.warning("用户名或密码错误", e)
@@ -67,22 +72,18 @@ object LittleskinWindow {
 	}
 	
 	@Throws(IOException::class)
-	private fun loginUser(userName: String, powerWord: String) = runBlocking {
+	private suspend fun loginUser(userName: String, powerWord: String) = coroutineScope {
 		YggdrasilAccounts(littleskinUrl, userName, powerWord).run {
 			
-			val job = scwn("Write users json") {
+			launch("Login $userName") {
+				textures.startDownloadUserSkin()
+			}
+			
+			withContext(Dispatchers.IO) {
 				currentUsersList.changeListToFile {
 					this@run.addToList()
 				}
 			}
-			
-			scwn("Login $userName") {
-				yggdrasilTextures.run {
-					startDownloadUserSkin()
-				}
-			}
-			
-			job.join()
 			logmaker.info("Login $userName Littleskin User")
 		}
 	}

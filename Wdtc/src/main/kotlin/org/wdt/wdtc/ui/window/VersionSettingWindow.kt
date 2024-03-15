@@ -13,7 +13,6 @@ import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import kotlinx.coroutines.*
-import kotlinx.coroutines.javafx.JavaFx
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.toFile
@@ -28,16 +27,16 @@ import org.wdt.wdtc.core.manger.gameConfig
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.core.utils.JavaUtils.getJavaVersion
+import org.wdt.wdtc.core.utils.KindOfMod.*
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 	private val config: GameConfig.Config = version.gameConfig.config
 	private val size: WindwosSizeManger = mainStage.getSizeManger()
 	private val javaVersion = ioCoroutineScope.async { getJavaVersion(config.javaPath) }
 	
-	fun setWindow() {
+	suspend fun setWindow() {
 		val window = HomeWindow(version)
 		val sonScrollPane = ScrollPane().apply {
 			layoutX = 105.0
@@ -48,7 +47,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setRightAnchor(0.0)
 		}
 		val back = JFXButton("返回").apply {
-			onAction = EventHandler { window.setHome(mainStage) }
+			onAction = EventHandler { launchScope { window.setHome(mainStage) } }
 		}
 		val gameSetting = JFXButton("游戏设置").apply {
 			setPrefSize(105.0, 30.0)
@@ -66,12 +65,16 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		gameSetting.onAction = EventHandler {
 			autoDownload.isDisable = false
 			gameSetting.isDisable = true
-			setVersionSettingPane(sonScrollPane)
+			launchOnJavaFx {
+				setVersionSettingPane(sonScrollPane)
+			}
 		}
 		autoDownload.onAction = EventHandler {
 			gameSetting.isDisable = false
 			autoDownload.isDisable = true
-			setAutoDownload(sonScrollPane)
+			launchOnJavaFx {
+				setAutoDownload(sonScrollPane)
+			}
 		}
 		val completion = JFXButton("补全游戏文件").apply {
 			layoutY = 395.0
@@ -79,20 +82,17 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setBottomAnchor(30.0)
 			setLeftAnchor(0.0)
 			onAction = EventHandler {
-				javafxCoroutineScope.launch("completion ${version.versionNumber} task") {
+				javafxScope.launch("completion ${version.versionNumber} task") {
 					isDisable = true
 					back.isDisable = true
-					val completionJob = launch(Dispatchers.Default) {
+					withContext(Dispatchers.IO) {
 						InstallGameVersion(version, false).run {
 							startInstallGame()
 						}
 					}
-					launch(Dispatchers.JavaFx) {
-						completionJob.join()
-						isDisable = false
-						back.isDisable = false
-						logmaker.info("${version.versionNumber} downloaded")
-					}
+					isDisable = false
+					back.isDisable = false
+					logmaker.info("${version.versionNumber} downloaded")
 				}
 			}
 			
@@ -104,7 +104,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setLeftAnchor(0.0)
 			onAction = EventHandler {
 				try {
-					scwn("remove version") {
+					launchScope("remove version") {
 						launch {
 							FileUtils.deleteDirectory(version.versionDirectory)
 							currentSetting.changeSettingToFile {
@@ -117,7 +117,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 								remove(version)
 							}
 						}
-						launch(Dispatchers.JavaFx) {
+						runOnJavaFx {
 							HomeWindow().run {
 								setHome(mainStage)
 							}
@@ -133,13 +133,16 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			children.addAll(sonScrollPane, completion, delete, back, gameSetting, autoDownload)
 			background = wdtcBackground
 			setStylesheets()
-			mainStage.setScene(Scene(this))
+		}.also {
+			runOnJavaFx {
+				mainStage.scene = Scene(it)
+			}
 		}
 		setCss("BackGroundWriteButton", delete, completion, gameSetting, autoDownload)
 		
 	}
 	
-	private fun setVersionSettingPane(scrollPane: ScrollPane) {
+	private suspend fun setVersionSettingPane(scrollPane: ScrollPane) {
 		val line = 35.0
 		val tips = Label("JDK地址:").apply {
 			layoutX = LAYOUT_X
@@ -198,27 +201,18 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setBottomAnchor(10.0)
 			setRightAnchor(30.0)
 		}
-		val pane = AnchorPane().apply {
+		AnchorPane().apply {
 			children.add(apply)
 			setStylesheets()
+		}.also {
+			size.modifyWindwosSize(
+				it,
+				tips, tips2, tips3, tips4, tips5, tips6, input, javaPath, inputHeight, inputWidth, choose
+			)
+			scrollPane.content = it
 		}
-		size.modifyWindwosSize(
-			pane,
-			tips,
-			tips2,
-			tips3,
-			tips4,
-			tips5,
-			tips6,
-			input,
-			javaPath,
-			inputHeight,
-			inputWidth,
-			choose
-		)
 		setCss("BlackBorder", choose, apply)
-		scrollPane.content = pane
-		javafxCoroutineScope.launch {
+		launchOnJavaFx {
 			config.run {
 				javaPath.text = this.javaPath
 				inputWidth.text = width.toString()
@@ -228,14 +222,13 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			}
 		}
 		choose.onAction = EventHandler {
-			val javaExePath = FileChooser().apply {
+			FileChooser().apply {
 				title = "选择Java文件"
 				initialDirectory = File("C:\\Program Files")
 			}.run {
 				showOpenDialog(mainStage)
-			}
-			if (javaExePath != null) {
-				javaPath.text = javaExePath.canonicalPath
+			}.runIfNoNull {
+				javaPath.text = canonicalPath
 			}
 		}
 		fun invalidConfiguration(e: Throwable) {
@@ -244,7 +237,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			logmaker.warning("配置无效", e)
 		}
 		apply.onAction = EventHandler {
-			scwn {
+			launchScope {
 				try {
 					val javaVersion = getJavaVersionNumber(javaPath.text)
 					val job = launch {
@@ -256,20 +249,20 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 								)
 							}.let {
 								logmaker.info(it)
-								scwn {
+								withContext(Dispatchers.IO) {
 									putConfigToFile(it)
 								}
 							}
 						}
 					}
-					launch(Dispatchers.JavaFx) {
-						job.join()
-						tips6.text = "设置成功"
-					}
-					launch(Dispatchers.JavaFx) {
+					launchOnJavaFx {
 						javaVersion.await().noNull().let {
 							tips2.text = "Java版本: $it"
 						}
+					}
+					launchOnJavaFx {
+						job.join()
+						tips6.text = "设置成功"
 					}
 				} catch (e: NumberFormatException) {
 					invalidConfiguration(e)
@@ -280,8 +273,8 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		}
 	}
 	
-	private fun CoroutineScope.getJavaVersionNumber(it: String): Deferred<String?> {
-		return async {
+	private suspend fun getJavaVersionNumber(it: String): Deferred<String?> = coroutineScope {
+		async {
 			if (it.toFile().isFileNotExists())
 				throw NumberFormatException()
 			else
@@ -289,15 +282,16 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		}
 	}
 	
-	private fun setAutoDownload(scrollPane: ScrollPane) {
+	
+	private suspend fun setAutoDownload(scrollPane: ScrollPane) {
 		val modList = AnchorPane()
 		var i = 0.0
-		for (kind in KindOfMod.entries.toTypedArray()) {
+		KindOfMod.entries.forEach {
 			AnchorPane().apply {
 				setTopAnchor(44 * i)
 				prefHeight = 44.0
 				prefWidth = 510.0
-				setModPane(kind, this)
+				setModPane(it, this)
 				size.modifyWindwosSize(modList, this)
 				i++
 			}
@@ -308,39 +302,13 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		}
 	}
 	
-	private fun setModPane(kind: KindOfMod, modPane: AnchorPane) {
+	private suspend fun setModPane(kind: KindOfMod, modPane: AnchorPane) {
 		val modIcon = ImageView()
-		when (kind) {
-			KindOfMod.FORGE -> modIcon.image = Image(
-				Objects.requireNonNull(
-					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/forge.png")
-				)
-			)
-			
-			KindOfMod.FABRIC -> modIcon.image = Image(
-				Objects.requireNonNull(
-					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/fabric.png")
-				)
-			)
-			
-			KindOfMod.QUILT -> modIcon.image = Image(
-				Objects.requireNonNull(
-					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/quilt.png")
-				)
-			)
-			
-			KindOfMod.ORIGINAL -> modIcon.image = Image(
-				Objects.requireNonNull(
-					VersionSettingWindow::class.java.getResourceAsStream("/assets/icon/ico.jpg")
-				)
-			)
-			
-			else -> {}
-		}
 		modIcon.apply {
 			setTopAnchor(4.0)
 			setLeftAnchor(10.0)
 			setBottomAnchor(4.0)
+			image = getModIcon(kind).await()
 		}
 		val modVersion = Label().apply {
 			if (version.kind == kind) {
@@ -358,7 +326,26 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setRightAnchor(20.0)
 			setBottomAnchor(11.0)
 		}
-		modPane.children.addAll(modIcon, modVersion, download)
+		runOnJavaFx {
+			modPane.children.addAll(modIcon, modVersion, download)
+		}
+	}
+	
+	private suspend fun getModIcon(kind: KindOfMod) = coroutineScope {
+		async {
+			when (kind) {
+				FORGE -> Image(getResourceAsStream("/assets/icon/forge.png"))
+				
+				FABRIC -> Image(getResourceAsStream("/assets/icon/fabric.png"))
+				
+				QUILT -> Image(getResourceAsStream("/assets/icon/quilt.png"))
+				
+				ORIGINAL -> Image(getResourceAsStream("/assets/icon/ico.jpg"))
+				
+				FABRICAPI -> Image(getResourceAsStream("/assets/icon/fabric.png"))
+			}
+		}
+		
 	}
 	
 	companion object {

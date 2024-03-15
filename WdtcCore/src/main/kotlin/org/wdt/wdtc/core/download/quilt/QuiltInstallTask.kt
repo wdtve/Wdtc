@@ -4,7 +4,7 @@ import org.wdt.utils.gson.*
 import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.manger.downloadSource
+import org.wdt.wdtc.core.manger.currentDownloadSource
 import org.wdt.wdtc.core.utils.startDownloadTask
 import org.wdt.wdtc.core.utils.toURL
 import java.io.IOException
@@ -40,7 +40,7 @@ class QuiltInstallTask : QuiltDownloadInfo, ModInstallTaskInterface {
       val download = GameRuntimeDependency(quiltLibraryObject.getString("name"))
       val libraryDefaultUrl = quiltLibraryObject.getString("url")
       if (libraryDefaultUrl == "https://maven.fabricmc.net/") {
-        download.libraryRepositoriesUrl = downloadSource.fabricLibraryUrl.toURL()
+	      download.libraryRepositoriesUrl = currentDownloadSource.fabricLibraryUrl.toURL()
       } else if (libraryDefaultUrl == "https://maven.quiltmc.org/repository/release/") {
         download.libraryRepositoriesUrl = "https://maven.quiltmc.org/repository/release/".toURL()
       }

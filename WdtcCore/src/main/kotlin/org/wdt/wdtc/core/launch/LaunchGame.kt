@@ -7,7 +7,6 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.writeStringToFile
 import org.wdt.wdtc.core.download.InstallGameVersion
 import org.wdt.wdtc.core.game.Version
-import org.wdt.wdtc.core.manger.gameConfig
 import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.*
 import java.util.*
@@ -26,7 +25,14 @@ class LaunchGame(
 		if (!currentSetting.chineseLanguage) return
 		version.gameOptionsFile.run {
 			if (isFileNotExists()) {
-				writeStringToFile("forceUnicodeFont:true\nguiScale:2\nlang:zh_cn\nautoJump:false")
+				buildString {
+					append("forceUnicodeFont:true").appendLine()
+					append("guiScale:2").appendLine()
+					append("lang:zh_cn").appendLine()
+					append("autoJump:false").appendLine()
+				}.also {
+					writeStringToFile(it)
+				}
 			}
 		}
 	}
@@ -80,7 +86,7 @@ class LaunchGame(
 			}.let { add(it) }
 		}
 	
-	 private fun getSimpleTaskList(block: (String) -> Unit): MutableList<TaskManger> {
+	private fun getSimpleTaskList(block: (String) -> Unit): MutableList<TaskManger> {
 		return mutableListOf(TaskManger("启动游戏", TaskKind.COROUTINES).apply {
 			coroutinesAction = defaultCoroutineScope.launch("Run all game".toCoroutineName(), CoroutineStart.LAZY) {
 				getFullTaskList(block).forEach {

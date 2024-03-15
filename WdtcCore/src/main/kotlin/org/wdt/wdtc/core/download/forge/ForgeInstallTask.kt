@@ -8,8 +8,6 @@ import org.wdt.wdtc.core.download.game.DownloadGameRuntime
 import org.wdt.wdtc.core.download.infterface.ModInstallTaskInterface
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.game.*
-import org.wdt.wdtc.core.game.GameConfig
-import org.wdt.wdtc.core.manger.gameConfig
 import org.wdt.wdtc.core.launch.GameRuntimeFile
 import org.wdt.wdtc.core.manger.*
 import org.wdt.wdtc.core.utils.*
@@ -87,7 +85,7 @@ class ForgeInstallTask(version: Version, forgeVersion: String) :
 		}.noNull()
 		val txtUrl = version.gameVersionJsonObject.downloads.clientMappings.url.run {
 			if (isNotOfficialDownloadSource)
-				this.toString().replace(pistonDataMojang, downloadSource.dataUrl).toURL().getRedirectUrl().toURL()
+				this.toString().replace(pistonDataMojang, currentDownloadSource.dataUrl).toURL().getRedirectUrl().toURL()
 			else this
 		}
 		startDownloadTask(txtUrl, File(version.gameLibraryDirectory, txtPath.formJar()))

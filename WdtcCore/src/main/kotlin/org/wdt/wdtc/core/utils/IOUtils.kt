@@ -39,28 +39,23 @@ class FileDataImpl(file: File) : FileData {
 	
 }
 
-fun InputStream.sha1(): String {
-	return toBufferedSource().readByteString().sha1().hex()
-}
+fun InputStream.sha1(): String = toBufferedSource().readByteString().sha1().hex()
 
-fun InputStream.toBufferedSource(): BufferedSource {
-	return source().buffer()
-}
+fun InputStream.toBufferedSource(): BufferedSource = source().buffer()
 
 fun File.toFileData(): FileData = FileDataImpl(this)
 
-fun URL.toFileData(): FileData {
-	return object : FileData {
-		override val sha1: String = if (isLowPerformanceMode) "useless" else newInputStream().sha1()
-		override val size: Long = openConnection().contentLengthLong
-	}
+fun URL.toFileData(): FileData = object : FileData {
+	override val sha1: String = if (isLowPerformanceMode) "useless" else newInputStream().sha1()
+	override val size: Long = openConnection().contentLengthLong
 }
 
-fun ZipEntry.toFileData(zipFile: ZipFile): FileData {
-	return object : FileData {
-		override val sha1: String = zipFile.getInputStream(this@toFileData).sha1()
-		override val size: Long = getSize()
+fun ZipEntry.toFileData(zipFile: ZipFile): FileData = object : FileData {
+	override val sha1: String = if (isLowPerformanceMode) "useless"
+	else {
+		zipFile.getInputStream(this@toFileData).sha1()
 	}
+	override val size: Long = getSize()
 }
 
 fun Path.toFileData() = toFile().toFileData()
@@ -70,15 +65,11 @@ fun File.getJarManifestInfo(key: String): String? {
 	return JarInputStream(inputStream()).manifest.mainAttributes.getValue(key)
 }
 
-fun getResourceAsStream(name: String): InputStream {
-	return object {}.javaClass.getResourceAsStream(name).noNull()
-}
+fun getResourceAsStream(name: String): InputStream = object {}.javaClass.getResourceAsStream(name).noNull()
 
-fun File.compareFile(fileData: FileData): Boolean {
-	return run {
-		if (isFileNotExists()) return true
-		compareFileData(toFileData(), fileData)
-	}
+fun File.compareFile(fileData: FileData): Boolean = run {
+	if (isFileNotExists()) return true
+	compareFileData(toFileData(), fileData)
 }
 
 fun compareFileData(fileData1: FileData, fileData2: FileData): Boolean {

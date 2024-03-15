@@ -3,7 +3,6 @@
 package org.wdt.wdtc.ui
 
 import jdk.internal.loader.BuiltinClassLoader
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.wdt.utils.gson.getJsonArray
 import org.wdt.utils.gson.parseArray
@@ -33,7 +32,7 @@ import java.nio.file.Path
 val openJFXListFile = File(wdtcDependenciesDirectory, "openjfx-list.json")
 val osName: String
 	get() {
-		if (currentSystem == MAC) error("Wdtc cannot run on macos!")
+		require(currentSystem != MAC) { "Wdtc cannot run on macos!" }
 		return if (currentSystem == WINDOWS) "win" else "linux"
 	}
 val canRunOSList = listOf("win", "linux")
@@ -58,9 +57,8 @@ fun setJavaFXListJson() {
 						)
 					}
 					LibraryObject(
-						downloads = LibraryObject.Downloads(
-							artifact = artifact
-						), libraryName = "org.openjfx:$moudleName:win:17.0.6".toDependency()
+						downloads = LibraryObject.Downloads(artifact = artifact),
+						libraryName = "org.openjfx:$moudleName:win:17.0.6".toDependency()
 					).addToList()
 					
 				}
@@ -85,7 +83,7 @@ fun downloadDependencies() = runBlocking {
 			val library = File(wtdcOpenJFXDirectory, artifact.path)
 			try {
 				if (library.compareFile(artifact)) {
-					speed.coroutineScope.launch {
+					speed.coroutineScope.launch(library.name) {
 						startDownloadTask(artifact.url, library)
 						speed.countDown()
 					}

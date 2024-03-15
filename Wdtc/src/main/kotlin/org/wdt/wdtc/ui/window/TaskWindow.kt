@@ -17,9 +17,7 @@ import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.manger.TaskKind
 import org.wdt.wdtc.core.manger.TaskManger
 import org.wdt.wdtc.core.utils.*
-import java.time.Instant
 import java.util.*
-import kotlin.concurrent.timer
 
 class TaskWindow(
 	private val mainStage: Stage, private val taskList: MutableList<TaskManger> = LinkedList()
@@ -35,10 +33,6 @@ class TaskWindow(
 			initOwner(mainStage)
 			initStyle(StageStyle.UNDECORATED)
 		}
-		val parentPane = AnchorPane().apply {
-			setPrefSize(400.0, 400.0)
-			setStylesheets()
-		}
 		val sonPane = VBox().apply {
 			setPrefSize(398.0, 311.0)
 		}
@@ -49,13 +43,8 @@ class TaskWindow(
 			content = sonPane
 		}
 		
-		javafxCoroutineScope.launch {
-			
+		javafxScope.launch {
 			taskList.forEach {
-				val taskPane = AnchorPane().apply {
-					setPrefSize(398.0, 43.0)
-					styleClass.add("BlackBorder")
-				}
 				val progressbar = ProgressBar().apply {
 					layoutX = 63.0
 					layoutY = 15.0
@@ -72,13 +61,13 @@ class TaskWindow(
 					layoutX = 15.0
 					layoutY = 15.0
 				}
-				val updateUI = javafxCoroutineScope.launch("update ui".toCoroutineName(), CoroutineStart.LAZY) {
+				val updateUI = javafxScope.launch("update ui".toCoroutineName(), CoroutineStart.LAZY) {
 					progressindicator.progress = 1.0
 					progressbar.progress = 1.0
 					taskList.remove(it)
 					taskQuantity += 1
 				}
-				scwn("Run task") {
+				launchScope("Run task") {
 					it.run {
 						if (actionKind == TaskKind.FUNCTION) {
 							action.noNull().invoke()
@@ -93,15 +82,20 @@ class TaskWindow(
 						}
 					}
 				}
-				taskPane.children.addAll(name, progressbar, progressindicator)
+				val taskPane = AnchorPane().apply {
+					setPrefSize(398.0, 43.0)
+					styleClass.add("BlackBorder")
+					children.addAll(name, progressbar, progressindicator)
+				}
+				
 				sonPane.children.add(taskPane)
 			}
 		}
 		val tips = Label("tips").apply {
 			layoutX = 14.0
 			layoutY = 375.0
-			timer("Set tips", daemon = true, startAt = Date.from(Instant.now()), period = 1500) {
-				javafxCoroutineScope.launch("Set tips".toCoroutineName()) {
+			timer("Set tips", 1500) {
+				javafxScope.launch("Set tips") {
 					text = "Tips:${getTips(15)}"
 				}
 				if (!runTask) cancel()
@@ -116,14 +110,19 @@ class TaskWindow(
 				sonStage.close()
 			}
 		}
-		parentPane.children.addAll(taskListPane, tips, closeButton)
-		sonStage.run {
-			scene = Scene(parentPane)
-			show()
+		AnchorPane().apply {
+			setPrefSize(400.0, 400.0)
+			setStylesheets()
+			children.addAll(taskListPane, tips, closeButton)
+		}.also {
+			sonStage.run {
+				scene = Scene(it)
+				show()
+			}
 		}
-		timer("close task", daemon = true, startAt = Date.from(Instant.now()), period = 500) {
+		timer("close window", 500) {
 			if (taskList.isEmpty()) {
-				javafxCoroutineScope.launch {
+				javafxScope.launch {
 					sonStage.close()
 				}
 				logmaker.info("all tasks finish, quantity $taskQuantity")
@@ -133,7 +132,7 @@ class TaskWindow(
 	}
 	
 	private fun monitorJob(job: Job) {
-		timer("cancel task", daemon = true, startAt = Date.from(Instant.now()), period = 100) {
+		timer("cancel job", 100) {
 			if (!runTask) {
 				job.cancel()
 				cancel()
