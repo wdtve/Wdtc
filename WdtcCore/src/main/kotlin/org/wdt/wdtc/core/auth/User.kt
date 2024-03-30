@@ -9,30 +9,31 @@ import org.wdt.wdtc.core.utils.gson.prettyGsonBuilder
 import java.io.File
 
 interface LoginUser {
-  val user: User
+	val user: User
 }
 
 data class User(
-  var userName: String,
-  var accessToken: String,
-  var type: AccountsType,
-  var uuid: String,
-  var headFile: File
+	var userName: String,
+	var accessToken: String,
+	var type: AccountsType,
+	var uuid: String,
+	var headFile: File
 ) {
-
-  var metaData: String? = null
-
-  var base64Data: String? = null
-
-  override fun toString(): String {
-    return "User(userName=$userName, type=$type, headFile=$headFile)"
-  }
+	
+	var metaData: String? = null
+	
+	var base64Data: String? = null
+	
+	override fun toString(): String {
+		return "User(userName=$userName, type=$type, headFile=$headFile)"
+	}
 }
 
 val isExistUserJsonFile: Boolean
-  get() = userJson.isFileExists()
+	get() = userJson.isFileExists()
+
 fun setUserToJson(user: User) = userJson.writeObjectToFile(user, prettyGsonBuilder)
 
 val preferredUser: User
-  get() = userJson.readFileToClass()
+	get() = userJson.readFileToClass()
 

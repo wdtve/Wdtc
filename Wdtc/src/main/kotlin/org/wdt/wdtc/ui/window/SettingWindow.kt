@@ -9,9 +9,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
 import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.sizeOfDirectory
 import org.wdt.wdtc.core.manger.*
@@ -75,11 +73,9 @@ object SettingWindow {
 						DirectoryChooser().apply {
 							title = "选择游戏文件夹(设置后需要重启)"
 							initialDirectory = currentSetting.defaultGamePath
-						}.run {
-							showDialog(mainStage)
-						}.runIfNoNull {
+						}.showDialog(mainStage).runIfNoNull {
 							launchScope {
-								withContext(Dispatchers.IO) {
+								runOnIO {
 									currentSetting.changeSettingToFile {
 										defaultGamePath = this@runIfNoNull
 									}
@@ -158,7 +154,7 @@ object SettingWindow {
 			bmclDownloadSource.isSelected = false
 			mcbbsDownloadSource.isSelected = false
 			logmaker.info("* Switch to Official DownloadSource")
-			currentSetting.apply {
+			currentSetting.changeSettingToFile {
 				downloadSource = DownloadSourceKind.OFFICIAL
 			}
 		}
@@ -246,9 +242,7 @@ object SettingWindow {
 					DirectoryChooser().apply {
 						title = "选择日志文件保存路径"
 						initialDirectory = wdtcConfig
-					}.run {
-						showDialog(mainStage)
-					}.runIfNoNull {
+					}.showDialog(mainStage).runIfNoNull {
 						launchScope {
 							val logFile = buildString {
 								append("Wdtc-").append(launcherVersion).append("-")
@@ -257,7 +251,7 @@ object SettingWindow {
 							}.let {
 								File(canonicalPath, it)
 							}.also {
-								withContext(Dispatchers.IO) {
+								runOnIO {
 									FileUtils.copyFile(File(wdtcConfig, "logs/Wdtc.log"), it)
 								}
 							}
@@ -271,7 +265,7 @@ object SettingWindow {
 		}
 		
 		val cleanCache = JFXButton().apply {
-			javafxScope.launch { text = "清除缓存:${wdtcCache.sizeOfDirectory()}B" }
+			launchOnJavaFx { text = "清除缓存:${wdtcCache.sizeOfDirectory()}B" }
 			setPrefSize(105.0, 30.0)
 			setLeftAnchor(0.0)
 			setBottomAnchor(30.0)
@@ -281,7 +275,7 @@ object SettingWindow {
 				} else {
 					try {
 						launchScope {
-							withContext(Dispatchers.IO) {
+							runOnIO {
 								FileUtils.cleanDirectory(wdtcCache)
 								logmaker.info("Cache Folder Cleaned")
 							}

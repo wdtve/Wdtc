@@ -6,36 +6,38 @@ import java.io.File
 
 val minecraftComSkin: File = File(System.getProperty("user.home"), "AppData/Roaming/.minecraft/assets/skins")
 
-val wdtcConfig: File = File(VMManger.wdtcConfigFromVM, ".wdtc")
+val wdtcConfig: File = VMManger.wdtcConfigFromVM.resolve(".wdtc")
 
-val wdtcSetting: File = File(wdtcConfig, "setting")
+val wdtcSetting: File = wdtcConfig.resolve("setting")
 
-val wdtcCache: File = File(wdtcConfig, "cache")
+val wdtcCache: File = wdtcConfig.resolve("cache")
 
-val starterBat: File = File(wdtcCache, "WdtcGameLauncherScript.bat")
+val starterBat: File = wdtcCache.resolve("WdtcGameLauncherScript.bat")
 
-val wdtcDependenciesDirectory: File = File(wdtcConfig, "dependencies")
+val wdtcDependenciesDirectory: File = wdtcConfig.resolve("dependencies")
 
-val wtdcOpenJFXDirectory: File = File(wdtcDependenciesDirectory, "openjfx")
+val wtdcOpenJFXDirectory: File = wdtcDependenciesDirectory.resolve("openjfx")
 
-val wdtcUser: File = File(wdtcConfig, "users")
+val wdtcUser: File = wdtcConfig.resolve("users")
 
-val authlibInjector: File = File(wdtcDependenciesDirectory, "authlib-injector.jar")
+val authlibInjector: File = wdtcDependenciesDirectory.resolve("authlib-injector.jar")
 
-val userJson: File = File(wdtcUser, "user.json")
+val userJson: File = wdtcUser.resolve("user.json")
 
-val llbmpipeLoader: File = File(wdtcDependenciesDirectory, "llvmpipe-loader.jar")
+val llbmpipeLoader: File = wdtcDependenciesDirectory.resolve("llvmpipe-loader.jar")
 
-val userAsste: File = File(wdtcUser, "assets")
+val userAsste: File = wdtcUser.resolve("assets")
 
-val userListFile: File = File(wdtcUser, "users.json")
+val userListFile: File = wdtcUser.resolve("users.json")
 
-val settingFile: File = File(wdtcSetting, "setting.json")
+val settingFile: File = wdtcSetting.resolve("setting.json")
 
-val versionManifestFile: File = File(wdtcCache, "versionManifest.json")
+val versionManifestFile: File = wdtcCache.resolve("versionManifest.json")
 
-val tipsFile: File = File(wdtcConfig, "assets/tips.txt")
+val tipsFile: File = wdtcConfig.resolve("assets").resolve("tips.txt")
 
-val versionsJson: File = File(wdtcSetting, "versions.json")
+val versionsJson: File = wdtcSetting.resolve("versions.json")
+// TODO Plugin functionality
+val pluginsDirectory: File = wdtcConfig.resolve("plugins")
 
 

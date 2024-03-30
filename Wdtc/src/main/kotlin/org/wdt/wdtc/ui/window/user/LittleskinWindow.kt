@@ -5,12 +5,15 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.Pane
-import kotlinx.coroutines.*
+import kotlinx.coroutines.coroutineScope
 import org.wdt.wdtc.core.auth.changeListToFile
 import org.wdt.wdtc.core.auth.currentUsersList
 import org.wdt.wdtc.core.auth.yggdrasil.YggdrasilAccounts
 import org.wdt.wdtc.core.manger.littleskinUrl
-import org.wdt.wdtc.core.utils.*
+import org.wdt.wdtc.core.utils.launch
+import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.runOnIO
+import org.wdt.wdtc.core.utils.warning
 import org.wdt.wdtc.ui.window.launchOnJavaFx
 import java.io.IOException
 
@@ -53,7 +56,7 @@ object LittleskinWindow {
 				} else {
 					try {
 						launchOnJavaFx {
-							withContext(Dispatchers.IO) {
+							runOnIO {
 								loginUser(userName, powerWord)
 							}
 							UserListPane.setUserList(pane)
@@ -71,7 +74,6 @@ object LittleskinWindow {
 		}
 	}
 	
-	@Throws(IOException::class)
 	private suspend fun loginUser(userName: String, powerWord: String) = coroutineScope {
 		YggdrasilAccounts(littleskinUrl, userName, powerWord).run {
 			
@@ -79,12 +81,12 @@ object LittleskinWindow {
 				textures.startDownloadUserSkin()
 			}
 			
-			withContext(Dispatchers.IO) {
+			runOnIO {
 				currentUsersList.changeListToFile {
 					this@run.addToList()
 				}
 			}
-			logmaker.info("Login $userName Littleskin User")
 		}
+		logmaker.info("Login $userName Littleskin User")
 	}
 }

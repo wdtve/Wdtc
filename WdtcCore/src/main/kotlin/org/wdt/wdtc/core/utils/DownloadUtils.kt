@@ -16,7 +16,7 @@ class DownloadUtils(private val url: URL, targetFile: File) {
 	
 	private val targetFileSink = targetFile.toOkioPath(true).let {
 		downloadCoroutineSocpe.async {
-			withContext(coroutineContext) {
+			runOnIO {
 				if (!fileSystem.exists(it)) {
 					targetFile.touch()
 				}
@@ -38,16 +38,16 @@ class DownloadUtils(private val url: URL, targetFile: File) {
 	}
 }
 
-fun startDownloadTask(url: String, file: File) {
+suspend fun startDownloadTask(url: String, file: File) {
 	startDownloadTask(url.toURL() to file)
 }
 
 
-fun startDownloadTask(url: URL, file: File) {
+suspend fun startDownloadTask(url: URL, file: File) {
 	startDownloadTask(url to file)
 }
 
-fun startDownloadTask(pair: Pair<URL, File>) {
+suspend fun startDownloadTask(pair: Pair<URL, File>) {
 	pair.run {
 		logmaker.info("Task Start: $first")
 		measureTimeMillis { manyTimesToTryDownload(5) }.also {
@@ -57,18 +57,19 @@ fun startDownloadTask(pair: Pair<URL, File>) {
 }
 
 
-fun Pair<URL, File>.manyTimesToTryDownload(times: Int) {
+suspend fun Pair<URL, File>.manyTimesToTryDownload(times: Int) {
 	lateinit var exception: IOException
 	repeat(times) {
 		exception = try {
 			DownloadUtils(first, second).run {
-				runBlocking { startDownloadFile() }
+				startDownloadFile()
 			}
 			return
 		} catch (e: IOException) {
 			logmaker.warning(e.message)
 			e
 		}
+		delay(500)
 	}
 	throw exception
 }

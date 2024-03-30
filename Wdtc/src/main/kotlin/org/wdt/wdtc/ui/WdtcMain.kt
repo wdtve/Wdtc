@@ -2,28 +2,28 @@
 
 package org.wdt.wdtc.ui
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.auth.printUserList
-import org.wdt.wdtc.core.auth.yggdrasil.updateAuthlibInjector
+import org.wdt.wdtc.core.auth.yggdrasil.downloadAuthlibInjector
 import org.wdt.wdtc.core.game.printVersionList
 import org.wdt.wdtc.core.manger.*
-import org.wdt.wdtc.core.utils.JavaUtils
 import org.wdt.wdtc.core.utils.isOnline
 import org.wdt.wdtc.core.utils.logmaker
 import org.wdt.wdtc.core.utils.runIfNoNull
 import org.wdt.wdtc.ui.window.setErrorWin
-import java.util.*
 import javafx.application.Application.launch as launchApp
 
-@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
+//@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 fun main(args: Array<String>) {
 	val startTime = System.currentTimeMillis()
 	try {
 		ckeckRunEnvironment()
 		createNeedDirectories()
 		if (args.isNotEmpty()) {
-			removeConfigDirectory(Arrays.stream(args).toList()[0] == "refresh")
+			removeConfigDirectory(args.first() == "refresh")
 		}
 		ckeckJavaFX()
 		logmaker.info("===== Wdtc - $launcherVersion =====")
@@ -47,10 +47,10 @@ fun main(args: Array<String>) {
 			if (isOnline) {
 				launch {
 					downloadVersionManifestJsonFileTask()
-					updateAuthlibInjector()
+					downloadAuthlibInjector()
 				}
 			}
-			launch(newSingleThreadContext("Find Java")) { JavaUtils.main(registryKey) }
+//			launch(newSingleThreadContext("Find Java")) { JavaUtils.main(registryKey) }
 			launchApp(AppMain::class.java)
 		}
 		awaitApplicationBreak(startTime)
@@ -80,4 +80,13 @@ private val registryKey: Array<String> = arrayOf(
 	"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Web Start Caps",
 	"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"
 )
+
+fun ckeckJavaFX() {
+	try {
+		Class.forName("javafx.application.Application")
+	} catch (_: ClassNotFoundException) {
+		downloadDependencies()
+		loadJavaFXPatch()
+	}
+}
 

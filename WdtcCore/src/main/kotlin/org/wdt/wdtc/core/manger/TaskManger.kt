@@ -35,6 +35,7 @@ fun createNeedDirectories() {
 	wdtcUser.createDirectories()
 	wdtcDependenciesDirectory.createDirectories()
 	userAsste.createDirectories()
+	pluginsDirectory.createDirectories()
 }
 
 suspend fun runStartUpTask() = withContext(Dispatchers.IO) {

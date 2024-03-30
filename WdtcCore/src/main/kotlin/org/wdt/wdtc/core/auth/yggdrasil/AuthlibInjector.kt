@@ -4,36 +4,24 @@ package org.wdt.wdtc.core.auth.yggdrasil
 
 import org.wdt.utils.gson.getString
 import org.wdt.utils.gson.parseJsonObject
-import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.toStrings
 import org.wdt.wdtc.core.manger.authlibInjector
-import org.wdt.wdtc.core.utils.*
+import org.wdt.wdtc.core.utils.compareFile
+import org.wdt.wdtc.core.utils.startDownloadTask
+import org.wdt.wdtc.core.utils.toFileData
+import org.wdt.wdtc.core.utils.toURL
 
-private val BMCL_AUTHLIB_INJECTOR_LATEST_JSON =
-	"https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json".toURL()
-private val AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/".toURL()
+private const val BMCL_AUTHLIB_INJECTOR_LATEST_JSON =
+	"https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"
+private const val AUTHLIB_INJECTOR = "https://authlib-injector.yushi.moe/"
 
-fun downloadauthlibInjector() {
-	bmclAuthlibInjectorLatestJsonObject.getString("download_url").toURL().let {
-		if (authlibInjector.compareFile(it.toFileData())) {
-			startDownloadTask(it, authlibInjector)
+suspend fun downloadAuthlibInjector() {
+	BMCL_AUTHLIB_INJECTOR_LATEST_JSON.toURL().toStrings().parseJsonObject().run {
+		getString("download_url").toURL().let {
+			if (authlibInjector.compareFile(it.toFileData())) {
+				startDownloadTask(it, authlibInjector)
+			}
 		}
 	}
 }
-
-fun updateAuthlibInjector() {
-	if (!isOnline) return
-	if (authlibInjector.isFileExists()) {
-		val latestVersionNumber = bmclAuthlibInjectorLatestJsonObject.getString("version")
-		val presentVersionNumber = authlibInjector.getJarManifestInfo("Implementation-Version")
-		if (latestVersionNumber != presentVersionNumber) {
-			downloadauthlibInjector()
-		}
-	} else {
-		downloadauthlibInjector()
-	}
-}
-
-
-private val bmclAuthlibInjectorLatestJsonObject = BMCL_AUTHLIB_INJECTOR_LATEST_JSON.toStrings().parseJsonObject()
 

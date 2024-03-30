@@ -1,5 +1,4 @@
-@file:JvmName("Consoler")
-@file:Suppress("NOTHING_TO_INLINE")
+@file:JvmName("Consoler") @file:Suppress("NOTHING_TO_INLINE")
 
 package org.wdt.wdtc.ui.window
 
@@ -17,21 +16,21 @@ import org.wdt.wdtc.core.manger.tipsFile
 import org.wdt.wdtc.core.utils.getResourceAsStream
 import org.wdt.wdtc.core.utils.noNull
 
-val wdtcBackground: Background = background
-
-private val background: Background
-	get() {    //Form:https://www.bilibili.com/video/BV1EY411m7uZ
-		val image = Image(
-			getResourceAsStream("/assets/blackGround/BlackGround${System.getProperty("wdtc.ui.background", "0")}.jpg")
-		)
-		return Background(
-			BackgroundImage(
-				image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize(
-					windowsWidht, windowsHeight, false, false, true, true
-				)
+//Form:https://www.bilibili.com/video/BV1EY411m7uZ
+val wdtcBackground: Background = System.getProperty("wdtc.ui.background", "0").let {
+	Image(
+		getResourceAsStream("/assets/blackGround/BlackGround${it}.jpg")
+	)
+}.let {
+	Background(
+		BackgroundImage(
+			it, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize(
+				windowsWidht, windowsHeight, false, false, true, true
 			)
 		)
-	}
+	)
+}
+
 
 val cssFile: String
 	get() = object {}.javaClass.getResource("/css/color.css").noNull().toString()
@@ -98,8 +97,7 @@ fun getTips(length: Int): String {
 val tips: String
 	get() {
 		val textLine = getResourceAsStream("/assets/tips.txt").readLines().toMutableList().apply {
-			if (tipsFile.isFileExists())
-				addAll(tipsFile.readFileToLine())
+			if (tipsFile.isFileExists()) addAll(tipsFile.readFileToLine())
 		}
 		
 		return textLine.let {

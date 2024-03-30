@@ -1,6 +1,7 @@
 package org.wdt.wdtc.core.download.game
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.runBlocking
 import org.wdt.utils.gson.getJsonArray
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
@@ -15,13 +16,15 @@ class GameVersionList : VersionListInterface {
 	
 	init {
 		if (versionManifestFile.isFileNotExists()) {
-			DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
+			runBlocking {
+				DownloadVersionGameFile.startDownloadVersionManifestJsonFile()
+			}
 		}
 	}
 	
-	override val versionList: GameVersionsObjectList
+	override val versionList: LinkedList<VersionsJsonObjectInterface>
 		get() {
-			return GameVersionsObjectList().apply {
+			return LinkedList<VersionsJsonObjectInterface>().apply {
 				versionManifestFile.readFileToJsonObject().getJsonArray("versions").forEach {
 					it.asJsonObject.parseObject<GameVersionsJsonObjectImpl>().let { version ->
 						if (version.gameType == "release") {
@@ -38,7 +41,7 @@ class GameVersionList : VersionListInterface {
 		
 		@field:SerializedName("releaseTime")
 		val releaseTime: Date
-	) : VersionsJsonObjectInterface, Comparable<GameVersionsJsonObjectImpl> {
+	) : VersionsJsonObjectInterface {
 		
 		@SerializedName("type")
 		val gameType: String? = null
@@ -48,10 +51,6 @@ class GameVersionList : VersionListInterface {
 		
 		@SerializedName("time")
 		val time: Date? = null
-		override fun compareTo(other: GameVersionsJsonObjectImpl): Int {
-			return releaseTime.compareTo(other.releaseTime)
-		}
-		
 		
 		override fun equals(other: Any?): Boolean {
 			if (this === other) return true
@@ -64,13 +63,5 @@ class GameVersionList : VersionListInterface {
 			return Objects.hash(versionNumber, gameType)
 		}
 		
-	}
-}
-
-class GameVersionsObjectList(
-	private val versionsList: TreeSet<VersionsJsonObjectInterface> = TreeSet()
-) : MutableSet<VersionsJsonObjectInterface> by versionsList {
-	override fun toString(): String {
-		return "GameVersionsObjectList(versionsList=$versionsList)"
 	}
 }

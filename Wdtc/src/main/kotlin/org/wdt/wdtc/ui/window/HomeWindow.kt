@@ -116,7 +116,9 @@ class HomeWindow {
 			}
 		}
 		if (!isExistUserJsonFile) {
-			noUser(mainStage)
+			launchOnJavaFx {
+				noUser(mainStage)
+			}
 		}
 	}
 	
@@ -165,7 +167,9 @@ class HomeWindow {
 					if (isExistUserJsonFile) {
 						launchGame(mainStage, it)
 					} else {
-						noUser(mainStage)
+						runOnJavaFx {
+							noUser(mainStage)
+						}
 					}
 				} else {
 					GameVersionListWindow().setWindowScene(mainStage)
@@ -173,12 +177,12 @@ class HomeWindow {
 			}
 		}
 		
-		private suspend fun noUser(mainStage: Stage) {
+		private fun noUser(mainStage: Stage) {
 			NewUserWindows(mainStage).apply {
 				title = "您还没有账户呢!"
 				type = AccountsType.OFFLINE
 			}.run {
-				runOnJavaFx { show() }
+				show()
 			}
 		}
 	}

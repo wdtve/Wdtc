@@ -12,7 +12,8 @@ import org.wdt.wdtc.core.utils.modInstallTask
 
 // TODO Optimize download speed
 class InstallGameVersion(
-	private val version: Version, private val install: Boolean = false,
+	private val version: Version,
+	private val install: Boolean = false,
 	private val printInfo: (suspend (String) -> Unit)? = null
 ) {
 	
@@ -47,19 +48,20 @@ class InstallGameVersion(
 		
 		download.startDownloadLibraryFile()
 		
-		System.currentTimeMillis().minus(startTime).also {
+		val libraryTime = System.currentTimeMillis().minus(startTime).also {
 			printInfo?.invoke("下载游戏所需类库完成,耗时${it}ms")
-			logmaker.info("Download game runtime finish,take a period of: ${it}ms")
 		}
+		logmaker.info("Download game runtime finish,take a period of: ${libraryTime}ms")
+		
 		
 		if (install) task?.afterDownloadTask()
 		
 		download.startDownloadAssetsFiles()
 		
-		System.currentTimeMillis().minus(startTime).also {
+		val fullTime = System.currentTimeMillis().minus(startTime).also {
 			printInfo?.invoke("游戏下载完成,耗时${it}ms")
-			logmaker.info("Download game finish,take a period of: ${it}ms")
 		}
+		logmaker.info("Download game finish,take a period of: ${fullTime}ms")
 	}
 	
 	private suspend fun startDownloadGameFileTask() {

@@ -21,11 +21,11 @@ import java.net.URL
 
 class YggdrasilAccounts(
 	val url: String,
-	val userName: String,
+	private val userName: String,
 	private val password: String
 ) : LoginUser {
+	val textures = YggdrasilTextures(userName, url)
 	
-	@get:Throws(IOException::class)
 	private val sendPostWithJson = ioCoroutineScope.async {
 		URL("$url/api/yggdrasil/authserver/authenticate").let {
 			it.openConnection().apply {
@@ -45,7 +45,6 @@ class YggdrasilAccounts(
 		textures.utils.writeSkinHead()
 	}
 	
-	val textures = YggdrasilTextures(userName, url)
 	
 	override val user: User
 		get() = runBlocking(Dispatchers.IO) {

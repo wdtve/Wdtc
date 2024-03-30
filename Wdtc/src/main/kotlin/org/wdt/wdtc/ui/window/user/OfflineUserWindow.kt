@@ -5,12 +5,12 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.Pane
-import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.auth.UsersList.Companion.saveChangeToFile
 import org.wdt.wdtc.core.auth.accounts.OfflineAccounts
 import org.wdt.wdtc.core.auth.currentUsersList
 import org.wdt.wdtc.core.utils.launchScope
 import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.runOnIO
 import org.wdt.wdtc.ui.window.runOnJavaFx
 import org.wdt.wdtc.ui.window.setErrorWin
 import java.io.IOException
@@ -44,13 +44,12 @@ object OfflineUserWindow {
 					registerusername.text.let {
 						if (it.isQualified) {
 							launchScope {
-								val job = launch {
+								runOnIO {
 									currentUsersList.apply {
 										OfflineAccounts(it).addToList()
 									}.saveChangeToFile()
 								}
 								runOnJavaFx {
-									job.join()
 									logmaker.info("离线账户${it}注册成功")
 									UserListPane.setUserList(pane)
 								}

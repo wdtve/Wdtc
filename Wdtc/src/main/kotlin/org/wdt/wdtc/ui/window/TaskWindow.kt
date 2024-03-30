@@ -43,7 +43,7 @@ class TaskWindow(
 			content = sonPane
 		}
 		
-		javafxScope.launch {
+		launchOnJavaFx {
 			taskList.forEach {
 				val progressbar = ProgressBar().apply {
 					layoutX = 63.0
@@ -122,7 +122,7 @@ class TaskWindow(
 		}
 		timer("close window", 500) {
 			if (taskList.isEmpty()) {
-				javafxScope.launch {
+				launchOnJavaFx {
 					sonStage.close()
 				}
 				logmaker.info("all tasks finish, quantity $taskQuantity")

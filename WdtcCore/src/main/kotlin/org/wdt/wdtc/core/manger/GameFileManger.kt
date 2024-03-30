@@ -6,7 +6,7 @@ import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.isFileOlder
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile
 import org.wdt.wdtc.core.game.GameVersionJsonObject
-import org.wdt.wdtc.core.game.readGameVersionJsonObjectGson
+import org.wdt.wdtc.core.game.serializeGameVersionJsonObjectGson
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -39,13 +39,13 @@ open class GameFileManger(
 		get() = File(versionDirectory, "logs")
 	
 	fun GameVersionJsonObject.putToVersionJson() {
-		versionJson.writeObjectToFile(this)
+		versionJson.writeObjectToFile(this, serializeGameVersionJsonObjectGson)
 	}
 	
 	
 	val gameVersionJsonObject: GameVersionJsonObject
 		get() = versionJson.run {
-			readFileToClass(readGameVersionJsonObjectGson)
+			readFileToClass(serializeGameVersionJsonObjectGson)
 		}
 	
 	val laucnherProfiles: File
@@ -71,7 +71,7 @@ open class GameFileManger(
 }
 
 
-fun downloadVersionManifestJsonFileTask() {
+suspend fun downloadVersionManifestJsonFileTask() {
 	val calendar = Calendar.getInstance().apply {
 		time = Date()
 		add(Calendar.DATE, -7)

@@ -4,7 +4,10 @@ import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.readLines
 import org.wdt.utils.io.toFile
-import org.wdt.wdtc.core.manger.*
+import org.wdt.wdtc.core.manger.changeSettingToFile
+import org.wdt.wdtc.core.manger.currentSetting
+import org.wdt.wdtc.core.manger.isLowPerformanceMode
+import org.wdt.wdtc.core.manger.isWindows
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
@@ -15,6 +18,7 @@ object JavaUtils {
 	
 	@JvmStatic
 	fun main(args: Array<String>) {
+//		TODO Has bug
 		try {
 			if (!isWindows) {
 				logmaker.warning("This utils only can run on windows!")
@@ -34,7 +38,7 @@ object JavaUtils {
 	private fun getPotentialJava(key: String) {
 		val process = ProcessBuilder("reg", "query", key).start()
 		val newJavaList: MutableSet<JavaInfo> = currentSetting.javaPath
-		process.inputReader().forEachLine {
+		process.inputStream.reader().forEachLine {
 			if (it.startsWith(key)) {
 				getJavaExeAndVersion(getPotentialJavaHome(getPotentialJavaFolders(it))).forEach { map ->
 					val newInfo = JavaInfo(File(map["JavaPath"]!!))
@@ -52,7 +56,7 @@ object JavaUtils {
 	private fun getPotentialJavaFolders(key: String): List<String> {
 		val list: MutableList<String> = ArrayList()
 		val process = ProcessBuilder("reg", "query", key).start()
-		process.inputReader().forEachLine {
+		process.inputStream.reader().forEachLine {
 			if (it.startsWith(key)) {
 				list.add(it)
 			}
@@ -65,7 +69,7 @@ object JavaUtils {
 		val pattern = Pattern.compile("\\s+JavaHome\\s+REG_SZ\\s+(.+)")
 		list.forEach { key ->
 			val process = ProcessBuilder("reg", "query", key, "/v", "JavaHome").start()
-			process.inputReader().forEachLine {
+			process.inputStream.reader().forEachLine {
 				if (it.cleanStrInString(STRING_SPACE).startsWith("JavaHome")) {
 					pattern.matcher(it).run {
 						if (find()) {

@@ -1,10 +1,10 @@
 package org.wdt.wdtc.core.download.infterface
 
-import org.wdt.wdtc.core.download.game.GameVersionsObjectList
 import org.wdt.wdtc.core.game.LibraryObjectList
+import java.util.*
 
 interface VersionListInterface {
-  val versionList: GameVersionsObjectList
+  val versionList: LinkedList<VersionsJsonObjectInterface>
 }
 
 interface VersionsJsonObjectInterface {

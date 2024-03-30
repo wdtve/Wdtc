@@ -18,7 +18,7 @@ class YggdrasilTextures(
 		get() = "$url/csl/$userName.json".toURL().toStrings().parseObject<Csl>().skins?.skinKind.noNull()
 	
 	
-	fun startDownloadUserSkin() {
+	suspend fun startDownloadUserSkin() {
 		if (!isWindows) return
 		val skinPath = userSkinHash.let {
 			File(minecraftComSkin, "${it.substring(0, 2)}/$it")

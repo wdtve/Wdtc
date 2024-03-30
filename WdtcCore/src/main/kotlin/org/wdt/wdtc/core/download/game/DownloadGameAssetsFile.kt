@@ -15,12 +15,13 @@ import org.wdt.wdtc.core.utils.*
 import java.io.File
 
 class DownloadGameAssetsFile(private val version: Version) {
-	fun startDownloadAssetsFiles() {
-		val assets = version.gameAssetsListJson.run {
-			readFileToJsonObject().getJsonObject("objects").asMap().values.map {
-				it.asJsonObject.parseObject<AssetsFileData>()
-			}
+	suspend fun startDownloadAssetsFiles() {
+		val assets = runOnIO {
+			version.gameAssetsListJson
+		}.readFileToJsonObject().getJsonObject("objects").asMap().values.map {
+			it.asJsonObject.parseObject<AssetsFileData>()
 		}
+		
 		val progress = ProgressManger(assets.size).apply {
 			coroutineScope = executorCoroutineScope(name = "Download assets file")
 		}
@@ -53,14 +54,14 @@ class DownloadGameAssetsFile(private val version: Version) {
 		init {
 			coroutinesAction = progress.run {
 				coroutineScope.launch(actionName.toCoroutineName(), CoroutineStart.LAZY) {
-					startDownloadTask((currentDownloadSource.assetsUrl + data.hashSplicing).toURL(), hashFile)
+					startDownloadTask((currentDownloadSource.assetsUrl + data.hashSplicing).toURL() to hashFile)
 					countDown()
 				}
 			}
 		}
 		
 		override fun start() {
-			if (hashFile.compareFile(data)) {
+			if (hashFile compareFile data) {
 				coroutinesAction.noNull().start()
 			} else {
 				progress.countDown()

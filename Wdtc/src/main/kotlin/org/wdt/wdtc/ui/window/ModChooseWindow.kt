@@ -176,7 +176,7 @@ class ModChooseWindow(private val version: Version, private val mainStage: Stage
       downloadFabricAPI.isDisable = false
       downloadForge.isDisable = true
       val fabircModInstallInfo = version.fabricModInstallInfo
-      if (fabircModInstallInfo?.isAPIDownloadTaskNoNull == true) {
+	    if (fabircModInstallInfo?.isHasApiDownloadTask == true) {
         fabricAPI.text = fabircModInstallInfo.apiDownloadTask?.fabricAPIVersionNumber
       }
     } else {

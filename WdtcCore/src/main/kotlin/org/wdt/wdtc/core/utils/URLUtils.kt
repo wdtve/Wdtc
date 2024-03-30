@@ -4,7 +4,6 @@ import org.wdt.wdtc.core.manger.networkimeoutTime
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 
 fun URL.isNetworkHasThisFile(): Boolean = try {
@@ -17,9 +16,7 @@ fun URL.isNetworkHasThisFile(): Boolean = try {
 	false
 }
 
-@Throws(IOException::class)
-fun URL.getRedirectUrl(): String = this.toHttpsURLConnection().apply {
-	instanceFollowRedirects = false
+fun URL.getRedirectUrl(): String = this.openConnection().apply {
 	connectTimeout = networkimeoutTime
 }.getHeaderField("Location")
 
@@ -36,14 +33,10 @@ fun openSomething(o: Any) {
 	}
 }
 
-fun URL.newInputStream(): InputStream = toHttpsURLConnection().apply {
+fun URL.newInputStream(): InputStream = openConnection().apply {
 	connectTimeout = networkimeoutTime
 	readTimeout = networkimeoutTime
 }.inputStream
-
-fun URL.toHttpsURLConnection(): HttpsURLConnection {
-	return this.openConnection() as HttpsURLConnection
-}
 
 fun String.toURL(): URL {
 	return URL(this)

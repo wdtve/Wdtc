@@ -17,6 +17,10 @@ dependencies {
   testImplementation(libs.stdlib.test)
 }
 
+kotlin {
+	jvmToolchain(8)
+}
+
 tasks.jar {
   manifest.attributes(
     "Implementation-Vendor" to "Wdt~(wd-t)",

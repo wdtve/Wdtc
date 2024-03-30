@@ -1,10 +1,9 @@
 package org.wdt.wdtc.core.launch
 
 import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.runOnIO
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.regex.Pattern
@@ -16,9 +15,9 @@ class LaunchProcess(
 ) {
 	private val builder = StringBuilder()
 	suspend fun startLaunchGame() {
-		val runtime = withContext(Dispatchers.IO) {
-			process.start().run {
-				measureTimeMillis {
+		val runtime = measureTimeMillis {
+			runOnIO {
+				process.start().run {
 					launch(CoroutineName("Read info inputStream")) { inputStream.getRunInfo() }
 					launch(CoroutineName("Read error inputStream")) { errorStream.getRunInfo() }
 				}

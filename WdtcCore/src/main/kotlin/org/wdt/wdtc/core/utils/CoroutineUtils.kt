@@ -22,6 +22,8 @@ fun launchScope(
 fun CoroutineScope.launch(name: String, block: suspend CoroutineScope.() -> Unit): Job =
 	launch(context = name.toCoroutineName(), block = block)
 
+suspend fun <T> runOnIO(block: suspend CoroutineScope.() -> T): T = withContext(Dispatchers.IO, block)
+
 fun String.toCoroutineName(): CoroutineName = CoroutineName(this)
 
 @OptIn(DelicateCoroutinesApi::class)

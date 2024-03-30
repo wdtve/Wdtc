@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.auth.accounts.Accounts
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.manger.currentSetting
 import org.wdt.wdtc.core.manger.llbmpipeLoader
-import org.wdt.wdtc.core.utils.launchScope
+import org.wdt.wdtc.core.utils.launch
 import org.wdt.wdtc.core.utils.noNull
 import org.wdt.wdtc.core.utils.unzipByFile
 import java.io.File
@@ -13,11 +13,11 @@ import java.io.File
 class GameRuntimeCommnad(private val version: Version) : GameRuntimeData(version) {
 	private val commandBuilder = StringBuilder()
 	fun getCommand(): StringBuilder = runBlocking {
-		GameRuntimeList(version).runtimeList.forEach {
+		runtimeList.forEach {
 			it.libraryObject.run {
 				if (it.nativesLibrary) {
 					downloads.classifiers?.nativesWindows.noNull().changedNativesLibraryFile.also { file ->
-						launchScope("extract ${file.name}") {
+						launch("extract ${file.name}") {
 							unzipByFile(file, version.versionNativesPath.canonicalPath)
 						}
 					}

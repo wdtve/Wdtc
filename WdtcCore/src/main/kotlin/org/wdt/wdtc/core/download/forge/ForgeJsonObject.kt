@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName
 import org.wdt.wdtc.core.download.infterface.VersionJsonObjectInterface
 import org.wdt.wdtc.core.game.Arguments
 import org.wdt.wdtc.core.game.LibraryObjectList
+import org.wdt.wdtc.core.game.serializeGameRuntimeDependencyGsonBuilder
 import org.wdt.wdtc.core.utils.gson.ForgeJsonObjectTypeAdapter
-import org.wdt.wdtc.core.utils.gson.defaultGsonBuilder
 import org.wdt.wdtc.core.utils.startendWith
 
 val forgeJsonObjectGsonBuilder: GsonBuilder =
-  defaultGsonBuilder.registerTypeAdapter(ForgeVersionJsonObject::class.java, ForgeJsonObjectTypeAdapter())
+  serializeGameRuntimeDependencyGsonBuilder.registerTypeAdapter(ForgeVersionJsonObject::class.java, ForgeJsonObjectTypeAdapter())
 
 
 class ForgeVersionJsonObject(

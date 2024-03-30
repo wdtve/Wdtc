@@ -1,9 +1,11 @@
 package org.wdt.wdtc.core.utils
 
-import org.wdt.utils.io.*
+import org.wdt.utils.io.IOUtils
+import org.wdt.utils.io.newInputStream
+import org.wdt.utils.io.newOutputStream
+import org.wdt.utils.io.touch
 import org.wdt.wdtc.core.manger.userAsste
 import java.io.File
-import java.io.IOException
 import java.io.InputStream
 import javax.imageio.ImageIO
 
@@ -15,13 +17,10 @@ class SkinUtils(
 	
 	var userSkinInput: InputStream? = null
 	
-	@Throws(IOException::class)
 	fun writeSkinHead(): File {
 		val newImage = ImageIO.read(userSkinInput ?: skinFile.newInputStream()).getSubimage(8, 8, 8, 8)
 		return skinFile.extension.let {
-			File(
-				userAsste, skinFile.name.cleanStrInString(".$it").appendForString("-head.", it)
-			).apply {
+			File(userAsste, skinFile.name.cleanStrInString(".$it").appendForString("-head.", it)).apply {
 				launchScope("Write skin file") {
 					touch()
 					ImageIO.write(newImage, extension, outputStream())

@@ -18,8 +18,8 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
 interface FileData {
-	val sha1: String
-	val size: Long
+	val sha1: String?
+	val size: Long?
 }
 
 class FileDataImpl(file: File) : FileData {
@@ -67,7 +67,7 @@ fun File.getJarManifestInfo(key: String): String? {
 
 fun getResourceAsStream(name: String): InputStream = object {}.javaClass.getResourceAsStream(name).noNull()
 
-fun File.compareFile(fileData: FileData): Boolean = run {
+infix fun File.compareFile(fileData: FileData): Boolean = run {
 	if (isFileNotExists()) return true
 	compareFileData(toFileData(), fileData)
 }

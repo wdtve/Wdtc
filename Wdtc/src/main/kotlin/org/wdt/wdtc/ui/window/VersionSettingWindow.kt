@@ -12,7 +12,10 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.utils.io.toFile
@@ -85,7 +88,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 				javafxScope.launch("completion ${version.versionNumber} task") {
 					isDisable = true
 					back.isDisable = true
-					withContext(Dispatchers.IO) {
+					runOnIO {
 						InstallGameVersion(version, false).run {
 							startInstallGame()
 						}
@@ -225,9 +228,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			FileChooser().apply {
 				title = "选择Java文件"
 				initialDirectory = File("C:\\Program Files")
-			}.run {
-				showOpenDialog(mainStage)
-			}.runIfNoNull {
+			}.showOpenDialog(mainStage).runIfNoNull {
 				javaPath.text = canonicalPath
 			}
 		}
@@ -249,7 +250,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 								)
 							}.let {
 								logmaker.info(it)
-								withContext(Dispatchers.IO) {
+								runOnIO {
 									putConfigToFile(it)
 								}
 							}
@@ -311,11 +312,12 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			image = getModIcon(kind).await()
 		}
 		val modVersion = Label().apply {
-			if (version.kind == kind) {
-				val info = version.modDownloadInfo
-				text = if (info != null) "$kind : ${info.modVersion}" else "$kind : 不安装"
+			text = if (version.kind == kind) {
+				version.modDownloadInfo.let {
+					if (it != null) "$kind : ${it.modVersion}" else "$kind : 不安装"
+				}
 			} else {
-				text = "$kind : 不安装"
+				"$kind : 不安装"
 			}
 			setBottomAnchor(15.0)
 			setLeftAnchor(60.0)

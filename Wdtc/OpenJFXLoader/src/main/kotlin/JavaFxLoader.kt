@@ -21,7 +21,6 @@ import org.wdt.wdtc.core.manger.currentSystem
 import org.wdt.wdtc.core.manger.wdtcDependenciesDirectory
 import org.wdt.wdtc.core.manger.wtdcOpenJFXDirectory
 import org.wdt.wdtc.core.utils.*
-import org.wdt.wdtc.ui.window.setErrorWin
 import java.io.File
 import java.io.IOException
 import java.lang.module.Configuration
@@ -81,17 +80,13 @@ fun downloadDependencies() = runBlocking {
 		forEach {
 			val artifact = it.downloads.artifact
 			val library = File(wtdcOpenJFXDirectory, artifact.path)
-			try {
-				if (library.compareFile(artifact)) {
-					speed.coroutineScope.launch(library.name) {
-						startDownloadTask(artifact.url, library)
-						speed.countDown()
-					}
-				} else {
+			if (library.compareFile(artifact)) {
+				speed.coroutineScope.launch(library.name) {
+					startDownloadTask(artifact.url, library)
 					speed.countDown()
 				}
-			} catch (e: IOException) {
-				setErrorWin(e)
+			} else {
+				speed.countDown()
 			}
 		}
 		speed.await()
@@ -106,37 +101,28 @@ fun loadJavaFXPatch() {
 	try {
 		Class.forName("javafx.application.Application")
 	} catch (e: ClassNotFoundException) {
-		try {
-			logmaker.info("Load JavaFX Dependencies")
-			logmaker.info("OpenJFX Platform:$osName")
-			val jarPaths: MutableSet<Path> = HashSet()
-			val modules: MutableSet<String> = HashSet()
-			runtimeList.forEach {
-				it.run {
-					File(wtdcOpenJFXDirectory, downloads.artifact.path).run {
-						jarPaths.add(toPath())
-					}
-					modules.add(libraryName.artifactId)
+		logmaker.info("Load JavaFX Dependencies")
+		logmaker.info("OpenJFX Platform:$osName")
+		val jarPaths: MutableSet<Path> = HashSet()
+		val modules: MutableSet<String> = HashSet()
+		runtimeList.forEach {
+			it.run {
+				File(wtdcOpenJFXDirectory, downloads.artifact.path).run {
+					jarPaths.add(toPath())
 				}
+				modules.add(libraryName.artifactId)
 			}
-			// Form : HMCL3
-			val finder = ModuleFinder.of(*jarPaths.toTypedArray())
-			for (mref in finder.findAll()) {
-				(ClassLoader.getSystemClassLoader() as BuiltinClassLoader).loadModule(mref)
-			}
-			val config = Configuration.resolveAndBind(finder, listOf(ModuleLayer.boot().configuration()), finder, modules)
-			ModuleLayer.defineModules(
-				config, listOf(ModuleLayer.boot())
-			) { ClassLoader.getSystemClassLoader() }
-			logmaker.info("Done")
-		} catch (ex: IOException) {
-			setErrorWin(ex)
 		}
+		// Form : HMCL3
+		val finder = ModuleFinder.of(*jarPaths.toTypedArray())
+		for (mref in finder.findAll()) {
+			(ClassLoader.getSystemClassLoader() as BuiltinClassLoader).loadModule(mref)
+		}
+		val config = Configuration.resolveAndBind(finder, listOf(ModuleLayer.boot().configuration()), finder, modules)
+		ModuleLayer.defineModules(
+			config, listOf(ModuleLayer.boot())
+		) { ClassLoader.getSystemClassLoader() }
+		logmaker.info("Done")
 	}
-}
-
-fun ckeckJavaFX() {
-	downloadDependencies()
-	loadJavaFXPatch()
 }
 

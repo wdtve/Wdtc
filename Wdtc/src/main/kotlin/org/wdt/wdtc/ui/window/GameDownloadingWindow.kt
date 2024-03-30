@@ -49,9 +49,7 @@ class GameDownloadingWindow(private val version: Version) {
 				runOnJavaFx {
 					textField.text = it
 				}
-			}.run {
-				startInstallGame()
-			}
+			}.startInstallGame()
 		}
 		val back = JFXButton("返回").apply {
 			onAction = EventHandler {

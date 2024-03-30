@@ -10,7 +10,6 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.download.game.DownloadVersionGameFile.Companion.startDownloadVersionManifestJsonFile
 import org.wdt.wdtc.core.download.game.GameVersionList
 import org.wdt.wdtc.core.game.Version
@@ -18,14 +17,13 @@ import org.wdt.wdtc.core.manger.downloadVersionManifestJsonFileTask
 import org.wdt.wdtc.core.manger.isDebug
 import org.wdt.wdtc.core.utils.defaultCoroutineScope
 import org.wdt.wdtc.core.utils.launchScope
+import org.wdt.wdtc.core.utils.runOnIO
 
 class GameVersionListWindow {
 	
-	private val job = launchScope("Download version manifest json") { downloadVersionManifestJsonFileTask() }
-	
 	fun setWindowScene(mainStage: Stage) {
 		val versionList = defaultCoroutineScope.async {
-			job.join()
+			runOnIO { downloadVersionManifestJsonFileTask() }
 			GameVersionList().versionList
 		}
 		val size = WindwosSizeManger(mainStage)
@@ -49,13 +47,8 @@ class GameVersionListWindow {
 			setLeftAnchor(0.0)
 			onAction = EventHandler {
 				launchScope("Download json") {
-					val job = launch {
-						startDownloadVersionManifestJsonFile()
-					}
-					runOnJavaFx {
-						job.join()
-						setWindowScene(mainStage)
-					}
+					runOnIO { startDownloadVersionManifestJsonFile() }
+					runOnJavaFx { setWindowScene(mainStage) }
 				}
 			}
 		}
@@ -95,11 +88,9 @@ class GameVersionListWindow {
 	}
 	
 	private fun JFXButton.getButtonAction(mainStage: Stage): EventHandler<ActionEvent> =
-		EventHandler { launchScope { startDownload(text, mainStage) } }
+		EventHandler { launchOnJavaFx { startDownload(text, mainStage) } }
 	
-	private suspend
-	
-	fun startDownload(versionNumber: String, mainStage: Stage) {
+	private suspend fun startDownload(versionNumber: String, mainStage: Stage) {
 		runOnJavaFx {
 			Version(versionNumber).also {
 				if (isDebug) {

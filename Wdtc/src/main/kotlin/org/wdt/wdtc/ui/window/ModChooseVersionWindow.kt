@@ -8,7 +8,8 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.download.fabric.FabricAPIDownloadTask
 import org.wdt.wdtc.core.download.fabric.FabricAPIVersionList
 import org.wdt.wdtc.core.download.fabric.FabricDonwloadInfo
@@ -16,7 +17,7 @@ import org.wdt.wdtc.core.download.fabric.FabricVersionList
 import org.wdt.wdtc.core.download.forge.ForgeDownloadInfo
 import org.wdt.wdtc.core.download.forge.ForgeVersionList
 import org.wdt.wdtc.core.download.infterface.VersionsJsonObjectInterface
-import org.wdt.wdtc.core.download.quilt.QuiltInstallTask
+import org.wdt.wdtc.core.download.quilt.QuiltDownloadInfo
 import org.wdt.wdtc.core.download.quilt.QuiltVersionList
 import org.wdt.wdtc.core.game.Version
 import org.wdt.wdtc.core.utils.KindOfMod
@@ -52,7 +53,6 @@ class ModChooseVersionWindow(
 	}
 	
 	
-	@Throws(IOException::class)
 	fun setModChooser() {
 		val back = JFXButton("返回").apply {
 			styleClass.add("BlackBorder")
@@ -100,7 +100,7 @@ class ModChooseVersionWindow(
 				when (kind) {
 					KindOfMod.FORGE -> version.forgeModDownloadInfo = ForgeDownloadInfo(version, versionJsonObject)
 					KindOfMod.FABRIC -> version.fabricModInstallInfo = FabricDonwloadInfo(version, versionJsonObject)
-					KindOfMod.QUILT -> version.quiltModDownloadInfo = QuiltInstallTask(version, versionJsonObject)
+					KindOfMod.QUILT -> version.quiltModDownloadInfo = QuiltDownloadInfo(version, versionJsonObject)
 					KindOfMod.FABRICAPI -> version.fabricModInstallInfo.noNull().apiDownloadTask =
 						FabricAPIDownloadTask(version, versionJsonObject)
 					

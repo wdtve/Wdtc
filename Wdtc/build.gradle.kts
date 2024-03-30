@@ -21,6 +21,23 @@ val sameManifest = mapOf(
 	"Add-Opens" to listOf("java.base/jdk.internal.loader").joinToString(" ")
 )
 
+dependencies {
+	implementation(project(":WdtcCore"))
+	implementation(files("./OpenJFXLoader/build/libs/OpenJFXLoader-$version.jar"))
+	implementation(libs.utils.io)
+	implementation(libs.utils.gson)
+	implementation(libs.gson)
+	implementation(libs.coroutines.core)
+	implementation(libs.coroutines.core.jvm)
+	implementation("com.jfoenix:jfoenix:9.0.10")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:${libs.versions.kotlinx.coroutines}")
+	implementation(libs.stdlib.jdk8)
+	testImplementation(libs.stdlib.test)
+}
+
+kotlin {
+	jvmToolchain(8)
+}
 
 tasks.shadowJar {
 	minimize()
@@ -50,31 +67,17 @@ tasks.create<JavaExec>("runShadowJar") {
 	workingDir = rootProject.rootDir
 }
 
-dependencies {
-	implementation(project(":WdtcCore"))
-	implementation(libs.utils.io)
-	implementation(libs.utils.gson)
-	implementation(libs.gson)
-	implementation(libs.coroutines.core)
-	implementation(libs.coroutines.core.jvm)
-	implementation("com.jfoenix:jfoenix:9.0.10")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:${libs.versions.kotlinx.coroutines}")
-	implementation(libs.stdlib.jdk8)
-	testImplementation(libs.stdlib.test)
-}
 
 fun getJvmArgs(debug: Boolean): List<String> {
-	val jvmList = mutableListOf(
+	return mutableListOf(
 		"-Dwtdc.application.type=ui",
 		"-Dwdtc.launcher.version=${project.version}",
 		"-Dwdtc.debug.mode=true",
-		"-Dwdtc.low.performance.mode=true"
-	)
-	return if (debug) {
-		jvmList.add("-Dwdtc.debug.mode=true")
-		jvmList
-	} else {
-		jvmList
+		"-Dwdtc.low.performance.mode=false"
+	).also {
+		if (debug) {
+			it.add("-Dwdtc.debug.mode=true")
+		}
 	}
 }
 

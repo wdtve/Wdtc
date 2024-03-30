@@ -14,7 +14,7 @@ import org.wdt.wdtc.core.utils.info
 import org.wdt.wdtc.core.utils.logmaker
 import java.io.File
 
-class Version @JvmOverloads constructor(
+class Version(
 	versionNumber: String,
 	here: File = currentSetting.defaultGamePath
 ) : GameFileManger(versionNumber, here) {
@@ -36,7 +36,7 @@ class Version @JvmOverloads constructor(
 	
 	var quiltModDownloadInfo: QuiltDownloadInfo? = null
 		set(value) {
-			kind = KindOfMod.FABRIC
+			kind = KindOfMod.QUILT
 			field = value
 		}
 	
@@ -51,8 +51,9 @@ class Version @JvmOverloads constructor(
 		} else false
 	}
 	
+	
 	override fun toString(): String {
-		return "Version(versionNumber=$versionNumber, kind=$kind)"
+		return "Version(kind=$kind, fabricModInstallInfo=$fabricModInstallInfo, forgeModDownloadInfo=$forgeModDownloadInfo, quiltModDownloadInfo=$quiltModDownloadInfo)"
 	}
 	
 	override fun equals(other: Any?): Boolean {

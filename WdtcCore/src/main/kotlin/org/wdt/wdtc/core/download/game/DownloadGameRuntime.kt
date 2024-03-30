@@ -10,31 +10,38 @@ import org.wdt.wdtc.core.launch.GameRuntimeFile
 import org.wdt.wdtc.core.manger.ProgressManger
 import org.wdt.wdtc.core.manger.TaskKind
 import org.wdt.wdtc.core.manger.TaskManger
-import org.wdt.wdtc.core.utils.compareFile
-import org.wdt.wdtc.core.utils.noNull
-import org.wdt.wdtc.core.utils.startDownloadTask
-import org.wdt.wdtc.core.utils.toCoroutineName
+import org.wdt.wdtc.core.utils.*
 import java.io.File
 
-class DownloadGameRuntime(
-	private val version: Version, private val gameRuntimeFile: GameRuntimeFile, private val speed: ProgressManger
-) {
+class DownloadGameRuntime(version: Version) {
+	
+	private val data = GameRuntimeData(version)
+	
+	private fun GameRuntimeData.getDownloadTask(
+		gameRuntimeFile: GameRuntimeFile,
+		speed: ProgressManger
+	): DownloadGameRuntimeTask = gameRuntimeFile.libraryObject.run {
+		if (gameRuntimeFile.nativesLibrary) {
+			nativesLibraryArtifact.noNull().let {
+				DownloadGameRuntimeTask(it.changedNativesLibraryFile, it.apply { url = changedNativesLibraryUrl }, speed)
+			}
+		} else {
+			DownloadGameRuntimeTask(changedLibraryFile, downloads.artifact.apply { url = changedLibraryUrl }, speed)
+		}
+	}
 	
 	fun start() {
-		val data = GameRuntimeData(version)
-		val task = data.run {
-			gameRuntimeFile.libraryObject.run {
-				if (gameRuntimeFile.nativesLibrary) {
-					nativesLibraryArtifact.noNull().let {
-						DownloadGameRuntimeTask(it.changedNativesLibraryFile, it.apply { url = changedNativesLibraryUrl }, speed)
-					}
-				} else {
-					DownloadGameRuntimeTask(changedLibraryFile, downloads.artifact.apply { url = changedLibraryUrl }, speed)
-				}
+		data.runtimeList.run {
+			val speed = ProgressManger(size).apply {
+				coroutineScope = executorCoroutineScope(name = "Download game runtime")
 			}
+			forEach {
+				data.getDownloadTask(it, speed).start()
+			}
+			speed.await()
 		}
-		task.start()
 	}
+	
 	
 	class DownloadGameRuntimeTask(
 		private val file: File, private val artifact: LibraryObject.Artifact, private val speed: ProgressManger
@@ -43,14 +50,14 @@ class DownloadGameRuntime(
 		init {
 			coroutinesAction = speed.run {
 				coroutineScope.launch(actionName.toCoroutineName(), CoroutineStart.LAZY) {
-					startDownloadTask(artifact.url, file)
+					startDownloadTask(artifact.url to file)
 					countDown()
 				}
 			}
 		}
 		
 		override fun start() {
-			if (file.compareFile(artifact)) {
+			if (file compareFile artifact) {
 				coroutinesAction.noNull().start()
 			} else {
 				speed.countDown()

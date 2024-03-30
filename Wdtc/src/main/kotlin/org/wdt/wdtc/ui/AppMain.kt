@@ -4,13 +4,10 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.stage.Stage
-import kotlinx.coroutines.launch
 import org.wdt.wdtc.core.manger.changeSettingToFile
 import org.wdt.wdtc.core.manger.currentSetting
 import org.wdt.wdtc.core.manger.isDebug
-import org.wdt.wdtc.core.utils.info
-import org.wdt.wdtc.core.utils.isOnline
-import org.wdt.wdtc.core.utils.logmaker
+import org.wdt.wdtc.core.utils.*
 import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 
@@ -28,18 +25,24 @@ class AppMain : Application() {
 			isResizable = isDebug
 			setOnCloseRequest {
 				logmaker.info(size)
-				try {
-					currentSetting.changeSettingToFile {
-						windowsWidth = width
-						windowsHeight = height
+				launchScope {
+					try {
+						runOnIO {
+							currentSetting.changeSettingToFile {
+								windowsWidth = width
+								windowsHeight = height
+							}
+						}
+					} catch (e: IOException) {
+						setErrorWin(e)
 					}
-				} catch (e: IOException) {
-					setErrorWin(e)
+					runOnJavaFx {
+						Platform.exit()
+					}
 				}
-				Platform.exit()
 			}
 		}.also {
-			javafxScope.launch {
+			launchOnJavaFx {
 				HomeWindow().run { setHome(it) }
 				it.show()
 				logmaker.info("Window Show")

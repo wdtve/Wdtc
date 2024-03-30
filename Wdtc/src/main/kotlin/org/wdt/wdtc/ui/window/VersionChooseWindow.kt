@@ -32,12 +32,13 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
 		val back = JFXButton("返回").apply {
 			onAction = EventHandler {
 				launchScope {
-					val window = (path as? Version)?.let { HomeWindow(it) } ?: HomeWindow()
-					window.setHome(mainStage)
+					((path as? Version)?.let { HomeWindow(it) } ?: HomeWindow()).run {
+						setHome(mainStage)
+					}
 				}
 			}
 		}
-		javafxScope.launch {
+		launchOnJavaFx {
 			currentVersionsList.forEach {
 				val pane = Pane().apply {
 					setPrefSize(514.0, 40.0)
