@@ -7,7 +7,9 @@ subprojects {
     plugin("application")
   }
 }
-
-val versionNumber = "0.0.2.3"
+plugins {
+	alias(libs.plugins.kotlin) apply false
+}
+val versionNumber = "0.0.2.4"
 group = "org.wdt.wdtc"
 version = "$versionNumber-kotlin"
