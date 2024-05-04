@@ -10,6 +10,6 @@ subprojects {
 plugins {
 	alias(libs.plugins.kotlin) apply false
 }
-val versionNumber = "0.0.2.4"
+val versionNumber = "0.0.2.5"
 group = "org.wdt.wdtc"
 version = "$versionNumber-kotlin"

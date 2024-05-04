@@ -41,7 +41,7 @@ class FabricProfileLibraryObject(
 	@field:SerializedName("size")
 	override val size: Long? = null
 	
-	fun toLibraryObject(): LibraryObject {
+	suspend fun toLibraryObject(): LibraryObject {
 		return LibraryObject.getLibraryObject(libraryName.apply {
 			libraryRepositoriesUrl = currentDownloadSource.fabricLibraryUrl.toURL()
 		}, url)

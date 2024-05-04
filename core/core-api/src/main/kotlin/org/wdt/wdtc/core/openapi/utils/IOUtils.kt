@@ -35,8 +35,6 @@ class FileDataImpl(file: File) : FileData {
 	override fun toString(): String {
 		return "FileDataImpl(sha1='$sha1', size=$size)"
 	}
-	
-	
 }
 
 fun InputStream.sha1(): String = toBufferedSource().readByteString().sha1().hex()
@@ -65,7 +63,8 @@ fun File.getJarManifestInfo(key: String): String? {
 	return JarInputStream(inputStream()).manifest.mainAttributes.getValue(key)
 }
 
-fun getResourceAsStream(name: String): InputStream = object {}.javaClass.getResourceAsStream(name).noNull()
+fun getResourceAsStream(name: String): InputStream = object {
+}.javaClass.getResourceAsStream(name).noNull()
 
 infix fun File.compareFile(fileData: FileData): Boolean = run {
 	if (isFileNotExists()) return true

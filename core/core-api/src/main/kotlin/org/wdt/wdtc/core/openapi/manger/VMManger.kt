@@ -29,7 +29,7 @@ val isConsole: Boolean = applicationType == "console"
 
 val isUI: Boolean = applicationType == "ui"
 
-val networkimeoutTime: Int = System.getProperty(NETWORK_TIMEOUT_TIME, "5000").toInt()
+val networkLinkTimeoutTime: Int = System.getProperty(NETWORK_TIMEOUT_TIME, "5000").toInt()
 
 val isLowMode = getBoolean(LOW_PERFORMANCE_MODE)
 

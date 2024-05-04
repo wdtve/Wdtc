@@ -9,8 +9,8 @@ import kotlin.concurrent.timer
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-val ioCoroutineScope = CoroutineScope(Dispatchers.IO)
-val defaultCoroutineScope = CoroutineScope(Dispatchers.Default)
+val ioCoroutineScope = coroutineScope(Dispatchers.IO)
+val defaultCoroutineScope = coroutineScope(Dispatchers.Default)
 
 fun launchScope(
 	name: String = "New coroutine",
@@ -31,9 +31,18 @@ fun String.toCoroutineName(): CoroutineName = CoroutineName(this)
 
 @OptIn(DelicateCoroutinesApi::class)
 fun executorCoroutineScope(thread: Int = 64, name: String): CoroutineScope {
-	return CoroutineScope(newFixedThreadPoolContext(thread, name))
+	return coroutineScope(newFixedThreadPoolContext(thread, name))
+}
+
+fun coroutineScope(context: CoroutineContext): CoroutineScope = object : CoroutineScope {
+	override val coroutineContext: CoroutineContext = context
 }
 
 inline fun timer(name: String? = null, period: Long, crossinline action: TimerTask.() -> Unit) {
 	timer(name, true, Date.from(Instant.now()), period, action)
+}
+
+suspend fun Job.runBlocking() {
+	start()
+	return join()
 }

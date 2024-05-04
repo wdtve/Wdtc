@@ -27,6 +27,7 @@ class Version(
 	fun cleanKind() {
 		kind = KindOfMod.ORIGINAL
 	}
+	
 	fun ckeckIsEffective(): Boolean {
 		return if (versionConfigFile.isFileExists()) {
 			gameConfig.configVersion == this
@@ -59,15 +60,16 @@ class Version(
 
 val preferredVersion: Version?
 	get() = currentSetting.preferredVersion?.takeIf { it.ckeckIsEffective() }
+
 class VersionsList(
-	private val versions: LinkedHashSet<Version> = linkedSetOf()
+	private val versions: HashSet<Version> = hashSetOf()
 ) : MutableSet<Version> by versions {
 	fun Version.addToList(): Boolean = add(this)
 	
 	
 	companion object {
 		fun VersionsList.saveChangeToFile() {
-			versionsJson.writeObjectToFile(this, serializeVersionsListGson)
+			versionsJson.writeObjectToFile(serializeVersionsListGson) { this }
 		}
 		
 		inline fun VersionsList.changeListToFile(block: VersionsList.() -> Unit): VersionsList {

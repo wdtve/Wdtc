@@ -7,7 +7,10 @@ import org.wdt.utils.gson.getJsonObject
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.readFileToJsonObject
 import org.wdt.wdtc.core.openapi.game.Version
-import org.wdt.wdtc.core.openapi.manger.*
+import org.wdt.wdtc.core.openapi.manger.ProgressManger
+import org.wdt.wdtc.core.openapi.manger.TaskKind
+import org.wdt.wdtc.core.openapi.manger.TaskManger
+import org.wdt.wdtc.core.openapi.manger.currentDownloadSource
 import org.wdt.wdtc.core.openapi.utils.*
 
 class DownloadGameAssetsFile(private val version: Version) {
@@ -18,7 +21,7 @@ class DownloadGameAssetsFile(private val version: Version) {
 		}.readFileToJsonObject().getJsonObject("objects").asMap().values
 		
 		val progress = ProgressManger(assets.size).apply {
-			coroutineScope = executorCoroutineScope(name = "Download assets file")
+			coroutineScope = executorCoroutineScope(name = "Download assets files")
 		}
 		
 		assets.asSequence().map {
@@ -52,8 +55,8 @@ class DownloadGameAssetsFile(private val version: Version) {
 			val hashFile = version.gameAssetsObjectsDirectory.resolve(data.hashSplicing)
 			coroutinesAction = progress.run {
 				coroutineScope.launch(actionName.toCoroutineName(), CoroutineStart.LAZY) {
-					finishCountDown(hashFile compareFile data) {
-						startDownloadTask((currentDownloadSource.assetsUrl + data.hashSplicing).toURL() to hashFile)
+					downloadFinishCountDown(data) {
+						currentDownloadSource.assetsUrl.plus(data.hashSplicing).toURL() to hashFile
 					}
 				}
 			}

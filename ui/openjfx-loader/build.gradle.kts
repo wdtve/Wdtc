@@ -16,7 +16,10 @@ dependencies {
 tasks.test {
 	useJUnitPlatform()
 }
-
 kotlin {
 	jvmToolchain(9)
+}
+
+tasks.getByName<JavaCompile>(java.sourceSets.main.get().compileJavaTaskName) {
+	options.compilerArgs.add("--add-exports=java.base/jdk.internal.loader=ALL-UNNAMED")
 }

@@ -31,7 +31,7 @@ data class User(
 val isExistUserJsonFile: Boolean
 	get() = userJson.isFileExists()
 
-fun setUserToJson(user: User) = userJson.writeObjectToFile(user, prettyGsonBuilder)
+fun setUserToJson(user: User) = userJson.writeObjectToFile(prettyGsonBuilder) { user }
 
 val preferredUser: User
 	get() = userJson.readFileToClass()

@@ -3,6 +3,7 @@ package org.wdt.wdtc.core.impl.download.game
 import kotlinx.coroutines.coroutineScope
 import org.wdt.utils.io.*
 import org.wdt.wdtc.core.openapi.download.game.VersionNotFoundException
+import org.wdt.wdtc.core.openapi.game.GameVersionJsonObject
 import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.manger.currentDownloadSource
 import org.wdt.wdtc.core.openapi.manger.isOfficialDownloadSource
@@ -13,7 +14,7 @@ import java.util.*
 
 class DownloadVersionGameFile(private val version: Version, private val install: Boolean) {
 	
-	private val versionJson by lazy {
+	private val versionJson: GameVersionJsonObject by lazy {
 		version.gameVersionJsonObject
 	}
 	

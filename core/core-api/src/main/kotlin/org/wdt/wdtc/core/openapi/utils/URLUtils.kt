@@ -1,6 +1,6 @@
 package org.wdt.wdtc.core.openapi.utils
 
-import org.wdt.wdtc.core.openapi.manger.networkimeoutTime
+import org.wdt.wdtc.core.openapi.manger.networkLinkTimeoutTime
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -8,7 +8,7 @@ import java.net.URL
 
 fun URL.isNetworkHasThisFile(): Boolean = try {
 	this.openConnection().run {
-		connectTimeout = networkimeoutTime
+		connectTimeout = networkLinkTimeoutTime
 		connect()
 	}
 	true
@@ -17,7 +17,7 @@ fun URL.isNetworkHasThisFile(): Boolean = try {
 }
 
 fun URL.getRedirectUrl(): String = this.openConnection().apply {
-	connectTimeout = networkimeoutTime
+	connectTimeout = networkLinkTimeoutTime
 }.getHeaderField("Location")
 
 val isOnline: Boolean
@@ -34,8 +34,8 @@ fun openSomething(o: Any) {
 }
 
 fun URL.newInputStream(): InputStream = openConnection().apply {
-	connectTimeout = networkimeoutTime
-	readTimeout = networkimeoutTime
+	connectTimeout = networkLinkTimeoutTime
+	readTimeout = networkLinkTimeoutTime
 }.inputStream
 
 fun String.toURL(): URL {

@@ -50,7 +50,7 @@ object SettingWindow {
 			setRightAnchor(0.0)
 			setTopAnchor(39.0)
 			onAction = eventHandler {
-				tipsField.text = tips
+				tipsField.text = getTips()
 			}
 		}
 		

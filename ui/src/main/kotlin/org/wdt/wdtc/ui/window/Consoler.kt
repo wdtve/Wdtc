@@ -15,6 +15,7 @@ import org.wdt.utils.io.readLines
 import org.wdt.wdtc.core.openapi.manger.isDebug
 import org.wdt.wdtc.core.openapi.manger.launcherVersion
 import org.wdt.wdtc.core.openapi.manger.tipsFile
+import org.wdt.wdtc.core.openapi.utils.coroutineScope
 import org.wdt.wdtc.core.openapi.utils.getResourceAsStream
 import org.wdt.wdtc.core.openapi.utils.noNull
 
@@ -85,7 +86,7 @@ val windowsTitle: String
 	get() = String.format(if (isDebug) "Wdtc - Debug - %s" else "Wdtc - %s", launcherVersion)
 
 fun getTips(length: Int): String {
-	return tips.let {
+	return getTips().let {
 		if (it.length < length) {
 			it
 		} else {
@@ -94,12 +95,11 @@ fun getTips(length: Int): String {
 	}
 }
 
-val tips: String
-	get() = getResourceAsStream("/assets/tips.txt").readLines().let {
-		if (tipsFile.isFileExists()) it.plus(tipsFile.readFileToLine()) else it
-	}.let {
-		it[it.indices.random()].replace("\$version_number", launcherVersion)
-	}
+fun getTips(): String = getResourceAsStream("/assets/tips.txt").readLines().let {
+	if (tipsFile.isFileExists()) it.plus(tipsFile.readFileToLine()) else it
+}.let {
+	it[it.indices.random()].replace("\$version_number", launcherVersion)
+}
 
 suspend fun <T> runOnJavaFx(block: suspend CoroutineScope.() -> T): T {
 	return withContext(Dispatchers.JavaFx, block)
@@ -113,7 +113,7 @@ fun eventHandler(
 	dispatcher: CoroutineDispatcher = Dispatchers.JavaFx, block: suspend () -> Unit
 ): EventHandler<ActionEvent> {
 	return EventHandler {
-		CoroutineScope(dispatcher).launch {
+		coroutineScope(dispatcher).launch {
 			block()
 		}
 	}

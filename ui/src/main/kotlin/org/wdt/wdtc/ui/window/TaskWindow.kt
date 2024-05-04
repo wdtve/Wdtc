@@ -144,6 +144,6 @@ class TaskWindow(
 	}
 	
 	companion object {
-		val taskPool = executorCoroutineScope(1, "Task pool")
+		val taskPool = executorCoroutineScope(1, "Task Pool")
 	}
 }

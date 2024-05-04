@@ -4,18 +4,20 @@ import kotlinx.coroutines.*
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import org.wdt.utils.io.okio.touch
+import org.wdt.wdtc.core.openapi.manger.ProgressManger
+import org.wdt.wdtc.core.openapi.manger.TaskManger
+import org.wdt.wdtc.core.openapi.manger.finishCountDown
 import java.io.File
 import java.io.IOException
 import java.net.URL
 import kotlin.system.measureTimeMillis
 
-class DownloadUtils(
-	url: URL,
-	targetFile: File
-) {
+class DownloadTask(
+	url: URL, targetFile: File
+) : TaskManger(targetFile.name) {
 	
 	@OptIn(ExperimentalCoroutinesApi::class)
-	private val scope = CoroutineScope(Dispatchers.IO.limitedParallelism(2))
+	private val scope = coroutineScope(Dispatchers.IO.limitedParallelism(2))
 	
 	private val targetFileSink = targetFile.toOkioPath(true).let {
 		scope.async {
@@ -31,6 +33,10 @@ class DownloadUtils(
 		url.newInputStream().toBufferedSource()
 	}
 	
+	override fun start() {
+		logmaker.warning("Please run startDownloadFile()")
+		runBlocking { startDownloadFile() }
+	}
 	
 	suspend fun startDownloadFile() {
 		targetFileSink.await().use { sink ->
@@ -62,8 +68,15 @@ suspend fun startDownloadTask(pair: Pair<URL, File>) {
 
 @Throws(IOException::class)
 suspend inline fun startDownloadTask(fileData: FileData, pair: () -> Pair<URL, File>) {
+	pair().runWhen({ second compareFile fileData }) {
+		startDownloadTask(this)
+	}
+}
+
+@Throws(IOException::class)
+suspend inline fun ProgressManger.downloadFinishCountDown(fileData: FileData, pair: () -> Pair<URL, File>) {
 	pair().let {
-		if (it.second compareFile fileData) {
+		finishCountDown(it.second compareFile fileData) {
 			startDownloadTask(it)
 		}
 	}
@@ -75,7 +88,7 @@ suspend fun Pair<URL, File>.manyTimesToTryDownload(times: Int) {
 	lateinit var exception: IOException
 	repeat(times) {
 		exception = try {
-			DownloadUtils(first, second).run {
+			DownloadTask(first, second).run {
 				startDownloadFile()
 			}
 			return

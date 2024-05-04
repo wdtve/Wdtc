@@ -42,8 +42,9 @@ val Version.gameConfig: GameConfigManger
 	get() = GameConfigManger(this)
 
 private fun Version.writeConfigJsonToFile(config: GameConfig) {
-	config.also {
-		versionConfigFile.writeObjectToFile(it, serializeVersionGson)
-		logmaker.info("${this.versionNumber} $it")
+	versionConfigFile.writeObjectToFile(serializeVersionGson) {
+		config.also {
+			logmaker.info("${this.versionNumber} $it")
+		}
 	}
 }

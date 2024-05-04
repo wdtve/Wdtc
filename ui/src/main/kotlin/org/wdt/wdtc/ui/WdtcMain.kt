@@ -2,9 +2,7 @@
 
 package org.wdt.wdtc.ui
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.impl.auth.accounts.yggdrasil.downloadAuthlibInjector
 import org.wdt.wdtc.core.impl.download.game.DownloadVersionGameFile.Companion.downloadVersionManifestJsonFileTask
@@ -18,11 +16,12 @@ import org.wdt.wdtc.core.openapi.manger.*
 import org.wdt.wdtc.core.openapi.utils.isOnline
 import org.wdt.wdtc.core.openapi.utils.logmaker
 import org.wdt.wdtc.core.openapi.utils.runIfNoNull
+import org.wdt.wdtc.core.openapi.utils.runOnIO
 import org.wdt.wdtc.ui.window.tryCatching
 import javafx.application.Application.launch as launchApp
 
 //@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
-fun main(args: Array<String>) {
+suspend fun main(args: Array<String>) {
 	val startTime = System.currentTimeMillis()
 	tryCatching {
 		ckeckRunEnvironment()
@@ -34,6 +33,7 @@ fun main(args: Array<String>) {
 		logmaker.info("===== Wdtc - $launcherVersion =====")
 		logmaker.info("Current System:${System.getProperty("os.name")}")
 		logmaker.info("Current Platform:$currentSystem")
+		logmaker.info("Kotlin Version:${KotlinVersion.CURRENT}")
 		logmaker.info("Java Version:${System.getProperty("java.version")}")
 		logmaker.info("Java VM Version:${System.getProperty("java.vm.name")}")
 		logmaker.info("Java Home:${System.getProperty("java.home")}")
@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
 		logmaker.info("Wdtc Config Path:$wdtcConfig")
 		logmaker.info("Setting File:$settingFile")
 		logmaker.info("Here:$defaultHere")
-		runBlocking(Dispatchers.IO) {
+		runOnIO {
 			runStartUpTask()
 			launch {
 				removePreferredVersion()
@@ -84,7 +84,7 @@ private val registryKey: Array<String> = arrayOf(
 	"HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\JDK"
 )
 
-fun ckeckJavaFX() {
+suspend fun ckeckJavaFX() {
 	try {
 		Class.forName("javafx.application.Application")
 	} catch (_: ClassNotFoundException) {

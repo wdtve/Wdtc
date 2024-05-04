@@ -5,7 +5,6 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import okio.ByteString.Companion.encodeUtf8
 import org.wdt.utils.gson.getString
 import org.wdt.utils.gson.parseObject
@@ -17,6 +16,7 @@ import org.wdt.wdtc.core.openapi.auth.User
 import org.wdt.wdtc.core.openapi.manger.littleskinApiUrl
 import org.wdt.wdtc.core.openapi.utils.ioAsync
 import org.wdt.wdtc.core.openapi.utils.noNull
+import org.wdt.wdtc.core.openapi.utils.runOnIO
 import java.io.File
 import java.io.PrintWriter
 import java.net.URL
@@ -75,7 +75,7 @@ class YggdrasilAccounts(
 		var selectedProfile: JsonObject,
 	)
 	
-	override suspend fun getUser(): User = coroutineScope {
+	override suspend fun getUser(): User = runOnIO {
 		val metaDataDeferred = async { littleskinApiUrl.toStrings() }
 		sendPostWithJson.await().let {
 			User(

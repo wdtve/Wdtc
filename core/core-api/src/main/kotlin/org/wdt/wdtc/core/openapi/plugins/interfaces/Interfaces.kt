@@ -4,4 +4,6 @@ interface Action {
 	fun invoke()
 }
 
-interface ActionImpls : Action
+// TODO More Action api
+
+interface StartupAction : Action

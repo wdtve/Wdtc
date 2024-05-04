@@ -93,18 +93,17 @@ class ForgeInstallTask(version: Version, forgeVersion: String) :
 	}
 	
 	private suspend fun startInstallForge() {
-		forgeInstallProfileJsonObject.processors.let {
-			repeat(it.size) { index ->
-				it[index].run {
-					if (sides != null && sides.first() == "client") {
-						startRunCommand(index)
-					} else if (args[1] != "DOWNLOAD_MOJMAPS") {
-						startRunCommand(index)
-					}
+		forgeInstallProfileJsonObject.processors.forEachIndexed { i, processor ->
+			processor.let {
+				if (it.sides != null && it.sides.first() == "client") {
+					startRunCommand(i)
+				} else if (it.args.first() != "DOWNLOAD_MOJMAPS") {
+					startRunCommand(i)
 				}
 			}
 		}
 	}
+	
 	
 	private val clientLzmaFile: File = File(wdtcCache, "data/client.lzma")
 	
@@ -125,7 +124,7 @@ class ForgeInstallTask(version: Version, forgeVersion: String) :
 		}
 	}
 	
-	override fun overwriteVersionJson() {
+	override suspend fun overwriteVersionJson() {
 		version.run {
 			gameVersionJsonObject.apply {
 				forgeVersionJsonObject.let {
@@ -134,7 +133,6 @@ class ForgeInstallTask(version: Version, forgeVersion: String) :
 							jvmList?.add(element)
 						}
 						it.arguments.gameList?.forEach { element ->
-							
 							gameList?.add(element)
 						}
 					}

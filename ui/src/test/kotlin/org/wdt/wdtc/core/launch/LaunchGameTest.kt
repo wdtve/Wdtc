@@ -1,13 +1,14 @@
 package org.wdt.wdtc.core.launch
 
 import org.junit.jupiter.api.Test
-import org.wdt.wdtc.core.impl.launch.LaunchGame.Companion.launchGameTask
-import org.wdt.wdtc.core.openapi.game.Version
+import org.wdt.utils.io.toFile
+import java.net.URLClassLoader
 
 class LaunchGameTest {
 	
 	@Test
 	fun getTaskList() {
-		println(Version("1.20.4").launchGameTask.getTaskList { println(it) })
+		val loader = URLClassLoader(arrayOf("E:\\Wdtc\\.wdtc\\dependencies\\org\\openjfx\\javafx-graphics\\17.0.6\\javafx-graphics-17.0.6-win.jar".toFile().toURI().toURL()))
+		loader.loadClass("javafx.application.Application")
 	}
 }

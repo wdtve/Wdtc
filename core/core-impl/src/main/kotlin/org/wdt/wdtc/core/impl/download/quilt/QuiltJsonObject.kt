@@ -25,7 +25,7 @@ class QuiltProfileLibraryObject(
 	@field:SerializedName("url")
 	val url: URL
 ) {
-	fun toLibraryObject(): LibraryObject {
+	suspend fun toLibraryObject(): LibraryObject {
 		return LibraryObject.getLibraryObject(libraryName.apply {
 			libraryRepositoriesUrl = currentDownloadSource.quiltMavenUrl.toURL()
 		}, url)

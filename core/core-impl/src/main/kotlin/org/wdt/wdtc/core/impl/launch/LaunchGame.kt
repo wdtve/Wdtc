@@ -12,14 +12,13 @@ import org.wdt.wdtc.core.openapi.utils.*
 import java.util.*
 
 class LaunchGame(
-	private val version: Version,
-	private val coroutineScope: CoroutineScope = ioCoroutineScope
+	private val version: Version, private val coroutineScope: CoroutineScope = ioCoroutineScope
 ) {
 	private val launchTaskProcess: ProcessBuilder
-		get() = if (currentSetting.console)
-			ProcessBuilder("cmd.exe", "/C", "start", starterBat.canonicalPath).directory(version.versionDirectory)
-		else
-			ProcessBuilder(starterBat.canonicalPath).directory(version.versionDirectory)
+		get() = if (currentSetting.console) ProcessBuilder("cmd.exe", "/C", "start", starterBat.canonicalPath).directory(
+			version.versionDirectory
+		)
+		else ProcessBuilder(starterBat.canonicalPath).directory(version.versionDirectory)
 	
 	private fun beforLaunchTask() {
 		if (!currentSetting.chineseLanguage) return
@@ -44,10 +43,9 @@ class LaunchGame(
 		
 		add(object : TaskManger("启动前配置", TaskKind.COROUTINES) {
 			init {
-				coroutinesAction =
-					coroutineScope.launch("before launch task".toCoroutineName(), start = CoroutineStart.LAZY) {
-						beforLaunchTask()
-					}
+				coroutinesAction = coroutineScope.launch("before launch task".toCoroutineName(), start = CoroutineStart.LAZY) {
+					beforLaunchTask()
+				}
 			}
 		})
 		
@@ -62,26 +60,25 @@ class LaunchGame(
 					
 				}
 			}
-		}
-		)
+		})
 		
 		add(object : TaskManger("写入启动脚本", TaskKind.COROUTINES) {
 			init {
-				coroutinesAction =
-					coroutineScope.launch("Write start script".toCoroutineName(), start = CoroutineStart.LAZY) {
-						logmaker.info("Write Start Script")
-						val command = buildString {
-							append(GameJvmCommand(version).getCommand())
-							append(GameCLICommand(version).getCommand())
-						}.also {
-							starterBat.writeStringToFile(it)
-						}
-						logmaker.info(command)
-						logmaker.info("Write Start Script Finish")
-						
+				coroutinesAction = coroutineScope.launch("Write start script".toCoroutineName(), start = CoroutineStart.LAZY) {
+					logmaker.info("Write Start Script")
+					val command = buildString {
+						append(GameJvmCommand(version).getCommand())
+						append(GameCLICommand(version).getCommand())
+					}.also {
+						starterBat.writeStringToFile(it)
 					}
+					logmaker.info(command)
+					logmaker.info("Write Start Script Finish")
+					
+				}
 			}
 		})
+		
 		add(object : TaskManger("运行脚本", TaskKind.COROUTINES) {
 			init {
 				coroutinesAction = coroutineScope.launch("Run script".toCoroutineName(), start = CoroutineStart.LAZY) {
@@ -99,12 +96,11 @@ class LaunchGame(
 	}
 	
 	private fun getSimpleTaskList(block: (String) -> Unit): MutableList<TaskManger> {
-		return mutableListOf(TaskManger("启动游戏", TaskKind.COROUTINES).apply {
-			coroutinesAction = defaultCoroutineScope.launch("Run all game".toCoroutineName(), CoroutineStart.LAZY) {
-				getFullTaskList(block).forEach {
-					it.coroutinesAction.noNull().run {
-						start()
-						join()
+		return mutableListOf(object : TaskManger("启动游戏", TaskKind.COROUTINES) {
+			init {
+				coroutinesAction = defaultCoroutineScope.launch("Run all game".toCoroutineName(), CoroutineStart.LAZY) {
+					getFullTaskList(block).forEach {
+						it.coroutinesAction.noNull().runBlocking()
 					}
 				}
 			}

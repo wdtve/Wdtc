@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.wdt.wdtc.ui.window
 
 import org.wdt.wdtc.core.openapi.utils.error
@@ -10,7 +12,7 @@ import javax.swing.JFrame
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 
-fun setErrorWin(e: Throwable) {
+inline fun setErrorWin(e: Throwable) {
 	e.let {
 		logmaker.error(it)
 		setWin(it.getExceptionMessage(), "发生错误!")

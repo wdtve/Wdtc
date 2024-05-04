@@ -31,12 +31,12 @@
 ### 构建方法:
 
 - 等Gradle自动下载好依赖后(个人技术能力有限,不太会自己造轮子,所以依赖比较多)
-- 运行`:wdtc-ui:runShadowJar`任务
+- 运行`runUI`任务
 
 ```shell
-# Wdtc-UI模块
-.\gradlew :wdtc-ui:runShadowJar
+.\gradlew runUI
 ```
+
 ---
 
 ## 许可证:

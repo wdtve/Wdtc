@@ -10,12 +10,12 @@ dependencies {
 }
 
 kotlin {
-	jvmToolchain(9)
+	jvmToolchain(8)
 }
 
 tasks.jar {
 	manifest.attributes(
-		"Implementation-Vendor" to "Wdt~(wdtev)",
+		"Implementation-Vendor" to "Wdt~(wdtve)",
 		"Implementation-Title" to "wdtc-core-kotlin",
 		"Implementation-Version" to "${project.version}"
 	)

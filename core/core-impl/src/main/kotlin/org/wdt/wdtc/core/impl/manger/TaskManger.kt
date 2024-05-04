@@ -7,6 +7,7 @@ import org.wdt.utils.io.createDirectories
 import org.wdt.utils.io.deleteDirectory
 import org.wdt.utils.io.isFileNotExists
 import org.wdt.wdtc.core.impl.download.game.DownloadVersionGameFile
+import org.wdt.wdtc.core.impl.plugins.impl.runStartupActions
 import org.wdt.wdtc.core.openapi.auth.UsersList
 import org.wdt.wdtc.core.openapi.auth.serializeUsersListGsonBuilder
 import org.wdt.wdtc.core.openapi.game.VersionsList
@@ -15,6 +16,7 @@ import org.wdt.wdtc.core.openapi.utils.*
 import org.wdt.wdtc.core.openapi.utils.gson.serializeVersionGson
 import org.wdt.wdtc.core.openapi.utils.gson.serializeVersionsListGson
 import java.io.File
+import java.net.URL
 
 fun ckeckRunEnvironment() {
 	require(!isMacos) { "Wdtc cannot run on macos!" }
@@ -42,19 +44,19 @@ suspend fun runStartUpTask() = runOnIO {
 			File(wdtcConfig, "readme.txt").outputStream()
 		)
 	}
-	userListFile.run {
-		if (isFileNotExists()) {
-			writeObjectToFile(UsersList(), serializeUsersListGsonBuilder)
+	userListFile.runWhen({ isFileNotExists() }) {
+		writeObjectToFile(serializeUsersListGsonBuilder) {
+			UsersList()
 		}
 	}
-	settingFile.run {
-		if (isFileNotExists()) {
-			writeObjectToFile(Setting(), serializeVersionGson)
+	settingFile.runWhen({ isFileNotExists() }) {
+		writeObjectToFile(serializeVersionGson) {
+			Setting()
 		}
 	}
-	versionsJson.run {
-		if (isFileNotExists()) {
-			writeObjectToFile(VersionsList(), serializeVersionsListGson)
+	versionsJson.runWhen({ isFileNotExists() }) {
+		writeObjectToFile(serializeVersionsListGson) {
+			VersionsList()
 		}
 	}
 	launch {
@@ -63,14 +65,18 @@ suspend fun runStartUpTask() = runOnIO {
 	}
 	
 	launch {
+		val url = URL("https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar")
 		llbmpipeLoader.let { file ->
-			"https://maven.aliyun.com/repository/public/org/glavo/llvmpipe-loader/1.0/llvmpipe-loader-1.0.jar".toURL().let {
-				startDownloadTask(it.toFileData()) { it to file }
-			}
+			startDownloadTask(url.toFileData()) { url to file }
 		}
 	}
 	if (versionManifestFile.isFileNotExists()) {
 		launch { DownloadVersionGameFile.startDownloadVersionManifestJsonFile() }
+	}
+	try {
+		runStartupActions()
+	} catch (e: Throwable) {
+		logmaker.error(e)
 	}
 }
 

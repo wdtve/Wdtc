@@ -18,18 +18,20 @@ import java.lang.reflect.Type
 class UsersList(
 	private val usersList: LinkedHashSet<User> = linkedSetOf()
 ) : MutableSet<User> by usersList {
+	
 	suspend fun add(loginUser: LoginUser) {
-		loginUser.getUser().also {
-			userJson.writeObjectToFile(it, prettyGsonBuilder)
-			logmaker.info(it)
-			usersList.add(it)
+		userJson.writeObjectToFile(prettyGsonBuilder) {
+			loginUser.getUser().also {
+				logmaker.info(it)
+				usersList.add(it)
+			}
 		}
 	}
 	
 	override fun remove(element: User): Boolean {
 		preferredUser.let {
 			if (it == element) {
-				userJson.writeObjectToFile(JsonObject())
+				userJson.writeObjectToFile { JsonObject() }
 			}
 		}
 		return usersList.remove(element)
@@ -41,7 +43,7 @@ class UsersList(
 	
 	companion object {
 		fun UsersList.saveChangeToFile() {
-			userListFile.writeObjectToFile(this, serializeUsersListGsonBuilder)
+			userListFile.writeObjectToFile(serializeUsersListGsonBuilder) { this }
 		}
 	}
 }

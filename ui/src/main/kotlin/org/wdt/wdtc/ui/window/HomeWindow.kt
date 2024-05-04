@@ -7,9 +7,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import org.wdt.wdtc.core.impl.launch.LaunchGame
 import org.wdt.wdtc.core.openapi.auth.Accounts.AccountsType
 import org.wdt.wdtc.core.openapi.auth.isExistUserJsonFile
@@ -17,7 +15,10 @@ import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.game.preferredVersion
 import org.wdt.wdtc.core.openapi.manger.GameDirectoryManger
 import org.wdt.wdtc.core.openapi.manger.wdtcCache
-import org.wdt.wdtc.core.openapi.utils.*
+import org.wdt.wdtc.core.openapi.utils.isOnline
+import org.wdt.wdtc.core.openapi.utils.noNull
+import org.wdt.wdtc.core.openapi.utils.openSomething
+import org.wdt.wdtc.core.openapi.utils.runOnIO
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 
 class HomeWindow {
@@ -85,8 +86,8 @@ class HomeWindow {
 			layoutX = 335.0
 			layoutY = 316.0
 			styleClass.add("BackGroundWriteButton")
-			onAction = EventHandler {
-				launchScope {
+			onAction = eventHandler {
+				withContext(Dispatchers.Default) {
 					launchGameButtonTask(mainStage, version)
 				}
 			}
@@ -114,7 +115,7 @@ class HomeWindow {
 			}
 		}
 		if (!isExistUserJsonFile) {
-			launchOnJavaFx {
+			runOnJavaFx {
 				noUser(mainStage)
 			}
 		}

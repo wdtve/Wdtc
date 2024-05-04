@@ -13,15 +13,15 @@ class SkinUtils(
 	private var skinFile: File
 ) {
 	
-	var userName: String? = null
+	private var userName: String? = null
 	
 	var userSkinInput: InputStream? = null
 	
-	fun writeSkinHead(): File {
+	suspend fun writeSkinHead(): File = runOnIO {
 		val newImage = ImageIO.read(userSkinInput ?: skinFile.newInputStream()).getSubimage(8, 8, 8, 8)
-		return skinFile.extension.let {
+		skinFile.extension.let {
 			File(userAsste, skinFile.name.cleanStrInString(".$it").appendForString("-head.", it)).apply {
-				launchScope("Write skin file") {
+				launch("Write skin file") {
 					touch()
 					ImageIO.write(newImage, extension, outputStream())
 				}

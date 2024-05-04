@@ -5,17 +5,16 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.async
 import org.wdt.utils.gson.parseObject
 import org.wdt.utils.gson.toJsonString
+import org.wdt.wdtc.core.openapi.game.LibraryObject.Companion.generateLibraryObject
 import org.wdt.wdtc.core.openapi.manger.SystemKind
 import org.wdt.wdtc.core.openapi.manger.currentSystem
-import org.wdt.wdtc.core.openapi.utils.FileData
+import org.wdt.wdtc.core.openapi.utils.*
 import org.wdt.wdtc.core.openapi.utils.gson.ActionTypeAdapter
 import org.wdt.wdtc.core.openapi.utils.gson.LibraryObjectListTypeAdapter
 import org.wdt.wdtc.core.openapi.utils.gson.SystemKindTypeAdapter
-import org.wdt.wdtc.core.openapi.utils.info
-import org.wdt.wdtc.core.openapi.utils.logmaker
-import org.wdt.wdtc.core.openapi.utils.sha1
 import java.net.URL
 import java.util.*
 
@@ -59,10 +58,7 @@ class LibraryObject(
 	}
 	
 	class Artifact(
-		var path: String,
-		override val sha1: String,
-		override val size: Long,
-		var url: URL
+		var path: String, override val sha1: String, override val size: Long, var url: URL
 	) : FileData {
 		override fun equals(other: Any?): Boolean {
 			if (this === other) return true
@@ -168,19 +164,25 @@ class LibraryObject(
 	}
 	
 	companion object {
-		fun getLibraryObject(dependency: GameRuntimeDependency, defaultUrl: URL): LibraryObject {
-			val downloads = dependency.libraryUrl.let {
-				Downloads(
-					artifact = Artifact(
-						path = dependency.formJar(),
-						sha1 = it.openStream().sha1(),
-						size = it.openConnection().contentLengthLong,
-						url = dependency.apply {
-							libraryRepositoriesUrl = defaultUrl
-						}.libraryUrl
-					)
+		
+		suspend fun GameRuntimeDependency.generateLibraryObject(): LibraryObject {
+			return getLibraryObject(this, libraryRepositoriesUrl)
+		}
+		
+		suspend fun getLibraryObject(dependency: GameRuntimeDependency, defaultUrl: URL): LibraryObject {
+			val connection = runOnIO { async { dependency.libraryUrl.openConnection() } }
+			val downloads = Downloads(
+				artifact = Artifact(
+					path = dependency.formJar(),
+					sha1 = runOnIO {
+						connection.await().getInputStream()
+					}.use { it.sha1() },
+					size = connection.await().contentLengthLong,
+					url = dependency.apply {
+						libraryRepositoriesUrl = defaultUrl
+					}.libraryUrl
 				)
-			}
+			)
 			return LibraryObject(downloads, dependency).also {
 				logmaker.info(it)
 			}
@@ -245,10 +247,10 @@ val serializeLibraryObjectListGsonBuilder: GsonBuilder =
 	serializeLibraryObjectGsonBuilder.registerTypeAdapter(LibraryObjectList::class.java, LibraryObjectListTypeAdapter())
 
 class LibraryObjectList(
-	libraryList: LinkedList<LibraryObject> = LinkedList()
+	libraryList: MutableList<LibraryObject> = mutableListOf()
 ) : MutableList<LibraryObject> by libraryList {
 	
-	fun add(dependency: GameRuntimeDependency, defaultUrl: URL) {
+	suspend fun add(dependency: GameRuntimeDependency, defaultUrl: URL) {
 		this.add(LibraryObject.getLibraryObject(dependency, defaultUrl))
 	}
 	
@@ -273,11 +275,26 @@ class LibraryObjectList(
 	override fun toString(): String {
 		return toJsonString(serializeLibraryObjectListGsonBuilder)
 	}
+	
+	companion object {
+		
+		suspend fun Iterable<GameRuntimeDependency>.generateLibraryObjectList(): LibraryObjectList {
+			return map {
+				it.generateLibraryObject()
+			}.asLibraryObjectList()
+		}
+		
+		fun Iterable<LibraryObject>.asLibraryObjectList(): LibraryObjectList {
+			return LibraryObjectList(toMutableList())
+		}
+		
+	}
 }
 
 class Rules(
 	objectList: LinkedList<Rule> = LinkedList()
 ) : MutableList<Rules.Rule> by objectList {
+	
 	val isUseForCurrent: Boolean
 		get() {
 			var ok = true
@@ -301,17 +318,15 @@ class Rules(
 		}
 		
 		val isUseForCurrent: Boolean
-			get() {
-				return when (action) {
-					Action.DISALLOW -> {
-						os?.name != currentSystem
-					}
-					
-					Action.ALLOW -> {
-						os == null || os?.name == currentSystem
-					}
-					
+			get() = when (action) {
+				Action.DISALLOW -> {
+					os?.name != currentSystem
 				}
+				
+				Action.ALLOW -> {
+					os == null || os?.name == currentSystem
+				}
+				
 			}
 		
 		class Os(

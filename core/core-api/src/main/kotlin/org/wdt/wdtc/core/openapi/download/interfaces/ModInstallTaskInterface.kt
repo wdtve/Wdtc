@@ -5,7 +5,7 @@ import org.wdt.wdtc.core.openapi.manger.KindOfMod
 import org.wdt.wdtc.core.openapi.utils.gson.DownloadInfoTypeAdapter
 
 interface ModInstallTaskInterface {
-	fun overwriteVersionJson()
+	suspend fun overwriteVersionJson()
 	
 	fun writeVersionJsonPatches()
 	

@@ -36,7 +36,7 @@ open class GameFileManger(
 		get() = File(versionDirectory, "logs")
 	
 	fun GameVersionJsonObject.putToVersionJson() {
-		versionJson.writeObjectToFile(this, serializeGameVersionJsonObjectGson)
+		versionJson.writeObjectToFile(serializeGameVersionJsonObjectGson) { this }
 	}
 	
 	

@@ -1,0 +1,10 @@
+{
+  "points": [
+    "action",
+    "startupAction"
+  ],
+  "map": {
+    "action": "org.wdt.wdtc.core.openapi.plugins.interfaces.Action",
+    "startupAction": "org.wdt.wdtc.core.openapi.plugins.interfaces.StartupAction"
+  }
+}

@@ -22,7 +22,7 @@ class QuiltInstallTask : QuiltDownloadInfo, ModInstallTaskInterface {
 		startDownloadTask(quiltVersionJsonUrl, quiltVersionJson)
 	}
 	
-	override fun overwriteVersionJson() {
+	override suspend fun overwriteVersionJson() {
 		quiltProfileJsonObject.also { quilt ->
 			version.run {
 				gameVersionJsonObject.apply {

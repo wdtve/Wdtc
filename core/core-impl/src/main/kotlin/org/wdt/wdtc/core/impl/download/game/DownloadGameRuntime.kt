@@ -10,8 +10,10 @@ import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.manger.ProgressManger
 import org.wdt.wdtc.core.openapi.manger.TaskKind
 import org.wdt.wdtc.core.openapi.manger.TaskManger
-import org.wdt.wdtc.core.openapi.manger.finishCountDown
-import org.wdt.wdtc.core.openapi.utils.*
+import org.wdt.wdtc.core.openapi.utils.downloadFinishCountDown
+import org.wdt.wdtc.core.openapi.utils.executorCoroutineScope
+import org.wdt.wdtc.core.openapi.utils.noNull
+import org.wdt.wdtc.core.openapi.utils.toCoroutineName
 import java.io.File
 
 class DownloadGameRuntime(version: Version) {
@@ -34,7 +36,7 @@ class DownloadGameRuntime(version: Version) {
 	fun start() {
 		data.runtimeList.run {
 			val speed = ProgressManger(size).apply {
-				coroutineScope = executorCoroutineScope(name = "Download game runtime")
+				coroutineScope = executorCoroutineScope(name = "Download library files")
 			}
 			forEach {
 				data.getDownloadTask(it, speed).start()
@@ -51,8 +53,8 @@ class DownloadGameRuntime(version: Version) {
 		init {
 			coroutinesAction = progress.run {
 				coroutineScope.launch(actionName.toCoroutineName(), CoroutineStart.LAZY) {
-					finishCountDown(file compareFile artifact) {
-						startDownloadTask(artifact.url to file)
+					downloadFinishCountDown(artifact) {
+						artifact.url to file
 					}
 				}
 			}

@@ -11,12 +11,20 @@ javafx {
 
 group = "org.wdt.wdtc.ui"
 version = rootProject.version
-//val versionFile = file("./build/resources/main").resolve("version.txt").also {
-//	if (!it.exists()) {
-//		it.createNewFile()
-//	}
-//	it.writeText(project.version.toString())
-//}
+val resourceFolder = file("./build/resources/main")
+val versionFile = resourceFolder.resolve("version.txt").also {
+	if (!it.exists()) {
+		it.createNewFile()
+	}
+	it.writeText(project.version.toString())
+}
+
+val dependencies = resourceFolder.resolve("libs.version.toml").also {
+	if (it.exists()) {
+		it.delete()
+	}
+	rootDir.resolve("gradle/libs.version.toml").copyTo(it)
+}
 
 val mainClazz = "org.wdt.wdtc.ui.WdtcMain"
 val sameManifest = mapOf(
@@ -29,7 +37,7 @@ val sameManifest = mapOf(
 
 dependencies {
 	api(project(":wdtc-core:core-impl"))
-	implementation(files("./openjfx-loader/build/libs/openjfx-loader-${project.version}.jar"))
+	api(project(":wdtc-ui:openjfx-loader"))
 	implementation("com.jfoenix:jfoenix:9.0.10")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:${libs.versions.kotlinx.coroutines}")
 	testImplementation(libs.stdlib.test)
@@ -40,7 +48,8 @@ kotlin {
 }
 
 tasks.shadowJar {
-//	append(versionFile.name)
+	append(versionFile.name)
+	append(dependencies.name)
 	minimize()
 	dependencies {
 		moduleList.forEach {
@@ -60,7 +69,7 @@ application {
 	applicationDefaultJvmArgs = getJvmArgs(false)
 }
 
-tasks.create<JavaExec>("runShadowJar") {
+tasks.create<JavaExec>("runUI") {
 	dependsOn(tasks.jar)
 	group = "application"
 	classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)

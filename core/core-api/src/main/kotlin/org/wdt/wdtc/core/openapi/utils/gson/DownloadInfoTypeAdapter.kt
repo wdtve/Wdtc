@@ -2,8 +2,8 @@ package org.wdt.wdtc.core.openapi.utils.gson
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
+import org.wdt.utils.gson.JsonObject
 import org.wdt.utils.gson.getString
 import org.wdt.wdtc.core.openapi.download.game.VersionNotFoundException
 import org.wdt.wdtc.core.openapi.download.interfaces.ModDownloadInfoInterface
@@ -55,10 +55,10 @@ object DownloadInfoTypeAdapter : TypeAdapters<ModDownloadInfoInterface> {
 		typeOfSrc: Type,
 		context: JsonSerializationContext
 	): JsonElement {
-		return JsonObject().apply {
-			addProperty("modKind", src.modKind.name)
-			addProperty(versionNumberKey, src.modVersion)
-		}
+		return JsonObject(
+			"modKind" to src.modKind.name,
+			versionNumberKey to src.modVersion
+		)
 	}
 }
 

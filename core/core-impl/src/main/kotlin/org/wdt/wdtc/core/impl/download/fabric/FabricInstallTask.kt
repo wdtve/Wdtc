@@ -16,7 +16,7 @@ class FabricInstallTask(version: Version, fabricVersionNumber: String) :
 		version, versionsJsonObjectInterface.versionNumber.noNull()
 	)
 	
-	override fun overwriteVersionJson() {
+	override suspend fun overwriteVersionJson() {
 		fabricProfileJsonObject.also { fabirc ->
 			version.run {
 				gameVersionJsonObject.apply {
@@ -61,8 +61,6 @@ class FabricInstallTask(version: Version, fabricVersionNumber: String) :
 	}
 	
 	override suspend fun beforInstallTask() {
-		startDownloadTask(
-			fabricVersionFileUrl.format(version.versionNumber, modVersion), fabricVersionJson
-		)
+		startDownloadTask(fabricVersionFileUrl.format(version.versionNumber, modVersion), fabricVersionJson)
 	}
 }
