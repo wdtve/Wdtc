@@ -12,13 +12,13 @@ import javafx.stage.Stage
 import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.game.currentVersionsList
 import org.wdt.wdtc.core.openapi.game.preferredVersion
-import org.wdt.wdtc.core.openapi.manger.GameDirectoryManger
-import org.wdt.wdtc.core.openapi.manger.KindOfMod
-import org.wdt.wdtc.core.openapi.manger.changeSettingToFile
-import org.wdt.wdtc.core.openapi.manger.currentSetting
+import org.wdt.wdtc.core.openapi.manager.GameDirectoryManager
+import org.wdt.wdtc.core.openapi.manager.KindOfMod
+import org.wdt.wdtc.core.openapi.manager.currentSetting
+import org.wdt.wdtc.core.openapi.manager.saveSettingToFile
 import org.wdt.wdtc.core.openapi.utils.runOnIO
 
-class VersionChooseWindow(private val path: GameDirectoryManger) {
+class VersionChooseWindow(private val path: GameDirectoryManager) {
 	fun setWindow(mainStage: Stage) {
 		val size = WindwosSizeManger(mainStage)
 		val sonScrollPane = ScrollPane().apply {
@@ -47,7 +47,7 @@ class VersionChooseWindow(private val path: GameDirectoryManger) {
 					layoutY = 12.0
 					onAction = eventHandler {
 						runOnIO {
-							currentSetting.changeSettingToFile {
+							currentSetting.saveSettingToFile {
 									preferredVersion = it
 							}
 						}

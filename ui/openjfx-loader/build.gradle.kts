@@ -2,11 +2,11 @@ plugins {
 	alias(libs.plugins.kotlin)
 }
 
-group = "org.wdt.wdtc.ui"
+group = "org.wdt.wdtc.ui.loader"
 version = rootProject.version
 
 dependencies {
-	implementation(project(":wdtc-core:core-api"))
+	implementation(project(":wdtc-core"))
 	implementation(libs.coroutines.core.jvm)
 	implementation(libs.utils.io)
 	implementation(libs.utils.gson)

@@ -8,8 +8,8 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
 import javafx.stage.Modality
 import javafx.stage.Stage
-import org.wdt.wdtc.core.openapi.auth.Accounts.AccountsType
-import org.wdt.wdtc.core.openapi.manger.littleskinUrl
+import org.wdt.wdtc.core.openapi.auth.AccountsType
+import org.wdt.wdtc.core.openapi.manager.littleskinUrl
 import org.wdt.wdtc.core.openapi.utils.openSomething
 import org.wdt.wdtc.ui.window.*
 

@@ -9,18 +9,18 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.wdt.wdtc.core.impl.download.fabric.FabricAPIDownloadTask
 import org.wdt.wdtc.core.impl.download.fabric.FabricAPIVersionList
-import org.wdt.wdtc.core.impl.download.fabric.FabricDonwloadInfo
+import org.wdt.wdtc.core.impl.download.fabric.FabricVersionImpl
 import org.wdt.wdtc.core.impl.download.fabric.FabricVersionList
-import org.wdt.wdtc.core.impl.download.forge.ForgeDownloadInfo
+import org.wdt.wdtc.core.impl.download.forge.ForgeVersionImpl
 import org.wdt.wdtc.core.impl.download.forge.ForgeVersionList
-import org.wdt.wdtc.core.impl.download.quilt.QuiltDownloadInfo
+import org.wdt.wdtc.core.impl.download.quilt.QuiltVersionImpl
 import org.wdt.wdtc.core.impl.download.quilt.QuiltVersionList
+import org.wdt.wdtc.core.openapi.download.game.VersionNotFoundException
 import org.wdt.wdtc.core.openapi.download.interfaces.VersionsJsonObjectInterface
 import org.wdt.wdtc.core.openapi.game.Version
-import org.wdt.wdtc.core.openapi.manger.KindOfMod
-import org.wdt.wdtc.core.openapi.manger.KindOfMod.*
+import org.wdt.wdtc.core.openapi.manager.KindOfMod
+import org.wdt.wdtc.core.openapi.manager.KindOfMod.*
 import org.wdt.wdtc.core.openapi.utils.ioAsync
-import org.wdt.wdtc.core.openapi.utils.noNull
 
 class ModChooseVersionWindow(
 	private val kind: KindOfMod, private val mainStage: Stage, private val version: Version
@@ -85,25 +85,27 @@ class ModChooseVersionWindow(
 		}
 	}
 	
-	private fun getVersionButton(versionJsonObject: VersionsJsonObjectInterface, buttonList: VBox) =
-		JFXButton(versionJsonObject.versionNumber).apply {
+	private fun getVersionButton(versionJsonObject: VersionsJsonObjectInterface, buttonList: VBox): JFXButton {
+		return JFXButton(versionJsonObject.versionNumber).apply {
 			style = "-fx-border-color: #000000"
 			prefWidth = 580.0
 			onAction = eventHandler {
 				when (kind) {
-					FORGE -> version.modDownloadInfo = ForgeDownloadInfo(version, versionJsonObject)
-					FABRIC -> version.modDownloadInfo = FabricDonwloadInfo(version, versionJsonObject)
-					QUILT -> version.modDownloadInfo = QuiltDownloadInfo(version, versionJsonObject)
-					FABRICAPI -> (version.modDownloadInfo as? FabricDonwloadInfo).noNull().apply {
-						apiDownloadTask = FabricAPIDownloadTask(version, versionJsonObject)
+					FORGE -> ForgeVersionImpl(version, versionJsonObject)
+					FABRIC -> FabricVersionImpl(version, versionJsonObject)
+					QUILT -> QuiltVersionImpl(version, versionJsonObject)
+					
+					FABRICAPI -> (version as FabricVersionImpl).also {
+						FabricAPIDownloadTask(it, versionJsonObject)
 					}
 					
-					ORIGINAL -> throw RuntimeException("Nothing to do")
-				}
-				ModChooseWindow(version, mainStage).run {
-					setChooseWin()
-				}
+					ORIGINAL -> version
+					OTHER -> throw VersionNotFoundException("Can not be OTHER")
+				}.let {
+					ModChooseWindow(it, mainStage)
+				}.setChooseWin()
 				buttonList.children.clear()
 			}
 		}
+	}
 }

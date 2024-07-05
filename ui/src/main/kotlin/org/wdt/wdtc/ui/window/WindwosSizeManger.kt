@@ -4,7 +4,7 @@ import javafx.beans.value.ObservableValue
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Region
 import javafx.stage.Stage
-import org.wdt.wdtc.core.openapi.manger.currentSetting
+import org.wdt.wdtc.core.openapi.manager.currentSetting
 
 class WindwosSizeManger(private val mainStage: Stage) {
 	fun modifyWindowsSize(pane: Pane, vararg node: Region) {

@@ -12,15 +12,13 @@ import org.wdt.wdtc.core.impl.manger.removeConfigDirectory
 import org.wdt.wdtc.core.impl.manger.runStartUpTask
 import org.wdt.wdtc.core.openapi.auth.printUserList
 import org.wdt.wdtc.core.openapi.game.printVersionList
-import org.wdt.wdtc.core.openapi.manger.*
-import org.wdt.wdtc.core.openapi.utils.isOnline
-import org.wdt.wdtc.core.openapi.utils.logmaker
-import org.wdt.wdtc.core.openapi.utils.runIfNoNull
-import org.wdt.wdtc.core.openapi.utils.runOnIO
+import org.wdt.wdtc.core.openapi.manager.*
+import org.wdt.wdtc.core.openapi.utils.*
+import org.wdt.wdtc.ui.loader.downloadDependencies
+import org.wdt.wdtc.ui.loader.loadJavaFXPatch
 import org.wdt.wdtc.ui.window.tryCatching
 import javafx.application.Application.launch as launchApp
 
-//@OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
 suspend fun main(args: Array<String>) {
 	val startTime = System.currentTimeMillis()
 	tryCatching {
@@ -55,7 +53,7 @@ suspend fun main(args: Array<String>) {
 					downloadAuthlibInjector()
 				}
 			}
-//			launch(newSingleThreadContext("Find Java")) { JavaUtils.main(registryKey) }
+			launch(newSingleThreadContext()) { JavaUtils.main(registryKey) }
 			launchApp(AppMain::class.java)
 		}
 		awaitApplicationBreak(startTime)
@@ -63,9 +61,9 @@ suspend fun main(args: Array<String>) {
 }
 
 private fun removePreferredVersion() {
-	currentSetting.preferredVersion.runIfNoNull {
-		if (versionJson.isFileNotExists()) {
-			currentSetting.changeSettingToFile {
+	currentSetting.preferredVersion?.let {
+		if (it.versionJson.isFileNotExists()) {
+			currentSetting.saveSettingToFile {
 				preferredVersion = null
 			}
 		}

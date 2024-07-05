@@ -12,11 +12,11 @@ import kotlinx.coroutines.javafx.JavaFx
 import org.wdt.utils.io.isFileExists
 import org.wdt.utils.io.readFileToLine
 import org.wdt.utils.io.readLines
-import org.wdt.wdtc.core.openapi.manger.isDebug
-import org.wdt.wdtc.core.openapi.manger.launcherVersion
-import org.wdt.wdtc.core.openapi.manger.tipsFile
-import org.wdt.wdtc.core.openapi.utils.coroutineScope
+import org.wdt.wdtc.core.openapi.manager.isDebug
+import org.wdt.wdtc.core.openapi.manager.launcherVersion
+import org.wdt.wdtc.core.openapi.manager.tipsFile
 import org.wdt.wdtc.core.openapi.utils.getResourceAsStream
+import org.wdt.wdtc.core.openapi.utils.launch
 import org.wdt.wdtc.core.openapi.utils.noNull
 
 //Form:https://www.bilibili.com/video/BV1EY411m7uZ
@@ -105,16 +105,15 @@ suspend fun <T> runOnJavaFx(block: suspend CoroutineScope.() -> T): T {
 	return withContext(Dispatchers.JavaFx, block)
 }
 
-fun launchOnJavaFx(block: suspend CoroutineScope.() -> Unit): Job = javafxScope.launch(block = block)
+fun launchOnJavaFx(start: CoroutineStart = CoroutineStart.DEFAULT, block: suspend CoroutineScope.() -> Unit): Job =
+	javafxScope.launch(start = start, block = block)
 
 val javafxScope = CoroutineScope(Dispatchers.JavaFx)
 
 fun eventHandler(
-	dispatcher: CoroutineDispatcher = Dispatchers.JavaFx, block: suspend () -> Unit
+	dispatcher: CoroutineDispatcher = Dispatchers.JavaFx, block: suspend CoroutineScope.() -> Unit
 ): EventHandler<ActionEvent> {
 	return EventHandler {
-		coroutineScope(dispatcher).launch {
-			block()
-		}
+		dispatcher.launch(block = block)
 	}
 }

@@ -6,8 +6,6 @@ import javafx.scene.Scene
 import javafx.scene.control.Label
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
-import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.stage.FileChooser
@@ -21,8 +19,10 @@ import org.wdt.wdtc.core.openapi.game.GameConfig
 import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.game.VersionsList.Companion.changeListToFile
 import org.wdt.wdtc.core.openapi.game.currentVersionsList
-import org.wdt.wdtc.core.openapi.manger.*
-import org.wdt.wdtc.core.openapi.manger.KindOfMod.*
+import org.wdt.wdtc.core.openapi.manager.currentSetting
+import org.wdt.wdtc.core.openapi.manager.gameConfig
+import org.wdt.wdtc.core.openapi.manager.isDebug
+import org.wdt.wdtc.core.openapi.manager.saveSettingToFile
 import org.wdt.wdtc.core.openapi.utils.*
 import org.wdt.wdtc.core.openapi.utils.JavaUtils.getJavaVersion
 import java.io.File
@@ -31,7 +31,7 @@ import java.io.IOException
 class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 	private val config: GameConfig.Config = version.gameConfig.config
 	private val size: WindwosSizeManger = mainStage.getSizeManger()
-	private val javaVersion = ioCoroutineScope.async { getJavaVersion(config.javaPath) }
+	private val javaVersion = ioScope.async { getJavaVersion(config.javaPath) }
 	
 	suspend fun setWindow() {
 		val window = HomeWindow(version)
@@ -44,7 +44,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			setRightAnchor(0.0)
 		}
 		val back = JFXButton("返回").apply {
-			onAction = EventHandler { launchScope { window.setHome(mainStage) } }
+			onAction = eventHandler { runOnJavaFx { window.setHome(mainStage) } }
 		}
 		val gameSetting = JFXButton("游戏设置").apply {
 			setPrefSize(105.0, 30.0)
@@ -69,9 +69,9 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		autoDownload.onAction = EventHandler {
 			gameSetting.isDisable = false
 			autoDownload.isDisable = true
-			launchOnJavaFx {
-				setAutoDownload(sonScrollPane)
-			}
+//			launchOnJavaFx {
+//				setAutoDownload(sonScrollPane)
+//			}
 		}
 		val completion = JFXButton("补全游戏文件").apply {
 			layoutY = 395.0
@@ -83,9 +83,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 					isDisable = true
 					back.isDisable = true
 					runOnIO {
-						InstallGameVersion(version, false).run {
-							startInstallGame()
-						}
+						InstallGameVersion(version, false).startInstallGame()
 					}
 					isDisable = false
 					back.isDisable = false
@@ -104,7 +102,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 					coroutineScope {
 						launch {
 							FileUtils.deleteDirectory(version.versionDirectory)
-							currentSetting.changeSettingToFile {
+							currentSetting.saveSettingToFile {
 								preferredVersion = null
 							}
 							logmaker.info(version.versionNumber + " Deleted")
@@ -219,7 +217,7 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 			FileChooser().apply {
 				title = "选择Java文件"
 				initialDirectory = File("C:\\Program Files")
-			}.showOpenDialog(mainStage).runIfNoNull {
+			}.showOpenDialog(mainStage)?.run {
 				javaPath.text = canonicalPath
 			}
 		}
@@ -256,70 +254,70 @@ class VersionSettingWindow(private val version: Version, val mainStage: Stage) {
 		}
 	}
 	
-	private suspend fun getJavaVersionNumber(it: String): Deferred<String?> = ioAsync {
+	private fun getJavaVersionNumber(it: String): Deferred<String?> = ioAsync {
 		if (it.toFile().isFileNotExists()) throw NumberFormatException()
 		else getJavaVersion(it)
 	}
-	
-	
-	private suspend fun setAutoDownload(scrollPane: ScrollPane) {
-		scrollPane.content = AnchorPane().also {
-			KindOfMod.entries.forEachIndexed { i, kind ->
-				AnchorPane().apply {
-					setTopAnchor(44.times(i).toDouble())
-					prefHeight = 44.0
-					prefWidth = 510.0
-					setModPane(kind, this)
-					size.modifyWindowsSize(it, this)
-				}
-			}
-			it.setStylesheets()
-		}
-	}
-	
-	private suspend fun setModPane(kind: KindOfMod, modPane: AnchorPane) {
-		val modIcon = ImageView().apply {
-			setTopAnchor(4.0)
-			setLeftAnchor(10.0)
-			setBottomAnchor(4.0)
-			image = getModIcon(kind).await()
-		}
-		val modVersion = Label().apply {
-			text = if (version.kind == kind) {
-				version.modDownloadInfo.let {
-					if (it != null) "$kind : ${it.modVersion}" else "$kind : 不安装"
-				}
-			} else {
-				"$kind : 不安装"
-			}
-			setBottomAnchor(15.0)
-			setLeftAnchor(60.0)
-			setTopAnchor(15.0)
-		}
-		val download = JFXButton("-->").apply {
-			setTopAnchor(11.0)
-			setRightAnchor(20.0)
-			setBottomAnchor(11.0)
-		}
-		modPane.children.addAll(modIcon, modVersion, download)
-	}
-	
-	private suspend fun getModIcon(kind: KindOfMod) = coroutineScope {
-		async {
-			when (kind) {
-				FORGE -> Image(getResourceAsStream("/assets/icon/forge.png"))
-				
-				FABRIC -> Image(getResourceAsStream("/assets/icon/fabric.png"))
-				
-				QUILT -> Image(getResourceAsStream("/assets/icon/quilt.png"))
-				
-				ORIGINAL -> Image(getResourceAsStream("/assets/icon/ico.jpg"))
-				
-				FABRICAPI -> Image(getResourceAsStream("/assets/icon/fabric.png"))
-			}
-		}
-		
-	}
+
+//	TODO Auto download pane
+//	private suspend fun setAutoDownload(scrollPane: ScrollPane) {
+//		scrollPane.content = AnchorPane().also {
+//			KindOfMod.entries.forEachIndexed { i, kind ->
+//				AnchorPane().apply {
+//					setTopAnchor(44.times(i).toDouble())
+//					prefHeight = 44.0
+//					prefWidth = 510.0
+//					setModPane(kind, this)
+//					size.modifyWindowsSize(it, this)
+//				}
+//			}
+//			it.setStylesheets()
+//		}
+//	}
+//
+//	private suspend fun setModPane(kind: KindOfMod, modPane: AnchorPane) {
+//		val modIcon = ImageView().apply {
+//			setTopAnchor(4.0)
+//			setLeftAnchor(10.0)
+//			setBottomAnchor(4.0)
+//			image = getModIcon(kind).await()
+//		}
+//		val modVersion = Label().apply {
+//			text = if (version.kind == kind) {
+//				version.modDownloadInfo.let {
+//					if (it != null) "$kind : ${it.modVersion}" else "$kind : 不安装"
+//				}
+//			} else {
+//				"$kind : 不安装"
+//			}
+//			setBottomAnchor(15.0)
+//			setLeftAnchor(60.0)
+//			setTopAnchor(15.0)
+//		}
+//		val download = JFXButton("-->").apply {
+//			setTopAnchor(11.0)
+//			setRightAnchor(20.0)
+//			setBottomAnchor(11.0)
+//		}
+//		modPane.children.addAll(modIcon, modVersion, download)
+//	}
+//
+//	private suspend fun getModIcon(kind: KindOfMod) = coroutineScope {
+//		async {
+//			when (kind) {
+//				FORGE -> Image(getResourceAsStream("/assets/icon/forge.png"))
+//
+//				FABRIC -> Image(getResourceAsStream("/assets/icon/fabric.png"))
+//
+//				QUILT -> Image(getResourceAsStream("/assets/icon/quilt.png"))
+//
+//				ORIGINAL -> Image(getResourceAsStream("/assets/icon/ico.jpg"))
+//
+//				FABRICAPI -> Image(getResourceAsStream("/assets/icon/fabric.png"))
+//			}
+//		}
+//
+//	}
 	
 	companion object {
 		const val LAYOUT_X = 10.0

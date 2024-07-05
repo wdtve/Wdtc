@@ -15,17 +15,17 @@ import javax.swing.JTextArea
 inline fun setErrorWin(e: Throwable) {
 	e.let {
 		logmaker.error(it)
-		setWin(it.getExceptionMessage(), "发生错误!")
+		setInfoWin(it.getExceptionMessage(), "发生错误!")
 	}
 }
 
-fun setWin(message: String, title: String) {
+fun setInfoWin(message: String, title: String) {
 	val textArea = JTextArea().apply {
-		text = message
+		text = message.toByteArray(Charsets.UTF_8).decodeToString()
 		setCaretPosition(0)
 		setCaretColor(Color.RED)
 		setBackground(Color(0xEEEEEE))
-		setFont(Font("JetBrains Mono", Font.ITALIC, 14))
+		setFont(Font("Microsoft YaHei UI", Font.ITALIC, 14))
 		setSelectionColor(Color.BLACK)
 		setSelectedTextColor(Color.WHITE)
 		setLineWrap(true)
@@ -36,7 +36,7 @@ fun setWin(message: String, title: String) {
 		add(JScrollPane(textArea), BorderLayout.CENTER)
 		setTitle(title)
 		isVisible = true
-		defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+		defaultCloseOperation = JFrame.HIDE_ON_CLOSE
 		setSize(1000, 500)
 	}.setResizable(true)
 }

@@ -2,7 +2,6 @@
 
 package org.wdt.wdtc.console
 
-fun main() {
-  TODO("Next Anniversary Goal")
+fun main(args: Array<String>) {
+	TODO("Next Anniversary Goal")
 }
-

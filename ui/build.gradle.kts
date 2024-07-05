@@ -11,6 +11,7 @@ javafx {
 
 group = "org.wdt.wdtc.ui"
 version = rootProject.version
+
 val resourceFolder = file("./build/resources/main")
 val versionFile = resourceFolder.resolve("version.txt").also {
 	if (!it.exists()) {
@@ -36,7 +37,7 @@ val sameManifest = mapOf(
 )
 
 dependencies {
-	api(project(":wdtc-core:core-impl"))
+	api(project(":wdtc-core"))
 	api(project(":wdtc-ui:openjfx-loader"))
 	implementation("com.jfoenix:jfoenix:9.0.10")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-javafx:${libs.versions.kotlinx.coroutines}")

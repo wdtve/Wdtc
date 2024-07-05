@@ -7,20 +7,12 @@ group = "org.wdt.wdtc.console"
 version = rootProject.version
 
 dependencies {
-	implementation(project(":wdtc-core"))
-	implementation("com.github.wd-t.utils:utils-cli:1.3.3")
-	implementation(libs.utils.io)
-	implementation(libs.utils.gson)
-	implementation(libs.gson)
-	implementation(libs.coroutines.core)
-	implementation(libs.coroutines.core.jvm)
-	implementation(libs.stdlib.jdk8)
-	testImplementation(libs.stdlib.test)
+	api(project(":wdtc-core"))
 }
 
 val mainClazz = "org.wdt.wdtc.console.WdtcMain"
 val sameManifest = mapOf(
-	"Implementation-Vendor" to "Wdt~(wd-t)",
+	"Implementation-Vendor" to "Wdt~(wdtev)",
 	"Implementation-Title" to "wdtc-console-kotlin",
 	"Implementation-Version" to "${project.version}",
 	"Main-Class" to mainClazz,
@@ -40,7 +32,7 @@ application {
 }
 
 
-tasks.create<JavaExec>("runShadowJar") {
+tasks.create<JavaExec>("runConsole") {
 	dependsOn(tasks.jar)
 	group = "application"
 	classpath = files(tasks.shadowJar.get().archiveFile.get().asFile)

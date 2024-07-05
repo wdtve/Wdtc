@@ -14,8 +14,11 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.Stage
 import org.wdt.utils.io.FileUtils
 import org.wdt.utils.io.sizeOfDirectory
-import org.wdt.wdtc.core.openapi.manger.*
-import org.wdt.wdtc.core.openapi.utils.*
+import org.wdt.wdtc.core.openapi.manager.*
+import org.wdt.wdtc.core.openapi.utils.info
+import org.wdt.wdtc.core.openapi.utils.logmaker
+import org.wdt.wdtc.core.openapi.utils.openSomething
+import org.wdt.wdtc.core.openapi.utils.runOnIO
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -93,14 +96,14 @@ object SettingWindow {
 			layoutY = line2
 			onAction = eventHandler {
 				trueLog.isSelected = false
-				currentSetting.changeSettingToFile {
+				currentSetting.saveSettingToFile {
 					console = false
 				}
 			}
 		}
 		trueLog.onAction = eventHandler {
 			falseLog.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				console = true
 			}
 		}
@@ -126,21 +129,21 @@ object SettingWindow {
 		officialDownloadSource.onAction = EventHandler {
 			bmclDownloadSource.isSelected = false
 			mcbbsDownloadSource.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				downloadSource = DownloadSourceKind.OFFICIAL
 			}
 		}
 		bmclDownloadSource.onAction = eventHandler {
 			officialDownloadSource.isSelected = false
 			mcbbsDownloadSource.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				downloadSource = DownloadSourceKind.BMCLAPI
 			}
 		}
 		mcbbsDownloadSource.onAction = eventHandler {
 			officialDownloadSource.isSelected = false
 			bmclDownloadSource.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				downloadSource = DownloadSourceKind.MCBBS
 			}
 		}
@@ -160,14 +163,14 @@ object SettingWindow {
 		}
 		trueOpenGl.onAction = EventHandler {
 			falseOpenGL.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				llvmpipeLoader = true
 			}
 			logmaker.info("OpenGL软渲染已开启")
 		}
 		falseOpenGL.onAction = EventHandler {
 			trueOpenGl.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				llvmpipeLoader = false
 			}
 			logmaker.info("OpenGL软渲染已关闭")
@@ -188,14 +191,14 @@ object SettingWindow {
 		}
 		falseZhcn.onAction = EventHandler {
 			trueZhcn.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				chineseLanguage = false
 			}
 		}
 		
 		trueZhcn.onAction = EventHandler {
 			falseZhcn.isSelected = false
-			currentSetting.changeSettingToFile {
+			currentSetting.saveSettingToFile {
 				chineseLanguage = true
 			}
 		}
@@ -207,21 +210,20 @@ object SettingWindow {
 			setPrefSize(105.0, 30.0)
 			onAction = eventHandler {
 				tryCatching {
-					DirectoryChooser().apply {
+					val file = DirectoryChooser().apply {
 						title = "选择日志文件保存路径"
 						initialDirectory = wdtcConfig
-					}.showDialog(mainStage).runIfNoNull {
+					}.showDialog(mainStage)?.run {
 						buildString {
 							append("Wdtc-").append(launcherVersion).append("-")
 							append(SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().time))
 							append(".log")
 						}.let {
 							File(canonicalPath, it)
-						}.also {
-							runOnIO {
-								FileUtils.copyFile(File(wdtcConfig, "logs/Wdtc.log"), it)
-							}
 						}
+					}
+					if (file != null) {
+						runOnIO { FileUtils.copyFile(wdtcConfig.resolve("logs/Wdtc.log"), file) }
 					}
 				}
 			}
@@ -279,21 +281,21 @@ object SettingWindow {
 		}
 	}
 	
-	suspend fun JFXButton.chooseDirectoryButonAction(event: MouseEvent, mainStage: Stage) {
+	private suspend fun chooseDirectoryButonAction(event: MouseEvent, mainStage: Stage) {
 		if (event.isControlDown) {
 			openSomething(settingFile)
 		} else {
 			DirectoryChooser().apply {
 				title = "选择游戏文件夹(设置后需要重启)"
 				initialDirectory = currentSetting.defaultGamePath
-			}.showDialog(mainStage).runIfNoNull {
+			}.showDialog(mainStage)?.run {
 				runOnIO {
 					tryCatching {
-						currentSetting.changeSettingToFile {
-							defaultGamePath = this@runIfNoNull
+						currentSetting.saveSettingToFile {
+							defaultGamePath = this@run
 						}
 					}
-					logmaker.info("Game directory change:$canonicalPath")
+					logmaker.info("Game directory change:${this@run.canonicalPath}")
 				}
 				runOnJavaFx {
 					Platform.exit()
@@ -303,7 +305,7 @@ object SettingWindow {
 		
 	}
 	
-	suspend fun JFXButton.cleanCacheAntion(event: MouseEvent) {
+	private suspend fun JFXButton.cleanCacheAntion(event: MouseEvent) {
 		if (event.isControlDown) {
 			openSomething(wdtcCache)
 		} else {

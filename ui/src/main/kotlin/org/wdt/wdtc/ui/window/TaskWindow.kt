@@ -12,15 +12,17 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import org.wdt.wdtc.core.openapi.manger.TaskKind
-import org.wdt.wdtc.core.openapi.manger.TaskManger
-import org.wdt.wdtc.core.openapi.utils.*
+import org.wdt.wdtc.core.openapi.manager.CoroutineTask
+import org.wdt.wdtc.core.openapi.utils.launch
+import org.wdt.wdtc.core.openapi.utils.logmaker
+import org.wdt.wdtc.core.openapi.utils.timer
 import java.util.*
 
 class TaskWindow(
-	private val mainStage: Stage, private val taskList: MutableList<TaskManger> = LinkedList()
+	private val mainStage: Stage, private val taskList: MutableList<CoroutineTask> = LinkedList()
 ) {
 	private var taskQuantity = 0
 	private var runTask = true
@@ -45,50 +47,7 @@ class TaskWindow(
 		
 		launchOnJavaFx {
 			taskList.forEach {
-				val progressbar = ProgressBar().apply {
-					layoutX = 63.0
-					layoutY = 15.0
-					prefHeight = 18.0
-					prefWidth = 286.0
-				}
-				val progressindicator = ProgressIndicator().apply {
-					layoutX = 362.0
-					layoutY = 8.0
-					prefHeight = 25.0
-					prefWidth = 25.0
-				}
-				val name = Label("${it.actionName}:").apply {
-					layoutX = 15.0
-					layoutY = 15.0
-				}
-				val updateUI = javafxScope.launch("update ui".toCoroutineName(), CoroutineStart.LAZY) {
-					progressindicator.progress = 1.0
-					progressbar.progress = 1.0
-					taskList.remove(it)
-					taskQuantity += 1
-				}
-				launchScope("Run task") {
-					it.run {
-						if (actionKind == TaskKind.FUNCTION) {
-							action.noNull().invoke()
-							updateUI.start()
-						} else if (actionKind == TaskKind.COROUTINES) {
-							coroutinesAction.noNull().run {
-								start()
-								monitorJob(this)
-								join()
-								updateUI.start()
-							}
-						}
-					}
-				}
-				val taskPane = AnchorPane().apply {
-					setPrefSize(398.0, 43.0)
-					styleClass.add("BlackBorder")
-					children.addAll(name, progressbar, progressindicator)
-				}
-				
-				sonPane.children.add(taskPane)
+				sonPane.children.add(getTaskPane(it))
 			}
 		}
 		val tips = Label("tips").apply {
@@ -131,10 +90,46 @@ class TaskWindow(
 		}
 	}
 	
-	private fun monitorJob(job: Job) {
+	private fun getTaskPane(task: CoroutineTask): AnchorPane {
+		val progressbar = ProgressBar().apply {
+			layoutX = 63.0
+			layoutY = 15.0
+			prefHeight = 18.0
+			prefWidth = 286.0
+		}
+		val progressindicator = ProgressIndicator().apply {
+			layoutX = 362.0
+			layoutY = 8.0
+			prefHeight = 25.0
+			prefWidth = 25.0
+		}
+		val name = Label("${task.taskName}:").apply {
+			layoutX = 15.0
+			layoutY = 15.0
+		}
+		val updateUI = launchOnJavaFx(CoroutineStart.LAZY) {
+			progressindicator.progress = 1.0
+			progressbar.progress = 1.0
+			taskList.remove(task)
+			taskQuantity += 1
+		}
+		
+		dispatcher.launch {
+			task.start()
+			updateUI.start()
+		}.monitorJob()
+		
+		return AnchorPane().apply {
+			setPrefSize(398.0, 43.0)
+			styleClass.add("BlackBorder")
+			children.addAll(name, progressbar, progressindicator)
+		}
+	}
+	
+	private fun Job.monitorJob() {
 		timer("cancel job", 100) {
 			if (!runTask) {
-				job.cancel()
+				this@monitorJob.cancel()
 				cancel()
 			}
 			if (taskList.isEmpty()) {
@@ -144,6 +139,8 @@ class TaskWindow(
 	}
 	
 	companion object {
-		val taskPool = executorCoroutineScope(1, "Task Pool")
+		@OptIn(ExperimentalCoroutinesApi::class)
+		val dispatcher = Dispatchers.IO.limitedParallelism(1)
 	}
+	
 }

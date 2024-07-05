@@ -1,6 +1,5 @@
 package org.wdt.wdtc.ui.window.user
 
-import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
@@ -8,18 +7,16 @@ import javafx.scene.layout.Pane
 import org.wdt.wdtc.core.impl.auth.accounts.OfflineAccounts
 import org.wdt.wdtc.core.openapi.auth.UsersList.Companion.saveChangeToFile
 import org.wdt.wdtc.core.openapi.auth.currentUsersList
-import org.wdt.wdtc.core.openapi.utils.launchScope
+import org.wdt.wdtc.core.openapi.utils.launchOnIO
 import org.wdt.wdtc.core.openapi.utils.logmaker
-import org.wdt.wdtc.core.openapi.utils.runOnIO
-import org.wdt.wdtc.ui.window.runOnJavaFx
-import org.wdt.wdtc.ui.window.setErrorWin
-import java.io.IOException
+import org.wdt.wdtc.ui.window.eventHandler
+import org.wdt.wdtc.ui.window.tryCatching
 import java.util.regex.Pattern
 
 object OfflineUserWindow {
 	fun setUserWin(pane: Pane) {
 		pane.setPrefSize(600.0, 400.0)
-		val registerusername = TextField().apply {
+		val registerUserName = TextField().apply {
 			layoutX = 224.0
 			layoutY = 106.0
 		}
@@ -39,33 +36,27 @@ object OfflineUserWindow {
 		val button = Button("注册一个!").apply {
 			layoutX = 266.0
 			layoutY = 221.0
-			onAction = EventHandler {
-				try {
-					registerusername.text.let {
+			onAction = eventHandler {
+				tryCatching {
+					registerUserName.text.let {
 						if (it.isQualified) {
-							launchScope {
-								runOnIO {
-									currentUsersList.apply {
-										OfflineAccounts(it).addToList()
-									}.saveChangeToFile()
-								}
-								runOnJavaFx {
-									logmaker.info("离线账户${it}注册成功")
-									UserListPane.setUserList(pane)
-								}
+							launchOnIO {
+								currentUsersList.apply {
+									OfflineAccounts(it).addToList()
+								}.saveChangeToFile()
 							}
+							logmaker.info("离线账户${it}注册成功")
+							UserListPane.setUserList(pane)
 						} else {
 							oKRegister.text = "不能带中文字符哦"
 						}
 					}
-				} catch (exception: IOException) {
-					setErrorWin(exception)
 				}
 			}
 		}
 		pane.children.run {
 			clear()
-			addAll(registerusername, label, button, attention, oKRegister)
+			addAll(registerUserName, label, button, attention, oKRegister)
 		}
 		
 	}

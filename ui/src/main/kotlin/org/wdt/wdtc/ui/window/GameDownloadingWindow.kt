@@ -8,10 +8,12 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Dispatchers
 import org.wdt.wdtc.core.impl.download.InstallGameVersion
 import org.wdt.wdtc.core.openapi.game.Version
-import org.wdt.wdtc.core.openapi.manger.currentDownloadSourceKind
-import org.wdt.wdtc.core.openapi.utils.launchScope
+import org.wdt.wdtc.core.openapi.manager.currentDownloadSourceKind
+import org.wdt.wdtc.core.openapi.utils.launch
 import org.wdt.wdtc.core.openapi.utils.openSomething
 
 class GameDownloadingWindow(private val version: Version) {
@@ -44,11 +46,9 @@ class GameDownloadingWindow(private val version: Version) {
 			setRightAnchor(150.0)
 			text = "${version.versionNumber} 开始下载,下载源: $currentDownloadSourceKind"
 		}
-		val job = launchScope("Install ${version.versionNumber} task") {
+		val job = Dispatchers.IO.launch(CoroutineName("Install ${version.versionNumber} task")) {
 			InstallGameVersion(version, true) {
-				runOnJavaFx {
-					textField.text = it
-				}
+				runOnJavaFx { textField.text = it }
 			}.startInstallGame()
 		}
 		val back = JFXButton("返回").apply {

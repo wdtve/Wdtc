@@ -8,17 +8,16 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import kotlinx.coroutines.*
+import org.wdt.wdtc.core.impl.launch.LaunchAction
 import org.wdt.wdtc.core.impl.launch.LaunchGame
-import org.wdt.wdtc.core.openapi.auth.Accounts.AccountsType
-import org.wdt.wdtc.core.openapi.auth.isExistUserJsonFile
+import org.wdt.wdtc.core.openapi.auth.AccountsType
 import org.wdt.wdtc.core.openapi.game.Version
 import org.wdt.wdtc.core.openapi.game.preferredVersion
-import org.wdt.wdtc.core.openapi.manger.GameDirectoryManger
-import org.wdt.wdtc.core.openapi.manger.wdtcCache
+import org.wdt.wdtc.core.openapi.manager.GameDirectoryManager
+import org.wdt.wdtc.core.openapi.manager.userJson
+import org.wdt.wdtc.core.openapi.manager.wdtcCache
 import org.wdt.wdtc.core.openapi.utils.isOnline
-import org.wdt.wdtc.core.openapi.utils.noNull
 import org.wdt.wdtc.core.openapi.utils.openSomething
-import org.wdt.wdtc.core.openapi.utils.runOnIO
 import org.wdt.wdtc.ui.window.user.NewUserWindows
 
 class HomeWindow {
@@ -57,7 +56,7 @@ class HomeWindow {
 			layoutY = 69.0
 			setPrefSize(128.0, 46.0)
 			onAction = EventHandler {
-				VersionChooseWindow(version ?: GameDirectoryManger.DEFAULT_GAME_DIRECTORY).run {
+				VersionChooseWindow(version ?: GameDirectoryManager.DEFAULT_GAME_DIRECTORY).run {
 					setWindow(mainStage)
 				}
 			}
@@ -114,7 +113,7 @@ class HomeWindow {
 				mainStage.scene = it
 			}
 		}
-		if (!isExistUserJsonFile) {
+		if (!userJson.exists()) {
 			runOnJavaFx {
 				noUser(mainStage)
 			}
@@ -146,9 +145,11 @@ class HomeWindow {
 		}
 		
 		private suspend fun launchGame(mainStage: Stage, version: Version) {
-			val tasks = runOnIO {
-				LaunchGame(version.noNull(), TaskWindow.taskPool).getTaskList { setWin(it, "启动失败") }
-			}
+			val tasks = LaunchGame(version).getTaskList(object : LaunchAction {
+				override suspend fun invoke(infos: String) {
+					runOnJavaFx { setInfoWin(infos, "启动失败") }
+				}
+			})
 			runOnJavaFx {
 				TaskWindow(mainStage, tasks).run {
 					showTaskStage()
@@ -161,7 +162,7 @@ class HomeWindow {
 		suspend fun launchGameButtonTask(mainStage: Stage, version: Version?) {
 			version.also {
 				if (it != null) {
-					if (isExistUserJsonFile) {
+					if (userJson.exists()) {
 						launchGame(mainStage, it)
 					} else {
 						runOnJavaFx {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.coroutineScope
 import org.wdt.wdtc.core.impl.auth.accounts.yggdrasil.YggdrasilAccounts
 import org.wdt.wdtc.core.openapi.auth.changeListToFile
 import org.wdt.wdtc.core.openapi.auth.currentUsersList
-import org.wdt.wdtc.core.openapi.manger.littleskinUrl
+import org.wdt.wdtc.core.openapi.manager.littleskinUrl
 import org.wdt.wdtc.core.openapi.utils.launch
 import org.wdt.wdtc.core.openapi.utils.logmaker
 import org.wdt.wdtc.core.openapi.utils.runOnIO

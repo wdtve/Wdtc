@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import org.wdt.wdtc.core.impl.download.game.DownloadVersionGameFile.Companion.downloadVersionManifestJsonFileTask
 import org.wdt.wdtc.core.impl.download.game.DownloadVersionGameFile.Companion.startDownloadVersionManifestJsonFile
 import org.wdt.wdtc.core.impl.download.game.GameVersionList
-import org.wdt.wdtc.core.openapi.game.Version
-import org.wdt.wdtc.core.openapi.manger.isDebug
+import org.wdt.wdtc.core.openapi.game.VersionImpl
+import org.wdt.wdtc.core.openapi.manager.isDebug
 import org.wdt.wdtc.core.openapi.utils.ioAsync
 import org.wdt.wdtc.core.openapi.utils.runOnIO
 
@@ -85,7 +85,7 @@ class GameVersionListWindow {
 	
 	private suspend fun startDownload(versionNumber: String, mainStage: Stage) {
 		runOnJavaFx {
-			Version(versionNumber).also {
+			VersionImpl(versionNumber).also {
 				if (isDebug) {
 					ModChooseWindow(it, mainStage).run {
 						setChooseWin()

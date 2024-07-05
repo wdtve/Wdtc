@@ -15,8 +15,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.wdt.utils.io.newInputStream
 import org.wdt.wdtc.core.openapi.auth.*
-import org.wdt.wdtc.core.openapi.auth.Accounts.AccountsType.OFFLINE
-import org.wdt.wdtc.core.openapi.auth.Accounts.AccountsType.YGGDRASIL
+import org.wdt.wdtc.core.openapi.auth.AccountsType.OFFLINE
+import org.wdt.wdtc.core.openapi.auth.AccountsType.YGGDRASIL
 import org.wdt.wdtc.ui.window.*
 import java.io.IOException
 

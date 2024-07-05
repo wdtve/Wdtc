@@ -1,14 +1,15 @@
 package org.wdt.wdtc.core.launch
 
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import org.wdt.utils.io.toFile
-import java.net.URLClassLoader
+import org.wdt.wdtc.ui.loader.setJavaFXListJson
 
 class LaunchGameTest {
 	
 	@Test
 	fun getTaskList() {
-		val loader = URLClassLoader(arrayOf("E:\\Wdtc\\.wdtc\\dependencies\\org\\openjfx\\javafx-graphics\\17.0.6\\javafx-graphics-17.0.6-win.jar".toFile().toURI().toURL()))
-		loader.loadClass("javafx.application.Application")
+		runBlocking {
+			setJavaFXListJson()
+		}
 	}
 }
